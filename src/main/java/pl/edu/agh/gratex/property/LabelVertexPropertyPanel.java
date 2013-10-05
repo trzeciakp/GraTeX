@@ -27,9 +27,9 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel
 	private JLabel						labelText;
 	private JTextField					textField;
 	private JLabel						lblColor;
-	private JComboBox					comboBoxFontColor;
+	private JComboBox<Color>			comboBoxFontColor;
 	private JLabel						lblPosition;
-	private JComboBox					comboBoxPosition;
+	private JComboBox<Option>			comboBoxPosition;
 	private JLabel						lblDistance;
 	private JSpinner					spinnerDistance;
 	private static int					MIN_SIZE			= 0;
@@ -138,7 +138,7 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel
 				new Option(PropertyModel.S, "S"), new Option(PropertyModel.SW, "SW"), new Option(PropertyModel.W, "W"),
 				new Option(PropertyModel.NW, "NW") };
 
-		comboBoxPosition = new JComboBox(positions);
+		comboBoxPosition = new JComboBox<Option>(positions);
 		comboBoxPosition.setBounds(101, 89, 80, 20);
 		comboBoxPosition.setMaximumRowCount(9);
 		comboBoxPosition.addActionListener(new ActionListener()

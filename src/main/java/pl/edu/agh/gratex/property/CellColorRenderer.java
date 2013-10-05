@@ -8,7 +8,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.MatteBorder;
 
-class CellColorRenderer extends JLabel implements ListCellRenderer
+class CellColorRenderer extends JLabel implements ListCellRenderer<Color>
 {
 	private static final long	serialVersionUID	= 6524312801000597079L;
 
@@ -26,7 +26,8 @@ class CellColorRenderer extends JLabel implements ListCellRenderer
 		super.setBackground(col);
 	}
 
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+	@Override
+	public Component getListCellRendererComponent(JList<? extends Color> list, Color value, int index, boolean isSelected, boolean cellHasFocus)
 	{
 		if (index < 1)
 		{
@@ -48,4 +49,5 @@ class CellColorRenderer extends JLabel implements ListCellRenderer
 
 		return this;
 	}
+
 }

@@ -16,7 +16,9 @@ import javax.swing.KeyStroke;
 public class AboutDialog extends JDialog
 {
 	private static final long	serialVersionUID	= 2858349132119113260L;
-
+	private final static String DIALOG_TEXT = "GraTeX version 1.0\r\n\r\nAuthors: Łukasz Opioła, Piotr Trzeciak\r\n\r\nUniversity of Science and Technology\r\nKraków, Poland, 2012";
+	private final static String DIALOG_TITLE = "About GraTeX";
+	
 	protected JRootPane createRootPane()
 	{
 		ActionListener actionListener = new ActionListener()
@@ -35,7 +37,7 @@ public class AboutDialog extends JDialog
 
 	public AboutDialog(MainWindow parent)
 	{
-		super(parent, "About GraTeX", true);
+		super(parent, DIALOG_TITLE, true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(300, 137);
 		setResizable(false);
@@ -60,7 +62,7 @@ public class AboutDialog extends JDialog
 			}
 		};
 		txtrGratexVersion
-				.setText("GraTeX version 1.0\r\n\r\nAuthors: �?ukasz Opioła, Piotr Trzeciak\r\n\r\nUniversity of Science and Technology\r\nKraków, Poland, 2012");
+				.setText(DIALOG_TEXT );
 		txtrGratexVersion.setFocusable(false);
 		txtrGratexVersion.setBounds(0, 0, 294, 108);
 		getContentPane().add(txtrGratexVersion);

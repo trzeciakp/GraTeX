@@ -8,7 +8,7 @@ import javax.swing.JComboBox;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 
-public class ColorComboBox extends JComboBox
+public class ColorComboBox extends JComboBox<Color>
 {
 	private static final long	serialVersionUID	= 2626900901227763359L;
 

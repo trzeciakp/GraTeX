@@ -15,15 +15,15 @@ public class PanelToolbox extends JPanel
 	private ToolButton			button_addTool;
 	private ToolButton			button_removeTool;
 	private ToolButton			button_selectTool;
-	private JComboBox			comboBox_mode;
+	private JComboBox<String>	comboBox_mode;
 
 	public PanelToolbox()
 	{
 		super();
 		setLayout(null);
 
-		comboBox_mode = new JComboBox();
-		comboBox_mode.setModel(new DefaultComboBoxModel(new String[] { "VERTEX", "EDGE", "LABEL (V)", "LABEL (E)" }));
+		comboBox_mode = new JComboBox<String>();
+		comboBox_mode.setModel(new DefaultComboBoxModel<String>(new String[] { "VERTEX", "EDGE", "LABEL (V)", "LABEL (E)" }));
 		comboBox_mode.setSelectedIndex(0);
 		comboBox_mode.setBounds(0, 11, 90, 30);
 		comboBox_mode.setToolTipText("Edition mode");

@@ -27,18 +27,18 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel
 	private JLabel					labelText;
 	private JTextField				textField;
 	private JLabel					lblColor;
-	private JComboBox				comboBoxFontColor;
+	private JComboBox<Color>		comboBoxFontColor;
 	private JLabel					lblPosition;
 	private JSpinner				spinnerPosition;
-	private JComboBox				comboBoxPosition;
+	private JComboBox<Option>		comboBoxPosition;
 	private JLabel					lblDistance;
 	private JSpinner				spinnerDistance;
 	private static int				MIN_SIZE			= 0;
 	private static int				MAX_SIZE			= 99;
 	private JLabel					lblPlace;
-	private JComboBox				comboBoxPlace;
+	private JComboBox<Option>		comboBoxPlace;
 	private JLabel					lblRotation;
-	private JComboBox				comboBoxRotation;
+	private JComboBox<Option>		comboBoxRotation;
 
 	private void changed()
 	{
@@ -203,7 +203,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel
 		add(spinnerPosition);
 
 		Option[] loopPositions = new Option[] { new Option(25, "25 %"), new Option(50, "50 %"), new Option(75, "75 %") };
-		comboBoxPosition = new JComboBox(loopPositions);
+		comboBoxPosition = new JComboBox<Option>(loopPositions);
 		comboBoxPosition.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -281,7 +281,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel
 
 		Option[] labelTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.BELOW, "below"),
 				new Option(PropertyModel.ABOVE, "above") };
-		comboBoxPlace = new JComboBox(labelTypes);
+		comboBoxPlace = new JComboBox<Option>(labelTypes);
 		comboBoxPlace.setBounds(101, 139, 81, 20);
 		comboBoxPlace.addActionListener(new ActionListener()
 		{
@@ -310,7 +310,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel
 
 		labelTypes[1] = new Option(PropertyModel.TANGENT, "tangent");
 		labelTypes[2] = new Option(PropertyModel.LEVEL, "level");
-		comboBoxRotation = new JComboBox(labelTypes);
+		comboBoxRotation = new JComboBox<Option>(labelTypes);
 		comboBoxRotation.setBounds(101, 164, 80, 20);
 		comboBoxRotation.addActionListener(new ActionListener()
 		{

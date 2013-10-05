@@ -31,23 +31,23 @@ public class VertexPropertyPanel extends AbstractPropertyPanel
 
 	private VertexPropertyModel		model;
 	private JLabel					lblVertexType;
-	private JComboBox				comboBoxVertexType;
+	private JComboBox<Option>		comboBoxVertexType;
 	private JLabel					lblColor;
-	private JComboBox				comboBoxVertexColor;
+	private JComboBox<Color>		comboBoxVertexColor;
 	private JLabel					lblLineType;
-	private JComboBox				comboBoxLineType;
+	private JComboBox<Option>		comboBoxLineType;
 	private JLabel					lblLineSize;
 	private JSpinner				spinnerLineSize;
 	private JLabel					lblVertexSize;
 	private JSpinner				spinnerVertexSize;
 	private JLabel					lblLineColor;
-	private JComboBox				comboBoxLineColor;
+	private JComboBox<Color>		comboBoxLineColor;
 	private JLabel					lblLabelInside;
-	private JComboBox				comboBoxLabelInside;
+	private JComboBox<Option>		comboBoxLabelInside;
 	private JLabel					lblNumber;
 	private JSpinner				spinnerNumber;
 	private JLabel					lblFontColor;
-	private JComboBox				comboBoxFontColor;
+	private JComboBox<Color>		comboBoxFontColor;
 	private AbstractSpinnerModel[]	listModels;
 
 	private static int				MIN_SIZE;
@@ -148,7 +148,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel
 		Option[] vertexTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.CIRCLE, "circle"),
 				new Option(PropertyModel.TRIANGLE, "triangle"), new Option(PropertyModel.SQUARE, "square"),
 				new Option(PropertyModel.PENTAGON, "pentagon"), new Option(PropertyModel.HEXAGON, "hexagon") };
-		comboBoxVertexType = new JComboBox(vertexTypes);
+		comboBoxVertexType = new JComboBox<Option>(vertexTypes);
 		comboBoxVertexType.setBounds(101, 89, 80, 20);
 		comboBoxVertexType.addActionListener(new ActionListener()
 		{
@@ -263,7 +263,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel
 		Option[] lineTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.NONE, "none"),
 				new Option(PropertyModel.SOLID, "solid"), new Option(PropertyModel.DASHED, "dashed"), new Option(PropertyModel.DOTTED, "dotted"),
 				new Option(PropertyModel.DOUBLE, "double") };
-		comboBoxLineType = new JComboBox(lineTypes);
+		comboBoxLineType = new JComboBox<Option>(lineTypes);
 		comboBoxLineType.setBounds(101, 89, 80, 20);
 		comboBoxLineType.addActionListener(new ActionListener()
 		{
@@ -375,7 +375,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel
 
 		Option[] labelTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.NO, "no"),
 				new Option(PropertyModel.YES, "yes") };
-		comboBoxLabelInside = new JComboBox(labelTypes);
+		comboBoxLabelInside = new JComboBox<Option>(labelTypes);
 		comboBoxLabelInside.setBounds(101, 164, 81, 20);
 		comboBoxLabelInside.addActionListener(new ActionListener()
 		{

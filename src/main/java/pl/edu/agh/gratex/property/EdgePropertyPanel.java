@@ -24,18 +24,18 @@ public class EdgePropertyPanel extends AbstractPropertyPanel
 
 	private EdgePropertyModel	model;
 	private JLabel				lblLineType;
-	private JComboBox			comboBoxLineType;
+	private JComboBox<Option>	comboBoxLineType;
 	private JLabel				lblLineSize;
 	private JSpinner			spinnerLineSize;
 	private JLabel				lblLineColor;
-	private JComboBox			comboBoxLineColor;
+	private JComboBox<Color>	comboBoxLineColor;
 	private JLabel				lblDirect;
-	private JComboBox			comboBoxDirect;
+	private JComboBox<Option>	comboBoxDirect;
 	private JLabel				lblArrowType;
-	private JComboBox			comboBoxArrowType;
+	private JComboBox<Option>	comboBoxArrowType;
 	private JLabel				lblAngle;
 	private JSpinner			spinnerAngle;
-	private JComboBox			comboBoxAngle;
+	private JComboBox<Option>	comboBoxAngle;
 	private static int			RANGE;
 	private static int			STEP;
 	private static int			MIN_SIZE;
@@ -122,7 +122,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel
 		Option[] lineTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.NONE, "none"),
 				new Option(PropertyModel.SOLID, "solid"), new Option(PropertyModel.DASHED, "dashed"), new Option(PropertyModel.DOTTED, "dotted"),
 				new Option(PropertyModel.DOUBLE, "double") };
-		comboBoxLineType = new JComboBox(lineTypes);
+		comboBoxLineType = new JComboBox<Option>(lineTypes);
 		comboBoxLineType.setBounds(101, 39, 80, 20);
 		comboBoxLineType.addActionListener(new ActionListener()
 		{
@@ -234,7 +234,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel
 
 		Option[] labelsOutside = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.NO, "no"),
 				new Option(PropertyModel.YES, "yes") };
-		comboBoxDirect = new JComboBox(labelsOutside);
+		comboBoxDirect = new JComboBox<Option>(labelsOutside);
 		comboBoxDirect.setBounds(101, 114, 80, 20);
 		comboBoxDirect.addActionListener(new ActionListener()
 		{
@@ -263,7 +263,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel
 
 		Option[] arrowTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.BASIC, "basic"),
 				new Option(PropertyModel.FILLED, "filled") };
-		comboBoxArrowType = new JComboBox(arrowTypes);
+		comboBoxArrowType = new JComboBox<Option>(arrowTypes);
 		comboBoxArrowType.setBounds(101, 164, 81, 20);
 		comboBoxArrowType.addActionListener(new ActionListener()
 		{
@@ -337,7 +337,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel
 
 		Option[] loopAngles = new Option[] { new Option(-1, " "), new Option(0, "0 deg"), new Option(90, "90 deg"), new Option(180, "180 deg"),
 				new Option(270, "270 deg") };
-		comboBoxAngle = new JComboBox(loopAngles);
+		comboBoxAngle = new JComboBox<Option>(loopAngles);
 		comboBoxAngle.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
