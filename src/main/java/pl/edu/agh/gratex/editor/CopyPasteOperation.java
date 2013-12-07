@@ -45,15 +45,15 @@ public class CopyPasteOperation extends Operation
 		{
 			tempV = (Vertex) it.next();
 			vertices.add(tempV.getCopy());
-			if (vertices.getLast().label != null)
+			if (vertices.getLast().getLabel() != null)
 			{
-				labelsV.add(vertices.getLast().label);
+				labelsV.add(vertices.getLast().getLabel());
 			}
 
-			if (tempV.posX < minX)
+			if (tempV.getPosX() < minX)
 			{
-				minX = tempV.posX;
-				minY = tempV.posY;
+				minX = tempV.getPosX();
+				minY = tempV.getPosY();
 			}
 			if (tempV.getNumber() < minNumber)
 			{
@@ -61,7 +61,7 @@ public class CopyPasteOperation extends Operation
 			}
 		}
 
-		Iterator<Edge> ite = ControlManager.graph.edges.listIterator();
+		Iterator<Edge> ite = ControlManager.graph.getEdges().listIterator();
 		Edge tempE = null;
 		while (ite.hasNext())
 		{
@@ -70,9 +70,10 @@ public class CopyPasteOperation extends Operation
 			if (edge != null)
 			{
 				edges.add(edge);
-				if (edges.getLast().label != null)
+                LabelE label = edges.getLast().getLabel();
+                if (label != null)
 				{
-					labelsE.add(edges.getLast().label);
+					labelsE.add(label);
 				}
 			}
 		}
@@ -92,8 +93,8 @@ public class CopyPasteOperation extends Operation
 		while (itv.hasNext())
 		{
 			tempV = itv.next();
-			tempV.posX += -biasX + targetX - minX;
-			tempV.posY += -biasY + targetY - minY;
+			tempV.setPosX(tempV.getPosX() + -biasX + targetX - minX);
+			tempV.setPosY(tempV.getPosY() + -biasY + targetY - minY);
 		}
 		biasX = targetX - minX;
 		biasY = targetY - minY;
@@ -108,7 +109,7 @@ public class CopyPasteOperation extends Operation
 		while (itvd.hasNext())
 		{
 			tempVD = itvd.next();
-			itv = ControlManager.graph.vertices.listIterator();
+			itv = ControlManager.graph.getVertices().listIterator();
 			while (itv.hasNext())
 			{
 				if (tempVD.collides(itv.next()))
@@ -160,10 +161,10 @@ public class CopyPasteOperation extends Operation
 
 	public String doOperation()
 	{
-		ControlManager.graph.vertices.addAll(vertices);
-		ControlManager.graph.edges.addAll(edges);
-		ControlManager.graph.labelsV.addAll(labelsV);
-		ControlManager.graph.labelsE.addAll(labelsE);
+		ControlManager.graph.getVertices().addAll(vertices);
+		ControlManager.graph.getEdges().addAll(edges);
+		ControlManager.graph.getLabelsV().addAll(labelsV);
+		ControlManager.graph.getLabelsE().addAll(labelsE);
 
 		Collections.sort(vertices, new VertexOrderComparator());
 		Iterator<Vertex> itv = vertices.listIterator();
@@ -173,7 +174,7 @@ public class CopyPasteOperation extends Operation
 			tempV = itv.next();
 			tempV.updateNumber(ControlManager.graph.getNextFreeNumber());
 			tempV.setPartOfNumeration(true);
-			tempV.labelInside = (ControlManager.graph.vertexDefaultModel.labelInside == 1);
+			tempV.setLabelInside((ControlManager.graph.getVertexDefaultModel().labelInside == 1));
 			if (ControlManager.graph.gridOn)
 			{
 				tempV.adjustToGrid();
@@ -196,10 +197,10 @@ public class CopyPasteOperation extends Operation
 
 	public String undoOperation()
 	{
-		ControlManager.graph.vertices.removeAll(vertices);
-		ControlManager.graph.edges.removeAll(edges);
-		ControlManager.graph.labelsV.removeAll(labelsV);
-		ControlManager.graph.labelsE.removeAll(labelsE);
+		ControlManager.graph.getVertices().removeAll(vertices);
+		ControlManager.graph.getEdges().removeAll(edges);
+		ControlManager.graph.getLabelsV().removeAll(labelsV);
+		ControlManager.graph.getLabelsE().removeAll(labelsE);
 
 		Iterator<Vertex> itv = vertices.listIterator();
 		while (itv.hasNext())

@@ -14,21 +14,22 @@ import pl.edu.agh.gratex.model.EdgePropertyModel;
 import pl.edu.agh.gratex.model.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.VertexPropertyModel;
+import pl.edu.agh.gratex.model.properties.LineType;
 
 
 public class Graph implements Serializable
 {
 	private static final long	serialVersionUID	= 6647099578243878702L;
 	
-	public LinkedList<Vertex>		vertices;
-	public LinkedList<Edge>			edges;
-	public LinkedList<LabelV>		labelsV;
-	public LinkedList<LabelE>		labelsE;
+	private LinkedList<Vertex>		vertices;
+	private LinkedList<Edge>			edges;
+	private LinkedList<LabelV>		labelsV;
+	private LinkedList<LabelE>		labelsE;
 
-	public VertexPropertyModel		vertexDefaultModel;
-	public EdgePropertyModel		edgeDefaultModel;
-	public LabelVertexPropertyModel	labelVDefaultModel;
-	public LabelEdgePropertyModel	labelEDefaultModel;
+	private VertexPropertyModel		vertexDefaultModel;
+	private EdgePropertyModel		edgeDefaultModel;
+	private LabelVertexPropertyModel	labelVDefaultModel;
+	private LabelEdgePropertyModel	labelEDefaultModel;
 
 	public int						gridResolutionX		= 20;
 	public int						gridResolutionY		= 20;
@@ -44,10 +45,10 @@ public class Graph implements Serializable
 
 	public Graph()
 	{
-		vertices = new LinkedList<Vertex>();
-		edges = new LinkedList<Edge>();
-		labelsV = new LinkedList<LabelV>();
-		labelsE = new LinkedList<LabelE>();
+		setVertices(new LinkedList<Vertex>());
+		setEdges(new LinkedList<Edge>());
+		setLabelsV(new LinkedList<LabelV>());
+		setLabelsE(new LinkedList<LabelE>());
 
 		initDefaultModels();
 
@@ -82,12 +83,12 @@ public class Graph implements Serializable
 
 		if (ControlManager.mode == ControlManager.VERTEX_MODE)
 		{
-			Iterator<Vertex> itv = vertices.listIterator();
+			Iterator<Vertex> itv = getVertices().listIterator();
 			Vertex temp = null;
 			while (itv.hasNext())
 			{
 				temp = itv.next();
-				Area outline = new Area(Utilities.getVertexShape(temp.type + 1, temp.radius, temp.posX, temp.posY));
+				Area outline = new Area(Utilities.getVertexShape(temp.getType() + 1, temp.getRadius(), temp.getPosX(), temp.getPosY()));
 				outline.intersect(rect);
 				if (!outline.isEmpty())
 				{
@@ -98,7 +99,7 @@ public class Graph implements Serializable
 
 		else if (ControlManager.mode == ControlManager.EDGE_MODE)
 		{
-			Iterator<Edge> ite = edges.listIterator();
+			Iterator<Edge> ite = getEdges().listIterator();
 			Edge temp = null;
 			while (ite.hasNext())
 			{
@@ -112,12 +113,12 @@ public class Graph implements Serializable
 
 		else if (ControlManager.mode == ControlManager.LABEL_V_MODE)
 		{
-			Iterator<LabelV> itlv = labelsV.listIterator();
+			Iterator<LabelV> itlv = getLabelsV().listIterator();
 			LabelV temp = null;
 			while (itlv.hasNext())
 			{
 				temp = itlv.next();
-				if (temp.outline.intersects(area))
+				if (temp.getOutline().intersects(area))
 				{
 					result.add(temp);
 				}
@@ -126,12 +127,12 @@ public class Graph implements Serializable
 
 		else if (ControlManager.mode == ControlManager.LABEL_E_MODE)
 		{
-			Iterator<LabelE> itle = labelsE.listIterator();
+			Iterator<LabelE> itle = getLabelsE().listIterator();
 			LabelE temp = null;
 			while (itle.hasNext())
 			{
 				temp = itle.next();
-				if (temp.outline.intersects(area))
+				if (temp.getOutline().intersects(area))
 				{
 					result.add(temp);
 				}
@@ -143,7 +144,7 @@ public class Graph implements Serializable
 
 	public Vertex getVertexFromPosition(int x, int y)
 	{
-		Iterator<Vertex> itv = vertices.listIterator();
+		Iterator<Vertex> itv = getVertices().listIterator();
 		Vertex temp = null;
 		while (itv.hasNext())
 		{
@@ -158,7 +159,7 @@ public class Graph implements Serializable
 
 	public boolean vertexCollision(Vertex vertex)
 	{
-		Iterator<Vertex> itv = vertices.listIterator();
+		Iterator<Vertex> itv = getVertices().listIterator();
 		while (itv.hasNext())
 		{
 			if (itv.next().collides(vertex))
@@ -173,12 +174,12 @@ public class Graph implements Serializable
 	{
 		LinkedList<Edge> result = new LinkedList<Edge>();
 
-		Iterator<Edge> ite = edges.listIterator();
+		Iterator<Edge> ite = getEdges().listIterator();
 		Edge temp = null;
 		while (ite.hasNext())
 		{
 			temp = ite.next();
-			if (temp.vertexA == vertex || temp.vertexB == vertex)
+			if (temp.getVertexA() == vertex || temp.getVertexB() == vertex)
 			{
 				result.add(temp);
 			}
@@ -188,7 +189,7 @@ public class Graph implements Serializable
 
 	public Edge getEdgeFromPosition(int x, int y)
 	{
-		Iterator<Edge> ite = edges.listIterator();
+		Iterator<Edge> ite = getEdges().listIterator();
 		Edge temp = null;
 		while (ite.hasNext())
 		{
@@ -203,7 +204,7 @@ public class Graph implements Serializable
 
 	public LabelV getLabelVFromPosition(int x, int y)
 	{
-		Iterator<LabelV> itlv = labelsV.listIterator();
+		Iterator<LabelV> itlv = getLabelsV().listIterator();
 		LabelV temp = null;
 		while (itlv.hasNext())
 		{
@@ -218,7 +219,7 @@ public class Graph implements Serializable
 
 	public LabelE getLabelEFromPosition(int x, int y)
 	{
-		Iterator<LabelE> itle = labelsE.listIterator();
+		Iterator<LabelE> itle = getLabelsE().listIterator();
 		LabelE temp = null;
 		while (itle.hasNext())
 		{
@@ -233,25 +234,25 @@ public class Graph implements Serializable
 
 	public void drawAll(Graphics2D g)
 	{
-		Iterator<Edge> ite = edges.listIterator();
+		Iterator<Edge> ite = getEdges().listIterator();
 		while (ite.hasNext())
 		{
 			ite.next().draw(g, false);
 		}
 
-		Iterator<Vertex> itv = vertices.listIterator();
+		Iterator<Vertex> itv = getVertices().listIterator();
 		while (itv.hasNext())
 		{
 			itv.next().draw(g, false);
 		}
 
-		ite = edges.listIterator();
+		ite = getEdges().listIterator();
 		while (ite.hasNext())
 		{
 			ite.next().drawLabel(g, false);
 		}
 
-		itv = vertices.listIterator();
+		itv = getVertices().listIterator();
 		while (itv.hasNext())
 		{
 			itv.next().drawLabel(g, false);
@@ -260,7 +261,7 @@ public class Graph implements Serializable
 
 	public void adjustVerticesToGrid()
 	{
-		Iterator<Vertex> itv = vertices.listIterator();
+		Iterator<Vertex> itv = getVertices().listIterator();
 		while (itv.hasNext())
 		{
 			itv.next().adjustToGrid();
@@ -269,57 +270,118 @@ public class Graph implements Serializable
 
 	public void deleteUnusedLabels()
 	{
-		Iterator<LabelV> itlv = labelsV.listIterator();
+		Iterator<LabelV> itlv = getLabelsV().listIterator();
 		while (itlv.hasNext())
 		{
-			if (itlv.next().owner.label == null)
+			if (itlv.next().getOwner().getLabel() == null)
 			{
 				itlv.remove();
 			}
 		}
 
-		Iterator<LabelE> itle = labelsE.listIterator();
-		while (itle.hasNext())
-		{
-			if (itle.next().owner.label == null)
-			{
-				itle.remove();
-			}
-		}
+        for(LabelE edgeLabel : getLabelsE()) {
+            if(edgeLabel.getOwner() == null) {
+                getLabelsE().remove(edgeLabel);
+            }
+        }
 	}
 
 	public void initDefaultModels()
 	{
-		vertexDefaultModel = new VertexPropertyModel();
-		vertexDefaultModel.number = -1;
-		vertexDefaultModel.radius = 40;
-		vertexDefaultModel.type = 1;
-		vertexDefaultModel.vertexColor = new Color(new Float(1), new Float(0.5), new Float(0));
-		vertexDefaultModel.lineType = 1;
-		vertexDefaultModel.lineWidth = 1;
-		vertexDefaultModel.lineColor = Color.black;
-		vertexDefaultModel.fontColor = Color.black;
-		vertexDefaultModel.labelInside = 1;
+		setVertexDefaultModel(new VertexPropertyModel());
+		getVertexDefaultModel().number = -1;
+		getVertexDefaultModel().radius = 40;
+		getVertexDefaultModel().type = 1;
+		getVertexDefaultModel().vertexColor = new Color(new Float(1), new Float(0.5), new Float(0));
+		getVertexDefaultModel().lineType = LineType.SOLID;
+		getVertexDefaultModel().lineWidth = 1;
+		getVertexDefaultModel().lineColor = Color.black;
+		getVertexDefaultModel().fontColor = Color.black;
+		getVertexDefaultModel().labelInside = 1;
 
-		edgeDefaultModel = new EdgePropertyModel();
-		edgeDefaultModel.lineType = DrawingTools.SOLID_LINE;
-		edgeDefaultModel.lineWidth = 1;
-		edgeDefaultModel.directed = 0;
-		edgeDefaultModel.lineColor = Color.black;
-		edgeDefaultModel.relativeEdgeAngle = 0;
+		setEdgeDefaultModel(new EdgePropertyModel());
+		getEdgeDefaultModel().lineType = LineType.SOLID;
+		getEdgeDefaultModel().lineWidth = 1;
+		getEdgeDefaultModel().directed = 0;
+		getEdgeDefaultModel().lineColor = Color.black;
+		getEdgeDefaultModel().relativeEdgeAngle = 0;
 
-		labelVDefaultModel = new LabelVertexPropertyModel();
-		labelVDefaultModel.text = "Label";
-		labelVDefaultModel.fontColor = Color.black;
-		labelVDefaultModel.position = 0;
-		labelVDefaultModel.spacing = 5;
+		setLabelVDefaultModel(new LabelVertexPropertyModel());
+		getLabelVDefaultModel().text = "Label";
+		getLabelVDefaultModel().fontColor = Color.black;
+		getLabelVDefaultModel().position = 0;
+		getLabelVDefaultModel().spacing = 5;
 
-		labelEDefaultModel = new LabelEdgePropertyModel();
-		labelEDefaultModel.text = "Label";
-		labelEDefaultModel.fontColor = Color.black;
-		labelEDefaultModel.position = 50;
-		labelEDefaultModel.spacing = 5;
-		labelEDefaultModel.topPlacement = 1;
-		labelEDefaultModel.horizontalPlacement = 0;
+		setLabelEDefaultModel(new LabelEdgePropertyModel());
+		getLabelEDefaultModel().text = "Label";
+		getLabelEDefaultModel().fontColor = Color.black;
+		getLabelEDefaultModel().position = 50;
+		getLabelEDefaultModel().spacing = 5;
+		getLabelEDefaultModel().topPlacement = 1;
+		getLabelEDefaultModel().horizontalPlacement = 0;
 	}
+
+    public LinkedList<Vertex> getVertices() {
+        return vertices;
+    }
+
+    public void setVertices(LinkedList<Vertex> vertices) {
+        this.vertices = vertices;
+    }
+
+    public LinkedList<Edge> getEdges() {
+        return edges;
+    }
+
+    public void setEdges(LinkedList<Edge> edges) {
+        this.edges = edges;
+    }
+
+    public LinkedList<LabelV> getLabelsV() {
+        return labelsV;
+    }
+
+    public void setLabelsV(LinkedList<LabelV> labelsV) {
+        this.labelsV = labelsV;
+    }
+
+    public LinkedList<LabelE> getLabelsE() {
+        return labelsE;
+    }
+
+    public void setLabelsE(LinkedList<LabelE> labelsE) {
+        this.labelsE = labelsE;
+    }
+
+    public VertexPropertyModel getVertexDefaultModel() {
+        return vertexDefaultModel;
+    }
+
+    public void setVertexDefaultModel(VertexPropertyModel vertexDefaultModel) {
+        this.vertexDefaultModel = vertexDefaultModel;
+    }
+
+    public EdgePropertyModel getEdgeDefaultModel() {
+        return edgeDefaultModel;
+    }
+
+    public void setEdgeDefaultModel(EdgePropertyModel edgeDefaultModel) {
+        this.edgeDefaultModel = edgeDefaultModel;
+    }
+
+    public LabelVertexPropertyModel getLabelVDefaultModel() {
+        return labelVDefaultModel;
+    }
+
+    public void setLabelVDefaultModel(LabelVertexPropertyModel labelVDefaultModel) {
+        this.labelVDefaultModel = labelVDefaultModel;
+    }
+
+    public LabelEdgePropertyModel getLabelEDefaultModel() {
+        return labelEDefaultModel;
+    }
+
+    public void setLabelEDefaultModel(LabelEdgePropertyModel labelEDefaultModel) {
+        this.labelEDefaultModel = labelEDefaultModel;
+    }
 }

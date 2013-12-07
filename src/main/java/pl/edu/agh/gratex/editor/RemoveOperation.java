@@ -45,23 +45,23 @@ public class RemoveOperation extends Operation
 					temp = (Vertex) it.next();
 					temp.setPartOfNumeration(false);
 					connectedEdges.addAll(ControlManager.graph.getAdjacentEdges(temp));
-					ControlManager.graph.edges.removeAll(connectedEdges);
+					ControlManager.graph.getEdges().removeAll(connectedEdges);
 				}
-				ControlManager.graph.vertices.removeAll(elements);
+				ControlManager.graph.getVertices().removeAll(elements);
 				result = elements.size() + " vertices removed";
 			}
 			else
 			{
 				connectedEdges = ControlManager.graph.getAdjacentEdges((Vertex) elements.get(0));
-				ControlManager.graph.edges.removeAll(connectedEdges);
-				ControlManager.graph.vertices.remove((Vertex) elements.get(0));
+				ControlManager.graph.getEdges().removeAll(connectedEdges);
+				ControlManager.graph.getVertices().remove((Vertex) elements.get(0));
 				((Vertex) elements.get(0)).setPartOfNumeration(false);
 				result = "Vertex removed";
 			}
 		}
 		else if (type == 2)
 		{
-			ControlManager.graph.edges.removeAll(elements);
+			ControlManager.graph.getEdges().removeAll(elements);
 			if (elements.size() > 1)
 			{
 				result = elements.size() + " edges removed";
@@ -78,16 +78,16 @@ public class RemoveOperation extends Operation
 				Iterator<GraphElement> it = elements.listIterator();
 				while (it.hasNext())
 				{
-					((LabelV) it.next()).owner.label = null;
+					((LabelV) it.next()).getOwner().setLabel(null);
 				}
 				result = elements.size() + " labels removed";
 			}
 			else
 			{
-				((LabelV) elements.getFirst()).owner.label = null;
+				((LabelV) elements.getFirst()).getOwner().setLabel(null);
 				result = "Label removed";
 			}
-			ControlManager.graph.labelsV.removeAll(elements);
+			ControlManager.graph.getLabelsV().removeAll(elements);
 		}
 		else
 		{
@@ -96,16 +96,16 @@ public class RemoveOperation extends Operation
 				Iterator<GraphElement> it = elements.listIterator();
 				while (it.hasNext())
 				{
-					((LabelE) it.next()).owner.label = null;
+					((LabelE) it.next()).getOwner().setLabel(null);
 				}
 				result = elements.size() + " labels removed";
 			}
 			else
 			{
-				((LabelE) elements.getFirst()).owner.label = null;
+				((LabelE) elements.getFirst()).getOwner().setLabel(null);
 				result = "Label removed";
 			}
-			ControlManager.graph.labelsV.removeAll(elements);
+			ControlManager.graph.getLabelsV().removeAll(elements);
 		}
 
 		return result;
@@ -124,18 +124,18 @@ public class RemoveOperation extends Operation
 				while (it.hasNext())
 				{
 					temp = (Vertex) it.next();
-					ControlManager.graph.vertices.add(temp);
+					ControlManager.graph.getVertices().add(temp);
 					temp.setPartOfNumeration(true);
 				}
 				result = "Removing multiple vertices undone";
 			}
 			else
 			{
-				ControlManager.graph.vertices.add((Vertex) elements.get(0));
+				ControlManager.graph.getVertices().add((Vertex) elements.get(0));
 				((Vertex) elements.get(0)).setPartOfNumeration(true);
 				result = "Removing vertex undone";
 			}
-			ControlManager.graph.edges.addAll(connectedEdges);
+			ControlManager.graph.getEdges().addAll(connectedEdges);
 		}
 		else if (type == 2)
 		{
@@ -144,13 +144,13 @@ public class RemoveOperation extends Operation
 				Iterator<GraphElement> it = elements.listIterator();
 				while (it.hasNext())
 				{
-					ControlManager.graph.edges.add((Edge) it.next());
+					ControlManager.graph.getEdges().add((Edge) it.next());
 				}
 				result = "Removing multiple edges undone";
 			}
 			else
 			{
-				ControlManager.graph.edges.add((Edge) elements.get(0));
+				ControlManager.graph.getEdges().add((Edge) elements.get(0));
 				result = "Removing edge undone";
 			}
 		}
@@ -163,15 +163,15 @@ public class RemoveOperation extends Operation
 				while (it.hasNext())
 				{
 					temp = (LabelV) it.next();
-					ControlManager.graph.labelsV.add(temp);
-					temp.owner.label = temp;
+					ControlManager.graph.getLabelsV().add(temp);
+					temp.getOwner().setLabel(temp);
 				}
 				result = "Removing multiple labels undone";
 			}
 			else
 			{
-				ControlManager.graph.labelsV.add((LabelV) elements.get(0));
-				((LabelV) elements.getFirst()).owner.label = (LabelV) elements.getFirst();
+				ControlManager.graph.getLabelsV().add((LabelV) elements.get(0));
+				((LabelV) elements.getFirst()).getOwner().setLabel((LabelV) elements.getFirst());
 				result = "Removing label undone";
 			}
 		}
@@ -184,15 +184,15 @@ public class RemoveOperation extends Operation
 				while (it.hasNext())
 				{
 					temp = (LabelE) it.next();
-					ControlManager.graph.labelsE.add(temp);
-					temp.owner.label = temp;
+					ControlManager.graph.getLabelsE().add(temp);
+					temp.getOwner().setLabel(temp);
 				}
 				result = "Removing multiple labels undone";
 			}
 			else
 			{
-				ControlManager.graph.labelsE.add((LabelE) elements.get(0));
-				((LabelE) elements.getFirst()).owner.label = (LabelE) elements.getFirst();
+				ControlManager.graph.getLabelsE().add((LabelE) elements.get(0));
+				((LabelE) elements.getFirst()).getOwner().setLabel((LabelE) elements.getFirst());
 				result = "Removing label undone";
 			}
 		}

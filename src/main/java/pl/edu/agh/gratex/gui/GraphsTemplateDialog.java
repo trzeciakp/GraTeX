@@ -22,7 +22,6 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import pl.edu.agh.gratex.graph.DrawingTools;
 import pl.edu.agh.gratex.graph.Edge;
 import pl.edu.agh.gratex.graph.Graph;
 import pl.edu.agh.gratex.graph.LabelE;
@@ -33,6 +32,7 @@ import pl.edu.agh.gratex.model.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.VertexPropertyModel;
+import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.property.PanelPropertyEditor;
 
 public class GraphsTemplateDialog extends JDialog
@@ -107,8 +107,8 @@ public class GraphsTemplateDialog extends JDialog
 		{
 			((VertexPropertyModel) model).number = -1;
 			vertex1.setModel((VertexPropertyModel) model);
-			graph.vertexDefaultModel = (VertexPropertyModel) vertex1.getModel();
-			graph.vertexDefaultModel.number = -1;
+			graph.setVertexDefaultModel((VertexPropertyModel) vertex1.getModel());
+			graph.getVertexDefaultModel().number = -1;
 		}
 		else if (model instanceof EdgePropertyModel)
 		{
@@ -116,22 +116,22 @@ public class GraphsTemplateDialog extends JDialog
 			edge1.setModel((EdgePropertyModel) model);
 			edge2.setModel((EdgePropertyModel) model);
 			edge3.setModel((EdgePropertyModel) model);
-			graph.edgeDefaultModel = (EdgePropertyModel) edge1.getModel();
-			graph.edgeDefaultModel.relativeEdgeAngle = -1;
+			graph.setEdgeDefaultModel((EdgePropertyModel) edge1.getModel());
+			graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
 		}
 		else if (model instanceof LabelVertexPropertyModel)
 		{
 			labelV1.setModel((LabelVertexPropertyModel) model);
-			graph.labelVDefaultModel = (LabelVertexPropertyModel) labelV1.getModel();
-			graph.labelVDefaultModel.text = null;
+			graph.setLabelVDefaultModel((LabelVertexPropertyModel) labelV1.getModel());
+			graph.getLabelVDefaultModel().text = null;
 		}
 		else
 		{
 			labelE1.setModel((LabelEdgePropertyModel) model);
 			labelE2.setModel((LabelEdgePropertyModel) model);
 			labelE3.setModel((LabelEdgePropertyModel) model);
-			graph.labelEDefaultModel = (LabelEdgePropertyModel) labelE1.getModel();
-			graph.labelEDefaultModel.text = null;
+			graph.setLabelEDefaultModel((LabelEdgePropertyModel) labelE1.getModel());
+			graph.getLabelEDefaultModel().text = null;
 		}
 
 		refreshModels();
@@ -141,19 +141,19 @@ public class GraphsTemplateDialog extends JDialog
 	{
 		if (tabbedPane.getSelectedIndex() == 0)
 		{
-			panel_propertyEditor.setModel(graph.vertexDefaultModel);
+			panel_propertyEditor.setModel(graph.getVertexDefaultModel());
 		}
 		else if (tabbedPane.getSelectedIndex() == 1)
 		{
-			panel_propertyEditor.setModel(graph.edgeDefaultModel);
+			panel_propertyEditor.setModel(graph.getEdgeDefaultModel());
 		}
 		else if (tabbedPane.getSelectedIndex() == 2)
 		{
-			panel_propertyEditor.setModel(graph.labelVDefaultModel);
+			panel_propertyEditor.setModel(graph.getLabelVDefaultModel());
 		}
 		else if (tabbedPane.getSelectedIndex() == 3)
 		{
-			panel_propertyEditor.setModel(graph.labelEDefaultModel);
+			panel_propertyEditor.setModel(graph.getLabelEDefaultModel());
 		}
 	}
 
@@ -177,20 +177,20 @@ public class GraphsTemplateDialog extends JDialog
 			public void actionPerformed(ActionEvent e)
 			{
 				graph.initDefaultModels();
-				graph.edgeDefaultModel.isLoop = -1;
-				graph.edgeDefaultModel.relativeEdgeAngle = -1;
-				graph.labelVDefaultModel.text = null;
-				graph.labelEDefaultModel.text = null;
-				vertex1.setModel(graph.vertexDefaultModel);
-				edge1.setModel(graph.edgeDefaultModel);
-				edge1.relativeEdgeAngle = 300;
-				edge2.setModel(graph.edgeDefaultModel);
-				edge2.relativeEdgeAngle = 180;
-				edge3.setModel(graph.edgeDefaultModel);
-				edge3.relativeEdgeAngle = 0;
-				labelV1.setModel(graph.labelVDefaultModel);
-				labelE1.setModel(graph.labelEDefaultModel);
-				labelE2.setModel(graph.labelEDefaultModel);
+				graph.getEdgeDefaultModel().isLoop = -1;
+				graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
+				graph.getLabelVDefaultModel().text = null;
+				graph.getLabelEDefaultModel().text = null;
+				vertex1.setModel(graph.getVertexDefaultModel());
+				edge1.setModel(graph.getEdgeDefaultModel());
+				edge1.setRelativeEdgeAngle(300);
+				edge2.setModel(graph.getEdgeDefaultModel());
+				edge2.setRelativeEdgeAngle(180);
+				edge3.setModel(graph.getEdgeDefaultModel());
+				edge3.setRelativeEdgeAngle(0);
+				labelV1.setModel(graph.getLabelVDefaultModel());
+				labelE1.setModel(graph.getLabelEDefaultModel());
+				labelE2.setModel(graph.getLabelEDefaultModel());
 
 				panel_preview.repaint();
 			}
@@ -235,77 +235,77 @@ public class GraphsTemplateDialog extends JDialog
 		graph = new Graph();
 		graph.gridOn = false;
 
-		graph.vertexDefaultModel = new VertexPropertyModel(ControlManager.graph.vertexDefaultModel);
-		graph.edgeDefaultModel = new EdgePropertyModel(ControlManager.graph.edgeDefaultModel);
-		graph.edgeDefaultModel.isLoop = -1;
-		graph.edgeDefaultModel.relativeEdgeAngle = -1;
-		graph.labelVDefaultModel = new LabelVertexPropertyModel(ControlManager.graph.labelVDefaultModel);
-		graph.labelVDefaultModel.text = null;
-		graph.labelEDefaultModel = new LabelEdgePropertyModel(ControlManager.graph.labelEDefaultModel);
-		graph.labelEDefaultModel.text = null;
+		graph.setVertexDefaultModel(new VertexPropertyModel(ControlManager.graph.getVertexDefaultModel()));
+		graph.setEdgeDefaultModel(new EdgePropertyModel(ControlManager.graph.getEdgeDefaultModel()));
+		graph.getEdgeDefaultModel().isLoop = -1;
+		graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
+		graph.setLabelVDefaultModel(new LabelVertexPropertyModel(ControlManager.graph.getLabelVDefaultModel()));
+		graph.getLabelVDefaultModel().text = null;
+		graph.setLabelEDefaultModel(new LabelEdgePropertyModel(ControlManager.graph.getLabelEDefaultModel()));
+		graph.getLabelEDefaultModel().text = null;
 
 		vertex1 = new Vertex();
-		vertex1.setModel(graph.vertexDefaultModel);
+		vertex1.setModel(graph.getVertexDefaultModel());
 		vertex1.updateNumber(1);
-		vertex1.posX = 240;
-		vertex1.posY = 190;
-		graph.vertices.add(vertex1);
+		vertex1.setPosX(240);
+		vertex1.setPosY(190);
+		graph.getVertices().add(vertex1);
 
 		vertex2 = new Vertex();
-		vertex2.setModel(graph.vertexDefaultModel);
+		vertex2.setModel(graph.getVertexDefaultModel());
 		vertex2.updateNumber(2);
-		vertex2.type = 1;
-		vertex2.vertexColor = new Color(200, 200, 200);
-		vertex2.lineType = DrawingTools.SOLID_LINE;
-		vertex2.lineWidth = 1;
-		vertex2.lineColor = Color.black;
-		vertex2.fontColor = Color.black;
-		vertex2.labelInside = true;
-		vertex2.radius = 15;
-		vertex2.posX = 490;
-		vertex2.posY = 313;
-		graph.vertices.add(vertex2);
+		vertex2.setType(1);
+		vertex2.setVertexColor(new Color(200, 200, 200));
+		vertex2.setLineType(LineType.SOLID);
+		vertex2.setLineWidth(1);
+		vertex2.setLineColor(Color.black);
+		vertex2.setFontColor(Color.black);
+		vertex2.setLabelInside(true);
+		vertex2.setRadius(15);
+		vertex2.setPosX(490);
+		vertex2.setPosY(313);
+		graph.getVertices().add(vertex2);
 
 		edge1 = new Edge();
-		edge1.setModel(graph.edgeDefaultModel);
-		edge1.vertexA = vertex2;
-		edge1.vertexB = vertex1;
-		edge1.relativeEdgeAngle = 300;
-		graph.edges.add(edge1);
+		edge1.setModel(graph.getEdgeDefaultModel());
+		edge1.setVertexA(vertex2);
+		edge1.setVertexB(vertex1);
+		edge1.setRelativeEdgeAngle(300);
+		graph.getEdges().add(edge1);
 
 		edge2 = new Edge();
-		edge2.setModel(graph.edgeDefaultModel);
-		edge2.vertexA = vertex1;
-		edge2.vertexB = vertex1;
-		edge2.relativeEdgeAngle = 180;
-		graph.edges.add(edge2);
+		edge2.setModel(graph.getEdgeDefaultModel());
+		edge2.setVertexA(vertex1);
+		edge2.setVertexB(vertex1);
+		edge2.setRelativeEdgeAngle(180);
+		graph.getEdges().add(edge2);
 
 		edge3 = new Edge();
-		edge3.setModel(graph.edgeDefaultModel);
-		edge3.vertexA = vertex1;
-		edge3.vertexB = vertex2;
-		edge3.relativeEdgeAngle = 0;
-		graph.edges.add(edge3);
+		edge3.setModel(graph.getEdgeDefaultModel());
+		edge3.setVertexA(vertex1);
+		edge3.setVertexB(vertex2);
+		edge3.setRelativeEdgeAngle(0);
+		graph.getEdges().add(edge3);
 
 		labelV1 = new LabelV(vertex1);
-		vertex1.label = labelV1;
-		labelV1.setModel(graph.labelVDefaultModel);
-		graph.labelsV.add(labelV1);
+		vertex1.setLabel(labelV1);
+		labelV1.setModel(graph.getLabelVDefaultModel());
+		graph.getLabelsV().add(labelV1);
 
 		labelE1 = new LabelE(edge1);
-		edge1.label = labelE1;
-		labelE1.setModel(graph.labelEDefaultModel);
-		graph.labelsE.add(labelE1);
+		edge1.setLabel(labelE1);
+		labelE1.setModel(graph.getLabelEDefaultModel());
+		graph.getLabelsE().add(labelE1);
 
 		labelE2 = new LabelE(edge2);
-		edge2.label = labelE2;
-		labelE2.setModel(graph.labelEDefaultModel);
-		graph.labelsE.add(labelE2);
+		edge2.setLabel(labelE2);
+		labelE2.setModel(graph.getLabelEDefaultModel());
+		graph.getLabelsE().add(labelE2);
 
 		labelE3 = new LabelE(edge3);
-		edge3.label = labelE3;
-		labelE3.setModel(graph.labelEDefaultModel);
-		graph.labelsE.add(labelE3);
+		edge3.setLabel(labelE3);
+		labelE3.setModel(graph.getLabelEDefaultModel());
+		graph.getLabelsE().add(labelE3);
 	}
 
 	private void initializeFrame()
@@ -336,7 +336,7 @@ public class GraphsTemplateDialog extends JDialog
 		panel_propertyEditor.setEnabled(true);
 		panel_propertyEditor.disableLabelEdition();
 		panel_propertyEditor.setMode(1);
-		panel_propertyEditor.setModel(graph.vertexDefaultModel);
+		panel_propertyEditor.setModel(graph.getVertexDefaultModel());
 
 		vertexPanel = new JPanel();
 		vertexPanel.setLayout(null);

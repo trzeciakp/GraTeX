@@ -33,51 +33,51 @@ public class TemplateChangeOperation extends Operation
 
 	public TemplateChangeOperation(Graph initialGraphState, Graph endGraphState)
 	{
-		vertexStartModel = ControlManager.graph.vertexDefaultModel;
-		edgeStartModel = ControlManager.graph.edgeDefaultModel;
-		labelVStartModel = ControlManager.graph.labelVDefaultModel;
-		labelEStartModel = ControlManager.graph.labelEDefaultModel;
+		vertexStartModel = ControlManager.graph.getVertexDefaultModel();
+		edgeStartModel = ControlManager.graph.getEdgeDefaultModel();
+		labelVStartModel = ControlManager.graph.getLabelVDefaultModel();
+		labelEStartModel = ControlManager.graph.getLabelEDefaultModel();
 
-		vertexEndModel = endGraphState.vertexDefaultModel;
-		edgeEndModel = endGraphState.edgeDefaultModel;
-		labelVEndModel = endGraphState.labelVDefaultModel;
-		labelEEndModel = endGraphState.labelEDefaultModel;
+		vertexEndModel = endGraphState.getVertexDefaultModel();
+		edgeEndModel = endGraphState.getEdgeDefaultModel();
+		labelVEndModel = endGraphState.getLabelVDefaultModel();
+		labelEEndModel = endGraphState.getLabelEDefaultModel();
 		applyToAll = endGraphState.gridOn;
 	}
 
 	public String doOperation()
 	{
-		ControlManager.graph.vertexDefaultModel = vertexEndModel;
-		ControlManager.graph.edgeDefaultModel = edgeEndModel;
-		ControlManager.graph.labelVDefaultModel = labelVEndModel;
-		ControlManager.graph.labelEDefaultModel = labelEEndModel;
+		ControlManager.graph.setVertexDefaultModel(vertexEndModel);
+		ControlManager.graph.setEdgeDefaultModel(edgeEndModel);
+		ControlManager.graph.setLabelVDefaultModel(labelVEndModel);
+		ControlManager.graph.setLabelEDefaultModel(labelEEndModel);
 
 		if (applyToAll)
 		{
-			if (ControlManager.graph.vertices.size() > 0)
+			if (ControlManager.graph.getVertices().size() > 0)
 			{
-				vertexChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.vertices), -1);
+				vertexChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.getVertices()), -1);
 				vertexChange.setEndModel(vertexEndModel);
 				vertexChange.doOperation();
 			}
 
-			if (ControlManager.graph.edges.size() > 0)
+			if (ControlManager.graph.getEdges().size() > 0)
 			{
-				edgeChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.edges), -1);
+				edgeChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.getEdges()), -1);
 				edgeChange.setEndModel(edgeEndModel);
 				edgeChange.doOperation();
 			}
 
-			if (ControlManager.graph.labelsV.size() > 0)
+			if (ControlManager.graph.getLabelsV().size() > 0)
 			{
-				labelVChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.labelsV), -1);
+				labelVChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.getLabelsV()), -1);
 				labelVChange.setEndModel(labelVEndModel);
 				labelVChange.doOperation();
 			}
 
-			if (ControlManager.graph.labelsE.size() > 0)
+			if (ControlManager.graph.getLabelsE().size() > 0)
 			{
-				labelEChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.labelsE), -1);
+				labelEChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.getLabelsE()), -1);
 				labelEChange.setEndModel(labelEEndModel);
 				labelEChange.doOperation();
 			}
@@ -95,10 +95,10 @@ public class TemplateChangeOperation extends Operation
 
 	public String undoOperation()
 	{
-		ControlManager.graph.vertexDefaultModel = vertexStartModel;
-		ControlManager.graph.edgeDefaultModel = edgeStartModel;
-		ControlManager.graph.labelVDefaultModel = labelVStartModel;
-		ControlManager.graph.labelEDefaultModel = labelEStartModel;
+		ControlManager.graph.setVertexDefaultModel(vertexStartModel);
+		ControlManager.graph.setEdgeDefaultModel(edgeStartModel);
+		ControlManager.graph.setLabelVDefaultModel(labelVStartModel);
+		ControlManager.graph.setLabelEDefaultModel(labelEStartModel);
 
 		if (applyToAll)
 		{

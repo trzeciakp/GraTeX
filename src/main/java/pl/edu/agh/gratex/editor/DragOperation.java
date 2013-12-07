@@ -80,56 +80,56 @@ public class DragOperation extends Operation
 
 	public void setLabelEStartState(LabelE labelE)
 	{
-		startBias = labelE.position;
-		startLabelEHorizontal = labelE.horizontalPlacement;
+		startBias = labelE.getPosition();
+		startLabelEHorizontal = labelE.isHorizontalPlacement();
 	}
 
 	public void setLabelEEndState(LabelE labelE)
 	{
-		endBias = labelE.position;
-		endLabelEHorizontal = labelE.horizontalPlacement;
+		endBias = labelE.getPosition();
+		endLabelEHorizontal = labelE.isHorizontalPlacement();
 	}
 
 	public void setEdgeStartState(Edge edge, boolean _isDisjointedVertexA)
 	{
-		startRelativeEdgeAngle = edge.relativeEdgeAngle;
-		startEdgeDirection = edge.directed;
+		startRelativeEdgeAngle = edge.getRelativeEdgeAngle();
+		startEdgeDirection = edge.isDirected();
 		isDisjointedVertexA = _isDisjointedVertexA;
 		if (isDisjointedVertexA)
 		{
-			disjointedVertex = edge.vertexA;
+			disjointedVertex = edge.getVertexA();
 		}
 		else
 		{
-			disjointedVertex = edge.vertexB;
+			disjointedVertex = edge.getVertexB();
 		}
 	}
 
 	public void setEdgeEndState(Edge edge)
 	{
-		endRelativeEdgeAngle = edge.relativeEdgeAngle;
-		endEdgeDirection = edge.directed;
+		endRelativeEdgeAngle = edge.getRelativeEdgeAngle();
+		endEdgeDirection = edge.isDirected();
 		if (isDisjointedVertexA)
 		{
-			endVertex = edge.vertexA;
+			endVertex = edge.getVertexA();
 		}
 		else
 		{
-			endVertex = edge.vertexB;
+			endVertex = edge.getVertexB();
 		}
 	}
 
 	public void restoreEdgeStartState()
 	{
-		((Edge) draggedGraphElement).directed = startEdgeDirection;
-		((Edge) draggedGraphElement).relativeEdgeAngle = startRelativeEdgeAngle;
+		((Edge) draggedGraphElement).setDirected(startEdgeDirection);
+		((Edge) draggedGraphElement).setRelativeEdgeAngle(startRelativeEdgeAngle);
 		if (isDisjointedVertexA)
 		{
-			((Edge) draggedGraphElement).vertexA = disjointedVertex;
+			((Edge) draggedGraphElement).setVertexA(disjointedVertex);
 		}
 		else
 		{
-			((Edge) draggedGraphElement).vertexB = disjointedVertex;
+			((Edge) draggedGraphElement).setVertexB(disjointedVertex);
 		}
 	}
 
@@ -145,14 +145,14 @@ public class DragOperation extends Operation
 
 	public void restoreDisjointedVertex()
 	{
-		((Edge) draggedGraphElement).directed = startEdgeDirection;
+		((Edge) draggedGraphElement).setDirected(startEdgeDirection);
 		if (isDisjointedVertexA)
 		{
-			((Edge) draggedGraphElement).vertexA = disjointedVertex;
+			((Edge) draggedGraphElement).setVertexA(disjointedVertex);
 		}
 		else
 		{
-			((Edge) draggedGraphElement).vertexB = disjointedVertex;
+			((Edge) draggedGraphElement).setVertexB(disjointedVertex);
 		}
 	}
 
@@ -167,33 +167,33 @@ public class DragOperation extends Operation
 
 		if (draggedGraphElement instanceof Vertex)
 		{
-			((Vertex) draggedGraphElement).posX = endPosX;
-			((Vertex) draggedGraphElement).posY = endPosY;
+			((Vertex) draggedGraphElement).setPosX(endPosX);
+			((Vertex) draggedGraphElement).setPosY(endPosY);
 			result = "Vertex moved";
 		}
 		else if (draggedGraphElement instanceof Edge)
 		{
-			((Edge) draggedGraphElement).directed = endEdgeDirection;
-			((Edge) draggedGraphElement).relativeEdgeAngle = endRelativeEdgeAngle;
+			((Edge) draggedGraphElement).setDirected(endEdgeDirection);
+			((Edge) draggedGraphElement).setRelativeEdgeAngle(endRelativeEdgeAngle);
 			if (isDisjointedVertexA)
 			{
-				((Edge) draggedGraphElement).vertexA = endVertex;
+				((Edge) draggedGraphElement).setVertexA(endVertex);
 			}
 			else
 			{
-				((Edge) draggedGraphElement).vertexB = endVertex;
+				((Edge) draggedGraphElement).setVertexB(endVertex);
 			}
 			result = "Edge moved";
 		}
 		else if (draggedGraphElement instanceof LabelV)
 		{
-			((LabelV) draggedGraphElement).position = endAngle;
+			((LabelV) draggedGraphElement).setPosition(endAngle);
 			result = "Label moved";
 		}
 		else if (draggedGraphElement instanceof LabelE)
 		{
-			((LabelE) draggedGraphElement).position = endBias;
-			((LabelE) draggedGraphElement).horizontalPlacement = endLabelEHorizontal;
+			((LabelE) draggedGraphElement).setPosition(endBias);
+			((LabelE) draggedGraphElement).setHorizontalPlacement(endLabelEHorizontal);
 			result = "Label moved";
 		}
 		return result;
@@ -205,8 +205,8 @@ public class DragOperation extends Operation
 
 		if (draggedGraphElement instanceof Vertex)
 		{
-			((Vertex) draggedGraphElement).posX = startPosX;
-			((Vertex) draggedGraphElement).posY = startPosY;
+			((Vertex) draggedGraphElement).setPosX(startPosX);
+			((Vertex) draggedGraphElement).setPosY(startPosY);
 			result = "Vertex moved back";
 		}
 		else if (draggedGraphElement instanceof Edge)
@@ -216,13 +216,13 @@ public class DragOperation extends Operation
 		}
 		else if (draggedGraphElement instanceof LabelV)
 		{
-			((LabelV) draggedGraphElement).position = startAngle;
+			((LabelV) draggedGraphElement).setPosition(startAngle);
 			result = "Label moved back";
 		}
 		else if (draggedGraphElement instanceof LabelE)
 		{
-			((LabelE) draggedGraphElement).position = startBias;
-			((LabelE) draggedGraphElement).horizontalPlacement = startLabelEHorizontal;
+			((LabelE) draggedGraphElement).setPosition(startBias);
+			((LabelE) draggedGraphElement).setHorizontalPlacement(startLabelEHorizontal);
 			result = "Label moved back";
 		}
 		return result;

@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.EdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.LineType;
 
 
 public class Edge extends GraphElement implements Serializable
@@ -26,30 +27,30 @@ public class Edge extends GraphElement implements Serializable
 	private static final long	serialVersionUID	= -7941761380307220731L;
 
 	// Wartości edytowalne przez użytkowanika
-	public int					lineType;
-	public int					lineWidth;
-	public boolean				directed;										// Z shiftem rysujemy skierowaną	
-	public int					arrowType;
-	public Color				lineColor;
-	public int					relativeEdgeAngle;
+    private LineType lineType;
+	private int					lineWidth;
+	private boolean				directed;										// Z shiftem rysujemy skierowaną
+	private int					arrowType;
+	private Color				lineColor;
+	private int					relativeEdgeAngle;
 
 	// Wartości potrzebne do parsowania
-	public Vertex				vertexA;
-	public Vertex				vertexB;
-	public LabelE				label;
-	public int					inAngle;
-	public int					outAngle;
+    private Vertex				vertexA;
+	private Vertex				vertexB;
+	private LabelE				label;
+	private int					inAngle;
+	private int					outAngle;
 
 	// Pozostałe
 	private int					arrowLengthFactor	= 2;						// Nakład na długość grota względem grubości linii - ustawienie z poziomu kodu
 	private int					arrowLengthBasic	= 10;						// Podstawowa długość grota - ustawienie z poziomu kodu
-	public Point				arcMiddle			= new Point();
-	public int					arcRadius;
-	public Point				outPoint;
-	public Point				inPoint;
-	public Arc2D.Double			arc;
-	public int[]				arrowLine1			= null;
-	public int[]				arrowLine2			= null;
+	private Point				arcMiddle			= new Point();
+	private int					arcRadius;
+	private Point				outPoint;
+	private Point				inPoint;
+	private Arc2D.Double			arc;
+	private int[]				arrowLine1			= null;
+	private int[]				arrowLine2			= null;
 
 	public Edge getCopy(LinkedList<Vertex> vertices)
 	{
@@ -60,11 +61,11 @@ public class Edge extends GraphElement implements Serializable
 		while (itv.hasNext())
 		{
 			tempV = itv.next();
-			if (tempV.posX == vertexA.posX && tempV.posY == vertexA.posY)
+			if (tempV.getPosX() == getVertexA().getPosX() && tempV.getPosY() == getVertexA().getPosY())
 			{
 				_vertexA = tempV;
 			}
-			if (tempV.posX == vertexB.posX && tempV.posY == vertexB.posY)
+			if (tempV.getPosX() == getVertexB().getPosX() && tempV.getPosY() == getVertexB().getPosY())
 			{
 				_vertexB = tempV;
 			}
@@ -76,12 +77,12 @@ public class Edge extends GraphElement implements Serializable
 		{
 			return null;
 		}
-		result.vertexA = _vertexA;
-		result.vertexB = _vertexB;
+		result.setVertexA(_vertexA);
+		result.setVertexB(_vertexB);
 
-		if (label != null)
+		if (getLabel() != null)
 		{
-			result.label = label.getCopy(result);
+			result.setLabel(getLabel().getCopy(result));
 		}
 
 		return result;
@@ -91,34 +92,34 @@ public class Edge extends GraphElement implements Serializable
 	{
 		EdgePropertyModel model = (EdgePropertyModel) pm;
 
-		if (model.lineType > -1)
+		if (model.lineType != LineType.EMPTY)
 		{
-			lineType = model.lineType;
+			setLineType(model.lineType);
 		}
 
 		if (model.lineWidth > -1)
 		{
-			lineWidth = model.lineWidth;
+			setLineWidth(model.lineWidth);
 		}
 
 		if (model.directed > -1)
 		{
-			directed = (model.directed == 1);
+			setDirected((model.directed == 1));
 		}
 
 		if (model.lineColor != null)
 		{
-			lineColor = new Color(model.lineColor.getRGB());
+			setLineColor(new Color(model.lineColor.getRGB()));
 		}
 
 		if (model.relativeEdgeAngle > -1)
 		{
-			relativeEdgeAngle = model.relativeEdgeAngle;
+			setRelativeEdgeAngle(model.relativeEdgeAngle);
 		}
 
 		if (model.arrowType > -1)
 		{
-			arrowType = model.arrowType;
+			setArrowType(model.arrowType);
 		}
 	}
 
@@ -126,19 +127,19 @@ public class Edge extends GraphElement implements Serializable
 	{
 		EdgePropertyModel result = new EdgePropertyModel();
 
-		result.lineWidth = lineWidth;
-		result.lineType = lineType;
-		result.arrowType = arrowType;
-		result.lineColor = new Color(lineColor.getRGB());
-		result.relativeEdgeAngle = relativeEdgeAngle;
-		if (vertexA == vertexB)
+		result.lineWidth = getLineWidth();
+		result.lineType = getLineType();
+		result.arrowType = getArrowType();
+		result.lineColor = new Color(getLineColor().getRGB());
+		result.relativeEdgeAngle = getRelativeEdgeAngle();
+		if (getVertexA() == getVertexB())
 		{
 			result.isLoop = pl.edu.agh.gratex.model.PropertyModel.YES;
 		}
 		else
 			result.isLoop = pl.edu.agh.gratex.model.PropertyModel.NO;
 		result.directed = 0;
-		if (directed)
+		if (isDirected())
 		{
 			result.directed = 1;
 		}
@@ -148,18 +149,18 @@ public class Edge extends GraphElement implements Serializable
 
 	public boolean intersects(int x, int y)
 	{
-		Point2D va = new Point(vertexA.posX, vertexA.posY);
-		Point2D vb = new Point(vertexB.posX, vertexB.posY);
+		Point2D va = new Point(getVertexA().getPosX(), getVertexA().getPosY());
+		Point2D vb = new Point(getVertexB().getPosX(), getVertexB().getPosY());
 		Point2D click = new Point(x, y);
 
-		if (vertexA == vertexB)
+		if (getVertexA() == getVertexB())
 		{
-			int r = vertexA.radius + vertexA.lineWidth / 2;
-			double dx = arcMiddle.x - x;
-			double dy = arcMiddle.y - y;
+			int r = getVertexA().getRadius() + getVertexA().getLineWidth() / 2;
+			double dx = getArcMiddle().x - x;
+			double dy = getArcMiddle().y - y;
 			double a = r * 0.75;
 			double b = r * 0.375;
-			if (relativeEdgeAngle == 90 || relativeEdgeAngle == 270)
+			if (getRelativeEdgeAngle() == 90 || getRelativeEdgeAngle() == 270)
 			{
 				a = r * 0.375;
 				b = r * 0.75;
@@ -170,32 +171,32 @@ public class Edge extends GraphElement implements Serializable
 		}
 		else
 		{
-			if (relativeEdgeAngle != 0)
+			if (getRelativeEdgeAngle() != 0)
 			{
-				if (Math.abs(click.distance(arcMiddle) - arcRadius) < 10 + lineWidth / 2)
+				if (Math.abs(click.distance(getArcMiddle()) - getArcRadius()) < 10 + getLineWidth() / 2)
 				{
-					double clickAngle = (Math.toDegrees(Math.atan2(click.getX() - arcMiddle.x, click.getY() - arcMiddle.y)) + 270) % 360;
-					if (arc.extent < 0)
+					double clickAngle = (Math.toDegrees(Math.atan2(click.getX() - getArcMiddle().x, click.getY() - getArcMiddle().y)) + 270) % 360;
+					if (getArc().extent < 0)
 					{
-						double endAngle = (arc.start + arc.extent + 720) % 360;
+						double endAngle = (getArc().start + getArc().extent + 720) % 360;
 
-						return (clickAngle - endAngle + 720) % 360 < (arc.start - endAngle + 720) % 360;
+						return (clickAngle - endAngle + 720) % 360 < (getArc().start - endAngle + 720) % 360;
 					}
 					else
 					{
-						return (arc.extent) % 360 > (clickAngle - arc.start + 720) % 360;
+						return (getArc().extent) % 360 > (clickAngle - getArc().start + 720) % 360;
 					}
 				}
 			}
 			else
 			{
-				if ((Math.min(vertexA.posX, vertexB.posX) <= x && Math.max(vertexA.posX, vertexB.posX) >= x)
-						|| (Math.min(vertexA.posY, vertexB.posY) <= y && Math.max(vertexA.posY, vertexB.posY) >= y))
+				if ((Math.min(getVertexA().getPosX(), getVertexB().getPosX()) <= x && Math.max(getVertexA().getPosX(), getVertexB().getPosX()) >= x)
+						|| (Math.min(getVertexA().getPosY(), getVertexB().getPosY()) <= y && Math.max(getVertexA().getPosY(), getVertexB().getPosY()) >= y))
 				{
-					if (click.distance(va) > vertexA.radius && click.distance(vb) > vertexB.radius)
+					if (click.distance(va) > getVertexA().getRadius() && click.distance(vb) > getVertexB().getRadius())
 					{
-						double distance = Line2D.ptLineDist((double) vertexA.posX, (double) vertexA.posY, (double) vertexB.posX,
-								(double) vertexB.posY, (double) x, (double) y);
+						double distance = Line2D.ptLineDist((double) getVertexA().getPosX(), (double) getVertexA().getPosY(), (double) getVertexB().getPosX(),
+								(double) getVertexB().getPosY(), (double) x, (double) y);
 						return distance < 12;
 					}
 				}
@@ -207,25 +208,25 @@ public class Edge extends GraphElement implements Serializable
 
 	private void calculateInOutPoints()
 	{
-		double beta = (Math.toDegrees(Math.atan2(vertexB.posX - vertexA.posX, vertexB.posY - vertexA.posY))) + 270;
-		outPoint = Utilities.calculateEdgeExitPoint(vertexA, relativeEdgeAngle + beta);
-		inPoint = Utilities.calculateEdgeExitPoint(vertexB, 180 - relativeEdgeAngle + beta);
-		outAngle = (int) Math.round(Math.toDegrees(Math.atan2(outPoint.x - vertexA.posX, outPoint.y - vertexA.posY)) + 270) % 360;
-		inAngle = (int) Math.round(Math.toDegrees(Math.atan2(inPoint.x - vertexB.posX, inPoint.y - vertexB.posY)) + 270) % 360;
+		double beta = (Math.toDegrees(Math.atan2(getVertexB().getPosX() - getVertexA().getPosX(), getVertexB().getPosY() - getVertexA().getPosY()))) + 270;
+		setOutPoint(Utilities.calculateEdgeExitPoint(getVertexA(), getRelativeEdgeAngle() + beta));
+		setInPoint(Utilities.calculateEdgeExitPoint(getVertexB(), 180 - getRelativeEdgeAngle() + beta));
+		setOutAngle((int) Math.round(Math.toDegrees(Math.atan2(getOutPoint().x - getVertexA().getPosX(), getOutPoint().y - getVertexA().getPosY())) + 270) % 360);
+		setInAngle((int) Math.round(Math.toDegrees(Math.atan2(getInPoint().x - getVertexB().getPosX(), getInPoint().y - getVertexB().getPosY())) + 270) % 360);
 	}
 
 	private void calculateArcParameters()
 	{
-		if (relativeEdgeAngle != 0)
+		if (getRelativeEdgeAngle() != 0)
 		{
-			double mx = (outPoint.x + inPoint.x) / 2;
-			double my = (outPoint.y + inPoint.y) / 2;
-			double dx = (inPoint.x - outPoint.x) / 2;
-			double dy = (inPoint.y - outPoint.y) / 2;
-			arcMiddle.x = (int) Math.round(mx - dy * Math.cos(Math.toRadians(relativeEdgeAngle)) / Math.sin(Math.toRadians(relativeEdgeAngle)));
-			arcMiddle.y = (int) Math.round(my + dx * Math.cos(Math.toRadians(relativeEdgeAngle)) / Math.sin(Math.toRadians(relativeEdgeAngle)));
-			arcRadius = (int) Math.round(Math.sqrt((arcMiddle.x - outPoint.x) * (arcMiddle.x - outPoint.x) + (arcMiddle.y - outPoint.y)
-					* (arcMiddle.y - outPoint.y)));
+			double mx = (getOutPoint().x + getInPoint().x) / 2;
+			double my = (getOutPoint().y + getInPoint().y) / 2;
+			double dx = (getInPoint().x - getOutPoint().x) / 2;
+			double dy = (getInPoint().y - getOutPoint().y) / 2;
+			getArcMiddle().x = (int) Math.round(mx - dy * Math.cos(Math.toRadians(getRelativeEdgeAngle())) / Math.sin(Math.toRadians(getRelativeEdgeAngle())));
+			getArcMiddle().y = (int) Math.round(my + dx * Math.cos(Math.toRadians(getRelativeEdgeAngle())) / Math.sin(Math.toRadians(getRelativeEdgeAngle())));
+			setArcRadius((int) Math.round(Math.sqrt((getArcMiddle().x - getOutPoint().x) * (getArcMiddle().x - getOutPoint().x) + (getArcMiddle().y - getOutPoint().y)
+					* (getArcMiddle().y - getOutPoint().y))));
 		}
 	}
 
@@ -233,21 +234,21 @@ public class Edge extends GraphElement implements Serializable
 	{
 		int ax = 0;
 		int ay = 0;
-		int bx = inPoint.x;
-		int by = inPoint.y;
+		int bx = getInPoint().x;
+		int by = getInPoint().y;
 
-		if (vertexA == vertexB)
+		if (getVertexA() == getVertexB())
 		{
-			ax = 2 * bx - vertexA.posX;
-			ay = 2 * by - vertexA.posY;
+			ax = 2 * bx - getVertexA().getPosX();
+			ay = 2 * by - getVertexA().getPosY();
 		}
-		else if (relativeEdgeAngle != 0)
+		else if (getRelativeEdgeAngle() != 0)
 		{
-			int x1 = bx - (arcMiddle.y - by);
-			int y1 = by + (arcMiddle.x - bx);
-			int x2 = bx + (arcMiddle.y - by);
-			int y2 = by - (arcMiddle.x - bx);
-			if (Point.distance(x1, y1, vertexB.posX, vertexB.posY) > Point.distance(x2, y2, vertexB.posX, vertexB.posY))
+			int x1 = bx - (getArcMiddle().y - by);
+			int y1 = by + (getArcMiddle().x - bx);
+			int x2 = bx + (getArcMiddle().y - by);
+			int y2 = by - (getArcMiddle().x - bx);
+			if (Point.distance(x1, y1, getVertexB().getPosX(), getVertexB().getPosY()) > Point.distance(x2, y2, getVertexB().getPosX(), getVertexB().getPosY()))
 			{
 				ax = x1;
 				ay = y1;
@@ -260,8 +261,8 @@ public class Edge extends GraphElement implements Serializable
 		}
 		else
 		{
-			ax = vertexA.posX;
-			ay = vertexA.posY;
+			ax = getVertexA().getPosX();
+			ay = getVertexA().getPosY();
 		}
 
 		int dx = bx - ax;
@@ -270,14 +271,14 @@ public class Edge extends GraphElement implements Serializable
 		int[] p1 = new int[] { ax - dy, ay + dx };
 		int[] p2 = new int[] { ax + dy, ay - dx };
 		
-		if (arrowType == PropertyModel.FILLED)
+		if (getArrowType() == PropertyModel.FILLED)
 		{
 
 			p1 = new int[] { ax - dy / 2, ay + dx / 2};
 			p2 = new int[] { ax + dy / 2, ay - dx / 2};
 		}
 
-		double part = (arrowLengthBasic + arrowLengthFactor * lineWidth)
+		double part = (arrowLengthBasic + arrowLengthFactor * getLineWidth())
 				/ Math.sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]));
 		
 		p1[0] = bx - (int) Math.round(part * (bx - p1[0]));
@@ -285,72 +286,72 @@ public class Edge extends GraphElement implements Serializable
 		p2[0] = bx - (int) Math.round(part * (bx - p2[0]));
 		p2[1] = by - (int) Math.round(part * (by - p2[1]));
 
-		arrowLine1 = new int[] { p1[0], p1[1], bx, by };
-		arrowLine2 = new int[] { p2[0], p2[1], bx, by };
+		setArrowLine1(new int[] { p1[0], p1[1], bx, by });
+		setArrowLine2(new int[] { p2[0], p2[1], bx, by });
 	}
 
 	private void drawAngleVisualisation(Graphics2D g)
 	{
 		g.setColor(Color.gray);
-		g.setStroke(DrawingTools.getStroke(2, DrawingTools.DASHED_LINE, 0.0));
-		g.drawLine(vertexA.posX, vertexA.posY, vertexB.posX, vertexB.posY);
+		g.setStroke(DrawingTools.getStroke(2, LineType.DASHED, 0.0));
+		g.drawLine(getVertexA().getPosX(), getVertexA().getPosY(), getVertexB().getPosX(), getVertexB().getPosY());
 
-		Point m = new Point((vertexA.posX + vertexB.posX) / 2, (vertexA.posY + vertexB.posY) / 2);
-		double d = 2 * m.distance(vertexA.posX, vertexB.posY);
+		Point m = new Point((getVertexA().getPosX() + getVertexB().getPosX()) / 2, (getVertexA().getPosY() + getVertexB().getPosY()) / 2);
+		double d = 2 * m.distance(getVertexA().getPosX(), getVertexB().getPosY());
 
-		Point p1 = new Point((int) Math.round(vertexA.posX + (d / (2.5 * vertexA.radius)) * (outPoint.x - vertexA.posX)),
-				(int) Math.round(vertexA.posY + (d / (2.5 * vertexA.radius)) * (outPoint.y - vertexA.posY)));
-		Point p2 = new Point((int) Math.round(vertexB.posX + (d / (2.5 * vertexB.radius)) * (inPoint.x - vertexB.posX)),
-				(int) Math.round(vertexB.posY + (d / (2.5 * vertexB.radius)) * (inPoint.y - vertexB.posY)));
-		g.drawLine(vertexA.posX, vertexA.posY, p1.x, p1.y);
-		g.drawLine(vertexB.posX, vertexB.posY, p2.x, p2.y);
+		Point p1 = new Point((int) Math.round(getVertexA().getPosX() + (d / (2.5 * getVertexA().getRadius())) * (getOutPoint().x - getVertexA().getPosX())),
+				(int) Math.round(getVertexA().getPosY() + (d / (2.5 * getVertexA().getRadius())) * (getOutPoint().y - getVertexA().getPosY())));
+		Point p2 = new Point((int) Math.round(getVertexB().getPosX() + (d / (2.5 * getVertexB().getRadius())) * (getInPoint().x - getVertexB().getPosX())),
+				(int) Math.round(getVertexB().getPosY() + (d / (2.5 * getVertexB().getRadius())) * (getInPoint().y - getVertexB().getPosY())));
+		g.drawLine(getVertexA().getPosX(), getVertexA().getPosY(), p1.x, p1.y);
+		g.drawLine(getVertexB().getPosX(), getVertexB().getPosY(), p2.x, p2.y);
 
 		g.setFont(new Font("Times New Roman", Font.PLAIN, 60));
 		FontMetrics fm = g.getFontMetrics();
 		String alphaText = Character.toString('\u03B1');
 
-		int arcAngle = relativeEdgeAngle;
+		int arcAngle = getRelativeEdgeAngle();
 		if (arcAngle > 180)
 		{
 			arcAngle -= 360;
 			alphaText = '-' + Character.toString('\u03B1');
 		}
-		double angle = Math.toRadians(outAngle - arcAngle / 2);
-		int x = vertexA.posX - fm.stringWidth(alphaText) / 2 + (int) Math.round((d / 4) * Math.cos(angle));
-		int y = vertexA.posY + fm.getAscent() / 4 - (int) Math.round((d / 4) * Math.sin(angle));
+		double angle = Math.toRadians(getOutAngle() - arcAngle / 2);
+		int x = getVertexA().getPosX() - fm.stringWidth(alphaText) / 2 + (int) Math.round((d / 4) * Math.cos(angle));
+		int y = getVertexA().getPosY() + fm.getAscent() / 4 - (int) Math.round((d / 4) * Math.sin(angle));
 		g.drawString(alphaText, x, y);
-		angle = Math.toRadians(inAngle + arcAngle / 2);
-		x = vertexB.posX - fm.stringWidth(alphaText) / 2 + (int) Math.round((d / 4) * Math.cos(angle));
-		y = vertexB.posY + fm.getAscent() / 4 - (int) Math.round((d / 4) * Math.sin(angle));
+		angle = Math.toRadians(getInAngle() + arcAngle / 2);
+		x = getVertexB().getPosX() - fm.stringWidth(alphaText) / 2 + (int) Math.round((d / 4) * Math.cos(angle));
+		y = getVertexB().getPosY() + fm.getAscent() / 4 - (int) Math.round((d / 4) * Math.sin(angle));
 		g.drawString(alphaText, x, y);
-		g.draw(new Arc2D.Double(vertexA.posX - (d / 3), vertexA.posY - (d / 3), d / 1.5, d / 1.5, outAngle, -arcAngle, Arc2D.OPEN));
-		g.draw(new Arc2D.Double(vertexB.posX - (d / 3), vertexB.posY - (d / 3), d / 1.5, d / 1.5, inAngle, arcAngle, Arc2D.OPEN));
+		g.draw(new Arc2D.Double(getVertexA().getPosX() - (d / 3), getVertexA().getPosY() - (d / 3), d / 1.5, d / 1.5, getOutAngle(), -arcAngle, Arc2D.OPEN));
+		g.draw(new Arc2D.Double(getVertexB().getPosX() - (d / 3), getVertexB().getPosY() - (d / 3), d / 1.5, d / 1.5, getInAngle(), arcAngle, Arc2D.OPEN));
 	}
 
 	public void updatePosition()
 	{
-		if (vertexA != vertexB)
+		if (getVertexA() != getVertexB())
 		{
 			calculateInOutPoints();
 			calculateArcParameters();
 
-			if (relativeEdgeAngle != 0)
+			if (getRelativeEdgeAngle() != 0)
 			{
-				int x1 = outPoint.x;
-				int y1 = outPoint.y;
-				int x2 = inPoint.x;
-				int y2 = inPoint.y;
-				int x0 = arcMiddle.x;
-				int y0 = arcMiddle.y;
+				int x1 = getOutPoint().x;
+				int y1 = getOutPoint().y;
+				int x2 = getInPoint().x;
+				int y2 = getInPoint().y;
+				int x0 = getArcMiddle().x;
+				int y0 = getArcMiddle().y;
 
-				double x = x0 - arcRadius;
-				double y = y0 - arcRadius;
-				double width = 2 * arcRadius;
-				double height = 2 * arcRadius;
+				double x = x0 - getArcRadius();
+				double y = y0 - getArcRadius();
+				double width = 2 * getArcRadius();
+				double height = 2 * getArcRadius();
 				double startAngle = (Math.toDegrees(Math.atan2(x1 - x0, y1 - y0)) + 270) % 360;
 				double endAngle = (Math.toDegrees(Math.atan2(x2 - x0, y2 - y0)) + 270) % 360;
 
-				if (relativeEdgeAngle > 180)
+				if (getRelativeEdgeAngle() > 180)
 				{
 					endAngle = (endAngle - startAngle + 360) % 360;
 				}
@@ -359,18 +360,18 @@ public class Edge extends GraphElement implements Serializable
 					endAngle = ((endAngle - startAngle + 360) % 360) - 360;
 				}
 
-				arc = new Arc2D.Double(x, y, width, height, startAngle, endAngle, Arc2D.OPEN);
+				setArc(new Arc2D.Double(x, y, width, height, startAngle, endAngle, Arc2D.OPEN));
 			}
 		}
 
 		else
 		{
-			int r = vertexA.radius + vertexA.lineWidth / 2;
+			int r = getVertexA().getRadius() + getVertexA().getLineWidth() / 2;
 			double x = 0;
 			double y = 0;
 			double width = r * 1.5;
 			double height = r * 0.75;
-			if (relativeEdgeAngle == 90 || relativeEdgeAngle == 270)
+			if (getRelativeEdgeAngle() == 90 || getRelativeEdgeAngle() == 270)
 			{
 				width = r * 0.75;
 				height = r * 1.5;
@@ -380,23 +381,23 @@ public class Edge extends GraphElement implements Serializable
 			double arrowPosHorizRate = 0.965;
 			double arrowPosVertRate = 0.265;
 
-			if (vertexA.type == 2)
+			if (getVertexA().getType() == 2)
 			{
 				offsetRate = 0.375;
 				arrowPosHorizRate = 0.84;
 				arrowPosVertRate = 0.325;
 
-				if (relativeEdgeAngle == 90)
+				if (getRelativeEdgeAngle() == 90)
 				{
 					arrowPosHorizRate = 0.595;
 					arrowPosVertRate = 0.26;
 				}
-				else if (relativeEdgeAngle == 180)
+				else if (getRelativeEdgeAngle() == 180)
 				{
 					arrowPosHorizRate = 0.475;
 					arrowPosVertRate = 0.195;
 				}
-				else if (relativeEdgeAngle == 270)
+				else if (getRelativeEdgeAngle() == 270)
 				{
 					arrowPosHorizRate = 0.505;
 					arrowPosVertRate = 0.15;
@@ -405,92 +406,92 @@ public class Edge extends GraphElement implements Serializable
 				}
 			}
 
-			else if (vertexA.type == 3)
+			else if (getVertexA().getType() == 3)
 			{
 				offsetRate = 0.5;
 				arrowPosHorizRate = 0.72;
 				arrowPosVertRate = 0.265;
 			}
 
-			else if (vertexA.type == 4)
+			else if (getVertexA().getType() == 4)
 			{
 				offsetRate = 0.4375;
 				arrowPosHorizRate = 0.755;
 				arrowPosVertRate = 0.295;
 
-				if (relativeEdgeAngle == 90)
+				if (getRelativeEdgeAngle() == 90)
 				{
 					arrowPosHorizRate = 0.795;
 					arrowPosVertRate = 0.305;
 				}
-				else if (relativeEdgeAngle == 180)
+				else if (getRelativeEdgeAngle() == 180)
 				{
 					arrowPosHorizRate = 0.93;
 					arrowPosVertRate = 0.355;
 				}
-				else if (relativeEdgeAngle == 270)
+				else if (getRelativeEdgeAngle() == 270)
 				{
 					arrowPosHorizRate = 0.815;
 					arrowPosVertRate = 0.335;
 				}
 			}
 
-			else if (vertexA.type == 5)
+			else if (getVertexA().getType() == 5)
 			{
 				offsetRate = 0.625;
 				arrowPosHorizRate = 0.85;
 				arrowPosVertRate = 0.27;
-				if (relativeEdgeAngle == 90 || relativeEdgeAngle == 270)
+				if (getRelativeEdgeAngle() == 90 || getRelativeEdgeAngle() == 270)
 				{
 					arrowPosHorizRate = 0.88;
 					arrowPosVertRate = 0.283;
 				}
 			}
 
-			switch (relativeEdgeAngle)
+			switch (getRelativeEdgeAngle())
 			{
 				case 0:
 				{
-					x = vertexA.posX + r * offsetRate;
-					y = vertexA.posY - height / 2;
-					inPoint = new Point((int) Math.round(vertexA.posX + r * arrowPosHorizRate), (int) Math.round(vertexA.posY + r * arrowPosVertRate));
-					outPoint = new Point((int) Math.round(vertexA.posX + r * arrowPosHorizRate),
-							(int) Math.round(vertexA.posY - r * arrowPosVertRate));
+					x = getVertexA().getPosX() + r * offsetRate;
+					y = getVertexA().getPosY() - height / 2;
+					setInPoint(new Point((int) Math.round(getVertexA().getPosX() + r * arrowPosHorizRate), (int) Math.round(getVertexA().getPosY() + r * arrowPosVertRate)));
+					setOutPoint(new Point((int) Math.round(getVertexA().getPosX() + r * arrowPosHorizRate),
+							(int) Math.round(getVertexA().getPosY() - r * arrowPosVertRate)));
 					break;
 				}
 				case 90:
 				{
-					x = vertexA.posX - width / 2;
-					y = vertexA.posY - r * (offsetRate + height / r);
-					inPoint = new Point((int) Math.round(vertexA.posX + r * arrowPosVertRate), (int) Math.round(vertexA.posY - r * arrowPosHorizRate));
-					outPoint = new Point((int) Math.round(vertexA.posX - r * arrowPosVertRate),
-							(int) Math.round(vertexA.posY - r * arrowPosHorizRate));
+					x = getVertexA().getPosX() - width / 2;
+					y = getVertexA().getPosY() - r * (offsetRate + height / r);
+					setInPoint(new Point((int) Math.round(getVertexA().getPosX() + r * arrowPosVertRate), (int) Math.round(getVertexA().getPosY() - r * arrowPosHorizRate)));
+					setOutPoint(new Point((int) Math.round(getVertexA().getPosX() - r * arrowPosVertRate),
+							(int) Math.round(getVertexA().getPosY() - r * arrowPosHorizRate)));
 					break;
 				}
 				case 180:
 				{
-					x = vertexA.posX - r * (offsetRate + width / r);
-					y = vertexA.posY - height / 2;
-					inPoint = new Point((int) Math.round(vertexA.posX - r * arrowPosHorizRate), (int) Math.round(vertexA.posY - r * arrowPosVertRate));
-					outPoint = new Point((int) Math.round(vertexA.posX - r * arrowPosHorizRate),
-							(int) Math.round(vertexA.posY + r * arrowPosVertRate));
+					x = getVertexA().getPosX() - r * (offsetRate + width / r);
+					y = getVertexA().getPosY() - height / 2;
+					setInPoint(new Point((int) Math.round(getVertexA().getPosX() - r * arrowPosHorizRate), (int) Math.round(getVertexA().getPosY() - r * arrowPosVertRate)));
+					setOutPoint(new Point((int) Math.round(getVertexA().getPosX() - r * arrowPosHorizRate),
+							(int) Math.round(getVertexA().getPosY() + r * arrowPosVertRate)));
 					break;
 				}
 				case 270:
 				{
-					x = vertexA.posX - width / 2;
-					y = vertexA.posY + r * offsetRate;
-					inPoint = new Point((int) Math.round(vertexA.posX - r * arrowPosVertRate), (int) Math.round(vertexA.posY + r * arrowPosHorizRate));
-					outPoint = new Point((int) Math.round(vertexA.posX + r * arrowPosVertRate),
-							(int) Math.round(vertexA.posY + r * arrowPosHorizRate));
+					x = getVertexA().getPosX() - width / 2;
+					y = getVertexA().getPosY() + r * offsetRate;
+					setInPoint(new Point((int) Math.round(getVertexA().getPosX() - r * arrowPosVertRate), (int) Math.round(getVertexA().getPosY() + r * arrowPosHorizRate)));
+					setOutPoint(new Point((int) Math.round(getVertexA().getPosX() + r * arrowPosVertRate),
+							(int) Math.round(getVertexA().getPosY() + r * arrowPosHorizRate)));
 					break;
 				}
 			}
-			arcMiddle = new Point((int) Math.round(x + width / 2), (int) Math.round(y + height / 2));
-			arc = new Arc2D.Double(x, y, width, height, 0, 360, Arc2D.OPEN);
+			setArcMiddle(new Point((int) Math.round(x + width / 2), (int) Math.round(y + height / 2)));
+			setArc(new Arc2D.Double(x, y, width, height, 0, 360, Arc2D.OPEN));
 		}
 
-		if (directed)
+		if (isDirected())
 		{
 			updateArrowPosition();
 		}
@@ -502,45 +503,45 @@ public class Edge extends GraphElement implements Serializable
 
 		updatePosition();
 
-		if (vertexA != vertexB)
+		if (getVertexA() != getVertexB())
 		{
-			if (relativeEdgeAngle != 0)
+			if (getRelativeEdgeAngle() != 0)
 			{
 				if (ControlManager.selection.contains(this))
 				{
 					g.setColor(DrawingTools.selectionColor);
-					Stroke drawingStroke = new BasicStroke(lineWidth * 2 + 5);
+					Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
 					g.setStroke(drawingStroke);
-					g.draw(arc);
+					g.draw(getArc());
 				}
 
-				g.setColor(lineColor);
+				g.setColor(getLineColor());
 				if (dummy)
 				{
-					g.setColor(DrawingTools.getDummyColor(lineColor));
+					g.setColor(DrawingTools.getDummyColor(getLineColor()));
 				}
-				g.setStroke(DrawingTools.getStroke(lineWidth, lineType, 0.0));
-				g.draw(arc);
+				g.setStroke(DrawingTools.getStroke(getLineWidth(), getLineType(), 0.0));
+				g.draw(getArc());
 			}
 			else
 			{
 				if (ControlManager.selection.contains(this))
 				{
 					g.setColor(DrawingTools.selectionColor);
-					Stroke drawingStroke = new BasicStroke(lineWidth * 2 + 5);
+					Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
 					g.setStroke(drawingStroke);
-					g.drawLine(vertexA.posX, vertexA.posY, vertexB.posX, vertexB.posY);
+					g.drawLine(getVertexA().getPosX(), getVertexA().getPosY(), getVertexB().getPosX(), getVertexB().getPosY());
 				}
 
-				g.setColor(lineColor);
+				g.setColor(getLineColor());
 				if (dummy)
 				{
-					g.setColor(DrawingTools.getDummyColor(lineColor));
+					g.setColor(DrawingTools.getDummyColor(getLineColor()));
 				}
-				g.setStroke(DrawingTools.getStroke(lineWidth, lineType, 0.0));
-				g.drawLine(vertexA.posX, vertexA.posY, vertexB.posX, vertexB.posY);
+				g.setStroke(DrawingTools.getStroke(getLineWidth(), getLineType(), 0.0));
+				g.drawLine(getVertexA().getPosX(), getVertexA().getPosY(), getVertexB().getPosX(), getVertexB().getPosY());
 			}
-			if ((ControlManager.selection.contains(this) || ControlManager.currentlyAddedEdge == this) && relativeEdgeAngle != 0)
+			if ((ControlManager.selection.contains(this) || ControlManager.currentlyAddedEdge == this) && getRelativeEdgeAngle() != 0)
 			{
 				drawAngleVisualisation(g);
 			}
@@ -551,59 +552,59 @@ public class Edge extends GraphElement implements Serializable
 			if (ControlManager.selection.contains(this))
 			{
 				g.setColor(DrawingTools.selectionColor);
-				Stroke drawingStroke = new BasicStroke(lineWidth * 2 + 5);
+				Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
 				g.setStroke(drawingStroke);
-				g.draw(arc);
+				g.draw(getArc());
 			}
 
-			g.setColor(lineColor);
+			g.setColor(getLineColor());
 			if (dummy)
 			{
-				g.setColor(DrawingTools.getDummyColor(lineColor));
+				g.setColor(DrawingTools.getDummyColor(getLineColor()));
 			}
-			g.setStroke(DrawingTools.getStroke(lineWidth, lineType, 0.0));
-			g.draw(arc);
+			g.setStroke(DrawingTools.getStroke(getLineWidth(), getLineType(), 0.0));
+			g.draw(getArc());
 		}
 
-		if (directed)
+		if (isDirected())
 		{
-			if (arrowType == PropertyModel.BASIC)
+			if (getArrowType() == PropertyModel.BASIC)
 			{
 				if (ControlManager.selection.contains(this))
 				{
 					g.setColor(DrawingTools.selectionColor);
-					Stroke drawingStroke = new BasicStroke(lineWidth * 2 + 5);
+					Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
 					g.setStroke(drawingStroke);
-					g.drawLine(arrowLine1[0], arrowLine1[1], arrowLine1[2], arrowLine1[3]);
-					g.drawLine(arrowLine2[0], arrowLine2[1], arrowLine2[2], arrowLine2[3]);
+					g.drawLine(getArrowLine1()[0], getArrowLine1()[1], getArrowLine1()[2], getArrowLine1()[3]);
+					g.drawLine(getArrowLine2()[0], getArrowLine2()[1], getArrowLine2()[2], getArrowLine2()[3]);
 				}
 
-				g.setColor(lineColor);
+				g.setColor(getLineColor());
 				if (dummy)
 				{
-					g.setColor(DrawingTools.getDummyColor(lineColor));
+					g.setColor(DrawingTools.getDummyColor(getLineColor()));
 				}
-				g.setStroke(new BasicStroke(lineWidth));
-				g.drawLine(arrowLine1[0], arrowLine1[1], arrowLine1[2], arrowLine1[3]);
-				g.drawLine(arrowLine2[0], arrowLine2[1], arrowLine2[2], arrowLine2[3]);
+				g.setStroke(new BasicStroke(getLineWidth()));
+				g.drawLine(getArrowLine1()[0], getArrowLine1()[1], getArrowLine1()[2], getArrowLine1()[3]);
+				g.drawLine(getArrowLine2()[0], getArrowLine2()[1], getArrowLine2()[2], getArrowLine2()[3]);
 			}
 			else
 			{
 				if (ControlManager.selection.contains(this))
 				{
 					g.setColor(DrawingTools.selectionColor);
-					Stroke drawingStroke = new BasicStroke(lineWidth * 2 + 5);
+					Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
 					g.setStroke(drawingStroke);
-					g.fillPolygon(new Polygon(new int[] {arrowLine1[0], arrowLine1[2], arrowLine2[0]}, new int[] {arrowLine1[1], arrowLine1[3], arrowLine2[1]}, 3));
+					g.fillPolygon(new Polygon(new int[] {getArrowLine1()[0], getArrowLine1()[2], getArrowLine2()[0]}, new int[] {getArrowLine1()[1], getArrowLine1()[3], getArrowLine2()[1]}, 3));
 				}
 
-				g.setColor(lineColor);
+				g.setColor(getLineColor());
 				if (dummy)
 				{
-					g.setColor(DrawingTools.getDummyColor(lineColor));
+					g.setColor(DrawingTools.getDummyColor(getLineColor()));
 				}
-				g.setStroke(new BasicStroke(lineWidth));
-				g.fillPolygon(new Polygon(new int[] {arrowLine1[0], arrowLine1[2], arrowLine2[0]}, new int[] {arrowLine1[1], arrowLine1[3], arrowLine2[1]}, 3));
+				g.setStroke(new BasicStroke(getLineWidth()));
+				g.fillPolygon(new Polygon(new int[] {getArrowLine1()[0], getArrowLine1()[2], getArrowLine2()[0]}, new int[] {getArrowLine1()[1], getArrowLine1()[3], getArrowLine2()[1]}, 3));
 			}
 		}
 		
@@ -612,9 +613,153 @@ public class Edge extends GraphElement implements Serializable
 
 	public void drawLabel(Graphics2D g, boolean dummy)
 	{
-		if (label != null)
+		if (getLabel() != null)
 		{
-			label.draw(g, dummy);
+			getLabel().draw(g, dummy);
 		}
 	}
+
+    public int getLineWidth() {
+        return lineWidth;
+    }
+
+    public void setLineWidth(int lineWidth) {
+        this.lineWidth = lineWidth;
+    }
+
+    public LineType getLineType() {
+        return lineType;
+    }
+
+    public void setLineType(LineType lineType) {
+        this.lineType = lineType;
+    }
+
+    public boolean isDirected() {
+        return directed;
+    }
+
+    public void setDirected(boolean directed) {
+        this.directed = directed;
+    }
+
+    public int getArrowType() {
+        return arrowType;
+    }
+
+    public void setArrowType(int arrowType) {
+        this.arrowType = arrowType;
+    }
+
+    public Color getLineColor() {
+        return lineColor;
+    }
+
+    public void setLineColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    public int getRelativeEdgeAngle() {
+        return relativeEdgeAngle;
+    }
+
+    public void setRelativeEdgeAngle(int relativeEdgeAngle) {
+        this.relativeEdgeAngle = relativeEdgeAngle;
+    }
+
+    public Vertex getVertexA() {
+        return vertexA;
+    }
+
+    public void setVertexA(Vertex vertexA) {
+        this.vertexA = vertexA;
+    }
+
+    public Vertex getVertexB() {
+        return vertexB;
+    }
+
+    public void setVertexB(Vertex vertexB) {
+        this.vertexB = vertexB;
+    }
+
+    public LabelE getLabel() {
+        return label;
+    }
+
+    public void setLabel(LabelE label) {
+        this.label = label;
+    }
+
+    public int getInAngle() {
+        return inAngle;
+    }
+
+    public void setInAngle(int inAngle) {
+        this.inAngle = inAngle;
+    }
+
+    public int getOutAngle() {
+        return outAngle;
+    }
+
+    public void setOutAngle(int outAngle) {
+        this.outAngle = outAngle;
+    }
+
+    public Point getArcMiddle() {
+        return arcMiddle;
+    }
+
+    public void setArcMiddle(Point arcMiddle) {
+        this.arcMiddle = arcMiddle;
+    }
+
+    public int getArcRadius() {
+        return arcRadius;
+    }
+
+    public void setArcRadius(int arcRadius) {
+        this.arcRadius = arcRadius;
+    }
+
+    public Point getOutPoint() {
+        return outPoint;
+    }
+
+    public void setOutPoint(Point outPoint) {
+        this.outPoint = outPoint;
+    }
+
+    public Point getInPoint() {
+        return inPoint;
+    }
+
+    public void setInPoint(Point inPoint) {
+        this.inPoint = inPoint;
+    }
+
+    public Arc2D.Double getArc() {
+        return arc;
+    }
+
+    public void setArc(Arc2D.Double arc) {
+        this.arc = arc;
+    }
+
+    public int[] getArrowLine1() {
+        return arrowLine1;
+    }
+
+    public void setArrowLine1(int[] arrowLine1) {
+        this.arrowLine1 = arrowLine1;
+    }
+
+    public int[] getArrowLine2() {
+        return arrowLine2;
+    }
+
+    public void setArrowLine2(int[] arrowLine2) {
+        this.arrowLine2 = arrowLine2;
+    }
 }

@@ -13,7 +13,8 @@ import pl.edu.agh.gratex.model.VertexPropertyModel;
 
 public class OperationList
 {
-	private LinkedList<Operation>	operations;
+    public static final int MAX_OPERATIONS = 256;
+    private LinkedList<Operation>	operations;
 	private int						iterator;
 
 	public OperationList()
@@ -28,7 +29,7 @@ public class OperationList
 		{
 			operations.removeLast();
 		}
-		while (operations.size() > 256)
+		while (operations.size() > MAX_OPERATIONS)
 		{
 			operations.removeFirst();
 		}

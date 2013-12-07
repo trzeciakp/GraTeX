@@ -1,5 +1,7 @@
 package pl.edu.agh.gratex.model;
 
+import pl.edu.agh.gratex.model.properties.LineType;
+
 import java.awt.Color;
 import java.io.Serializable;
 
@@ -7,7 +9,7 @@ public class EdgePropertyModel extends PropertyModel implements Serializable
 {
 	private static final long	serialVersionUID	= 8852715176545442749L;
 
-	public int					lineType;
+	public LineType lineType;
 	public int					lineWidth;
 	public int					directed;
 	public Color				lineColor;
@@ -17,7 +19,7 @@ public class EdgePropertyModel extends PropertyModel implements Serializable
 
 	public EdgePropertyModel()
 	{
-		lineType = PropertyModel.EMPTY;
+		lineType = LineType.EMPTY;
 		lineWidth = PropertyModel.EMPTY;
 		directed = PropertyModel.EMPTY;
 		lineColor = null;
@@ -51,7 +53,7 @@ public class EdgePropertyModel extends PropertyModel implements Serializable
 
 		if (model.lineType != lineType)
 		{
-			lineType = -1;
+			lineType = LineType.EMPTY;
 		}
 
 		if (model.lineWidth != lineWidth)

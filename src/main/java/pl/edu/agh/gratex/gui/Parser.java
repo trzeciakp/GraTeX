@@ -9,6 +9,7 @@ import pl.edu.agh.gratex.graph.LabelE;
 import pl.edu.agh.gratex.graph.LabelV;
 import pl.edu.agh.gratex.graph.Vertex;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.LineType;
 
 
 public class Parser
@@ -18,42 +19,42 @@ public class Parser
 	{
 		String result = "\\usetikzlibrary{shapes.geometric}\n\\begin{tikzpicture}\n[every node/.style={inner sep=0pt}]\n";
 
-		Iterator<Vertex> itv = gr.vertices.listIterator();
+		Iterator<Vertex> itv = gr.getVertices().listIterator();
 		Vertex vtemp = null;
 		String line = null;
 		while (itv.hasNext())
 		{
 			vtemp = itv.next();
 			line = "\\node (" + vtemp.getNumber() + ") ";
-			if (vtemp.type == 1)
+			if (vtemp.getType() == 1)
 			{
 				line += "[circle"; //ksztalt
 			}
 			else
 			{
-				line += "[regular polygon, regular polygon sides=" + (vtemp.type + 1);
+				line += "[regular polygon, regular polygon sides=" + (vtemp.getType() + 1);
 			}
-			line += ", minimum size=" + (1.25 * vtemp.radius) + "pt"; //wielkosc
-			if (vtemp.vertexColor != null)
-				line += ", fill=" + PropertyModel.COLORS.get(vtemp.vertexColor);
-			line += ", line width=" + 0.625 * vtemp.lineWidth + "pt";
-			if (vtemp.lineType != PropertyModel.NONE)
+			line += ", minimum size=" + (1.25 * vtemp.getRadius()) + "pt"; //wielkosc
+			if (vtemp.getVertexColor() != null)
+				line += ", fill=" + PropertyModel.COLORS.get(vtemp.getVertexColor());
+			line += ", line width=" + 0.625 * vtemp.getLineWidth() + "pt";
+			if (vtemp.getLineType() != LineType.NONE)
 			{
 				line += ", draw";
-				if (vtemp.lineColor != null)
-					line += "=" + PropertyModel.COLORS.get(vtemp.lineColor);
-				if (vtemp.lineType == PropertyModel.DASHED)
+				if (vtemp.getLineColor() != null)
+					line += "=" + PropertyModel.COLORS.get(vtemp.getLineColor());
+				if (vtemp.getLineType() == LineType.DASHED)
 					line += ", dashed";
-				else if (vtemp.lineType == PropertyModel.DOTTED)
+				else if (vtemp.getLineType() == LineType.DOTTED)
 					line += ", dotted";
-				else if (vtemp.lineType == PropertyModel.DOUBLE)
+				else if (vtemp.getLineType() == LineType.DOUBLE)
 					line += ", double";
 			}
-			line += "] at (" + 0.625 * vtemp.posX + "pt, " + 0.625 * (-vtemp.posY) + "pt) ";
-			if (vtemp.labelInside)
+			line += "] at (" + 0.625 * vtemp.getPosX() + "pt, " + 0.625 * (-vtemp.getPosY()) + "pt) ";
+			if (vtemp.isLabelInside())
 			{
-				if (vtemp.fontColor != null)
-					line += "{\\textcolor{" + PropertyModel.COLORS.get(vtemp.fontColor) + "}{" + vtemp.getNumber() + "}};\n";
+				if (vtemp.getFontColor() != null)
+					line += "{\\textcolor{" + PropertyModel.COLORS.get(vtemp.getFontColor()) + "}{" + vtemp.getNumber() + "}};\n";
 				else
 					line += "{" + vtemp.getNumber() + "}";
 			}
@@ -63,30 +64,30 @@ public class Parser
 		}
 		vtemp = null;
 
-		Iterator<Edge> etv = gr.edges.listIterator();
+		Iterator<Edge> etv = gr.getEdges().listIterator();
 		line = "";
 		Edge etemp = null;
 		while (etv.hasNext())
 		{
 			etemp = etv.next();
-			line = "\\draw [line width=" + 0.625 * etemp.lineWidth;
-			if (etemp.directed) {
+			line = "\\draw [line width=" + 0.625 * etemp.getLineWidth();
+			if (etemp.isDirected()) {
 				line += ", ->";
-				if(etemp.arrowType == PropertyModel.FILLED ) line += ", >=latex";
+				if(etemp.getArrowType() == PropertyModel.FILLED ) line += ", >=latex";
 			}
-			if (etemp.lineType == PropertyModel.DASHED)
+			if (etemp.getLineType() == LineType.DASHED)
 				line += ", dashed";
-			else if (etemp.lineType == PropertyModel.DOTTED)
+			else if (etemp.getLineType() == LineType.DOTTED)
 				line += ", dotted";
-			else if (etemp.lineType == PropertyModel.DOUBLE)
+			else if (etemp.getLineType() == LineType.DOUBLE)
 				line += ", double";
-			if (etemp.lineColor != null)
-				line += ", color=" + PropertyModel.COLORS.get(etemp.lineColor);
+			if (etemp.getLineColor() != null)
+				line += ", color=" + PropertyModel.COLORS.get(etemp.getLineColor());
 			//petla
-			if (etemp.vertexA == etemp.vertexB)
+			if (etemp.getVertexA() == etemp.getVertexB())
 			{
 				line += ", loop ";
-				switch (etemp.relativeEdgeAngle)
+				switch (etemp.getRelativeEdgeAngle())
 				{
 					case 0:
 						line += "right";
@@ -101,59 +102,59 @@ public class Parser
 						line += "below";
 						break;
 				}
-				line += "] (" + etemp.vertexA.getNumber() + ") to (" + etemp.vertexB.getNumber() + ");\n";
+				line += "] (" + etemp.getVertexA().getNumber() + ") to (" + etemp.getVertexB().getNumber() + ");\n";
 			}
 			else
 			{
 				line += "]";
-				line += " (" + etemp.vertexA.getNumber() + ") to ";
-				if (etemp.relativeEdgeAngle > 0)
-					line += " [in=" + etemp.inAngle + ", out=" + etemp.outAngle + "]";
+				line += " (" + etemp.getVertexA().getNumber() + ") to ";
+				if (etemp.getRelativeEdgeAngle() > 0)
+					line += " [in=" + etemp.getInAngle() + ", out=" + etemp.getOutAngle() + "]";
 
-				line += " (" + etemp.vertexB.getNumber() + ");\n";
+				line += " (" + etemp.getVertexB().getNumber() + ");\n";
 			}
 			result += line;
 		}
 		etemp = null;
 
-		itv = gr.vertices.listIterator();
+		itv = gr.getVertices().listIterator();
 		vtemp = null;
 		LabelV lvtemp = null;
 		line = null;
 		while (itv.hasNext())
 		{
 			vtemp = itv.next();
-			if (vtemp.label != null)
+			if (vtemp.getLabel() != null)
 			{
-				lvtemp = vtemp.label;
-				line = "\\node at (" + 0.625 * lvtemp.posX + "pt, " + 0.625 * (-lvtemp.posY) + "pt) ";
-				if (lvtemp.fontColor != null)
-					line += "{\\textcolor{" + PropertyModel.COLORS.get(lvtemp.fontColor) + "}{" + lvtemp.text + "}};\n";
+				lvtemp = vtemp.getLabel();
+				line = "\\node at (" + 0.625 * lvtemp.getPosX() + "pt, " + 0.625 * (-lvtemp.getPosY()) + "pt) ";
+				if (lvtemp.getFontColor() != null)
+					line += "{\\textcolor{" + PropertyModel.COLORS.get(lvtemp.getFontColor()) + "}{" + lvtemp.getText() + "}};\n";
 				else
-					line += "{" + lvtemp.text + "}";
+					line += "{" + lvtemp.getText() + "}";
 				result += line;
 			}
 		}
 		lvtemp = null;
 		vtemp = null;
 
-		etv = gr.edges.listIterator();
+		etv = gr.getEdges().listIterator();
 		line = null;
 		etemp = null;
 		LabelE letemp = null;
 		while (etv.hasNext())
 		{
 			etemp = etv.next();
-			if (etemp.label != null)
+			if (etemp.getLabel() != null)
 			{
-				letemp = etemp.label;
-				line = "\\node at (" + 0.625 * letemp.posX + "pt, " + 0.625 * (-letemp.posY) + "pt) ";
-				if (letemp.angle > 0)
-					line += "[rotate=" + letemp.angle + "] ";
-				if (letemp.fontColor != null)
-					line += "{\\textcolor{" + PropertyModel.COLORS.get(letemp.fontColor) + "}{" + letemp.text + "}};\n";
+				letemp = etemp.getLabel();
+				line = "\\node at (" + 0.625 * letemp.getPosX() + "pt, " + 0.625 * (-letemp.getPosY()) + "pt) ";
+				if (letemp.getAngle() > 0)
+					line += "[rotate=" + letemp.getAngle() + "] ";
+				if (letemp.getFontColor() != null)
+					line += "{\\textcolor{" + PropertyModel.COLORS.get(letemp.getFontColor()) + "}{" + letemp.getText() + "}};\n";
 				else
-					line += "{" + letemp.text + "}";
+					line += "{" + letemp.getText() + "}";
 				result += line;
 			}
 		}

@@ -3,6 +3,8 @@ package pl.edu.agh.gratex.property;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JComboBox;
@@ -16,6 +18,7 @@ import javax.swing.event.ChangeListener;
 
 import pl.edu.agh.gratex.model.EdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.LineType;
 
 
 public class EdgePropertyPanel extends AbstractPropertyPanel
@@ -24,7 +27,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel
 
 	private EdgePropertyModel	model;
 	private JLabel				lblLineType;
-	private JComboBox<Option>	comboBoxLineType;
+	private JComboBox<LineType> comboBoxLineType;
 	private JLabel				lblLineSize;
 	private JSpinner			spinnerLineSize;
 	private JLabel				lblLineColor;
@@ -66,7 +69,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel
 			lblArrowType.setEnabled(false);
 			comboBoxArrowType.setEnabled(false);
 		}
-		comboBoxLineType.setSelectedIndex(model.lineType + 1);
+		comboBoxLineType.setSelectedItem(model.lineType);
 		if (model.lineWidth == -1)
 			spinnerLineSize.setValue(" ");
 		else
@@ -119,24 +122,32 @@ public class EdgePropertyPanel extends AbstractPropertyPanel
 		lblLineType.setBounds(26, 42, 64, 14);
 		add(lblLineType);
 
-		Option[] lineTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.NONE, "none"),
-				new Option(PropertyModel.SOLID, "solid"), new Option(PropertyModel.DASHED, "dashed"), new Option(PropertyModel.DOTTED, "dotted"),
-				new Option(PropertyModel.DOUBLE, "double") };
-		comboBoxLineType = new JComboBox<Option>(lineTypes);
+		//Option[] lineTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.NONE, "none"),
+		//		new Option(PropertyModel.SOLID, "solid"), new Option(PropertyModel.DASHED, "dashed"), new Option(PropertyModel.DOTTED, "dotted"),
+		//		new Option(PropertyModel.DOUBLE, "double") };
+        List<LineType> lineTypes = new ArrayList<>();
+        for(LineType lineType : LineType.values()) {
+            if(lineType != LineType.NONE) {
+                lineTypes.add(lineType);
+            }
+        }
+        comboBoxLineType = new JComboBox<LineType>(lineTypes.toArray(new LineType[0]));
 		comboBoxLineType.setBounds(101, 39, 80, 20);
 		comboBoxLineType.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				int newValue = ((Option) comboBoxLineType.getSelectedItem()).getValue();
-				if ((newValue != -1) && (model.lineType != newValue) || (!changedByUser))
+				//int newValue = ((Option) comboBoxLineType.getSelectedItem()).getValue();
+                LineType newValue = (LineType) comboBoxLineType.getSelectedItem();
+				//if ((newValue != -1) && (model.lineType != newValue) || (!changedByUser))
+                if(newValue != LineType.EMPTY && model.lineType != newValue || (!changedByUser))
 				{
 					model.lineType = newValue;
 					changed();
 				}
 				else
 				{
-					comboBoxLineType.setSelectedIndex(model.lineType + 1);
+					comboBoxLineType.setSelectedItem(model.lineType);
 				}
 			}
 		});

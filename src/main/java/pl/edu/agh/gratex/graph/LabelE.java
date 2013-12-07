@@ -19,29 +19,29 @@ public class LabelE extends GraphElement implements Serializable
 	private static final long	serialVersionUID	= 7816741486248743237L;
 	
 	// Wartości edytowalne przez użytkowanika
-	public String	text;
-	public Font		font	= new Font("Cambria", Font.PLAIN, 16);
-	public Color	fontColor;
-	public int		position;										// Procent przesunięcia na krawędzie
-	public int		spacing;										// odleglość napisu od krawędzi
-	public boolean	topPlacement;									// Czy etykieta jest nad krawędzią
-	public boolean	horizontalPlacement;							// Czy etykieta jest zawsze poziomo (nie = równolegle do krawędzi)
+    private String	text;
+	private Font		font	= new Font("Cambria", Font.PLAIN, 16);
+	private Color	fontColor;
+	private int		position;										// Procent przesunięcia na krawędzie
+	private int		spacing;										// odleglość napisu od krawędzi
+	private boolean	topPlacement;									// Czy etykieta jest nad krawędzią
+	private boolean	horizontalPlacement;							// Czy etykieta jest zawsze poziomo (nie = równolegle do krawędzi)
 
 	// Wartości potrzebne do parsowania
-	public int		posX;											// Środek stringa x
-	public int		posY;											// Środek stringa y
-	public int		angle;											// Nachylenie (0 stopni gdy pozioma)
+    private int		posX;											// Środek stringa x
+	private int		posY;											// Środek stringa y
+	private int		angle;											// Nachylenie (0 stopni gdy pozioma)
 
 	// Pozostałe
-	public Edge		owner;
-	public Polygon	outline;
-	public int		drawX;
-	public int		drawY;
+    private Edge		owner;
+	private Polygon	outline;
+	private int		drawX;
+	private int		drawY;
 
 	public LabelE(Edge element)
 	{
-		owner = element;
-		text = "Label";
+		setOwner(element);
+		setText("Label");
 	}
 
 	public LabelE getCopy(Edge owner)
@@ -58,32 +58,32 @@ public class LabelE extends GraphElement implements Serializable
 
 		if (model.text != null)
 		{
-			text = new String(model.text);
+			setText(new String(model.text));
 		}
 
 		if (model.fontColor != null)
 		{
-			fontColor = new Color(model.fontColor.getRGB());
+			setFontColor(new Color(model.fontColor.getRGB()));
 		}
 
 		if (model.position > -1)
 		{
-			position = model.position;
+			setPosition(model.position);
 		}
 
 		if (model.spacing > -1)
 		{
-			spacing = model.spacing;
+			setSpacing(model.spacing);
 		}
 
 		if (model.topPlacement > -1)
 		{
-			topPlacement = (model.topPlacement == 1);
+			setTopPlacement((model.topPlacement == 1));
 		}
 
 		if (model.horizontalPlacement > -1)
 		{
-			horizontalPlacement = (model.horizontalPlacement == 1);
+			setHorizontalPlacement((model.horizontalPlacement == 1));
 		}
 	}
 
@@ -91,22 +91,22 @@ public class LabelE extends GraphElement implements Serializable
 	{
 		LabelEdgePropertyModel result = new LabelEdgePropertyModel();
 
-		result.text = new String(text);
-		result.fontColor = new Color(fontColor.getRGB());
-		result.position = position;
-		result.spacing = spacing;
+		result.text = new String(getText());
+		result.fontColor = new Color(getFontColor().getRGB());
+		result.position = getPosition();
+		result.spacing = getSpacing();
 		result.topPlacement = 0;
 		result.isLoop = PropertyModel.NO;
-		if (owner.vertexA == owner.vertexB)
+		if (getOwner().getVertexA() == getOwner().getVertexB())
 		{
 			result.isLoop = PropertyModel.YES;
 		}
-		if (topPlacement)
+		if (isTopPlacement())
 		{
 			result.topPlacement = 1;
 		}
 		result.horizontalPlacement = 0;
-		if (horizontalPlacement)
+		if (isHorizontalPlacement())
 		{
 			result.horizontalPlacement = 1;
 		}
@@ -116,160 +116,160 @@ public class LabelE extends GraphElement implements Serializable
 
 	public boolean intersects(int x, int y)
 	{
-		return outline.contains(x, y);
+		return getOutline().contains(x, y);
 	}
 
 	public void updatePosition(Graphics2D g)
 	{
-		g.setFont(font);
+		g.setFont(getFont());
 		FontMetrics fm = g.getFontMetrics();
-		int width = fm.stringWidth(text);
+		int width = fm.stringWidth(getText());
 		int height = fm.getAscent();
 		int descent = fm.getDescent();
 
 		double ellipseShortRadius = 0.75;
 
-		if (owner.vertexA == owner.vertexB)
+		if (getOwner().getVertexA() == getOwner().getVertexB())
 		{
-			horizontalPlacement = true;
-			topPlacement = true;
-			if (position < 34)
+			setHorizontalPlacement(true);
+			setTopPlacement(true);
+			if (getPosition() < 34)
 			{
-				position = 25;
+				setPosition(25);
 			}
-			else if (position < 67)
+			else if (getPosition() < 67)
 			{
-				position = 50;
+				setPosition(50);
 			}
 			else
 			{
-				position = 75;
+				setPosition(75);
 			}
 
 			double offsetRate = 0.75;
-			if (owner.vertexA.type == 2)
+			if (getOwner().getVertexA().getType() == 2)
 			{
 				offsetRate = 0.375;
-				if (owner.relativeEdgeAngle == 270)
+				if (getOwner().getRelativeEdgeAngle() == 270)
 				{
 					ellipseShortRadius /= 2;
 				}
 			}
-			else if (owner.vertexA.type == 3)
+			else if (getOwner().getVertexA().getType() == 3)
 			{
 				offsetRate = 0.5;
 			}
-			else if (owner.vertexA.type == 4)
+			else if (getOwner().getVertexA().getType() == 4)
 			{
 				offsetRate = 0.4375;
 			}
-			else if (owner.vertexA.type == 5)
+			else if (getOwner().getVertexA().getType() == 5)
 			{
 				offsetRate = 0.625;
 			}
 
-			int r = owner.vertexA.radius + owner.vertexA.lineWidth / 2;
-			switch (owner.relativeEdgeAngle)
+			int r = getOwner().getVertexA().getRadius() + getOwner().getVertexA().getLineWidth() / 2;
+			switch (getOwner().getRelativeEdgeAngle())
 			{
 				case 0:
 				{
-					if (position == 25)
+					if (getPosition() == 25)
 					{
-						posX = owner.vertexA.posX + width / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius));
-						posY = owner.vertexA.posY - height / 2 - spacing - (int) Math.round(r * ellipseShortRadius / 2);
+						setPosX(getOwner().getVertexA().getPosX() + width / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius)));
+						setPosY(getOwner().getVertexA().getPosY() - height / 2 - getSpacing() - (int) Math.round(r * ellipseShortRadius / 2));
 					}
-					else if (position == 50)
+					else if (getPosition() == 50)
 					{
-						posX = owner.vertexA.posX + spacing + width / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius * 2));
-						posY = owner.vertexA.posY;
+						setPosX(getOwner().getVertexA().getPosX() + getSpacing() + width / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius * 2)));
+						setPosY(getOwner().getVertexA().getPosY());
 					}
 					else
 					{
-						posX = owner.vertexA.posX + width / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius));
-						posY = owner.vertexA.posY + height / 2 + spacing + (int) Math.round(r * ellipseShortRadius / 2);
+						setPosX(getOwner().getVertexA().getPosX() + width / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius)));
+						setPosY(getOwner().getVertexA().getPosY() + height / 2 + getSpacing() + (int) Math.round(r * ellipseShortRadius / 2));
 					}
 					break;
 				}
 				case 90:
 				{
-					if (position == 25)
+					if (getPosition() == 25)
 					{
-						posX = owner.vertexA.posX - spacing - width / 2 - (int) Math.round(r * ellipseShortRadius / 2);
-						posY = owner.vertexA.posY - height / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius));
+						setPosX(getOwner().getVertexA().getPosX() - getSpacing() - width / 2 - (int) Math.round(r * ellipseShortRadius / 2));
+						setPosY(getOwner().getVertexA().getPosY() - height / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius)));
 					}
-					else if (position == 50)
+					else if (getPosition() == 50)
 					{
-						posX = owner.vertexA.posX;
-						posY = owner.vertexA.posY - spacing - height / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius * 2));
+						setPosX(getOwner().getVertexA().getPosX());
+						setPosY(getOwner().getVertexA().getPosY() - getSpacing() - height / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius * 2)));
 					}
 					else
 					{
-						posX = owner.vertexA.posX + spacing + width / 2 + (int) Math.round(r * ellipseShortRadius / 2);
-						posY = owner.vertexA.posY - height / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius));
+						setPosX(getOwner().getVertexA().getPosX() + getSpacing() + width / 2 + (int) Math.round(r * ellipseShortRadius / 2));
+						setPosY(getOwner().getVertexA().getPosY() - height / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius)));
 					}
 					break;
 				}
 				case 180:
 				{
-					if (position == 25)
+					if (getPosition() == 25)
 					{
-						posX = owner.vertexA.posX - width / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius));
-						posY = owner.vertexA.posY + spacing + height / 2 + (int) Math.round(r * ellipseShortRadius / 2);
+						setPosX(getOwner().getVertexA().getPosX() - width / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius)));
+						setPosY(getOwner().getVertexA().getPosY() + getSpacing() + height / 2 + (int) Math.round(r * ellipseShortRadius / 2));
 					}
-					else if (position == 50)
+					else if (getPosition() == 50)
 					{
-						posX = owner.vertexA.posX - spacing - width / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius * 2));
-						posY = owner.vertexA.posY;
+						setPosX(getOwner().getVertexA().getPosX() - getSpacing() - width / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius * 2)));
+						setPosY(getOwner().getVertexA().getPosY());
 					}
 					else
 					{
-						posX = owner.vertexA.posX - width / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius));
-						posY = owner.vertexA.posY - spacing - height / 2 - (int) Math.round(r * ellipseShortRadius / 2);
+						setPosX(getOwner().getVertexA().getPosX() - width / 2 - (int) Math.round(r * (offsetRate + ellipseShortRadius)));
+						setPosY(getOwner().getVertexA().getPosY() - getSpacing() - height / 2 - (int) Math.round(r * ellipseShortRadius / 2));
 					}
 					break;
 				}
 				case 270:
 				{
-					if (position == 25)
+					if (getPosition() == 25)
 					{
-						posX = owner.vertexA.posX + spacing + width / 2 + (int) Math.round(r * ellipseShortRadius / 2);
-						posY = owner.vertexA.posY + height / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius));
+						setPosX(getOwner().getVertexA().getPosX() + getSpacing() + width / 2 + (int) Math.round(r * ellipseShortRadius / 2));
+						setPosY(getOwner().getVertexA().getPosY() + height / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius)));
 					}
-					else if (position == 50)
+					else if (getPosition() == 50)
 					{
-						posX = owner.vertexA.posX;
-						posY = owner.vertexA.posY + spacing + height / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius * 2));
+						setPosX(getOwner().getVertexA().getPosX());
+						setPosY(getOwner().getVertexA().getPosY() + getSpacing() + height / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius * 2)));
 					}
 					else
 					{
-						posX = owner.vertexA.posX - spacing - width / 2 - (int) Math.round(r * ellipseShortRadius / 2);
-						posY = owner.vertexA.posY + height / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius));
+						setPosX(getOwner().getVertexA().getPosX() - getSpacing() - width / 2 - (int) Math.round(r * ellipseShortRadius / 2));
+						setPosY(getOwner().getVertexA().getPosY() + height / 2 + (int) Math.round(r * (offsetRate + ellipseShortRadius)));
 						;
 					}
 					break;
 				}
 			}
-			drawX = posX - width / 2;
-			drawY = posY + height / 2 - descent;
-			int[] xp = new int[] { drawX, drawX + width, drawX + width, drawX };
-			int[] yp = new int[] { posY - height / 2, posY - height / 2, posY + height / 2, posY + height / 2 };
-			outline = new Polygon(xp, yp, 4);
+			setDrawX(getPosX() - width / 2);
+			setDrawY(getPosY() + height / 2 - descent);
+			int[] xp = new int[] {getDrawX(), getDrawX() + width, getDrawX() + width, getDrawX()};
+			int[] yp = new int[] { getPosY() - height / 2, getPosY() - height / 2, getPosY() + height / 2, getPosY() + height / 2 };
+			setOutline(new Polygon(xp, yp, 4));
 		}
 		else
 		{
-			if (owner.relativeEdgeAngle == 0) // straight edge
+			if (getOwner().getRelativeEdgeAngle() == 0) // straight edge
 			{
-				int ax = owner.inPoint.x;
-				int ay = owner.inPoint.y;
-				int bx = owner.outPoint.x;
-				int by = owner.outPoint.y;
+				int ax = getOwner().getInPoint().x;
+				int ay = getOwner().getInPoint().y;
+				int bx = getOwner().getOutPoint().x;
+				int by = getOwner().getOutPoint().y;
 				int dx = bx - ax;
 				int dy = by - ay;
 
 				double distance = Math.sqrt((ax - bx) * (ax - bx) + (ay - by) * (ay - by));
 
-				double baselinePart = (owner.lineWidth + spacing) / distance;
-				double ascentPart = (owner.lineWidth + spacing + height) / distance;
+				double baselinePart = (getOwner().getLineWidth() + getSpacing()) / distance;
+				double ascentPart = (getOwner().getLineWidth() + getSpacing() + height) / distance;
 
 				Point baseline1p1 = new Point((int) Math.round(ax + dy * baselinePart), (int) Math.round(ay - dx * baselinePart));
 				Point baseline1p2 = new Point((int) Math.round(bx + dy * baselinePart), (int) Math.round(by - dx * baselinePart));
@@ -283,7 +283,7 @@ public class LabelE extends GraphElement implements Serializable
 
 				Point startPoint = null;
 				Point endPoint = null;
-				if (topPlacement)
+				if (isTopPlacement())
 				{
 					if (baseline2p1.x < baseline2p2.x)
 					{
@@ -330,9 +330,9 @@ public class LabelE extends GraphElement implements Serializable
 					}
 				}
 
-				if (horizontalPlacement)
+				if (isHorizontalPlacement())
 				{
-					if (!topPlacement)
+					if (!isTopPlacement())
 					{
 						if (baseline2p1.x < baseline2p2.x)
 						{
@@ -357,60 +357,60 @@ public class LabelE extends GraphElement implements Serializable
 					}
 
 					Point stringClosestCorner = new Point((int) Math.round(startPoint.x
-							+ (position * (distance) * (endPoint.x - startPoint.x) / (100 * distance))), (int) Math.round(startPoint.y
-							+ (position * (distance) * (endPoint.y - startPoint.y) / (100 * distance))));
+							+ (getPosition() * (distance) * (endPoint.x - startPoint.x) / (100 * distance))), (int) Math.round(startPoint.y
+							+ (getPosition() * (distance) * (endPoint.y - startPoint.y) / (100 * distance))));
 
-					if (topPlacement)
+					if (isTopPlacement())
 					{
 						if ((ax - bx) * (ay - by) > 0)
 						{
-							drawX = stringClosestCorner.x;
-							drawY = stringClosestCorner.y - descent;
+							setDrawX(stringClosestCorner.x);
+							setDrawY(stringClosestCorner.y - descent);
 						}
 						else
 						{
-							drawX = stringClosestCorner.x - width;
+							setDrawX(stringClosestCorner.x - width);
 
-							drawY = stringClosestCorner.y - descent;
+							setDrawY(stringClosestCorner.y - descent);
 						}
-						posY = stringClosestCorner.y - height / 2;
+						setPosY(stringClosestCorner.y - height / 2);
 					}
 					else
 					{
 						if ((ax - bx) * (ay - by) > 0)
 						{
-							drawX = stringClosestCorner.x - width;
-							drawY = stringClosestCorner.y - descent + height;
+							setDrawX(stringClosestCorner.x - width);
+							setDrawY(stringClosestCorner.y - descent + height);
 						}
 						else
 						{
-							drawX = stringClosestCorner.x;
-							drawY = stringClosestCorner.y - descent + height;
+							setDrawX(stringClosestCorner.x);
+							setDrawY(stringClosestCorner.y - descent + height);
 						}
-						posY = stringClosestCorner.y + height / 2;
+						setPosY(stringClosestCorner.y + height / 2);
 					}
 
 					if (height % 2 == 1)
 					{
 						height++;
 					}
-					angle = 0;
-					posX = drawX + width / 2;
-					int[] xp = new int[] { drawX, drawX + width, drawX + width, drawX };
-					int[] yp = new int[] { posY - height / 2, posY - height / 2, posY + height / 2, posY + height / 2 };
-					outline = new Polygon(xp, yp, 4);
+					setAngle(0);
+					setPosX(getDrawX() + width / 2);
+					int[] xp = new int[] {getDrawX(), getDrawX() + width, getDrawX() + width, getDrawX()};
+					int[] yp = new int[] { getPosY() - height / 2, getPosY() - height / 2, getPosY() + height / 2, getPosY() + height / 2 };
+					setOutline(new Polygon(xp, yp, 4));
 				}
 				else
 				{
 
 					Point stringStartBottom = new Point((int) Math.round(startPoint.x
-							+ (position * (distance - width) * (endPoint.x - startPoint.x) / (100 * distance))), (int) Math.round(startPoint.y
-							+ (position * (distance - width) * (endPoint.y - startPoint.y) / (100 * distance))));
+							+ (getPosition() * (distance - width) * (endPoint.x - startPoint.x) / (100 * distance))), (int) Math.round(startPoint.y
+							+ (getPosition() * (distance - width) * (endPoint.y - startPoint.y) / (100 * distance))));
 
 					Point stringEndBottom = new Point((int) Math.round(startPoint.x
-							+ ((width + (position * (distance - width) / 100)) * (endPoint.x - startPoint.x) / distance)),
+							+ ((width + (getPosition() * (distance - width) / 100)) * (endPoint.x - startPoint.x) / distance)),
 							(int) Math.round(startPoint.y
-									+ ((width + (position * (distance - width) / 100)) * (endPoint.y - startPoint.y) / distance)));
+									+ ((width + (getPosition() * (distance - width) / 100)) * (endPoint.y - startPoint.y) / distance)));
 
 					Point stringStartTop = null;
 					Point stringEndTop = null;
@@ -423,8 +423,8 @@ public class LabelE extends GraphElement implements Serializable
 						stringEndTop = new Point(stringEndBottom.x + Math.abs(baseline1p1.x - ascent1p1.x), stringEndBottom.y
 								- Math.abs(baseline1p1.y - ascent1p1.y));
 
-						drawX = stringStartBottom.x + (int) Math.round((double) descent / (double) height * Math.abs(baseline1p1.x - ascent1p1.x));
-						drawY = stringStartBottom.y - (int) Math.round((double) descent / (double) height * Math.abs(baseline1p1.y - ascent1p1.y));
+						setDrawX(stringStartBottom.x + (int) Math.round((double) descent / (double) height * Math.abs(baseline1p1.x - ascent1p1.x)));
+						setDrawY(stringStartBottom.y - (int) Math.round((double) descent / (double) height * Math.abs(baseline1p1.y - ascent1p1.y)));
 					}
 					else
 					{
@@ -434,16 +434,16 @@ public class LabelE extends GraphElement implements Serializable
 						stringEndTop = new Point(stringEndBottom.x - Math.abs(baseline1p1.x - ascent1p1.x), stringEndBottom.y
 								- Math.abs(baseline1p1.y - ascent1p1.y));
 
-						drawX = stringStartBottom.x - (int) Math.round((double) descent / (double) height * Math.abs(baseline1p1.x - ascent1p1.x));
-						drawY = stringStartBottom.y - (int) Math.round((double) descent / (double) height * Math.abs(baseline1p1.y - ascent1p1.y));
+						setDrawX(stringStartBottom.x - (int) Math.round((double) descent / (double) height * Math.abs(baseline1p1.x - ascent1p1.x)));
+						setDrawY(stringStartBottom.y - (int) Math.round((double) descent / (double) height * Math.abs(baseline1p1.y - ascent1p1.y)));
 					}
 
 					int[] xp = new int[] { stringStartBottom.x, stringEndBottom.x, stringEndTop.x, stringStartTop.x };
 					int[] yp = new int[] { stringStartBottom.y, stringEndBottom.y, stringEndTop.y, stringStartTop.y };
-					outline = new Polygon(xp, yp, 4);
+					setOutline(new Polygon(xp, yp, 4));
 
-					posX = (stringStartBottom.x + stringEndTop.x) / 2;
-					posY = (stringStartBottom.y + stringEndTop.y) / 2;
+					setPosX((stringStartBottom.x + stringEndTop.x) / 2);
+					setPosY((stringStartBottom.y + stringEndTop.y) / 2);
 
 					double angled = Math
 							.toDegrees(Math.asin((stringStartBottom.y - stringEndBottom.y) / stringStartBottom.distance(stringEndBottom)));
@@ -452,130 +452,130 @@ public class LabelE extends GraphElement implements Serializable
 						angled += 360;
 					}
 
-					angle = (int) Math.round(angled);
+					setAngle((int) Math.round(angled));
 				}
 			}
 			else
 			// curved edge
 			{
-				if (horizontalPlacement)
+				if (isHorizontalPlacement())
 				{
 					double r = 0.0;
-					if (topPlacement)
+					if (isTopPlacement())
 					{
-						r = spacing + owner.arcRadius;
+						r = getSpacing() + getOwner().getArcRadius();
 					}
 					else
 					{
-						r = owner.arcRadius - spacing;
+						r = getOwner().getArcRadius() - getSpacing();
 					}
-					double startAngle = (Math.toDegrees(Math.atan2(owner.outPoint.x - owner.arcMiddle.x, owner.outPoint.y - owner.arcMiddle.y)) + 270) % 360;
-					double endAngle = (Math.toDegrees(Math.atan2(owner.inPoint.x - owner.arcMiddle.x, owner.inPoint.y - owner.arcMiddle.y)) + 270) % 360;
+					double startAngle = (Math.toDegrees(Math.atan2(getOwner().getOutPoint().x - getOwner().getArcMiddle().x, getOwner().getOutPoint().y - getOwner().getArcMiddle().y)) + 270) % 360;
+					double endAngle = (Math.toDegrees(Math.atan2(getOwner().getInPoint().x - getOwner().getArcMiddle().x, getOwner().getInPoint().y - getOwner().getArcMiddle().y)) + 270) % 360;
 					double stringAngle = 0.0;
-					if (owner.relativeEdgeAngle <= 60)
+					if (getOwner().getRelativeEdgeAngle() <= 60)
 					{
-						stringAngle = (360 + startAngle - (position * ((startAngle - endAngle + 360) % 360)) / 100) % 360;
+						stringAngle = (360 + startAngle - (getPosition() * ((startAngle - endAngle + 360) % 360)) / 100) % 360;
 					}
 					else
 					{
-						stringAngle = (startAngle + (position * ((endAngle - startAngle + 360) % 360)) / 100) % 360;
+						stringAngle = (startAngle + (getPosition() * ((endAngle - startAngle + 360) % 360)) / 100) % 360;
 					}
 
-					posX = owner.arcMiddle.x + (int) Math.round(r * Math.cos(Math.toRadians(stringAngle)));
-					posY = owner.arcMiddle.y - (int) Math.round(r * Math.sin(Math.toRadians(stringAngle)));
+					setPosX(getOwner().getArcMiddle().x + (int) Math.round(r * Math.cos(Math.toRadians(stringAngle))));
+					setPosY(getOwner().getArcMiddle().y - (int) Math.round(r * Math.sin(Math.toRadians(stringAngle))));
 
-					angle = 0;
-					if (!topPlacement)
+					setAngle(0);
+					if (!isTopPlacement())
 					{
 						stringAngle = (stringAngle + 180) % 360;
 					}
 					if (stringAngle < 90)
 					{
-						drawX = posX;
-						drawY = posY - descent;
-						posX += width / 2;
-						posY -= height / 2;
+						setDrawX(getPosX());
+						setDrawY(getPosY() - descent);
+						setPosX(getPosX() + width / 2);
+						setPosY(getPosY() - height / 2);
 					}
 					else if (stringAngle < 180)
 					{
-						drawX = posX - width;
-						drawY = posY - descent;
-						posX -= width / 2;
-						posY -= height / 2;
+						setDrawX(getPosX() - width);
+						setDrawY(getPosY() - descent);
+						setPosX(getPosX() - width / 2);
+						setPosY(getPosY() - height / 2);
 					}
 					else if (stringAngle < 270)
 					{
-						drawX = posX - width;
-						drawY = posY + height - descent;
-						posX -= width / 2;
-						posY += height / 2;
+						setDrawX(getPosX() - width);
+						setDrawY(getPosY() + height - descent);
+						setPosX(getPosX() - width / 2);
+						setPosY(getPosY() + height / 2);
 					}
 					else
 					{
-						drawX = posX;
-						drawY = posY + height - descent;
-						posX += width / 2;
-						posY += height / 2;
+						setDrawX(getPosX());
+						setDrawY(getPosY() + height - descent);
+						setPosX(getPosX() + width / 2);
+						setPosY(getPosY() + height / 2);
 					}
 
-					int xpoints[] = new int[] { posX - width / 2, posX + width / 2, posX + width / 2, posX - width / 2 };
-					int ypoints[] = new int[] { posY - height / 2, posY - height / 2, posY + height / 2, posY + height / 2 };
-					outline = new Polygon(xpoints, ypoints, 4);
+					int xpoints[] = new int[] { getPosX() - width / 2, getPosX() + width / 2, getPosX() + width / 2, getPosX() - width / 2 };
+					int ypoints[] = new int[] { getPosY() - height / 2, getPosY() - height / 2, getPosY() + height / 2, getPosY() + height / 2 };
+					setOutline(new Polygon(xpoints, ypoints, 4));
 				}
 				else
 				{
 					double r = 0.0;
-					if (topPlacement)
+					if (isTopPlacement())
 					{
-						r = spacing + height / 2 + owner.arcRadius;
+						r = getSpacing() + height / 2 + getOwner().getArcRadius();
 					}
 					else
 					{
-						r = owner.arcRadius - spacing - height / 2;
+						r = getOwner().getArcRadius() - getSpacing() - height / 2;
 					}
 					double alpha = Math.toDegrees(Math.atan(width / (2 * r)));
-					double startAngle = (Math.toDegrees(Math.atan2(owner.outPoint.x - owner.arcMiddle.x, owner.outPoint.y - owner.arcMiddle.y)) + 270) % 360;
-					double endAngle = (Math.toDegrees(Math.atan2(owner.inPoint.x - owner.arcMiddle.x, owner.inPoint.y - owner.arcMiddle.y)) + 270) % 360;
+					double startAngle = (Math.toDegrees(Math.atan2(getOwner().getOutPoint().x - getOwner().getArcMiddle().x, getOwner().getOutPoint().y - getOwner().getArcMiddle().y)) + 270) % 360;
+					double endAngle = (Math.toDegrees(Math.atan2(getOwner().getInPoint().x - getOwner().getArcMiddle().x, getOwner().getInPoint().y - getOwner().getArcMiddle().y)) + 270) % 360;
 					double stringAngle = 0.0;
-					if (owner.relativeEdgeAngle <= 60)
+					if (getOwner().getRelativeEdgeAngle() <= 60)
 					{
 						startAngle = (startAngle - alpha) % 360;
 						endAngle = (endAngle + alpha) % 360;
-						stringAngle = (360 + startAngle - (position * ((startAngle - endAngle + 360) % 360)) / 100) % 360;
+						stringAngle = (360 + startAngle - (getPosition() * ((startAngle - endAngle + 360) % 360)) / 100) % 360;
 					}
 					else
 					{
 						startAngle = (startAngle + alpha) % 360;
 						endAngle = (endAngle - alpha) % 360;
-						stringAngle = startAngle + (position * ((endAngle - startAngle + 360) % 360)) / 100;
+						stringAngle = startAngle + (getPosition() * ((endAngle - startAngle + 360) % 360)) / 100;
 					}
 
-					angle = (int) Math.round((stringAngle + 270) % 360);
-					if (angle > 90 && angle < 271)
+					setAngle((int) Math.round((stringAngle + 270) % 360));
+					if (getAngle() > 90 && getAngle() < 271)
 					{
-						angle = (180 + angle) % 360;
+						setAngle((180 + getAngle()) % 360);
 					}
 
-					posX = owner.arcMiddle.x + (int) Math.round(r * Math.cos(Math.toRadians(stringAngle)));
-					posY = owner.arcMiddle.y - (int) Math.round(r * Math.sin(Math.toRadians(stringAngle)));
+					setPosX(getOwner().getArcMiddle().x + (int) Math.round(r * Math.cos(Math.toRadians(stringAngle))));
+					setPosY(getOwner().getArcMiddle().y - (int) Math.round(r * Math.sin(Math.toRadians(stringAngle))));
 
-					Point middle = new Point(posX, posY);
-					Point draw = new Point(posX - width / 2, posY + height / 2 - descent);
-					draw = Utilities.rotatePoint(middle, draw, angle);
-					Point p1 = new Point(posX - width / 2, posY - height / 2);
-					p1 = Utilities.rotatePoint(middle, p1, angle);
-					Point p2 = new Point(posX + width / 2, posY - height / 2);
-					p2 = Utilities.rotatePoint(middle, p2, angle);
-					Point p3 = new Point(posX + width / 2, posY + height / 2);
-					p3 = Utilities.rotatePoint(middle, p3, angle);
-					Point p4 = new Point(posX - width / 2, posY + height / 2);
-					p4 = Utilities.rotatePoint(middle, p4, angle);
+					Point middle = new Point(getPosX(), getPosY());
+					Point draw = new Point(getPosX() - width / 2, getPosY() + height / 2 - descent);
+					draw = Utilities.rotatePoint(middle, draw, getAngle());
+					Point p1 = new Point(getPosX() - width / 2, getPosY() - height / 2);
+					p1 = Utilities.rotatePoint(middle, p1, getAngle());
+					Point p2 = new Point(getPosX() + width / 2, getPosY() - height / 2);
+					p2 = Utilities.rotatePoint(middle, p2, getAngle());
+					Point p3 = new Point(getPosX() + width / 2, getPosY() + height / 2);
+					p3 = Utilities.rotatePoint(middle, p3, getAngle());
+					Point p4 = new Point(getPosX() - width / 2, getPosY() + height / 2);
+					p4 = Utilities.rotatePoint(middle, p4, getAngle());
 
-					drawX = draw.x;
-					drawY = draw.y;
+					setDrawX(draw.x);
+					setDrawY(draw.y);
 					int xpoints[] = new int[] { p1.x, p2.x, p3.x, p4.x };
 					int ypoints[] = new int[] { p1.y, p2.y, p3.y, p4.y };
-					outline = new Polygon(xpoints, ypoints, 4);
+					setOutline(new Polygon(xpoints, ypoints, 4));
 				}
 			}
 		}
@@ -590,26 +590,138 @@ public class LabelE extends GraphElement implements Serializable
 		if (ControlManager.selection.contains(this))
 		{
 			g.setColor(DrawingTools.selectionColor);
-			g.fillPolygon(outline);
+			g.fillPolygon(getOutline());
 		}
 
-		g.setColor(fontColor);
+		g.setColor(getFontColor());
 		if (dummy)
 		{
-			g.setColor(DrawingTools.getDummyColor(fontColor));
+			g.setColor(DrawingTools.getDummyColor(getFontColor()));
 		}
-		g.setFont(font);
-		if (horizontalPlacement)
+		g.setFont(getFont());
+		if (isHorizontalPlacement())
 		{
-			g.drawString(text, drawX, drawY);
+			g.drawString(getText(), getDrawX(), getDrawY());
 		}
 		else
 		{
-			g.translate(drawX, drawY);
-			g.rotate(Math.toRadians(360 - angle), 0, 0);
-			g.drawString(text, 0, 0);
+			g.translate(getDrawX(), getDrawY());
+			g.rotate(Math.toRadians(360 - getAngle()), 0, 0);
+			g.drawString(getText(), 0, 0);
 		}
 
 		g.dispose();
 	}
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    public Color getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(Color fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
+    }
+
+    public boolean isTopPlacement() {
+        return topPlacement;
+    }
+
+    public void setTopPlacement(boolean topPlacement) {
+        this.topPlacement = topPlacement;
+    }
+
+    public boolean isHorizontalPlacement() {
+        return horizontalPlacement;
+    }
+
+    public void setHorizontalPlacement(boolean horizontalPlacement) {
+        this.horizontalPlacement = horizontalPlacement;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+
+    public int getAngle() {
+        return angle;
+    }
+
+    public void setAngle(int angle) {
+        this.angle = angle;
+    }
+
+    public Edge getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Edge owner) {
+        this.owner = owner;
+    }
+
+    public Polygon getOutline() {
+        return outline;
+    }
+
+    public void setOutline(Polygon outline) {
+        this.outline = outline;
+    }
+
+    public int getDrawX() {
+        return drawX;
+    }
+
+    public void setDrawX(int drawX) {
+        this.drawX = drawX;
+    }
+
+    public int getDrawY() {
+        return drawY;
+    }
+
+    public void setDrawY(int drawY) {
+        this.drawY = drawY;
+    }
 }

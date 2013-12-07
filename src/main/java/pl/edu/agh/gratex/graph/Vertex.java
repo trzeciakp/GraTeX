@@ -13,6 +13,7 @@ import java.io.Serializable;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.VertexPropertyModel;
+import pl.edu.agh.gratex.model.properties.LineType;
 
 
 public class Vertex extends GraphElement implements Serializable
@@ -21,21 +22,21 @@ public class Vertex extends GraphElement implements Serializable
 
 	// Wartości edytowalne przez użytkowanika
 	private int					number;
-	public int					radius;
-	public int					type;
-	public Color				vertexColor;
-	public int					lineWidth;
-	public int					lineType;
-	public Color				lineColor;
-	public Font					font;
-	public Color				fontColor;
-	public boolean				labelInside;
+	private int					radius;
+	private int					type;
+	private Color				vertexColor;
+	private int					lineWidth;
+	private LineType			lineType;
+	private Color				lineColor;
+	private Font					font;
+	private Color				fontColor;
+	private boolean				labelInside;
 
 	// Wartości potrzebne do parsowania
-	public int					posX;
-	public int					posY;
-	public LabelV				label				= null;
-	public String				text;
+    private int					posX;
+	private int					posY;
+	private LabelV				label				= null;
+	private String				text;
 
 	// Pozostałe
 	private int					tempX;
@@ -45,12 +46,12 @@ public class Vertex extends GraphElement implements Serializable
 	{
 		Vertex result = new Vertex();
 		result.setModel(getModel());
-		result.labelInside = false;
-		result.posX = posX;
-		result.posY = posY;
-		if (label != null)
+		result.setLabelInside(false);
+		result.setPosX(getPosX());
+		result.setPosY(getPosY());
+		if (getLabel() != null)
 		{
-			result.label = label.getCopy(result);
+			result.setLabel(getLabel().getCopy(result));
 		}
 
 		return result;
@@ -74,42 +75,42 @@ public class Vertex extends GraphElement implements Serializable
 
 		if (model.radius > -1)
 		{
-			radius = model.radius;
+			setRadius(model.radius);
 		}
 
 		if (model.type > -1)
 		{
-			type = model.type;
+			setType(model.type);
 		}
 
 		if (model.vertexColor != null)
 		{
-			vertexColor = new Color(model.vertexColor.getRGB());
+			setVertexColor(new Color(model.vertexColor.getRGB()));
 		}
 
 		if (model.lineWidth > -1)
 		{
-			lineWidth = model.lineWidth;
+			setLineWidth(model.lineWidth);
 		}
 
-		if (model.lineType > -1)
+		if (model.lineType != LineType.EMPTY)
 		{
-			lineType = model.lineType;
+			setLineType(model.lineType);
 		}
 
 		if (model.lineColor != null)
 		{
-			lineColor = new Color(model.lineColor.getRGB());
+			setLineColor(new Color(model.lineColor.getRGB()));
 		}
 
 		if (model.fontColor != null)
 		{
-			fontColor = new Color(model.fontColor.getRGB());
+			setFontColor(new Color(model.fontColor.getRGB()));
 		}
 
 		if (model.labelInside > -1)
 		{
-			labelInside = (model.labelInside == 1);
+			setLabelInside((model.labelInside == 1));
 		}
 	}
 
@@ -118,15 +119,15 @@ public class Vertex extends GraphElement implements Serializable
 		VertexPropertyModel result = new VertexPropertyModel();
 
 		result.number = number;
-		result.radius = radius;
-		result.type = type;
-		result.vertexColor = new Color(vertexColor.getRGB());
-		result.lineWidth = lineWidth;
-		result.lineType = lineType;
-		result.lineColor = new Color(lineColor.getRGB());
-		result.fontColor = new Color(fontColor.getRGB());
+		result.radius = getRadius();
+		result.type = getType();
+		result.vertexColor = new Color(getVertexColor().getRGB());
+		result.lineWidth = getLineWidth();
+		result.lineType = getLineType();
+		result.lineColor = new Color(getLineColor().getRGB());
+		result.fontColor = new Color(getFontColor().getRGB());
 		result.labelInside = 0;
-		if (labelInside)
+		if (isLabelInside())
 		{
 			result.labelInside = 1;
 		}
@@ -139,11 +140,11 @@ public class Vertex extends GraphElement implements Serializable
 		number = _number;
 		if (ControlManager.graph.digitalNumeration)
 		{
-			text = Integer.toString(number);
+			setText(Integer.toString(number));
 		}
 		else
 		{
-			text = Utilities.getABC(number);
+			setText(Utilities.getABC(number));
 		}
 	}
 
@@ -154,27 +155,27 @@ public class Vertex extends GraphElement implements Serializable
 
 	public void adjustToGrid()
 	{
-		posX = ((posX + (ControlManager.graph.gridResolutionX / 2)) / ControlManager.graph.gridResolutionX) * ControlManager.graph.gridResolutionX;
-		posY = ((posY + (ControlManager.graph.gridResolutionY / 2)) / ControlManager.graph.gridResolutionY) * ControlManager.graph.gridResolutionY;
+		setPosX(((getPosX() + (ControlManager.graph.gridResolutionX / 2)) / ControlManager.graph.gridResolutionX) * ControlManager.graph.gridResolutionX);
+		setPosY(((getPosY() + (ControlManager.graph.gridResolutionY / 2)) / ControlManager.graph.gridResolutionY) * ControlManager.graph.gridResolutionY);
 	}
 
 	public boolean collides(Vertex vertex)
 	{
-		Area area = new Area(Utilities.getVertexShape(type + 1, radius, posX, posY));
-		area.intersect(new Area(Utilities.getVertexShape(vertex.type + 1, vertex.radius, vertex.posX, vertex.posY)));
+		Area area = new Area(Utilities.getVertexShape(getType() + 1, getRadius(), getPosX(), getPosY()));
+		area.intersect(new Area(Utilities.getVertexShape(vertex.getType() + 1, vertex.getRadius(), vertex.getPosX(), vertex.getPosY())));
 		return !area.isEmpty();
 	}
 
 	public boolean intersects(int x, int y)
 	{
-		Area area = new Area(Utilities.getVertexShape(type + 1, radius, posX, posY));
+		Area area = new Area(Utilities.getVertexShape(getType() + 1, getRadius(), getPosX(), getPosY()));
 		return area.contains(x, y);
 	}
 
 	public boolean fitsIntoPage()
 	{
-		return !((posX - radius - lineWidth / 2 < 0) || (posX + radius + lineWidth / 2 > ControlManager.graph.pageWidth)
-				|| (posY - radius - lineWidth / 2 < 0) || (posY + radius + lineWidth / 2 > ControlManager.graph.pageHeight));
+		return !((getPosX() - getRadius() - getLineWidth() / 2 < 0) || (getPosX() + getRadius() + getLineWidth() / 2 > ControlManager.graph.pageWidth)
+				|| (getPosY() - getRadius() - getLineWidth() / 2 < 0) || (getPosY() + getRadius() + getLineWidth() / 2 > ControlManager.graph.pageHeight));
 	}
 
 	public void draw(Graphics2D g2d, boolean dummy)
@@ -183,116 +184,116 @@ public class Vertex extends GraphElement implements Serializable
 
 		if (dummy && ControlManager.graph.gridOn)
 		{
-			tempX = posX;
-			tempY = posY;
+			tempX = getPosX();
+			tempY = getPosY();
 			adjustToGrid();
 		}
 
 		if (ControlManager.selection.contains(this))
 		{
 			g.setColor(DrawingTools.selectionColor);
-			g.fill(Utilities.getVertexShape(type + 1, radius + lineWidth / 2 + radius / 4, posX, posY));
+			g.fill(Utilities.getVertexShape(getType() + 1, getRadius() + getLineWidth() / 2 + getRadius() / 4, getPosX(), getPosY()));
 		}
 
-		g.setColor(vertexColor);
+		g.setColor(getVertexColor());
 		if (dummy)
 		{
-			g.setColor(DrawingTools.getDummyColor(vertexColor));
+			g.setColor(DrawingTools.getDummyColor(getVertexColor()));
 		}
 
-		if (lineWidth > 0 && lineType != PropertyModel.NONE)
+		if (getLineWidth() > 0 && getLineType() != LineType.NONE)
 		{
-			if (lineType == DrawingTools.DOUBLE_LINE)
+			if (getLineType() == LineType.DOUBLE)
 			{
-				Shape innerOutline = Utilities.getVertexShape(type + 1, radius - 2 - (lineWidth * 23) / 16, posX, posY);
-				if (type == PropertyModel.CIRCLE)
+				Shape innerOutline = Utilities.getVertexShape(getType() + 1, getRadius() - 2 - (getLineWidth() * 23) / 16, getPosX(), getPosY());
+				if (getType() == pl.edu.agh.gratex.model.properties.Shape.CIRCLE.getValue())
 				{
-					innerOutline = Utilities.getVertexShape(type + 1, radius - 2 - (lineWidth * 9) / 8, posX, posY);
+					innerOutline = Utilities.getVertexShape(getType() + 1, getRadius() - 2 - (getLineWidth() * 9) / 8, getPosX(), getPosY());
 				}
-				if (type == PropertyModel.TRIANGLE)
+				if (getType() == pl.edu.agh.gratex.model.properties.Shape.TRIANGLE.getValue())
 				{
-					innerOutline = Utilities.getVertexShape(type + 1, radius - 4 - (lineWidth * 11) / 5, posX, posY);
+					innerOutline = Utilities.getVertexShape(getType() + 1, getRadius() - 4 - (getLineWidth() * 11) / 5, getPosX(), getPosY());
 				}
-				if (type == PropertyModel.SQUARE)
+				if (getType() == pl.edu.agh.gratex.model.properties.Shape.SQUARE.getValue())
 				{
-					innerOutline = Utilities.getVertexShape(type + 1, radius - 3 - (lineWidth * 13) / 8, posX, posY);
+					innerOutline = Utilities.getVertexShape(getType() + 1, getRadius() - 3 - (getLineWidth() * 13) / 8, getPosX(), getPosY());
 				}
 				
 				g.setColor(Color.white);
-				g.fill(Utilities.getVertexShape(type + 1, radius + lineWidth / 2, posX, posY));
+				g.fill(Utilities.getVertexShape(getType() + 1, getRadius() + getLineWidth() / 2, getPosX(), getPosY()));
 				
-				g.setColor(vertexColor);
+				g.setColor(getVertexColor());
 				if (dummy)
 				{
-					g.setColor(DrawingTools.getDummyColor(vertexColor));
+					g.setColor(DrawingTools.getDummyColor(getVertexColor()));
 				}
 				g.fill(innerOutline);
 				
-				g.setColor(lineColor);
+				g.setColor(getLineColor());
 				if (dummy)
 				{
-					g.setColor(DrawingTools.getDummyColor(lineColor));
+					g.setColor(DrawingTools.getDummyColor(getLineColor()));
 				}
-				g.setStroke(DrawingTools.getStroke(lineWidth, PropertyModel.SOLID, 0.0));
-				g.draw(Utilities.getVertexShape(type + 1, radius, posX, posY));
+				g.setStroke(DrawingTools.getStroke(getLineWidth(), LineType.SOLID, 0.0));
+				g.draw(Utilities.getVertexShape(getType() + 1, getRadius(), getPosX(), getPosY()));
 				g.draw(innerOutline);
 			}
 
 			else
 			{
-				Shape vertexShape = Utilities.getVertexShape(type + 1, radius, posX, posY);
+				Shape vertexShape = Utilities.getVertexShape(getType() + 1, getRadius(), getPosX(), getPosY());
 				g.fill(vertexShape);
 
-				g.setColor(lineColor);
+				g.setColor(getLineColor());
 				if (dummy)
 				{
-					g.setColor(DrawingTools.getDummyColor(lineColor));
+					g.setColor(DrawingTools.getDummyColor(getLineColor()));
 				}
 
-				double girth = Math.PI * 2 * radius;
-				if (type == 2)
+				double girth = Math.PI * 2 * getRadius();
+				if (getType() == 2)
 				{
-					girth = Math.sqrt(3) * radius;
+					girth = Math.sqrt(3) * getRadius();
 				}
-				if (type == 3)
+				if (getType() == 3)
 				{
-					girth = Math.sqrt(2) * radius;
+					girth = Math.sqrt(2) * getRadius();
 				}
-				if (type == 4)
+				if (getType() == 4)
 				{
-					girth = 2 * radius * Math.cos(Math.toRadians(54));
+					girth = 2 * getRadius() * Math.cos(Math.toRadians(54));
 				}
-				if (type == 5)
+				if (getType() == 5)
 				{
-					girth = radius;
+					girth = getRadius();
 				}
 
-				g.setStroke(DrawingTools.getStroke(lineWidth, lineType, girth));
+				g.setStroke(DrawingTools.getStroke(getLineWidth(), getLineType(), girth));
 				g.draw(vertexShape);
 			}
 			g.setStroke(new BasicStroke());
 		}
 
-		if (labelInside)
+		if (isLabelInside())
 		{
-			g.setColor(fontColor);
+			g.setColor(getFontColor());
 			if (dummy)
 			{
-				g.setColor(DrawingTools.getDummyColor(fontColor));
+				g.setColor(DrawingTools.getDummyColor(getFontColor()));
 			}
 			updateNumber(number);
-			if (text != null)
+			if (getText() != null)
 			{
-				g.setFont(font);
+				g.setFont(getFont());
 				FontMetrics fm = g.getFontMetrics();
-				g.drawString(text, posX - fm.stringWidth(text) / 2, posY + (fm.getAscent() - fm.getDescent()) / 2);
+				g.drawString(getText(), getPosX() - fm.stringWidth(getText()) / 2, getPosY() + (fm.getAscent() - fm.getDescent()) / 2);
 			}
 		}
 
 		if (dummy && ControlManager.graph.gridOn)
 		{
-			posX = tempX;
-			posY = tempY;
+			setPosX(tempX);
+			setPosY(tempY);
 		}
 
 		g.dispose();
@@ -300,9 +301,113 @@ public class Vertex extends GraphElement implements Serializable
 
 	public void drawLabel(Graphics2D g, boolean dummy)
 	{
-		if (label != null)
+		if (getLabel() != null)
 		{
-			label.draw(g, dummy);
+			getLabel().draw(g, dummy);
 		}
 	}
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public Color getVertexColor() {
+        return vertexColor;
+    }
+
+    public void setVertexColor(Color vertexColor) {
+        this.vertexColor = vertexColor;
+    }
+
+    public int getLineWidth() {
+        return lineWidth;
+    }
+
+    public void setLineWidth(int lineWidth) {
+        this.lineWidth = lineWidth;
+    }
+
+    public LineType getLineType() {
+        return lineType;
+    }
+
+    public void setLineType(LineType lineType) {
+        this.lineType = lineType;
+    }
+
+    public Color getLineColor() {
+        return lineColor;
+    }
+
+    public void setLineColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    public Color getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(Color fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public boolean isLabelInside() {
+        return labelInside;
+    }
+
+    public void setLabelInside(boolean labelInside) {
+        this.labelInside = labelInside;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+
+    public LabelV getLabel() {
+        return label;
+    }
+
+    public void setLabel(LabelV label) {
+        this.label = label;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

@@ -16,14 +16,14 @@ public class Utilities
 	{
 		Point result = new Point();
 
-		if (vertex.type == 1)
+		if (vertex.getType() == 1)
 		{
-			result.x = vertex.posX + (int) Math.round((vertex.radius + vertex.lineWidth / 2) * Math.cos(Math.toRadians(-angle)));
-			result.y = vertex.posY + (int) Math.round((vertex.radius + vertex.lineWidth / 2) * Math.sin(Math.toRadians(-angle)));
+			result.x = vertex.getPosX() + (int) Math.round((vertex.getRadius() + vertex.getLineWidth() / 2) * Math.cos(Math.toRadians(-angle)));
+			result.y = vertex.getPosY() + (int) Math.round((vertex.getRadius() + vertex.getLineWidth() / 2) * Math.sin(Math.toRadians(-angle)));
 		}
 		else
 		{
-			double radius = vertex.radius + vertex.lineWidth / 2;
+			double radius = vertex.getRadius() + vertex.getLineWidth() / 2;
 			angle = (angle + 1080) % 360;
 			double a1 = Math.cos(Math.toRadians(angle));
 			double b1 = -Math.sin(Math.toRadians(angle));
@@ -33,7 +33,7 @@ public class Utilities
 			double b2 = 0.0;
 			double c2 = 0.0;
 
-			if (vertex.type == 2)
+			if (vertex.getType() == 2)
 			{
 				a2 = 1;
 				b2 = Math.sqrt(3);
@@ -50,7 +50,7 @@ public class Utilities
 					c2 = -radius / 2;
 				}
 			}
-			else if (vertex.type == 3)
+			else if (vertex.getType() == 3)
 			{
 				a2 = 0.0;
 				b2 = 1;
@@ -76,7 +76,7 @@ public class Utilities
 				}
 
 			}
-			else if (vertex.type == 4)
+			else if (vertex.getType() == 4)
 			{
 				a2 = 1;
 				b2 = -Math.tan(Math.toRadians(36));
@@ -145,8 +145,8 @@ public class Utilities
 				}
 			}
 
-			result.x = vertex.posX + (int) Math.round((a1 * c2 - a2 * c1) / (a1 * b2 - a2 * b1));
-			result.y = vertex.posY - (int) Math.round((c1 * b2 - c2 * b1) / (a1 * b2 - a2 * b1));
+			result.x = vertex.getPosX() + (int) Math.round((a1 * c2 - a2 * c1) / (a1 * b2 - a2 * b1));
+			result.y = vertex.getPosY() - (int) Math.round((c1 * b2 - c2 * b1) / (a1 * b2 - a2 * b1));
 		}
 
 		return result;
@@ -294,35 +294,35 @@ public class Utilities
 
 	public static boolean checkArcRectangleIntersection(Edge edge, Rectangle area)
 	{
-		if (area.contains(edge.inPoint) || area.contains(edge.outPoint))
+		if (area.contains(edge.getInPoint()) || area.contains(edge.getOutPoint()))
 		{
 			return true;
 		}
 
-		if (edge.vertexA == edge.vertexB)
+		if (edge.getVertexA() == edge.getVertexB())
 		{
-			int x = (int) edge.arc.x;
-			int y = (int) edge.arc.y;
-			int width = (int) edge.arc.width;
-			int height = (int) edge.arc.height;
+			int x = (int) edge.getArc().x;
+			int y = (int) edge.getArc().y;
+			int width = (int) edge.getArc().width;
+			int height = (int) edge.getArc().height;
 
-			if (edge.relativeEdgeAngle == 0)
+			if (edge.getRelativeEdgeAngle() == 0)
 			{
-				x = edge.outPoint.x;
-				width -= (edge.outPoint.x - (int) edge.arc.x);
+				x = edge.getOutPoint().x;
+				width -= (edge.getOutPoint().x - (int) edge.getArc().x);
 			}
-			else if (edge.relativeEdgeAngle == 90)
+			else if (edge.getRelativeEdgeAngle() == 90)
 			{
-				height = edge.outPoint.y - y;
+				height = edge.getOutPoint().y - y;
 			}
-			else if (edge.relativeEdgeAngle == 180)
+			else if (edge.getRelativeEdgeAngle() == 180)
 			{
-				width = edge.outPoint.x - x;
+				width = edge.getOutPoint().x - x;
 			}
 			else
 			{
-				y = edge.outPoint.y;
-				height -= (edge.outPoint.y - (int) edge.arc.y);
+				y = edge.getOutPoint().y;
+				height -= (edge.getOutPoint().y - (int) edge.getArc().y);
 			}
 
 			return area.intersects(new Rectangle(x, y, width, height));
@@ -335,19 +335,19 @@ public class Utilities
 			Point p3 = new Point(area.x + area.width, area.y + area.height);
 			Point p4 = new Point(area.x, area.y + area.height);
 
-			if (checkArcLineIntersection(edge.arcMiddle, edge.outPoint, edge.inPoint, p1, p2))
+			if (checkArcLineIntersection(edge.getArcMiddle(), edge.getOutPoint(), edge.getInPoint(), p1, p2))
 			{
 				return true;
 			}
-			else if (checkArcLineIntersection(edge.arcMiddle, edge.outPoint, edge.inPoint, p2, p3))
+			else if (checkArcLineIntersection(edge.getArcMiddle(), edge.getOutPoint(), edge.getInPoint(), p2, p3))
 			{
 				return true;
 			}
-			else if (checkArcLineIntersection(edge.arcMiddle, edge.outPoint, edge.inPoint, p3, p4))
+			else if (checkArcLineIntersection(edge.getArcMiddle(), edge.getOutPoint(), edge.getInPoint(), p3, p4))
 			{
 				return true;
 			}
-			else if (checkArcLineIntersection(edge.arcMiddle, edge.outPoint, edge.inPoint, p4, p1))
+			else if (checkArcLineIntersection(edge.getArcMiddle(), edge.getOutPoint(), edge.getInPoint(), p4, p1))
 			{
 				return true;
 			}

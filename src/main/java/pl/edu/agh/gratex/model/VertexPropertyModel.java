@@ -1,5 +1,7 @@
 package pl.edu.agh.gratex.model;
 
+import pl.edu.agh.gratex.model.properties.LineType;
+
 import java.awt.Color;
 import java.io.Serializable;
 
@@ -11,7 +13,7 @@ public class VertexPropertyModel extends PropertyModel implements Serializable
 	public int					radius;
 	public int					type;
 	public Color				vertexColor;
-	public int					lineType;
+	public LineType				lineType;
 	public int					lineWidth;
 	public Color				lineColor;
 	public Color				fontColor;
@@ -23,7 +25,7 @@ public class VertexPropertyModel extends PropertyModel implements Serializable
 		type = PropertyModel.EMPTY;
 		vertexColor = null;
 		lineWidth = PropertyModel.EMPTY;
-		lineType = PropertyModel.EMPTY;
+		lineType = LineType.EMPTY;
 		lineColor = null;
 		labelInside = PropertyModel.EMPTY;
 		number = -1;
@@ -90,7 +92,7 @@ public class VertexPropertyModel extends PropertyModel implements Serializable
 
 		if (model.lineType != lineType)
 		{
-			lineType = -1;
+			lineType = LineType.EMPTY;
 		}
 
 		if (lineColor != null)

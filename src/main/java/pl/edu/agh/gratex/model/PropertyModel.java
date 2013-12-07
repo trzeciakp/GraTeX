@@ -9,21 +9,12 @@ public abstract class PropertyModel implements Serializable
 {
 	private static final long				serialVersionUID	= 4277135806397473605L;
 
-	public final static int					EMPTY				= -1;
+	public final static int                 EMPTY				= -1;
 	public final static int					NONE				= 0;
 
-	public final static int					SOLID				= 1;
-	public final static int					DASHED				= 2;
-	public final static int					DOTTED				= 3;
-	public final static int					DOUBLE				= 4;
+    public final static int test = 2;
 
-	public final static int					CIRCLE				= 1;
-	public final static int					TRIANGLE			= 2;
-	public final static int					SQUARE				= 3;
-	public final static int					PENTAGON			= 4;
-	public final static int					HEXAGON				= 5;
-
-	public final static int					NUMBERS				= 1;
+    public final static int					NUMBERS				= 1;
 	public final static int					ALPHA				= 2;
 
 	public final static int					NO					= 0;

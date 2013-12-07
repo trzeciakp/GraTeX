@@ -116,19 +116,19 @@ public class ControlManager
 			selection.clear();
 			if (mode == VERTEX_MODE)
 			{
-				selection.addAll(ControlManager.graph.vertices);
+				selection.addAll(ControlManager.graph.getVertices());
 			}
 			else if (mode == EDGE_MODE)
 			{
-				selection.addAll(ControlManager.graph.edges);
+				selection.addAll(ControlManager.graph.getEdges());
 			}
 			else if (mode == LABEL_V_MODE)
 			{
-				selection.addAll(ControlManager.graph.labelsV);
+				selection.addAll(ControlManager.graph.getLabelsV());
 			}
 			else
 			{
-				selection.addAll(ControlManager.graph.labelsE);
+				selection.addAll(ControlManager.graph.getLabelsE());
 			}
 			updatePropertyChangeOperationStatus(true);
 			mainWindow.updateWorkspace();
@@ -511,9 +511,9 @@ public class ControlManager
 				if (tool == ADD_TOOL)
 				{
 					Vertex vertex = new Vertex();
-					vertex.setModel(graph.vertexDefaultModel);
-					vertex.posX = x;
-					vertex.posY = y;
+					vertex.setModel(graph.getVertexDefaultModel());
+					vertex.setPosX(x);
+					vertex.setPosY(y);
 					if (graph.gridOn)
 					{
 						vertex.adjustToGrid();
@@ -585,14 +585,14 @@ public class ControlManager
 						if (currentlyAddedEdge == null)
 						{
 							currentlyAddedEdge = new Edge();
-							currentlyAddedEdge.setModel(graph.edgeDefaultModel);
-							currentlyAddedEdge.vertexA = temp;
+							currentlyAddedEdge.setModel(graph.getEdgeDefaultModel());
+							currentlyAddedEdge.setVertexA(temp);
 							publishInfo("Now choose the target vertex (click)");
 						}
 						else
 						{
-							currentlyAddedEdge.vertexB = temp;
-							currentlyAddedEdge.directed = e.isShiftDown();
+							currentlyAddedEdge.setVertexB(temp);
+							currentlyAddedEdge.setDirected(e.isShiftDown());
 							operations.addNewOperation(new AddOperation(currentlyAddedEdge));
 							publishInfo(operations.redo());
 							selection.add(currentlyAddedEdge);
@@ -631,10 +631,10 @@ public class ControlManager
 					Vertex temp = graph.getVertexFromPosition(x, y);
 					if (temp != null)
 					{
-						if (temp.label == null)
+						if (temp.getLabel() == null)
 						{
 							LabelV labelV = new LabelV(temp);
-							labelV.setModel(graph.labelVDefaultModel);
+							labelV.setModel(graph.getLabelVDefaultModel());
 							operations.addNewOperation(new AddOperation(labelV));
 							publishInfo(operations.redo());
 							selection.add(labelV);
@@ -681,11 +681,11 @@ public class ControlManager
 					Edge temp = graph.getEdgeFromPosition(x, y);
 					if (temp != null)
 					{
-						if (temp.label == null)
+						if (temp.getLabel() == null)
 						{
 							LabelE labelE = new LabelE(temp);
-							labelE.setModel(graph.labelEDefaultModel);
-							labelE.horizontalPlacement = e.isShiftDown();
+							labelE.setModel(graph.getLabelEDefaultModel());
+							labelE.setHorizontalPlacement(e.isShiftDown());
 							operations.addNewOperation(new AddOperation(labelE));
 							publishInfo(operations.redo());
 							selection.add(labelE);
@@ -751,7 +751,7 @@ public class ControlManager
 					{
 						currentlyMovedElement = graph.getVertexFromPosition(x, y);
 						currentDragOperation = new DragOperation(currentlyMovedElement);
-						currentDragOperation.setStartPos(((Vertex) currentlyMovedElement).posX, ((Vertex) currentlyMovedElement).posY);
+						currentDragOperation.setStartPos(((Vertex) currentlyMovedElement).getPosX(), ((Vertex) currentlyMovedElement).getPosY());
 					}
 				}
 			}
@@ -764,11 +764,11 @@ public class ControlManager
 						Edge edge = (Edge) graph.getEdgeFromPosition(x, y);
 						currentlyMovedElement = edge;
 						currentDragOperation = new DragOperation(currentlyMovedElement);
-						if (edge.vertexA == edge.vertexB)
+						if (edge.getVertexA() == edge.getVertexB())
 						{
 							Point c = new Point(x, y);
-							Point v = new Point(edge.vertexA.posX, edge.vertexA.posY);
-							if (c.distance(v) > (edge.vertexA.radius + edge.vertexA.lineWidth / 2) * 1.5)
+							Point v = new Point(edge.getVertexA().getPosX(), edge.getVertexA().getPosY());
+							if (c.distance(v) > (edge.getVertexA().getRadius() + edge.getVertexA().getLineWidth() / 2) * 1.5)
 							{
 								changingEdgeAngle = true;
 								currentDragOperation.setEdgeStartState(edge, true);
@@ -776,18 +776,18 @@ public class ControlManager
 							else
 							{
 								edgeDragDummy = new Vertex();
-								edgeDragDummy.posX = x;
-								edgeDragDummy.posY = y;
-								edgeDragDummy.radius = 2;
-								if (c.distance(edge.inPoint) < c.distance(edge.outPoint))
+								edgeDragDummy.setPosX(x);
+								edgeDragDummy.setPosY(y);
+								edgeDragDummy.setRadius(2);
+								if (c.distance(edge.getInPoint()) < c.distance(edge.getOutPoint()))
 								{
 									currentDragOperation.setEdgeStartState(edge, false);
-									edge.vertexB = edgeDragDummy;
+									edge.setVertexB(edgeDragDummy);
 								}
 								else
 								{
 									currentDragOperation.setEdgeStartState(edge, true);
-									edge.vertexA = edgeDragDummy;
+									edge.setVertexA(edgeDragDummy);
 								}
 
 							}
@@ -795,8 +795,8 @@ public class ControlManager
 						else
 						{
 							Point c = new Point(x, y);
-							Point va = new Point(edge.vertexA.posX, edge.vertexA.posY);
-							Point vb = new Point(edge.vertexB.posX, edge.vertexB.posY);
+							Point va = new Point(edge.getVertexA().getPosX(), edge.getVertexA().getPosY());
+							Point vb = new Point(edge.getVertexB().getPosX(), edge.getVertexB().getPosY());
 							if (c.distance(va) / c.distance(vb) < 2 && c.distance(va) / c.distance(vb) > 0.5)
 							{
 								changingEdgeAngle = true;
@@ -805,18 +805,18 @@ public class ControlManager
 							else
 							{
 								edgeDragDummy = new Vertex();
-								edgeDragDummy.posX = x;
-								edgeDragDummy.posY = y;
-								edgeDragDummy.radius = 2;
+								edgeDragDummy.setPosX(x);
+								edgeDragDummy.setPosY(y);
+								edgeDragDummy.setRadius(2);
 								if (c.distance(va) < c.distance(vb))
 								{
 									currentDragOperation.setEdgeStartState(edge, true);
-									edge.vertexA = edgeDragDummy;
+									edge.setVertexA(edgeDragDummy);
 								}
 								else
 								{
 									currentDragOperation.setEdgeStartState(edge, false);
-									edge.vertexB = edgeDragDummy;
+									edge.setVertexB(edgeDragDummy);
 								}
 							}
 						}
@@ -831,7 +831,7 @@ public class ControlManager
 					{
 						currentlyMovedElement = graph.getLabelVFromPosition(x, y);
 						currentDragOperation = new DragOperation(currentlyMovedElement);
-						currentDragOperation.setStartAngle(((LabelV) currentlyMovedElement).position);
+						currentDragOperation.setStartAngle(((LabelV) currentlyMovedElement).getPosition());
 					}
 				}
 			}
@@ -856,7 +856,7 @@ public class ControlManager
 		{
 			if (currentlyMovedElement instanceof Vertex)
 			{
-				currentDragOperation.setEndPos(((Vertex) currentlyMovedElement).posX, ((Vertex) currentlyMovedElement).posY);
+				currentDragOperation.setEndPos(((Vertex) currentlyMovedElement).getPosX(), ((Vertex) currentlyMovedElement).getPosY());
 				if (currentDragOperation.changeMade())
 				{
 					operations.addNewOperation(currentDragOperation);
@@ -880,9 +880,9 @@ public class ControlManager
 				{
 					if (currentDragOperation.draggingA())
 					{
-						if (edge.vertexA != currentDragOperation.getDisjointedVertex())
+						if (edge.getVertexA() != currentDragOperation.getDisjointedVertex())
 						{
-							if (edge.vertexA != edgeDragDummy)
+							if (edge.getVertexA() != edgeDragDummy)
 							{
 								currentDragOperation.setEdgeEndState(edge);
 								operations.addNewOperation(currentDragOperation);
@@ -896,9 +896,9 @@ public class ControlManager
 					}
 					else
 					{
-						if (edge.vertexB != currentDragOperation.getDisjointedVertex())
+						if (edge.getVertexB() != currentDragOperation.getDisjointedVertex())
 						{
-							if (edge.vertexB != edgeDragDummy)
+							if (edge.getVertexB() != edgeDragDummy)
 							{
 								currentDragOperation.setEdgeEndState(edge);
 								operations.addNewOperation(currentDragOperation);
@@ -914,7 +914,7 @@ public class ControlManager
 			}
 			else if (currentlyMovedElement instanceof LabelV)
 			{
-				currentDragOperation.setEndAngle(((LabelV) currentlyMovedElement).position);
+				currentDragOperation.setEndAngle(((LabelV) currentlyMovedElement).getPosition());
 				if (currentDragOperation.changeMade())
 				{
 					operations.addNewOperation(currentDragOperation);
@@ -977,13 +977,13 @@ public class ControlManager
 
 		if (currentlyAddedEdge != null)
 		{
-			currentlyAddedEdge.directed = e.isShiftDown();
+			currentlyAddedEdge.setDirected(e.isShiftDown());
 		}
 		if (currentlyMovedElement != null)
 		{
 			if (currentlyMovedElement instanceof Edge)
 			{
-				((Edge) currentlyMovedElement).directed = e.isShiftDown();
+				((Edge) currentlyMovedElement).setDirected(e.isShiftDown());
 			}
 		}
 	}
@@ -993,17 +993,17 @@ public class ControlManager
 		shiftDown = pressed;
 		if (ControlManager.currentlyAddedEdge != null)
 		{
-			ControlManager.currentlyAddedEdge.directed = pressed;
+			ControlManager.currentlyAddedEdge.setDirected(pressed);
 		}
 		if (currentlyMovedElement != null)
 		{
 			if (currentlyMovedElement instanceof Edge)
 			{
-				((Edge) currentlyMovedElement).directed = pressed;
+				((Edge) currentlyMovedElement).setDirected(pressed);
 			}
 			if (currentlyMovedElement instanceof LabelE)
 			{
-				((LabelE) currentlyMovedElement).horizontalPlacement = !pressed;
+				((LabelE) currentlyMovedElement).setHorizontalPlacement(!pressed);
 			}
 		}
 		mainWindow.updateWorkspace();
@@ -1022,12 +1022,12 @@ public class ControlManager
 			if (mode == VERTEX_MODE)
 			{
 				Vertex vertex = (Vertex) currentlyMovedElement;
-				graph.vertices.remove(vertex);
-				int oldPosX = vertex.posX;
-				int oldPosY = vertex.posY;
+				graph.getVertices().remove(vertex);
+				int oldPosX = vertex.getPosX();
+				int oldPosY = vertex.getPosY();
 
-				vertex.posX = x;
-				vertex.posY = y;
+				vertex.setPosX(x);
+				vertex.setPosY(y);
 
 				if (graph.gridOn)
 				{
@@ -1036,33 +1036,33 @@ public class ControlManager
 
 				if (graph.vertexCollision(vertex) || !vertex.fitsIntoPage())
 				{
-					vertex.posX = oldPosX;
-					vertex.posY = oldPosY;
+					vertex.setPosX(oldPosX);
+					vertex.setPosY(oldPosY);
 				}
-				graph.vertices.add(vertex);
+				graph.getVertices().add(vertex);
 			}
 			else if (mode == EDGE_MODE)
 			{
 				if (changingEdgeAngle)
 				{
 					Edge edge = (Edge) currentlyMovedElement;
-					if (edge.vertexA == edge.vertexB)
+					if (edge.getVertexA() == edge.getVertexB())
 					{
-						double angle = (Math.toDegrees(Math.atan2(mouseX - edge.vertexB.posX, mouseY - edge.vertexB.posY)) + 270) % 360;
-						edge.relativeEdgeAngle = ((int) Math.floor((angle + 45) / 90) % 4) * 90;
+						double angle = (Math.toDegrees(Math.atan2(mouseX - edge.getVertexB().getPosX(), mouseY - edge.getVertexB().getPosY())) + 270) % 360;
+						edge.setRelativeEdgeAngle(((int) Math.floor((angle + 45) / 90) % 4) * 90);
 					}
 					else
 					{
 						double angle = 0.0;
-						if (Point.distance(x, y, edge.vertexA.posX, edge.vertexA.posY) < Point.distance(x, y, edge.vertexB.posX, edge.vertexB.posY))
+						if (Point.distance(x, y, edge.getVertexA().getPosX(), edge.getVertexA().getPosY()) < Point.distance(x, y, edge.getVertexB().getPosX(), edge.getVertexB().getPosY()))
 						{
-							angle = Math.toDegrees(Math.atan2(x - edge.vertexA.posX, y - edge.vertexA.posY)) + 270;
-							angle -= Math.toDegrees(Math.atan2(edge.vertexB.posX - edge.vertexA.posX, edge.vertexB.posY - edge.vertexA.posY)) + 270;
+							angle = Math.toDegrees(Math.atan2(x - edge.getVertexA().getPosX(), y - edge.getVertexA().getPosY())) + 270;
+							angle -= Math.toDegrees(Math.atan2(edge.getVertexB().getPosX() - edge.getVertexA().getPosX(), edge.getVertexB().getPosY() - edge.getVertexA().getPosY())) + 270;
 						}
 						else
 						{
-							angle = Math.toDegrees(Math.atan2(x - edge.vertexB.posX, y - edge.vertexB.posY)) + 270;
-							angle = -angle + Math.toDegrees(Math.atan2(edge.vertexA.posX - edge.vertexB.posX, edge.vertexA.posY - edge.vertexB.posY))
+							angle = Math.toDegrees(Math.atan2(x - edge.getVertexB().getPosX(), y - edge.getVertexB().getPosY())) + 270;
+							angle = -angle + Math.toDegrees(Math.atan2(edge.getVertexA().getPosX() - edge.getVertexB().getPosX(), edge.getVertexA().getPosY() - edge.getVertexB().getPosY()))
 									+ 270;
 						}
 
@@ -1080,7 +1080,7 @@ public class ControlManager
 							}
 
 						}
-						edge.relativeEdgeAngle = intAngle;
+						edge.setRelativeEdgeAngle(intAngle);
 					}
 				}
 				else
@@ -1091,32 +1091,32 @@ public class ControlManager
 						Edge edge = (Edge) currentlyMovedElement;
 						if (currentDragOperation.draggingA())
 						{
-							edge.vertexA = vertex;
+							edge.setVertexA(vertex);
 						}
 						else
 						{
-							edge.vertexB = vertex;
+							edge.setVertexB(vertex);
 						}
 
-						if (edge.vertexA == edge.vertexB)
+						if (edge.getVertexA() == edge.getVertexB())
 						{
-							double angle = (Math.toDegrees(Math.atan2(mouseX - edge.vertexB.posX, mouseY - edge.vertexB.posY)) + 270) % 360;
-							edge.relativeEdgeAngle = ((int) Math.floor((angle + 45) / 90) % 4) * 90;
+							double angle = (Math.toDegrees(Math.atan2(mouseX - edge.getVertexB().getPosX(), mouseY - edge.getVertexB().getPosY())) + 270) % 360;
+							edge.setRelativeEdgeAngle(((int) Math.floor((angle + 45) / 90) % 4) * 90);
 						}
 						else
 						{
 							double angle = 0.0;
-							if (Point.distance(x, y, edge.vertexA.posX, edge.vertexA.posY) < Point.distance(x, y, edge.vertexB.posX,
-									edge.vertexB.posY))
+							if (Point.distance(x, y, edge.getVertexA().getPosX(), edge.getVertexA().getPosY()) < Point.distance(x, y, edge.getVertexB().getPosX(),
+                                    edge.getVertexB().getPosY()))
 							{
-								angle = Math.toDegrees(Math.atan2(x - edge.vertexA.posX, y - edge.vertexA.posY)) + 270;
-								angle -= Math.toDegrees(Math.atan2(edge.vertexB.posX - edge.vertexA.posX, edge.vertexB.posY - edge.vertexA.posY)) + 270;
+								angle = Math.toDegrees(Math.atan2(x - edge.getVertexA().getPosX(), y - edge.getVertexA().getPosY())) + 270;
+								angle -= Math.toDegrees(Math.atan2(edge.getVertexB().getPosX() - edge.getVertexA().getPosX(), edge.getVertexB().getPosY() - edge.getVertexA().getPosY())) + 270;
 							}
 							else
 							{
-								angle = Math.toDegrees(Math.atan2(x - edge.vertexB.posX, y - edge.vertexB.posY)) + 270;
+								angle = Math.toDegrees(Math.atan2(x - edge.getVertexB().getPosX(), y - edge.getVertexB().getPosY())) + 270;
 								angle = -angle
-										+ Math.toDegrees(Math.atan2(edge.vertexA.posX - edge.vertexB.posX, edge.vertexA.posY - edge.vertexB.posY))
+										+ Math.toDegrees(Math.atan2(edge.getVertexA().getPosX() - edge.getVertexB().getPosX(), edge.getVertexA().getPosY() - edge.getVertexB().getPosY()))
 										+ 270;
 							}
 
@@ -1134,34 +1134,34 @@ public class ControlManager
 								}
 
 							}
-							edge.relativeEdgeAngle = intAngle;
+							edge.setRelativeEdgeAngle(intAngle);
 						}
 					}
 					else
 					{
-						edgeDragDummy.posX = x;
-						edgeDragDummy.posY = y;
-						((Edge) currentlyMovedElement).relativeEdgeAngle = 0;
+						edgeDragDummy.setPosX(x);
+						edgeDragDummy.setPosY(y);
+						((Edge) currentlyMovedElement).setRelativeEdgeAngle(0);
 						if (currentDragOperation.draggingA())
 						{
-							((Edge) currentlyMovedElement).vertexA = edgeDragDummy;
+							((Edge) currentlyMovedElement).setVertexA(edgeDragDummy);
 						}
 						else
 						{
-							((Edge) currentlyMovedElement).vertexB = edgeDragDummy;
+							((Edge) currentlyMovedElement).setVertexB(edgeDragDummy);
 						}
 					}
 				}
 			}
 			else if (mode == LABEL_V_MODE)
 			{
-				Vertex vertex = ((LabelV) currentlyMovedElement).owner;
-				Point2D p1 = new Point(vertex.posX, vertex.posY);
+				Vertex vertex = ((LabelV) currentlyMovedElement).getOwner();
+				Point2D p1 = new Point(vertex.getPosX(), vertex.getPosY());
 				Point2D p2 = new Point(x, y);
-				double angle = Math.toDegrees(Math.asin((x - vertex.posX) / p1.distance(p2)));
-				if (y < vertex.posY)
+				double angle = Math.toDegrees(Math.asin((x - vertex.getPosX()) / p1.distance(p2)));
+				if (y < vertex.getPosY())
 				{
-					if (x < vertex.posX)
+					if (x < vertex.getPosX())
 					{
 						angle += 360;
 					}
@@ -1170,25 +1170,25 @@ public class ControlManager
 				{
 					angle = 180 - angle;
 				}
-				((LabelV) currentlyMovedElement).position = ((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8;
+				((LabelV) currentlyMovedElement).setPosition(((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8);
 			}
 			else if (mode == LABEL_E_MODE)
 			{
 				int bias = 0;
-				Edge edge = ((LabelE) currentlyMovedElement).owner;
+				Edge edge = ((LabelE) currentlyMovedElement).getOwner();
 				LabelE labelE = (LabelE) currentlyMovedElement;
-				if (edge.vertexA == edge.vertexB)
+				if (edge.getVertexA() == edge.getVertexB())
 				{
-					double angle = -Math.toDegrees(Math.atan2(x - edge.arcMiddle.x, y - edge.arcMiddle.y)) + 270 + edge.relativeEdgeAngle;
-					labelE.position = (int) Math.round((angle % 360) / 3.6);
+					double angle = -Math.toDegrees(Math.atan2(x - edge.getArcMiddle().x, y - edge.getArcMiddle().y)) + 270 + edge.getRelativeEdgeAngle();
+					labelE.setPosition((int) Math.round((angle % 360) / 3.6));
 				}
 
 				else
 				{
-					if (edge.relativeEdgeAngle == 0)
+					if (edge.getRelativeEdgeAngle() == 0)
 					{
-						Point p1 = edge.inPoint;
-						Point p2 = edge.outPoint;
+						Point p1 = edge.getInPoint();
+						Point p2 = edge.getOutPoint();
 
 						if (p2.x < p1.x)
 						{
@@ -1203,7 +1203,7 @@ public class ControlManager
 						double p2c = p2.distance(c);
 						double mc = Line2D.ptLineDist((double) p1.x, (double) p1.y, (double) p2.x, (double) p2.y, (double) x, (double) y);
 
-						labelE.topPlacement = ((p2.x - p1.x) * (c.y - p1.y) - (p2.y - p1.y) * (c.x - p1.x) < 0);
+						labelE.setTopPlacement(((p2.x - p1.x) * (c.y - p1.y) - (p2.y - p1.y) * (c.x - p1.x) < 0));
 
 						if (p1c * p1c > p2c * p2c + p1p2 * p1p2)
 						{
@@ -1217,13 +1217,13 @@ public class ControlManager
 						{
 							bias = (int) Math.round(100 * Math.sqrt(p1c * p1c - mc * mc) / p1p2);
 						}
-						labelE.position = bias;
+						labelE.setPosition(bias);
 					}
 					else
 					{
-						double startAngle = (Math.toDegrees(Math.atan2(edge.outPoint.x - edge.arcMiddle.x, edge.outPoint.y - edge.arcMiddle.y)) + 270) % 360;
-						double endAngle = (Math.toDegrees(Math.atan2(edge.inPoint.x - edge.arcMiddle.x, edge.inPoint.y - edge.arcMiddle.y)) + 270) % 360;
-						double mouseAngle = (Math.toDegrees(Math.atan2(x - edge.arcMiddle.x, y - edge.arcMiddle.y)) + 270) % 360;
+						double startAngle = (Math.toDegrees(Math.atan2(edge.getOutPoint().x - edge.getArcMiddle().x, edge.getOutPoint().y - edge.getArcMiddle().y)) + 270) % 360;
+						double endAngle = (Math.toDegrees(Math.atan2(edge.getInPoint().x - edge.getArcMiddle().x, edge.getInPoint().y - edge.getArcMiddle().y)) + 270) % 360;
+						double mouseAngle = (Math.toDegrees(Math.atan2(x - edge.getArcMiddle().x, y - edge.getArcMiddle().y)) + 270) % 360;
 
 						int position = 0;
 						double alpha = (startAngle - mouseAngle + 360) % 360;
@@ -1241,8 +1241,8 @@ public class ControlManager
 
 						if (position > -1 && position < 101)
 						{
-							labelE.topPlacement = (edge.arcMiddle.distance(new Point(x, y)) > edge.arcRadius);
-							labelE.position = position;
+							labelE.setTopPlacement((edge.getArcMiddle().distance(new Point(x, y)) > edge.getArcRadius()));
+							labelE.setPosition(position);
 						}
 					}
 				}
@@ -1257,10 +1257,10 @@ public class ControlManager
 			if (mode == VERTEX_MODE)
 			{
 				Vertex vertex = new Vertex();
-				vertex.setModel(graph.vertexDefaultModel);
+				vertex.setModel(graph.getVertexDefaultModel());
 				vertex.updateNumber(graph.getNextFreeNumber());
-				vertex.posX = mouseX;
-				vertex.posY = mouseY;
+				vertex.setPosX(mouseX);
+				vertex.setPosY(mouseY);
 				if (!graph.vertexCollision(vertex) && vertex.fitsIntoPage())
 				{
 					vertex.draw(g, true);
@@ -1274,21 +1274,21 @@ public class ControlManager
 					if (vertex == null)
 					{
 						vertex = new Vertex();
-						vertex.posX = mouseX;
-						vertex.posY = mouseY;
-						vertex.radius = 2;
-						currentlyAddedEdge.relativeEdgeAngle = 0;
+						vertex.setPosX(mouseX);
+						vertex.setPosY(mouseY);
+						vertex.setRadius(2);
+						currentlyAddedEdge.setRelativeEdgeAngle(0);
 					}
-					currentlyAddedEdge.vertexB = vertex;
+					currentlyAddedEdge.setVertexB(vertex);
 					if (ControlManager.graph.getVertexFromPosition(mouseX, mouseY) != null)
 					{
-						if (currentlyAddedEdge.vertexA != currentlyAddedEdge.vertexB)
+						if (currentlyAddedEdge.getVertexA() != currentlyAddedEdge.getVertexB())
 						{
-							double angle = Math.toDegrees(Math.atan2(mouseX - currentlyAddedEdge.vertexB.posX, mouseY
-									- currentlyAddedEdge.vertexB.posY)) + 270;
+							double angle = Math.toDegrees(Math.atan2(mouseX - currentlyAddedEdge.getVertexB().getPosX(), mouseY
+									- currentlyAddedEdge.getVertexB().getPosY())) + 270;
 							angle = -angle
-									+ Math.toDegrees(Math.atan2(currentlyAddedEdge.vertexA.posX - currentlyAddedEdge.vertexB.posX,
-											currentlyAddedEdge.vertexA.posY - currentlyAddedEdge.vertexB.posY)) + 270;
+									+ Math.toDegrees(Math.atan2(currentlyAddedEdge.getVertexA().getPosX() - currentlyAddedEdge.getVertexB().getPosX(),
+											currentlyAddedEdge.getVertexA().getPosY() - currentlyAddedEdge.getVertexB().getPosY())) + 270;
 							angle = (angle + 362.5) % 360;
 							int intAngle = ((((int) Math.floor(angle) / 5) * 5) + 720) % 360;
 							if (intAngle > 60)
@@ -1303,13 +1303,13 @@ public class ControlManager
 								}
 
 							}
-							currentlyAddedEdge.relativeEdgeAngle = intAngle;
+							currentlyAddedEdge.setRelativeEdgeAngle(intAngle);
 						}
 						else
 						{
-							double angle = (Math.toDegrees(Math.atan2(mouseX - currentlyAddedEdge.vertexB.posX, mouseY
-									- currentlyAddedEdge.vertexB.posY)) + 270) % 360;
-							currentlyAddedEdge.relativeEdgeAngle = ((int) Math.floor((angle + 45) / 90) % 4) * 90;
+							double angle = (Math.toDegrees(Math.atan2(mouseX - currentlyAddedEdge.getVertexB().getPosX(), mouseY
+									- currentlyAddedEdge.getVertexB().getPosY())) + 270) % 360;
+							currentlyAddedEdge.setRelativeEdgeAngle(((int) Math.floor((angle + 45) / 90) % 4) * 90);
 						}
 					}
 					currentlyAddedEdge.draw(g, true);
@@ -1320,17 +1320,17 @@ public class ControlManager
 				Vertex temp = graph.getVertexFromPosition(mouseX, mouseY);
 				if (temp != null)
 				{
-					if (temp.label == null)
+					if (temp.getLabel() == null)
 					{
 						LabelV labelV = new LabelV(temp);
-						labelV.setModel(graph.labelVDefaultModel);
+						labelV.setModel(graph.getLabelVDefaultModel());
 
-						Point2D p1 = new Point(temp.posX, temp.posY);
+						Point2D p1 = new Point(temp.getPosX(), temp.getPosY());
 						Point2D p2 = new Point(mouseX, mouseY);
-						double angle = Math.toDegrees(Math.asin((mouseX - temp.posX) / p1.distance(p2)));
-						if (mouseY < temp.posY)
+						double angle = Math.toDegrees(Math.asin((mouseX - temp.getPosX()) / p1.distance(p2)));
+						if (mouseY < temp.getPosY())
 						{
-							if (mouseX < temp.posX)
+							if (mouseX < temp.getPosX())
 							{
 								angle += 360;
 							}
@@ -1339,9 +1339,9 @@ public class ControlManager
 						{
 							angle = 180 - angle;
 						}
-						labelV.position = ((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8;
+						labelV.setPosition(((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8);
 
-						graph.labelVDefaultModel.position = labelV.position;
+						graph.getLabelVDefaultModel().position = labelV.getPosition();
 						labelV.draw(g, true);
 					}
 				}
@@ -1351,28 +1351,28 @@ public class ControlManager
 				Edge temp = graph.getEdgeFromPosition(mouseX, mouseY);
 				if (temp != null)
 				{
-					if (temp.label == null)
+					if (temp.getLabel() == null)
 					{
 						LabelE labelE = new LabelE(temp);
-						labelE.setModel(graph.labelEDefaultModel);
-						labelE.horizontalPlacement = shiftDown;
+						labelE.setModel(graph.getLabelEDefaultModel());
+						labelE.setHorizontalPlacement(shiftDown);
 
 						int bias = 0;
 						int x = mouseX;
 						int y = mouseY;
 
-						if (temp.vertexA == temp.vertexB)
+						if (temp.getVertexA() == temp.getVertexB())
 						{
-							double angle = -Math.toDegrees(Math.atan2(x - temp.arcMiddle.x, y - temp.arcMiddle.y)) + 270 + temp.relativeEdgeAngle;
-							labelE.position = (int) Math.round((angle % 360) / 3.6);
+							double angle = -Math.toDegrees(Math.atan2(x - temp.getArcMiddle().x, y - temp.getArcMiddle().y)) + 270 + temp.getRelativeEdgeAngle();
+							labelE.setPosition((int) Math.round((angle % 360) / 3.6));
 						}
 
 						else
 						{
-							if (temp.relativeEdgeAngle == 0)
+							if (temp.getRelativeEdgeAngle() == 0)
 							{
-								Point p1 = temp.inPoint;
-								Point p2 = temp.outPoint;
+								Point p1 = temp.getInPoint();
+								Point p2 = temp.getOutPoint();
 
 								if (p2.x < p1.x)
 								{
@@ -1387,7 +1387,7 @@ public class ControlManager
 								double p2c = p2.distance(c);
 								double mc = Line2D.ptLineDist((double) p1.x, (double) p1.y, (double) p2.x, (double) p2.y, (double) x, (double) y);
 
-								labelE.topPlacement = ((p2.x - p1.x) * (c.y - p1.y) - (p2.y - p1.y) * (c.x - p1.x) < 0);
+								labelE.setTopPlacement(((p2.x - p1.x) * (c.y - p1.y) - (p2.y - p1.y) * (c.x - p1.x) < 0));
 
 								if (p1c * p1c > p2c * p2c + p1p2 * p1p2)
 								{
@@ -1401,14 +1401,14 @@ public class ControlManager
 								{
 									bias = (int) Math.round(100 * Math.sqrt(p1c * p1c - mc * mc) / p1p2);
 								}
-								labelE.position = bias;
+								labelE.setPosition(bias);
 							}
 							else
 							{
 								double startAngle = (Math.toDegrees(Math
-										.atan2(temp.outPoint.x - temp.arcMiddle.x, temp.outPoint.y - temp.arcMiddle.y)) + 270) % 360;
-								double endAngle = (Math.toDegrees(Math.atan2(temp.inPoint.x - temp.arcMiddle.x, temp.inPoint.y - temp.arcMiddle.y)) + 270) % 360;
-								double mouseAngle = (Math.toDegrees(Math.atan2(x - temp.arcMiddle.x, y - temp.arcMiddle.y)) + 270) % 360;
+										.atan2(temp.getOutPoint().x - temp.getArcMiddle().x, temp.getOutPoint().y - temp.getArcMiddle().y)) + 270) % 360;
+								double endAngle = (Math.toDegrees(Math.atan2(temp.getInPoint().x - temp.getArcMiddle().x, temp.getInPoint().y - temp.getArcMiddle().y)) + 270) % 360;
+								double mouseAngle = (Math.toDegrees(Math.atan2(x - temp.getArcMiddle().x, y - temp.getArcMiddle().y)) + 270) % 360;
 
 								int position = 0;
 								double alpha = (startAngle - mouseAngle + 360) % 360;
@@ -1426,18 +1426,18 @@ public class ControlManager
 
 								if (position > -1 && position < 101)
 								{
-									labelE.topPlacement = (temp.arcMiddle.distance(new Point(x, y)) > temp.arcRadius);
-									labelE.position = position;
+									labelE.setTopPlacement((temp.getArcMiddle().distance(new Point(x, y)) > temp.getArcRadius()));
+									labelE.setPosition(position);
 								}
 							}
 						}
 
-						graph.labelEDefaultModel.topPlacement = 0;
-						if (labelE.topPlacement)
+						graph.getLabelEDefaultModel().topPlacement = 0;
+						if (labelE.isTopPlacement())
 						{
-							graph.labelEDefaultModel.topPlacement = 1;
+							graph.getLabelEDefaultModel().topPlacement = 1;
 						}
-						graph.labelEDefaultModel.position = labelE.position;
+						graph.getLabelEDefaultModel().position = labelE.getPosition();
 						labelE.draw(g, true);
 					}
 				}
