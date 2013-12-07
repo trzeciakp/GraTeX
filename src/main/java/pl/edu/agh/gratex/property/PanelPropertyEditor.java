@@ -1,94 +1,79 @@
 package pl.edu.agh.gratex.property;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-
 import pl.edu.agh.gratex.model.PropertyModel;
 
+import javax.swing.*;
 
-public class PanelPropertyEditor extends JPanel
-{
-	private static final long		serialVersionUID	= -4423821822436250916L;
 
-	private int						mode				= 1;
-	private JLabel					label_title;
-	private AbstractPropertyPanel[]	panels				= new AbstractPropertyPanel[5];
+public class PanelPropertyEditor extends JPanel {
+    private static final long serialVersionUID = -4423821822436250916L;
 
-	public PanelPropertyEditor()
-	{
-		initialize();
-		setEnabled(false);
-	}
+    private int mode = 1;
+    private JLabel label_title;
+    private AbstractPropertyPanel[] panels = new AbstractPropertyPanel[5];
 
-	public void valueChanged(PropertyModel model)
-	{
-		pl.edu.agh.gratex.gui.ControlManager.updateSelectedItemsModel(model);
-	}
+    public PanelPropertyEditor() {
+        initialize();
+        setEnabled(false);
+    }
 
-	private void initialize()
-	{
-		setLayout(null);
-		label_title = new JLabel("Property editor");
-		label_title.setHorizontalAlignment(SwingConstants.CENTER);
-		label_title.setBounds(10, 11, 180, 14);
-		add(label_title);
+    public void valueChanged(PropertyModel model) {
+        pl.edu.agh.gratex.gui.ControlManager.updateSelectedItemsModel(model);
+    }
 
-		panels[1] = new VertexPropertyPanel();
-		panels[2] = new EdgePropertyPanel();
-		panels[3] = new LabelVertexPropertyPanel();
-		panels[4] = new LabelEdgePropertyPanel();
+    private void initialize() {
+        setLayout(null);
+        label_title = new JLabel("Property editor");
+        label_title.setHorizontalAlignment(SwingConstants.CENTER);
+        label_title.setBounds(10, 11, 180, 14);
+        add(label_title);
 
-		for (int i = 1; i < 5; i++)
-		{
-			add(panels[i]);
-			if (mode != i)
-				panels[i].setVisible(false);
-			else
-				panels[i].setVisible(true);
-			panels[i].setBounds(10, 30, 180, 340);
-		}
+        panels[1] = new VertexPropertyPanel();
+        panels[2] = new EdgePropertyPanel();
+        panels[3] = new LabelVertexPropertyPanel();
+        panels[4] = new LabelEdgePropertyPanel();
 
-	}
+        for (int i = 1; i < 5; i++) {
+            add(panels[i]);
+            if (mode != i)
+                panels[i].setVisible(false);
+            else
+                panels[i].setVisible(true);
+            panels[i].setBounds(10, 30, 180, 340);
+        }
 
-	public void setModel(PropertyModel pm)
-	{
-		panels[mode].setModel(pm);
-	}
+    }
 
-	public void setEnabled(boolean flag)
-	{
-		panels[mode].setEnabled(flag);
-		if (flag)
-		{
-			panels[mode].components.get(0).requestFocus();
-		}
-	}
+    public void setModel(PropertyModel pm) {
+        panels[mode].setModel(pm);
+    }
 
-	public void setMode(int m)
-	{
-		panels[mode].setVisible(false);
-		mode = m;
-		panels[mode].setVisible(true);
-	}
+    public void setEnabled(boolean flag) {
+        panels[mode].setEnabled(flag);
+        if (flag) {
+            panels[mode].components.get(0).requestFocus();
+        }
+    }
 
-	public PropertyModel getModel()
-	{
-		return panels[mode].getModel();
-	}
+    public void setMode(int m) {
+        panels[mode].setVisible(false);
+        mode = m;
+        panels[mode].setVisible(true);
+    }
 
-	public void giveFocusToTextField()
-	{
-		panels[mode].components.get(0).requestFocus();
-		((JTextField) panels[mode].components.get(0)).selectAll();
-	}
+    public PropertyModel getModel() {
+        return panels[mode].getModel();
+    }
 
-	public void disableLabelEdition()
-	{
-		panels[3].components.get(0).setEnabled(false);
-		panels[3].components.get(0).setFocusable(false);
-		panels[4].components.get(0).setEnabled(false);
-		panels[4].components.get(0).setFocusable(false);
-	}
+    public void giveFocusToTextField() {
+        panels[mode].components.get(0).requestFocus();
+        ((JTextField) panels[mode].components.get(0)).selectAll();
+    }
+
+    public void disableLabelEdition() {
+        panels[3].components.get(0).setEnabled(false);
+        panels[3].components.get(0).setFocusable(false);
+        panels[4].components.get(0).setEnabled(false);
+        panels[4].components.get(0).setFocusable(false);
+    }
 }

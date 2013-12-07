@@ -1,48 +1,40 @@
 package pl.edu.agh.gratex.gui;
 
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-
-import javax.swing.JPanel;
-
 import pl.edu.agh.gratex.graph.Graph;
 
-public class PanelPreview extends JPanel
-{
-	private static final long	serialVersionUID	= -8882633408669094896L;
+import javax.swing.*;
+import java.awt.*;
 
-	private Graph				graph;
+public class PanelPreview extends JPanel {
+    private static final long serialVersionUID = -8882633408669094896L;
 
-	public PanelPreview(Graph _graph)
-	{
-		graph = _graph;
-	}
+    private Graph graph;
 
-	public void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
+    public PanelPreview(Graph _graph) {
+        graph = _graph;
+    }
 
-		RenderingHints rh = g2d.getRenderingHints();
-		rh.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		rh.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-		rh.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2d.setRenderingHints(rh);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
 
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+        RenderingHints rh = g2d.getRenderingHints();
+        rh.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        rh.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        rh.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHints(rh);
 
-		graph.drawAll(g2d);
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
 
-		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+        graph.drawAll(g2d);
 
-		g.setColor(Color.gray);
-		g.setFont(new Font("Cambria", Font.ITALIC, 24));
-		g.drawString("Preview", 5, 23);
-	}
+        g.setColor(Color.BLACK);
+        g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+
+        g.setColor(Color.gray);
+        g.setFont(new Font("Cambria", Font.ITALIC, 24));
+        g.drawString("Preview", 5, 23);
+    }
 }

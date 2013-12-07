@@ -1,190 +1,162 @@
 package pl.edu.agh.gratex.graph;
 
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.io.Serializable;
-
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
 
+import java.awt.*;
+import java.io.Serializable;
 
-public class LabelV extends GraphElement implements Serializable
-{
-	private static final long	serialVersionUID	= 5054682946344977073L;
-	
-	// Wartości edytowalne przez użytkowanika
-    private String		text;
-	private Font			font	= new Font("Cambria", Font.PLAIN, 16);
-	private Color		fontColor;
-	private int			position;										// 0-N; 1-NE; 2-E; ...; 7 - NW;
-	private int			spacing;										// odleglość napisu od obrysu wierzchołka
 
-	// Wartości potrzebne do parsowania
-    private int			posX;											// \ Środek stringa
-	private int			posY;											// / Środek stringa
+public class LabelV extends GraphElement implements Serializable {
+    private static final long serialVersionUID = 5054682946344977073L;
 
-	// Pozostałe
-    private Vertex		owner;
-	private int			drawX;
-	private int			drawY;
-	private Rectangle	outline;
+    // Wartości edytowalne przez użytkowanika
+    private String text;
+    private Font font = new Font("Cambria", Font.PLAIN, 16);
+    private Color fontColor;
+    private int position;                                        // 0-N; 1-NE; 2-E; ...; 7 - NW;
+    private int spacing;                                        // odleglość napisu od obrysu wierzchołka
 
-	public LabelV(Vertex element)
-	{
-		setOwner(element);
-		setText("Label");
-	}
+    // Wartości potrzebne do parsowania
+    private int posX;                                            // \ Środek stringa
+    private int posY;                                            // / Środek stringa
 
-	public LabelV getCopy(Vertex owner)
-	{
-		LabelV result = new LabelV(owner);
-		result.setModel(getModel());
+    // Pozostałe
+    private Vertex owner;
+    private int drawX;
+    private int drawY;
+    private Rectangle outline;
 
-		return result;
-	}
+    public LabelV(Vertex element) {
+        setOwner(element);
+        setText("Label");
+    }
 
-	public void setModel(PropertyModel pm)
-	{
-		LabelVertexPropertyModel model = (LabelVertexPropertyModel) pm;
+    public LabelV getCopy(Vertex owner) {
+        LabelV result = new LabelV(owner);
+        result.setModel(getModel());
 
-		if (model.text != null)
-		{
-			setText(new String(model.text));
-		}
+        return result;
+    }
 
-		if (model.fontColor != null)
-		{
-			setFontColor(new Color(model.fontColor.getRGB()));
-		}
+    public void setModel(PropertyModel pm) {
+        LabelVertexPropertyModel model = (LabelVertexPropertyModel) pm;
 
-		if (model.position > -1)
-		{
-			setPosition(model.position);
-		}
+        if (model.text != null) {
+            setText(new String(model.text));
+        }
 
-		if (model.spacing > -1)
-		{
-			setSpacing(model.spacing);
-		}
-	}
+        if (model.fontColor != null) {
+            setFontColor(new Color(model.fontColor.getRGB()));
+        }
 
-	public PropertyModel getModel()
-	{
-		LabelVertexPropertyModel result = new LabelVertexPropertyModel();
+        if (model.position > -1) {
+            setPosition(model.position);
+        }
 
-		result.text = new String(getText());
-		result.fontColor = new Color(getFontColor().getRGB());
-		result.position = getPosition();
-		result.spacing = getSpacing();
+        if (model.spacing > -1) {
+            setSpacing(model.spacing);
+        }
+    }
 
-		return result;
-	}
+    public PropertyModel getModel() {
+        LabelVertexPropertyModel result = new LabelVertexPropertyModel();
 
-	public boolean intersects(int x, int y)
-	{
-		return getOutline().contains(x, y);
-	}
+        result.text = new String(getText());
+        result.fontColor = new Color(getFontColor().getRGB());
+        result.position = getPosition();
+        result.spacing = getSpacing();
 
-	public void updatePosition(Graphics2D g)
-	{
-		g.setFont(getFont());
-		FontMetrics fm = g.getFontMetrics();
-		int width = fm.stringWidth(getText());
-		int height = fm.getAscent();
-		int descent = fm.getDescent();
+        return result;
+    }
 
-		Point exitPoint = Utilities.calculateEdgeExitPoint(getOwner(), (450 - 45 * getPosition()) % 360);
+    public boolean intersects(int x, int y) {
+        return getOutline().contains(x, y);
+    }
 
-		double dposX = 0.0;
-		double dposY = 0.0;
+    public void updatePosition(Graphics2D g) {
+        g.setFont(getFont());
+        FontMetrics fm = g.getFontMetrics();
+        int width = fm.stringWidth(getText());
+        int height = fm.getAscent();
+        int descent = fm.getDescent();
 
-		switch (getPosition())
-		{
-			case 0:
-			{
-				dposX = exitPoint.x;
-				dposY = exitPoint.y - getSpacing() - height / 2;
-				break;
-			}
-			case 1:
-			{
-				dposX = exitPoint.x + getSpacing() / 1.4142 + width / 2;
-				dposY = exitPoint.y - getSpacing() / 1.4142 - height / 2;
-				break;
-			}
-			case 2:
-			{
-				dposX = exitPoint.x + getSpacing() + width / 2;
-				dposY = exitPoint.y;
-				break;
-			}
-			case 3:
-			{
-				dposX = exitPoint.x + getSpacing() / 1.4142 + width / 2;
-				dposY = exitPoint.y + getSpacing() / 1.4142 + height / 2;
-				break;
-			}
-			case 4:
-			{
-				dposX = exitPoint.x;
-				dposY = exitPoint.y + getSpacing() + height / 2 + 0.5;
-				break;
-			}
-			case 5:
-			{
-				dposX = exitPoint.x - getSpacing() / 1.4142 - width / 2;
-				dposY = exitPoint.y + getSpacing() / 1.4142 + height / 2;
-				break;
-			}
-			case 6:
-			{
-				dposX = exitPoint.x - getSpacing() - width / 2;
-				dposY = exitPoint.y;
-				break;
-			}
-			case 7:
-			{
-				dposX = exitPoint.x - getSpacing() / 1.4142 - width / 2;
-				dposY = exitPoint.y - getSpacing() / 1.4142 - height / 2;
-				break;
-			}
+        Point exitPoint = Utilities.calculateEdgeExitPoint(getOwner(), (450 - 45 * getPosition()) % 360);
 
-		}
-		setPosX((int) dposX);
-		setPosY((int) dposY);
-		setDrawX((int) (dposX - width / 2));
-		setDrawY((int) (dposY - descent + height / 2));
-		setOutline(new Rectangle(getPosX() - width / 2, getPosY() - height / 2, width, height));
-	}
+        double dposX = 0.0;
+        double dposY = 0.0;
 
-	public void draw(Graphics2D g2d, boolean dummy)
-	{
-		Graphics2D g = (Graphics2D) g2d.create();
+        switch (getPosition()) {
+            case 0: {
+                dposX = exitPoint.x;
+                dposY = exitPoint.y - getSpacing() - height / 2;
+                break;
+            }
+            case 1: {
+                dposX = exitPoint.x + getSpacing() / 1.4142 + width / 2;
+                dposY = exitPoint.y - getSpacing() / 1.4142 - height / 2;
+                break;
+            }
+            case 2: {
+                dposX = exitPoint.x + getSpacing() + width / 2;
+                dposY = exitPoint.y;
+                break;
+            }
+            case 3: {
+                dposX = exitPoint.x + getSpacing() / 1.4142 + width / 2;
+                dposY = exitPoint.y + getSpacing() / 1.4142 + height / 2;
+                break;
+            }
+            case 4: {
+                dposX = exitPoint.x;
+                dposY = exitPoint.y + getSpacing() + height / 2 + 0.5;
+                break;
+            }
+            case 5: {
+                dposX = exitPoint.x - getSpacing() / 1.4142 - width / 2;
+                dposY = exitPoint.y + getSpacing() / 1.4142 + height / 2;
+                break;
+            }
+            case 6: {
+                dposX = exitPoint.x - getSpacing() - width / 2;
+                dposY = exitPoint.y;
+                break;
+            }
+            case 7: {
+                dposX = exitPoint.x - getSpacing() / 1.4142 - width / 2;
+                dposY = exitPoint.y - getSpacing() / 1.4142 - height / 2;
+                break;
+            }
 
-		updatePosition(g);
+        }
+        setPosX((int) dposX);
+        setPosY((int) dposY);
+        setDrawX((int) (dposX - width / 2));
+        setDrawY((int) (dposY - descent + height / 2));
+        setOutline(new Rectangle(getPosX() - width / 2, getPosY() - height / 2, width, height));
+    }
 
-		if (ControlManager.selection.contains(this))
-		{
-			g.setColor(DrawingTools.selectionColor);
-			g.fillRect(getOutline().x, getOutline().y, getOutline().width, getOutline().height);
-		}
+    public void draw(Graphics2D g2d, boolean dummy) {
+        Graphics2D g = (Graphics2D) g2d.create();
 
-		g.setFont(getFont());
-		g.setColor(getFontColor());
-		if (dummy)
-		{
-			g.setColor(DrawingTools.getDummyColor(getFontColor()));
-		}
-		g.drawString(getText(), getDrawX(), getDrawY());
+        updatePosition(g);
 
-		g.dispose();
-	}
+        if (ControlManager.selection.contains(this)) {
+            g.setColor(DrawingTools.selectionColor);
+            g.fillRect(getOutline().x, getOutline().y, getOutline().width, getOutline().height);
+        }
+
+        g.setFont(getFont());
+        g.setColor(getFontColor());
+        if (dummy) {
+            g.setColor(DrawingTools.getDummyColor(getFontColor()));
+        }
+        g.drawString(getText(), getDrawX(), getDrawY());
+
+        g.dispose();
+    }
 
     public String getText() {
         return text;

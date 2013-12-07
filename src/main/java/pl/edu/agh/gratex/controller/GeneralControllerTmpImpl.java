@@ -1,6 +1,8 @@
 package pl.edu.agh.gratex.controller;
 
+import pl.edu.agh.gratex.graph.GraphElementType;
 import pl.edu.agh.gratex.gui.ControlManager;
+import pl.edu.agh.gratex.model.ToolType;
 
 /**
  *
@@ -60,5 +62,37 @@ public class GeneralControllerTmpImpl implements GeneralController {
     @Override
     public void parseToTeX() {
         ControlManager.parseToTeX();
+    }
+
+    @Override
+    public void selectAll() {
+        ControlManager.selectAll();
+    }
+
+    @Override
+    public void changeMode(GraphElementType graphElementType) {
+        //TODO
+        ControlManager.changeMode(graphElementType.ordinal()+1);
+    }
+
+    @Override
+    public void exitApplication() {
+        ControlManager.exitApplication();
+    }
+
+    @Override
+    public void showAboutDialog() {
+        ControlManager.showAboutDialog();
+    }
+
+    @Override
+    public void deleteSelection() {
+        ControlManager.deleteSelection();
+    }
+
+    @Override
+    public void changeTool(ToolType toolType) {
+        //TODO
+        ControlManager.changeTool(toolType.ordinal() + 1);
     }
 }

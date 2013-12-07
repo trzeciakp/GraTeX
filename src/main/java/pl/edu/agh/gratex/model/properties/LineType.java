@@ -5,7 +5,7 @@ public enum LineType {
         public String toString() {
             return " ";
         }
-    },NONE,SOLID,DASHED,DOTTED,DOUBLE;
+    }, NONE, SOLID, DASHED, DOTTED, DOUBLE;
 
     public String toString() {
         return name().toLowerCase();

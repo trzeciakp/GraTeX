@@ -7,7 +7,7 @@ public enum LabelPlacement implements Serializable {
         public String toString() {
             return " ";
         }
-    },BELOW(0), ABOVE(1);
+    }, BELOW(0), ABOVE(1);
     private int value;
 
     public int getValue() {

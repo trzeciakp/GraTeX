@@ -7,7 +7,7 @@ public enum ArrowType implements Serializable {
         public String toString() {
             return " ";
         }
-    },BASIC(0), FILLED(1);
+    }, BASIC(0), FILLED(1);
     private int value;
 
     public int getValue() {

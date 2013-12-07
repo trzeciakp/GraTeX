@@ -1,23 +1,19 @@
 package pl.edu.agh.gratex.property;
 
-public class Option
-{
-	private int		value;
-	private String	name;
+public class Option {
+    private int value;
+    private String name;
 
-	public String toString()
-	{
-		return name;
-	}
+    public String toString() {
+        return name;
+    }
 
-	public Option(int _id, String _name)
-	{
-		value = _id;
-		name = _name;
-	}
+    public Option(int _id, String _name) {
+        value = _id;
+        name = _name;
+    }
 
-	public int getValue()
-	{
-		return value;
-	}
+    public int getValue() {
+        return value;
+    }
 }

@@ -2,15 +2,14 @@ package pl.edu.agh.gratex.gui;
 
 import pl.edu.agh.gratex.controller.GeneralController;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class PanelButtonContainer extends JPanel
-{
-	private static final long	serialVersionUID	= 4702408962784933450L;
+public class PanelButtonContainer extends JPanel {
+    private static final long serialVersionUID = 4702408962784933450L;
 
     private GeneralController generalController;
     private EnumMap<ActionType, ActionButton> buttons = new EnumMap<ActionType, ActionButton>(ActionType.class);
@@ -45,136 +44,122 @@ public class PanelButtonContainer extends JPanel
         }
     }
 
-	public PanelButtonContainer(GeneralController generalController)
-	{
-		super();
-		setLayout(null);
-		setFocusTraversalKeysEnabled(false);
+    public PanelButtonContainer(GeneralController generalController) {
+        super();
+        setLayout(null);
+        setFocusTraversalKeysEnabled(false);
         this.generalController = generalController;
 
-        ActionListener nullActionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        };
         int x = 10;
-        for(ActionType actionType : ActionType.values()) {
-            ActionButton actionButton = new ActionButton(actionType.getImageName(), actionType.getTooltip(), nullActionListener);
+        for (ActionType actionType : ActionType.values()) {
+            ActionButton actionButton = new ActionButton(actionType.getImageName(), actionType.getTooltip(), getPerformedAction(actionType));
             actionButton.setBounds(x, 5, 40, 40);
             actionButton.setFocusable(false);
             add(actionButton);
             buttons.put(actionType, actionButton);
             x += 45;
         }
-
-        for (Map.Entry<ActionType, ActionButton> entry : buttons.entrySet()) {
-            switch (entry.getKey()) {
-                case NEW_GRAPH:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.newGraphFile();
-                        }
-                    });
-                    break;
-                case OPEN_GRAPH:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.openGraphFile();
-                        }
-                    });
-                    break;
-                case SAVE_GRAPH:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.saveGraphFile(false);
-                        }
-                    });
-                    break;
-                case EDIT_TEMPLATE:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.editGraphTemplate();
-                        }
-                    });
-                    break;
-                case COPY_SUBGRAPH:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.copyToClipboard();
-                        }
-                    });
-                    break;
-                case PASTE_SUBGRAPH:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.pasteFromClipboard();
-                        }
-                    });
-                    break;
-                case UNDO:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.undo();
-                        }
-                    });
-                    break;
-                case REDO:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.redo();
-                        }
-                    });
-                    break;
-                case TOGGLE_GRID:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.toggleGrid();
-                        }
-                    });
-                    break;
-                case NUMERATION_PREFERENCE:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.setNumeration();
-                        }
-                    });
-                    break;
-                case SHOW_CODE:
-                    entry.getValue().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            PanelButtonContainer.this.generalController.parseToTeX();
-                        }
-                    });
-                    break;
-            }
-        }
-		buttons.get(ActionType.COPY_SUBGRAPH).setEnabled(false);
-		buttons.get(ActionType.PASTE_SUBGRAPH).setEnabled(false);
-	}
-
-	public void updateFunctions()
-	{
         buttons.get(ActionType.COPY_SUBGRAPH).setEnabled(false);
         buttons.get(ActionType.PASTE_SUBGRAPH).setEnabled(false);
-		if (ControlManager.mode == ControlManager.VERTEX_MODE && ControlManager.selection.size() > 0)
-		{
+    }
+
+    public void updateFunctions() {
+        buttons.get(ActionType.COPY_SUBGRAPH).setEnabled(false);
+        buttons.get(ActionType.PASTE_SUBGRAPH).setEnabled(false);
+        if (ControlManager.mode == ControlManager.VERTEX_MODE && ControlManager.selection.size() > 0) {
             buttons.get(ActionType.COPY_SUBGRAPH).setEnabled(true);
-		}
-		if (ControlManager.currentCopyPasteOperation != null)
-		{
+        }
+        if (ControlManager.currentCopyPasteOperation != null) {
             buttons.get(ActionType.PASTE_SUBGRAPH).setEnabled(true);
-		}
-	}
+        }
+    }
+
+    private ActionListener getPerformedAction(ActionType actionType) {
+        switch (actionType) {
+            case NEW_GRAPH:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.newGraphFile();
+                    }
+                };
+            case OPEN_GRAPH:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.openGraphFile();
+                    }
+                };
+            case SAVE_GRAPH:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.saveGraphFile(false);
+                    }
+                };
+            case EDIT_TEMPLATE:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.editGraphTemplate();
+                    }
+                };
+            case COPY_SUBGRAPH:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.copyToClipboard();
+                    }
+                };
+            case PASTE_SUBGRAPH:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.pasteFromClipboard();
+                    }
+                };
+            case UNDO:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.undo();
+                    }
+                };
+            case REDO:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.redo();
+                    }
+                };
+            case TOGGLE_GRID:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.toggleGrid();
+                    }
+                };
+            case NUMERATION_PREFERENCE:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.setNumeration();
+                    }
+                };
+            case SHOW_CODE:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        PanelButtonContainer.this.generalController.parseToTeX();
+                    }
+                };
+            default:
+                //TODO maybe null? in case when you forgot to add action
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                    }
+                };
+        }
+    }
 }

@@ -7,7 +7,7 @@ public enum LabelRotation implements Serializable {
         public String toString() {
             return " ";
         }
-    },TANGENT(0), LEVEL(1);
+    }, TANGENT(0), LEVEL(1);
     private int value;
 
     public int getValue() {

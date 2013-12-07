@@ -1,381 +1,324 @@
 package pl.edu.agh.gratex.gui;
 
 
-import java.awt.Color;
+import pl.edu.agh.gratex.graph.*;
+import pl.edu.agh.gratex.model.*;
+import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.property.PanelPropertyEditor;
+
+import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
-import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.border.MatteBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+public class GraphsTemplateDialog extends JDialog {
+    private static final long serialVersionUID = 3521596195996666926L;
 
-import pl.edu.agh.gratex.graph.Edge;
-import pl.edu.agh.gratex.graph.Graph;
-import pl.edu.agh.gratex.graph.LabelE;
-import pl.edu.agh.gratex.graph.LabelV;
-import pl.edu.agh.gratex.graph.Vertex;
-import pl.edu.agh.gratex.model.EdgePropertyModel;
-import pl.edu.agh.gratex.model.LabelEdgePropertyModel;
-import pl.edu.agh.gratex.model.LabelVertexPropertyModel;
-import pl.edu.agh.gratex.model.PropertyModel;
-import pl.edu.agh.gratex.model.VertexPropertyModel;
-import pl.edu.agh.gratex.model.properties.LineType;
-import pl.edu.agh.gratex.property.PanelPropertyEditor;
+    private Graph graph;
+    private Graph result = null;
+    private Vertex vertex1;
+    private Vertex vertex2;
+    private Edge edge1;
+    private Edge edge2;
+    private Edge edge3;
+    private LabelV labelV1;
+    private LabelE labelE1;
+    private LabelE labelE2;
+    private LabelE labelE3;
 
-public class GraphsTemplateDialog extends JDialog
-{
-	private static final long	serialVersionUID	= 3521596195996666926L;
+    private JButton button_restoreDefaultSettings;
+    private JCheckBox checkBox_applyToAll;
+    private JButton button_save;
+    private JButton button_discard;
 
-	private Graph				graph;
-	private Graph				result				= null;
-	private Vertex				vertex1;
-	private Vertex				vertex2;
-	private Edge				edge1;
-	private Edge				edge2;
-	private Edge				edge3;
-	private LabelV				labelV1;
-	private LabelE				labelE1;
-	private LabelE				labelE2;
-	private LabelE				labelE3;
+    private JTabbedPane tabbedPane;
+    private PanelPropertyEditor panel_propertyEditor;
+    private PanelPreview panel_preview;
+    private JLabel label_hint;
 
-	private JButton				button_restoreDefaultSettings;
-	private JCheckBox			checkBox_applyToAll;
-	private JButton				button_save;
-	private JButton				button_discard;
+    private JPanel vertexPanel;
+    private JPanel edgePanel;
+    private JPanel labelVPanel;
+    private JPanel labelEPanel;
 
-	private JTabbedPane			tabbedPane;
-	private PanelPropertyEditor	panel_propertyEditor;
-	private PanelPreview		panel_preview;
-	private JLabel				label_hint;
+    protected JRootPane createRootPane() {
+        ActionListener actionListener = new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                setVisible(false);
+                dispose();
+            }
+        };
+        KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+        JRootPane rootPane = new JRootPane();
+        rootPane.registerKeyboardAction(actionListener, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
+        return rootPane;
+    }
 
-	private JPanel				vertexPanel;
-	private JPanel				edgePanel;
-	private JPanel				labelVPanel;
-	private JPanel				labelEPanel;
+    public GraphsTemplateDialog(MainWindow parent) {
+        super(parent, "Graph's template editor", true);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(768, 511);
+        setLocationRelativeTo(null);
+        getContentPane().setLayout(null);
 
-	protected JRootPane createRootPane()
-	{
-		ActionListener actionListener = new ActionListener()
-		{
-			public void actionPerformed(ActionEvent actionEvent)
-			{
-				setVisible(false);
-				dispose();
-			}
-		};
-		KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-		JRootPane rootPane = new JRootPane();
-		rootPane.registerKeyboardAction(actionListener, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
-		return rootPane;
-	}
+        initGraph();
+        initializeFrame();
+        initializeEvents();
+    }
 
-	public GraphsTemplateDialog(MainWindow parent)
-	{
-		super(parent, "Graph's template editor", true);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setSize(768, 511);
-		setLocationRelativeTo(null);
-		getContentPane().setLayout(null);
+    public Graph displayDialog() {
+        setVisible(true);
+        return result;
+    }
 
-		initGraph();
-		initializeFrame();
-		initializeEvents();
-	}
+    private void updateModel(PropertyModel model) {
+        if (model instanceof VertexPropertyModel) {
+            ((VertexPropertyModel) model).number = -1;
+            vertex1.setModel((VertexPropertyModel) model);
+            graph.setVertexDefaultModel((VertexPropertyModel) vertex1.getModel());
+            graph.getVertexDefaultModel().number = -1;
+        } else if (model instanceof EdgePropertyModel) {
+            ((EdgePropertyModel) model).relativeEdgeAngle = -1;
+            edge1.setModel((EdgePropertyModel) model);
+            edge2.setModel((EdgePropertyModel) model);
+            edge3.setModel((EdgePropertyModel) model);
+            graph.setEdgeDefaultModel((EdgePropertyModel) edge1.getModel());
+            graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
+        } else if (model instanceof LabelVertexPropertyModel) {
+            labelV1.setModel((LabelVertexPropertyModel) model);
+            graph.setLabelVDefaultModel((LabelVertexPropertyModel) labelV1.getModel());
+            graph.getLabelVDefaultModel().text = null;
+        } else {
+            labelE1.setModel((LabelEdgePropertyModel) model);
+            labelE2.setModel((LabelEdgePropertyModel) model);
+            labelE3.setModel((LabelEdgePropertyModel) model);
+            graph.setLabelEDefaultModel((LabelEdgePropertyModel) labelE1.getModel());
+            graph.getLabelEDefaultModel().text = null;
+        }
 
-	public Graph displayDialog()
-	{
-		setVisible(true);
-		return result;
-	}
+        refreshModels();
+    }
 
-	private void updateModel(PropertyModel model)
-	{
-		if (model instanceof VertexPropertyModel)
-		{
-			((VertexPropertyModel) model).number = -1;
-			vertex1.setModel((VertexPropertyModel) model);
-			graph.setVertexDefaultModel((VertexPropertyModel) vertex1.getModel());
-			graph.getVertexDefaultModel().number = -1;
-		}
-		else if (model instanceof EdgePropertyModel)
-		{
-			((EdgePropertyModel) model).relativeEdgeAngle = -1;
-			edge1.setModel((EdgePropertyModel) model);
-			edge2.setModel((EdgePropertyModel) model);
-			edge3.setModel((EdgePropertyModel) model);
-			graph.setEdgeDefaultModel((EdgePropertyModel) edge1.getModel());
-			graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
-		}
-		else if (model instanceof LabelVertexPropertyModel)
-		{
-			labelV1.setModel((LabelVertexPropertyModel) model);
-			graph.setLabelVDefaultModel((LabelVertexPropertyModel) labelV1.getModel());
-			graph.getLabelVDefaultModel().text = null;
-		}
-		else
-		{
-			labelE1.setModel((LabelEdgePropertyModel) model);
-			labelE2.setModel((LabelEdgePropertyModel) model);
-			labelE3.setModel((LabelEdgePropertyModel) model);
-			graph.setLabelEDefaultModel((LabelEdgePropertyModel) labelE1.getModel());
-			graph.getLabelEDefaultModel().text = null;
-		}
+    private void refreshModels() {
+        if (tabbedPane.getSelectedIndex() == 0) {
+            panel_propertyEditor.setModel(graph.getVertexDefaultModel());
+        } else if (tabbedPane.getSelectedIndex() == 1) {
+            panel_propertyEditor.setModel(graph.getEdgeDefaultModel());
+        } else if (tabbedPane.getSelectedIndex() == 2) {
+            panel_propertyEditor.setModel(graph.getLabelVDefaultModel());
+        } else if (tabbedPane.getSelectedIndex() == 3) {
+            panel_propertyEditor.setModel(graph.getLabelEDefaultModel());
+        }
+    }
 
-		refreshModels();
-	}
+    private void initializeEvents() {
+        tabbedPane.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent arg0) {
+                ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_preview);
+                ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(label_hint);
+                ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_propertyEditor);
 
-	private void refreshModels()
-	{
-		if (tabbedPane.getSelectedIndex() == 0)
-		{
-			panel_propertyEditor.setModel(graph.getVertexDefaultModel());
-		}
-		else if (tabbedPane.getSelectedIndex() == 1)
-		{
-			panel_propertyEditor.setModel(graph.getEdgeDefaultModel());
-		}
-		else if (tabbedPane.getSelectedIndex() == 2)
-		{
-			panel_propertyEditor.setModel(graph.getLabelVDefaultModel());
-		}
-		else if (tabbedPane.getSelectedIndex() == 3)
-		{
-			panel_propertyEditor.setModel(graph.getLabelEDefaultModel());
-		}
-	}
+                panel_propertyEditor.setMode(tabbedPane.getSelectedIndex() + 1);
+                refreshModels();
+            }
+        });
 
-	private void initializeEvents()
-	{
-		tabbedPane.addChangeListener(new ChangeListener()
-		{
-			public void stateChanged(ChangeEvent arg0)
-			{
-				((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_preview);
-				((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(label_hint);
-				((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_propertyEditor);
+        button_restoreDefaultSettings.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                graph.initDefaultModels();
+                graph.getEdgeDefaultModel().isLoop = -1;
+                graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
+                graph.getLabelVDefaultModel().text = null;
+                graph.getLabelEDefaultModel().text = null;
+                vertex1.setModel(graph.getVertexDefaultModel());
+                edge1.setModel(graph.getEdgeDefaultModel());
+                edge1.setRelativeEdgeAngle(300);
+                edge2.setModel(graph.getEdgeDefaultModel());
+                edge2.setRelativeEdgeAngle(180);
+                edge3.setModel(graph.getEdgeDefaultModel());
+                edge3.setRelativeEdgeAngle(0);
+                labelV1.setModel(graph.getLabelVDefaultModel());
+                labelE1.setModel(graph.getLabelEDefaultModel());
+                labelE2.setModel(graph.getLabelEDefaultModel());
 
-				panel_propertyEditor.setMode(tabbedPane.getSelectedIndex() + 1);
-				refreshModels();
-			}
-		});
+                panel_preview.repaint();
+            }
+        });
 
-		button_restoreDefaultSettings.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				graph.initDefaultModels();
-				graph.getEdgeDefaultModel().isLoop = -1;
-				graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
-				graph.getLabelVDefaultModel().text = null;
-				graph.getLabelEDefaultModel().text = null;
-				vertex1.setModel(graph.getVertexDefaultModel());
-				edge1.setModel(graph.getEdgeDefaultModel());
-				edge1.setRelativeEdgeAngle(300);
-				edge2.setModel(graph.getEdgeDefaultModel());
-				edge2.setRelativeEdgeAngle(180);
-				edge3.setModel(graph.getEdgeDefaultModel());
-				edge3.setRelativeEdgeAngle(0);
-				labelV1.setModel(graph.getLabelVDefaultModel());
-				labelE1.setModel(graph.getLabelEDefaultModel());
-				labelE2.setModel(graph.getLabelEDefaultModel());
+        button_save.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (checkBox_applyToAll.isSelected()) {
+                    if (0 != JOptionPane.showConfirmDialog(null,
+                            "Current settings will be applied to ALL existing elements of the graph.\nDo you wish to continue?", "Confirm decision",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+                        return;
+                    }
 
-				panel_preview.repaint();
-			}
-		});
+                    graph.gridOn = true;
 
-		button_save.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				if (checkBox_applyToAll.isSelected())
-				{
-					if (0 != JOptionPane.showConfirmDialog(null,
-							"Current settings will be applied to ALL existing elements of the graph.\nDo you wish to continue?", "Confirm decision",
-							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE))
-					{
-						return;
-					}
+                }
+                refreshModels();
+                result = graph;
+                setVisible(false);
+                dispose();
+            }
+        });
 
-					graph.gridOn = true;
+        button_discard.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                result = null;
+                setVisible(false);
+                dispose();
+            }
+        });
+    }
 
-				}
-				refreshModels();
-				result = graph;
-				setVisible(false);
-				dispose();
-			}
-		});
+    private void initGraph() {
+        graph = new Graph();
+        graph.gridOn = false;
 
-		button_discard.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				result = null;
-				setVisible(false);
-				dispose();
-			}
-		});
-	}
+        graph.setVertexDefaultModel(new VertexPropertyModel(ControlManager.graph.getVertexDefaultModel()));
+        graph.setEdgeDefaultModel(new EdgePropertyModel(ControlManager.graph.getEdgeDefaultModel()));
+        graph.getEdgeDefaultModel().isLoop = -1;
+        graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
+        graph.setLabelVDefaultModel(new LabelVertexPropertyModel(ControlManager.graph.getLabelVDefaultModel()));
+        graph.getLabelVDefaultModel().text = null;
+        graph.setLabelEDefaultModel(new LabelEdgePropertyModel(ControlManager.graph.getLabelEDefaultModel()));
+        graph.getLabelEDefaultModel().text = null;
 
-	private void initGraph()
-	{
-		graph = new Graph();
-		graph.gridOn = false;
+        vertex1 = new Vertex();
+        vertex1.setModel(graph.getVertexDefaultModel());
+        vertex1.updateNumber(1);
+        vertex1.setPosX(240);
+        vertex1.setPosY(190);
+        graph.getVertices().add(vertex1);
 
-		graph.setVertexDefaultModel(new VertexPropertyModel(ControlManager.graph.getVertexDefaultModel()));
-		graph.setEdgeDefaultModel(new EdgePropertyModel(ControlManager.graph.getEdgeDefaultModel()));
-		graph.getEdgeDefaultModel().isLoop = -1;
-		graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
-		graph.setLabelVDefaultModel(new LabelVertexPropertyModel(ControlManager.graph.getLabelVDefaultModel()));
-		graph.getLabelVDefaultModel().text = null;
-		graph.setLabelEDefaultModel(new LabelEdgePropertyModel(ControlManager.graph.getLabelEDefaultModel()));
-		graph.getLabelEDefaultModel().text = null;
+        vertex2 = new Vertex();
+        vertex2.setModel(graph.getVertexDefaultModel());
+        vertex2.updateNumber(2);
+        vertex2.setType(1);
+        vertex2.setVertexColor(new Color(200, 200, 200));
+        vertex2.setLineType(LineType.SOLID);
+        vertex2.setLineWidth(1);
+        vertex2.setLineColor(Color.black);
+        vertex2.setFontColor(Color.black);
+        vertex2.setLabelInside(true);
+        vertex2.setRadius(15);
+        vertex2.setPosX(490);
+        vertex2.setPosY(313);
+        graph.getVertices().add(vertex2);
 
-		vertex1 = new Vertex();
-		vertex1.setModel(graph.getVertexDefaultModel());
-		vertex1.updateNumber(1);
-		vertex1.setPosX(240);
-		vertex1.setPosY(190);
-		graph.getVertices().add(vertex1);
+        edge1 = new Edge();
+        edge1.setModel(graph.getEdgeDefaultModel());
+        edge1.setVertexA(vertex2);
+        edge1.setVertexB(vertex1);
+        edge1.setRelativeEdgeAngle(300);
+        graph.getEdges().add(edge1);
 
-		vertex2 = new Vertex();
-		vertex2.setModel(graph.getVertexDefaultModel());
-		vertex2.updateNumber(2);
-		vertex2.setType(1);
-		vertex2.setVertexColor(new Color(200, 200, 200));
-		vertex2.setLineType(LineType.SOLID);
-		vertex2.setLineWidth(1);
-		vertex2.setLineColor(Color.black);
-		vertex2.setFontColor(Color.black);
-		vertex2.setLabelInside(true);
-		vertex2.setRadius(15);
-		vertex2.setPosX(490);
-		vertex2.setPosY(313);
-		graph.getVertices().add(vertex2);
+        edge2 = new Edge();
+        edge2.setModel(graph.getEdgeDefaultModel());
+        edge2.setVertexA(vertex1);
+        edge2.setVertexB(vertex1);
+        edge2.setRelativeEdgeAngle(180);
+        graph.getEdges().add(edge2);
 
-		edge1 = new Edge();
-		edge1.setModel(graph.getEdgeDefaultModel());
-		edge1.setVertexA(vertex2);
-		edge1.setVertexB(vertex1);
-		edge1.setRelativeEdgeAngle(300);
-		graph.getEdges().add(edge1);
+        edge3 = new Edge();
+        edge3.setModel(graph.getEdgeDefaultModel());
+        edge3.setVertexA(vertex1);
+        edge3.setVertexB(vertex2);
+        edge3.setRelativeEdgeAngle(0);
+        graph.getEdges().add(edge3);
 
-		edge2 = new Edge();
-		edge2.setModel(graph.getEdgeDefaultModel());
-		edge2.setVertexA(vertex1);
-		edge2.setVertexB(vertex1);
-		edge2.setRelativeEdgeAngle(180);
-		graph.getEdges().add(edge2);
+        labelV1 = new LabelV(vertex1);
+        vertex1.setLabel(labelV1);
+        labelV1.setModel(graph.getLabelVDefaultModel());
+        graph.getLabelsV().add(labelV1);
 
-		edge3 = new Edge();
-		edge3.setModel(graph.getEdgeDefaultModel());
-		edge3.setVertexA(vertex1);
-		edge3.setVertexB(vertex2);
-		edge3.setRelativeEdgeAngle(0);
-		graph.getEdges().add(edge3);
+        labelE1 = new LabelE(edge1);
+        edge1.setLabel(labelE1);
+        labelE1.setModel(graph.getLabelEDefaultModel());
+        graph.getLabelsE().add(labelE1);
 
-		labelV1 = new LabelV(vertex1);
-		vertex1.setLabel(labelV1);
-		labelV1.setModel(graph.getLabelVDefaultModel());
-		graph.getLabelsV().add(labelV1);
+        labelE2 = new LabelE(edge2);
+        edge2.setLabel(labelE2);
+        labelE2.setModel(graph.getLabelEDefaultModel());
+        graph.getLabelsE().add(labelE2);
 
-		labelE1 = new LabelE(edge1);
-		edge1.setLabel(labelE1);
-		labelE1.setModel(graph.getLabelEDefaultModel());
-		graph.getLabelsE().add(labelE1);
+        labelE3 = new LabelE(edge3);
+        edge3.setLabel(labelE3);
+        labelE3.setModel(graph.getLabelEDefaultModel());
+        graph.getLabelsE().add(labelE3);
+    }
 
-		labelE2 = new LabelE(edge2);
-		edge2.setLabel(labelE2);
-		labelE2.setModel(graph.getLabelEDefaultModel());
-		graph.getLabelsE().add(labelE2);
+    private void initializeFrame() {
+        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane.setBorder(new MatteBorder(0, 0, 1, 0, (Color) Color.GRAY));
+        tabbedPane.setBounds(0, 0, 752, 427);
+        getContentPane().add(tabbedPane);
 
-		labelE3 = new LabelE(edge3);
-		edge3.setLabel(labelE3);
-		labelE3.setModel(graph.getLabelEDefaultModel());
-		graph.getLabelsE().add(labelE3);
-	}
+        label_hint = new JLabel("Edit graph properties, according to which new elements will be created.");
+        label_hint.setHorizontalAlignment(SwingConstants.CENTER);
+        label_hint.setBounds(222, 10, 524, 20);
+        panel_preview = new PanelPreview(graph);
+        panel_preview.setBounds(222, 42, 520, 343);
 
-	private void initializeFrame()
-	{
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBorder(new MatteBorder(0, 0, 1, 0, (Color) Color.GRAY));
-		tabbedPane.setBounds(0, 0, 752, 427);
-		getContentPane().add(tabbedPane);
+        panel_propertyEditor = new PanelPropertyEditor() {
+            private static final long serialVersionUID = 4008480073440306159L;
 
-		label_hint = new JLabel("Edit graph properties, according to which new elements will be created.");
-		label_hint.setHorizontalAlignment(SwingConstants.CENTER);
-		label_hint.setBounds(222, 10, 524, 20);
-		panel_preview = new PanelPreview(graph);
-		panel_preview.setBounds(222, 42, 520, 343);
+            public void valueChanged(PropertyModel model) {
+                updateModel(model);
+                panel_preview.repaint();
+            }
+        };
+        panel_propertyEditor.setBounds(10, 10, 200, 380);
+        panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
+        panel_propertyEditor.setEnabled(true);
+        panel_propertyEditor.disableLabelEdition();
+        panel_propertyEditor.setMode(1);
+        panel_propertyEditor.setModel(graph.getVertexDefaultModel());
 
-		panel_propertyEditor = new PanelPropertyEditor()
-		{
-			private static final long	serialVersionUID	= 4008480073440306159L;
+        vertexPanel = new JPanel();
+        vertexPanel.setLayout(null);
+        tabbedPane.addTab("Vertex", null, vertexPanel, null);
 
-			public void valueChanged(PropertyModel model)
-			{
-				updateModel(model);
-				panel_preview.repaint();
-			}
-		};
-		panel_propertyEditor.setBounds(10, 10, 200, 380);
-		panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
-		panel_propertyEditor.setEnabled(true);
-		panel_propertyEditor.disableLabelEdition();
-		panel_propertyEditor.setMode(1);
-		panel_propertyEditor.setModel(graph.getVertexDefaultModel());
+        vertexPanel.add(panel_propertyEditor);
+        vertexPanel.add(label_hint);
+        vertexPanel.add(panel_preview);
 
-		vertexPanel = new JPanel();
-		vertexPanel.setLayout(null);
-		tabbedPane.addTab("Vertex", null, vertexPanel, null);
+        edgePanel = new JPanel();
+        edgePanel.setLayout(null);
+        tabbedPane.addTab("Edge", null, edgePanel, null);
 
-		vertexPanel.add(panel_propertyEditor);
-		vertexPanel.add(label_hint);
-		vertexPanel.add(panel_preview);
+        labelVPanel = new JPanel();
+        labelVPanel.setLayout(null);
+        tabbedPane.addTab("Label (V)", null, labelVPanel, null);
 
-		edgePanel = new JPanel();
-		edgePanel.setLayout(null);
-		tabbedPane.addTab("Edge", null, edgePanel, null);
+        labelEPanel = new JPanel();
+        labelEPanel.setLayout(null);
+        tabbedPane.addTab("Label (E)", null, labelEPanel, null);
 
-		labelVPanel = new JPanel();
-		labelVPanel.setLayout(null);
-		tabbedPane.addTab("Label (V)", null, labelVPanel, null);
+        button_discard = new JButton("Discard");
+        button_discard.setToolTipText("Discard all changes");
+        button_discard.setBounds(656, 433, 90, 34);
+        getContentPane().add(button_discard);
 
-		labelEPanel = new JPanel();
-		labelEPanel.setLayout(null);
-		tabbedPane.addTab("Label (E)", null, labelEPanel, null);
+        button_save = new JButton("Save");
+        button_save.setToolTipText("Save changes");
+        button_save.setBounds(554, 433, 90, 34);
+        getContentPane().add(button_save);
 
-		button_discard = new JButton("Discard");
-		button_discard.setToolTipText("Discard all changes");
-		button_discard.setBounds(656, 433, 90, 34);
-		getContentPane().add(button_discard);
+        button_restoreDefaultSettings = new JButton("Restore default settings");
+        button_restoreDefaultSettings.setToolTipText("Reset values to default");
+        button_restoreDefaultSettings.setBounds(6, 433, 170, 34);
+        getContentPane().add(button_restoreDefaultSettings);
 
-		button_save = new JButton("Save");
-		button_save.setToolTipText("Save changes");
-		button_save.setBounds(554, 433, 90, 34);
-		getContentPane().add(button_save);
-
-		button_restoreDefaultSettings = new JButton("Restore default settings");
-		button_restoreDefaultSettings.setToolTipText("Reset values to default");
-		button_restoreDefaultSettings.setBounds(6, 433, 170, 34);
-		getContentPane().add(button_restoreDefaultSettings);
-
-		checkBox_applyToAll = new JCheckBox("Apply to existing items");
-		checkBox_applyToAll.setBounds(393, 433, 149, 34);
-		checkBox_applyToAll.setToolTipText("Above settings will be applied to all existing elements of the graph");
-		getContentPane().add(checkBox_applyToAll);
-	}
+        checkBox_applyToAll = new JCheckBox("Apply to existing items");
+        checkBox_applyToAll.setBounds(393, 433, 149, 34);
+        checkBox_applyToAll.setToolTipText("Above settings will be applied to all existing elements of the graph");
+        getContentPane().add(checkBox_applyToAll);
+    }
 }
