@@ -17,6 +17,8 @@ import javax.swing.event.ChangeListener;
 
 import pl.edu.agh.gratex.model.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.LabelPlacement;
+import pl.edu.agh.gratex.model.properties.LabelRotation;
 
 
 public class LabelEdgePropertyPanel extends AbstractPropertyPanel
@@ -279,8 +281,8 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel
 		lblPlace.setBounds(15, 142, 75, 14);
 		add(lblPlace);
 
-		Option[] labelTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.BELOW, "below"),
-				new Option(PropertyModel.ABOVE, "above") };
+		Option[] labelTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(LabelPlacement.BELOW.getValue(), "below"),
+				new Option(LabelPlacement.ABOVE.getValue(), "above") };
 		comboBoxPlace = new JComboBox<Option>(labelTypes);
 		comboBoxPlace.setBounds(101, 139, 81, 20);
 		comboBoxPlace.addActionListener(new ActionListener()
@@ -308,8 +310,8 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel
 		lblRotation.setBounds(6, 167, 84, 14);
 		add(lblRotation);
 
-		labelTypes[1] = new Option(PropertyModel.TANGENT, "tangent");
-		labelTypes[2] = new Option(PropertyModel.LEVEL, "level");
+		labelTypes[1] = new Option(LabelRotation.TANGENT.getValue(), "tangent");
+		labelTypes[2] = new Option(LabelRotation.LEVEL.getValue(), "level");
 		comboBoxRotation = new JComboBox<Option>(labelTypes);
 		comboBoxRotation.setBounds(101, 164, 80, 20);
 		comboBoxRotation.addActionListener(new ActionListener()

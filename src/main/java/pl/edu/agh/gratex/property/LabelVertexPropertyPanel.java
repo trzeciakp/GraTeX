@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
 
@@ -133,10 +134,10 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel
 		lblPosition.setBounds(26, 92, 64, 14);
 		add(lblPosition);
 
-		Option[] positions = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.N, "N"),
-				new Option(PropertyModel.NE, "NE"), new Option(PropertyModel.E, "E"), new Option(PropertyModel.SE, "SE"),
-				new Option(PropertyModel.S, "S"), new Option(PropertyModel.SW, "SW"), new Option(PropertyModel.W, "W"),
-				new Option(PropertyModel.NW, "NW") };
+		Option[] positions = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(LabelPosition.N.getValue(), "N"),
+				new Option(LabelPosition.NE.getValue(), "NE"), new Option(LabelPosition.E.getValue(), "E"), new Option(LabelPosition.SE.getValue(), "SE"),
+				new Option(LabelPosition.S.getValue(), "S"), new Option(LabelPosition.SW.getValue(), "SW"), new Option(LabelPosition.W.getValue(), "W"),
+				new Option(LabelPosition.NW.getValue(), "NW") };
 
 		comboBoxPosition = new JComboBox<Option>(positions);
 		comboBoxPosition.setBounds(101, 89, 80, 20);

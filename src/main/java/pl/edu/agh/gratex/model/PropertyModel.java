@@ -7,12 +7,9 @@ import java.util.Vector;
 
 public abstract class PropertyModel implements Serializable
 {
-	private static final long				serialVersionUID	= 4277135806397473605L;
 
 	public final static int                 EMPTY				= -1;
 	public final static int					NONE				= 0;
-
-    public final static int test = 2;
 
     public final static int					NUMBERS				= 1;
 	public final static int					ALPHA				= 2;
@@ -20,25 +17,7 @@ public abstract class PropertyModel implements Serializable
 	public final static int					NO					= 0;
 	public final static int					YES					= 1;
 
-	public final static int					N					= 0;
-	public final static int					NE					= 1;
-	public final static int					E					= 2;
-	public final static int					SE					= 3;
-	public final static int					S					= 4;
-	public final static int					SW					= 5;
-	public final static int					W					= 6;
-	public final static int					NW					= 7;
-
-	public final static int					BELOW				= 0;
-	public final static int					ABOVE				= 1;
-
-	public final static int					TANGENT				= 0;
-	public final static int					LEVEL				= 1;
-	
-	public final static int					BASIC				= 0;
-	public final static int					FILLED				= 1;
-
-	public static HashMap<Color, String>	COLORS				= new HashMap<Color, String>();
+    public static HashMap<Color, String>	COLORS				= new HashMap<Color, String>();
 
 	static
 	{

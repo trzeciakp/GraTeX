@@ -9,6 +9,7 @@ import pl.edu.agh.gratex.graph.LabelE;
 import pl.edu.agh.gratex.graph.LabelV;
 import pl.edu.agh.gratex.graph.Vertex;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 
@@ -73,7 +74,7 @@ public class Parser
 			line = "\\draw [line width=" + 0.625 * etemp.getLineWidth();
 			if (etemp.isDirected()) {
 				line += ", ->";
-				if(etemp.getArrowType() == PropertyModel.FILLED ) line += ", >=latex";
+				if(etemp.getArrowType() == ArrowType.FILLED.getValue()) line += ", >=latex";
 			}
 			if (etemp.getLineType() == LineType.DASHED)
 				line += ", dashed";

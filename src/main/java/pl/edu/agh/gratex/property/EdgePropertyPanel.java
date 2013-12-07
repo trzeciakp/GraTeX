@@ -18,6 +18,7 @@ import javax.swing.event.ChangeListener;
 
 import pl.edu.agh.gratex.model.EdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 
@@ -272,8 +273,8 @@ public class EdgePropertyPanel extends AbstractPropertyPanel
 		lblArrowType.setBounds(6, 167, 75, 14);
 		add(lblArrowType);
 
-		Option[] arrowTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.BASIC, "basic"),
-				new Option(PropertyModel.FILLED, "filled") };
+		Option[] arrowTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(ArrowType.BASIC.getValue(), "basic"),
+				new Option(ArrowType.FILLED.getValue(), "filled") };
 		comboBoxArrowType = new JComboBox<Option>(arrowTypes);
 		comboBoxArrowType.setBounds(101, 164, 81, 20);
 		comboBoxArrowType.addActionListener(new ActionListener()

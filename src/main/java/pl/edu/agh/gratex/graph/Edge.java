@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.EdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 
@@ -271,7 +272,7 @@ public class Edge extends GraphElement implements Serializable
 		int[] p1 = new int[] { ax - dy, ay + dx };
 		int[] p2 = new int[] { ax + dy, ay - dx };
 		
-		if (getArrowType() == PropertyModel.FILLED)
+		if (getArrowType() == ArrowType.FILLED.getValue())
 		{
 
 			p1 = new int[] { ax - dy / 2, ay + dx / 2};
@@ -568,7 +569,7 @@ public class Edge extends GraphElement implements Serializable
 
 		if (isDirected())
 		{
-			if (getArrowType() == PropertyModel.BASIC)
+			if (getArrowType() == ArrowType.BASIC.getValue())
 			{
 				if (ControlManager.selection.contains(this))
 				{
