@@ -1,91 +1,180 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.controller.GeneralController;
+
 import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class PanelButtonContainer extends JPanel
 {
 	private static final long	serialVersionUID	= 4702408962784933450L;
 
-	private ActionButton[]		buttons;
+    private GeneralController generalController;
+    private EnumMap<ActionType, ActionButton> buttons = new EnumMap<ActionType, ActionButton>(ActionType.class);
 
-	public PanelButtonContainer()
+    private enum ActionType {
+        NEW_GRAPH("new.png", "New graph"),
+        OPEN_GRAPH("open.png", "Open graph file"),
+        SAVE_GRAPH("save.png", "Save"),
+        EDIT_TEMPLATE("defaults.png", "Edit graph's template"),
+        COPY_SUBGRAPH("copy.png", "Copy selected subgraph"),
+        PASTE_SUBGRAPH("paste.png", "Paste copied subgraph"),
+        UNDO("undo.png", "Undo"),
+        REDO("redo.png", "Redo"),
+        TOGGLE_GRID("grid.png", "Toggle grid on/off"),
+        NUMERATION_PREFERENCE("numeration.png", "Numeration preferences"),
+        SHOW_CODE("tex.png", "Show graph's LaTeX code");
+
+        private String imageName;
+        private String tooltip;
+
+        ActionType(String imageName, String tooltip) {
+            this.imageName = imageName;
+            this.tooltip = tooltip;
+        }
+
+        private String getImageName() {
+            return imageName;
+        }
+
+        private String getTooltip() {
+            return tooltip;
+        }
+    }
+
+	public PanelButtonContainer(GeneralController generalController)
 	{
 		super();
 		setLayout(null);
 		setFocusTraversalKeysEnabled(false);
+        this.generalController = generalController;
 
-		buttons = new ActionButton[11];
+        ActionListener nullActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-		buttons[0] = new ActionButton("new.png", 0);
-		buttons[0].setBounds(10, 5, 40, 40);
-		buttons[0].setFocusable(false);
-		add(buttons[0]);
+            }
+        };
+        int x = 10;
+        for(ActionType actionType : ActionType.values()) {
+            ActionButton actionButton = new ActionButton(actionType.getImageName(), actionType.getTooltip(), nullActionListener);
+            actionButton.setBounds(x, 5, 40, 40);
+            actionButton.setFocusable(false);
+            add(actionButton);
+            buttons.put(actionType, actionButton);
+            x += 45;
+        }
 
-		buttons[1] = new ActionButton("open.png", 1);
-		buttons[1].setBounds(55, 5, 40, 40);
-		buttons[1].setFocusable(false);
-		add(buttons[1]);
-
-		buttons[2] = new ActionButton("save.png", 2);
-		buttons[2].setBounds(100, 5, 40, 40);
-		buttons[2].setFocusable(false);
-		add(buttons[2]);
-
-		buttons[3] = new ActionButton("defaults.png", 3);
-		buttons[3].setBounds(155, 5, 40, 40);
-		buttons[3].setFocusable(false);
-		add(buttons[3]);
-
-		buttons[4] = new ActionButton("copy.png", 4);
-		buttons[4].setBounds(210, 5, 40, 40);
-		buttons[4].setFocusable(false);
-		add(buttons[4]);
-
-		buttons[5] = new ActionButton("paste.png", 5);
-		buttons[5].setBounds(255, 5, 40, 40);
-		buttons[5].setFocusable(false);
-		add(buttons[5]);
-
-		buttons[6] = new ActionButton("undo.png", 6);
-		buttons[6].setBounds(310, 5, 40, 40);
-		buttons[6].setFocusable(false);
-		add(buttons[6]);
-
-		buttons[7] = new ActionButton("redo.png", 7);
-		buttons[7].setBounds(355, 5, 40, 40);
-		buttons[7].setFocusable(false);
-		add(buttons[7]);
-
-		buttons[8] = new ActionButton("grid.png", 8);
-		buttons[8].setBounds(410, 5, 40, 40);
-		buttons[8].setFocusable(false);
-		add(buttons[8]);
-
-		buttons[9] = new ActionButton("numeration.png", 9);
-		buttons[9].setBounds(455, 5, 40, 40);
-		buttons[9].setFocusable(false);
-		add(buttons[9]);
-
-		buttons[10] = new ActionButton("tex.png", 10);
-		buttons[10].setBounds(510, 5, 40, 40);
-		buttons[10].setFocusable(false);
-		add(buttons[10]);
-
-		buttons[4].setEnabled(false);
-		buttons[5].setEnabled(false);
+        for (Map.Entry<ActionType, ActionButton> entry : buttons.entrySet()) {
+            switch (entry.getKey()) {
+                case NEW_GRAPH:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.newGraphFile();
+                        }
+                    });
+                    break;
+                case OPEN_GRAPH:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.openGraphFile();
+                        }
+                    });
+                    break;
+                case SAVE_GRAPH:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.saveGraphFile(false);
+                        }
+                    });
+                    break;
+                case EDIT_TEMPLATE:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.editGraphTemplate();
+                        }
+                    });
+                    break;
+                case COPY_SUBGRAPH:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.copyToClipboard();
+                        }
+                    });
+                    break;
+                case PASTE_SUBGRAPH:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.pasteFromClipboard();
+                        }
+                    });
+                    break;
+                case UNDO:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.undo();
+                        }
+                    });
+                    break;
+                case REDO:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.redo();
+                        }
+                    });
+                    break;
+                case TOGGLE_GRID:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.toggleGrid();
+                        }
+                    });
+                    break;
+                case NUMERATION_PREFERENCE:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.setNumeration();
+                        }
+                    });
+                    break;
+                case SHOW_CODE:
+                    entry.getValue().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            PanelButtonContainer.this.generalController.parseToTeX();
+                        }
+                    });
+                    break;
+            }
+        }
+		buttons.get(ActionType.COPY_SUBGRAPH).setEnabled(false);
+		buttons.get(ActionType.PASTE_SUBGRAPH).setEnabled(false);
 	}
 
 	public void updateFunctions()
 	{
-		buttons[4].setEnabled(false);
-		buttons[5].setEnabled(false);
+        buttons.get(ActionType.COPY_SUBGRAPH).setEnabled(false);
+        buttons.get(ActionType.PASTE_SUBGRAPH).setEnabled(false);
 		if (ControlManager.mode == ControlManager.VERTEX_MODE && ControlManager.selection.size() > 0)
 		{
-			buttons[4].setEnabled(true);
+            buttons.get(ActionType.COPY_SUBGRAPH).setEnabled(true);
 		}
 		if (ControlManager.currentCopyPasteOperation != null)
 		{
-			buttons[5].setEnabled(true);
+            buttons.get(ActionType.PASTE_SUBGRAPH).setEnabled(true);
 		}
 	}
 }

@@ -16,6 +16,8 @@ import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
+import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.GeneralControllerTmpImpl;
 import pl.edu.agh.gratex.property.PanelPropertyEditor;
 
 public class MainWindow extends JFrame
@@ -38,7 +40,7 @@ public class MainWindow extends JFrame
 		setIconImage(ImageIO.read(url));
 		
 		ControlManager.passWindowHandle(this);
-		initializeFrame();
+		initializeFrame(new GeneralControllerTmpImpl());
 		initializeEvents();
 		updateFunctions();
 		ControlManager.newGraphFile();
@@ -158,7 +160,7 @@ public class MainWindow extends JFrame
 		});
 	}
 
-	private void initializeFrame()
+	private void initializeFrame(GeneralController generalController)
 	{
 		setMinimumSize(new Dimension(800, 500));
 		setSize(1038, 768);
@@ -181,7 +183,7 @@ public class MainWindow extends JFrame
 		panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
 		getContentPane().add(panel_propertyEditor);
 
-		panel_buttonContainer = new PanelButtonContainer();
+		panel_buttonContainer = new PanelButtonContainer(generalController);
 		panel_buttonContainer.setBounds(-5, 25, 802, 50);
 		panel_buttonContainer.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 

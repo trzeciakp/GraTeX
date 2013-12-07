@@ -419,7 +419,7 @@ public class ControlManager
 				newGraphFile();
 				break;
 			case 1:
-				openGraphFile();
+                openGraphFile();
 				break;
 			case 2:
 				saveGraphFile(false);
