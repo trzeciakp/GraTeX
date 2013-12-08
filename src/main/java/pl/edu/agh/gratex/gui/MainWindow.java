@@ -52,7 +52,7 @@ public class MainWindow extends JFrame {
         String tipPart4a = null;
         String tipPart4b = null;
 
-        switch (ControlManager.mode) {
+        switch (ControlManager.getMode().ordinal()+1) {
             case 1: {
                 tipPart1 = "VERTEX mode - ";
                 tipPart4a = "a vertex. ";
@@ -78,7 +78,7 @@ public class MainWindow extends JFrame {
                 break;
             }
         }
-        switch (ControlManager.tool) {
+        switch (ControlManager.getTool().ordinal()+1) {
             case 1: {
                 tipPart2 = "ADD tool. ";
                 tipPart3 = "Left-click to add " + tipPart4a;
