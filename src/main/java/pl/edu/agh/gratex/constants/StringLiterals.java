@@ -51,7 +51,7 @@ public class StringLiterals {
     public final static String MESSAGE_CONFIRM_OVERWRITE_FILE = "The file exists, overwrite?";
 
     // AboutDialog
-    public final static String MESSAGE_ABOUT_DIALOG = "GraTeX version 1.0\n\nAuthors: Łukasz Opioła, Piotr Trzeciak\n\nUniversity of Science and Technology\nKraków, Poland, 2012";
+    public final static String MESSAGE_ABOUT_DIALOG = "GraTeX version 1.1\n\nAuthors: Łukasz Opioła, Piotr Trzeciak\n\nUniversity of Science and Technology\nKraków, Poland, 2012";
 
 
 
