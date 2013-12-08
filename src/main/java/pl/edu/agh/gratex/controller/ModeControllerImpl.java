@@ -20,9 +20,10 @@ public class ModeControllerImpl implements ModeController {
 
     @Override
     public void setMode(GraphElementType graphElementType) {
+        GraphElementType previousMode = ControlManager.getMode();
         ControlManager.changeMode(graphElementType.ordinal() + 1);
         for(ModeListener modeListener : listeners) {
-            modeListener.fireModeChanged();
+            modeListener.fireModeChanged(previousMode, graphElementType);
         }
     }
 

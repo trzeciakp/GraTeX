@@ -14,9 +14,10 @@ public class ToolControllerImpl implements ToolController {
 
     @Override
     public void setTool(ToolType toolType) {
+        ToolType previousToolType = ControlManager.getTool();
         ControlManager.changeTool(toolType.ordinal() + 1);
         for (ToolListener toolListener : listeners) {
-            toolListener.fireToolChanged();
+            toolListener.fireToolChanged(previousToolType, toolType);
         }
     }
 

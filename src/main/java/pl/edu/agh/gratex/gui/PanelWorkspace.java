@@ -1,5 +1,8 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.controller.ToolController;
+import pl.edu.agh.gratex.controller.ToolListener;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -7,8 +10,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.net.URL;
+import java.util.EnumMap;
 
-public class PanelWorkspace extends JPanel implements MouseListener, MouseMotionListener {
+public class PanelWorkspace extends JPanel implements MouseListener, MouseMotionListener, ToolListener {
     private static final long serialVersionUID = -7736096439630674213L;
 
     private Cursor addToolCursor;
@@ -16,44 +20,46 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     private Cursor selectToolCursor;
 
     private JScrollPane parent;
+    private ToolController toolController;
+    private int pageWidth;
+    private int pageHeight;
     private int mouseDragX = -1;
     private int mouseDragY = -1;
+    private EnumMap<ToolType, Cursor> cursors = new EnumMap<ToolType, Cursor>(ToolType.class);
+
 
     private boolean mouseInWorkspace;
 
-    public PanelWorkspace(JScrollPane _parent) {
+    public PanelWorkspace(JScrollPane _parent, ToolController toolController, int pageWidth, int pageHeight) {
         super();
         parent = _parent;
+        this.toolController = toolController;
+        this.pageWidth = pageWidth;
+        this.pageHeight = pageHeight;
         addMouseListener(this);
         addMouseMotionListener(this);
+        toolController.addToolListener(this);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         try {
-            URL url = this.getClass().getClassLoader().getResource("images/addtoolcursor.png");
-            Image image = ImageIO.read(url);
-            addToolCursor = toolkit.createCustomCursor(image, new Point(0, 0), "add");
-            url = this.getClass().getClassLoader().getResource("images/removetoolcursor.png");
-            image = ImageIO.read(url);
-            removeToolCursor = toolkit.createCustomCursor(image, new Point(0, 0), "remove");
-            url = this.getClass().getClassLoader().getResource("images/selecttoolcursor.png");
-            image = ImageIO.read(url);
-            selectToolCursor = toolkit.createCustomCursor(image, new Point(0, 0), "select");
+            for(ToolCursor toolCursor : ToolCursor.values()) {
+                URL url = this.getClass().getClassLoader().getResource(toolCursor.getImageName());
+                Image image = ImageIO.read(url);
+                Cursor cursor = toolkit.createCustomCursor(image, new Point(0, 0), toolCursor.getDescription());
+                cursors.put(toolCursor.getToolType(), cursor);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        updateCursor();
-        setPreferredSize(new Dimension(ControlManager.graph.pageWidth, ControlManager.graph.pageHeight));
+
+        setPreferredSize(new Dimension(this.pageWidth, this.pageHeight));
+        updateCursor(toolController.getTool());
     }
 
-    public void updateCursor() {
-        if (ControlManager.tool == 1) {
-            setCursor(addToolCursor);
-        } else if (ControlManager.tool == 2) {
-            setCursor(removeToolCursor);
-        } else {
-            setCursor(selectToolCursor);
-        }
+    private void updateCursor(ToolType toolType) {
+        setCursor(cursors.get(toolType));
     }
 
+    //TODO maybe introduce WorkspaceController?
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
@@ -67,7 +73,7 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         g.setColor(Color.GRAY);
         g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, ControlManager.graph.pageWidth, ControlManager.graph.pageHeight);
+        g.fillRect(0, 0, this.pageWidth, this.pageHeight);
 
         if (ControlManager.graph != null) {
             ControlManager.paintGrid(g2d);
@@ -83,7 +89,7 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     }
 
     public void mouseClicked(MouseEvent e) {
-        if (e.getX() <= ControlManager.graph.pageWidth && e.getY() <= ControlManager.graph.pageHeight && SwingUtilities.isLeftMouseButton(e)) {
+        if (e.getX() <= this.pageWidth && e.getY() <= this.pageHeight && SwingUtilities.isLeftMouseButton(e)) {
             ControlManager.processMouseClicking(e);
             repaint();
         } else if (SwingUtilities.isRightMouseButton(e)) {
@@ -102,7 +108,8 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     }
 
     public void mouseReleased(MouseEvent e) {
-        updateCursor();
+        //TODO why was it here?
+        //updateCursor();
         mouseDragX = -1;
         if (SwingUtilities.isLeftMouseButton(e)) {
             ControlManager.processMouseReleasing(e);
@@ -111,7 +118,7 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     }
 
     public void mousePressed(MouseEvent e) {
-        if (e.getX() <= ControlManager.graph.pageWidth && e.getY() <= ControlManager.graph.pageHeight && SwingUtilities.isLeftMouseButton(e)) {
+        if (e.getX() <= this.pageWidth && e.getY() <= this.pageHeight && SwingUtilities.isLeftMouseButton(e)) {
             ControlManager.processMousePressing(e);
             repaint();
         } else if (!SwingUtilities.isLeftMouseButton(e)) {
@@ -144,9 +151,43 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     }
 
     public void mouseMoved(MouseEvent e) {
-        if (e.getX() <= ControlManager.graph.pageWidth && e.getY() <= ControlManager.graph.pageHeight) {
+        if (e.getX() <= this.pageWidth && e.getY() <= this.pageHeight) {
             ControlManager.processMouseMoving(e);
             repaint();
         }
     }
+
+    @Override
+    public void fireToolChanged(ToolType previousToolType, ToolType currentToolType) {
+        updateCursor(currentToolType);
+    }
+
+    private enum ToolCursor {
+        ADD(ToolType.ADD, "images/addtoolcursor.png", "add"),
+        REMOVE(ToolType.REMOVE, "images/removetoolcursor.png", "remove"),
+        SELECT(ToolType.SELECT, "images/selecttoolcursor.png", "select");
+
+        private ToolType toolType;
+        private String imageName;
+        private String description;
+
+        ToolCursor(ToolType toolType, String imageName, String description) {
+            this.toolType = toolType;
+            this.imageName = imageName;
+            this.description = description;
+        }
+
+        private ToolType getToolType() {
+            return toolType;
+        }
+
+        private String getImageName() {
+            return imageName;
+        }
+
+        private String getDescription() {
+            return description;
+        }
+    }
 }
+

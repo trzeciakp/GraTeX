@@ -1,6 +1,6 @@
 package pl.edu.agh.gratex.gui;
 
-import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.graph.GraphElementType;
 
 import javax.swing.*;
@@ -9,15 +9,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.EnumMap;
 
-public class MenuBar extends JMenuBar {
+public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     private static final long serialVersionUID = 5037237692507363783L;
 
     private GeneralController generalController;
+    private ModeController modeController;
+    private ToolController toolController;
     private EnumMap<MenuItem,JMenuItem> menuItems;
 
-    public MenuBar(GeneralController generalController) {
+    public MenuBar(GeneralController generalController, ModeController modeController, ToolController toolController) {
         super();
         this.generalController = generalController;
+        this.modeController = modeController;
+        this.toolController = toolController;
         EnumMap<MenuList, JMenu> menus = new EnumMap<MenuList, JMenu>(MenuList.class);
         EnumMap<MenuList, ButtonGroup> groups = new EnumMap<MenuList, ButtonGroup>(MenuList.class);
         menuItems = new EnumMap<MenuItem, JMenuItem>(MenuItem.class);
@@ -67,6 +71,39 @@ public class MenuBar extends JMenuBar {
         }
         if (ControlManager.currentCopyPasteOperation != null) {
             menuItems.get(MenuItem.PASTE).setEnabled(true);
+        }
+    }
+
+    @Override
+    public void fireModeChanged(GraphElementType previousMode, GraphElementType currentMode) {
+        switch (currentMode) {
+            case VERTEX:
+                menuItems.get(MenuItem.VERTEX_MODE).setSelected(true);
+                break;
+            case EDGE:
+                menuItems.get(MenuItem.EDGE_MODE).setSelected(true);
+                break;
+            case LABEL_VERTEX:
+                menuItems.get(MenuItem.LABELV_MODE).setSelected(true);
+                break;
+            case LABEL_EDGE:
+                menuItems.get(MenuItem.LABELE_MODE).setSelected(true);
+                break;
+        }
+    }
+
+    @Override
+    public void fireToolChanged(ToolType previousToolType, ToolType currentToolType) {
+        switch (currentToolType) {
+            case ADD:
+                menuItems.get(MenuItem.ADD_TOOL).setSelected(true);
+                break;
+            case REMOVE:
+                menuItems.get(MenuItem.REMOVE_TOOL).setSelected(true);
+                break;
+            case SELECT:
+                menuItems.get(MenuItem.SELECT_TOOL).setSelected(true);
+                break;
         }
     }
 
@@ -211,49 +248,49 @@ public class MenuBar extends JMenuBar {
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        generalController.changeMode(GraphElementType.VERTEX);
+                        modeController.setMode(GraphElementType.VERTEX);
                     }
                 };
             case EDGE_MODE:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        generalController.changeMode(GraphElementType.EDGE);
+                        modeController.setMode(GraphElementType.EDGE);
                     }
                 };
             case LABELV_MODE:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        generalController.changeMode(GraphElementType.LABEL_VERTEX);
+                        modeController.setMode(GraphElementType.LABEL_VERTEX);
                     }
                 };
             case LABELE_MODE:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        generalController.changeMode(GraphElementType.LABEL_EDGE);
+                        modeController.setMode(GraphElementType.LABEL_EDGE);
                     }
                 };
             case ADD_TOOL:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        generalController.changeTool(ToolType.ADD);
+                        toolController.setTool(ToolType.ADD);
                     }
                 };
             case REMOVE_TOOL:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        generalController.changeTool(ToolType.REMOVE);
+                        toolController.setTool(ToolType.REMOVE);
                     }
                 };
             case SELECT_TOOL:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        generalController.changeTool(ToolType.SELECT);
+                        toolController.setTool(ToolType.SELECT);
                     }
                 };
             case ABOUT:

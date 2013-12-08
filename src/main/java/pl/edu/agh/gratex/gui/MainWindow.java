@@ -31,14 +31,14 @@ public class MainWindow extends JFrame {
         setIconImage(ImageIO.read(url));
 
         ControlManager.passWindowHandle(this);
-        initializeFrame(new GeneralControllerTmpImpl(), new ToolControllerImpl(), new ModeControllerImpl());
+        initializeFrame(new GeneralControllerTmpImpl(), new ToolControllerImpl(), new ModeControllerImpl(), ControlManager.graph.pageWidth, ControlManager.graph.pageHeight);
         initializeEvents();
         updateFunctions();
         ControlManager.newGraphFile();
     }
 
     public void updateWorkspace() {
-        panel_workspace.updateCursor();
+        //panel_workspace.updateCursor();
         panel_workspace.repaint();
     }
 
@@ -134,7 +134,7 @@ public class MainWindow extends JFrame {
         });
     }
 
-    private void initializeFrame(GeneralController generalController, ToolController toolController, ModeController modeController ) {
+    private void initializeFrame(GeneralController generalController, ToolController toolController, ModeController modeController, int workspacePageWidth, int workspacePageHeight) {
         setMinimumSize(new Dimension(800, 500));
         setSize(1038, 768);
         setLocationRelativeTo(null);
@@ -145,7 +145,7 @@ public class MainWindow extends JFrame {
 
         scrollPane_workspace = new JScrollPane();
         scrollPane_workspace.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
-        panel_workspace = new PanelWorkspace(scrollPane_workspace);
+        panel_workspace = new PanelWorkspace(scrollPane_workspace, toolController, workspacePageWidth, workspacePageHeight);
         scrollPane_workspace.setViewportView(panel_workspace);
         panel_workspace.setLayout(null);
         scrollPane_workspace.setBounds(110, 85, 472, 344);
@@ -170,7 +170,7 @@ public class MainWindow extends JFrame {
         panel_toolbox.setBounds(10, 85, 90, 344);
         getContentPane().add(panel_toolbox);
 
-        menuBar = new MenuBar(generalController);
+        menuBar = new MenuBar(generalController, modeController, toolController);
         menuBar.setBounds(0, 0, 0, 25);
         getContentPane().add(menuBar);
     }

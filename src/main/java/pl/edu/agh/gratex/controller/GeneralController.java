@@ -32,17 +32,9 @@ public interface GeneralController {
     //TODO maybe it should select even if not in select mode
     public void selectAll();
 
-    public void changeMode(GraphElementType graphElementType);
-
     void exitApplication();
 
     void showAboutDialog();
 
     void deleteSelection();
-
-    void changeTool(ToolType toolType);
-
-    ToolType getTool();
-
-    GraphElementType getMode();
 }
