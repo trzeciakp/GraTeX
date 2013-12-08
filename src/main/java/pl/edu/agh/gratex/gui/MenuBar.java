@@ -2,8 +2,9 @@ package pl.edu.agh.gratex.gui;
 
 import pl.edu.agh.gratex.constants.MenuBarItem;
 import pl.edu.agh.gratex.constants.MenuBarSubmenu;
+import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
-import pl.edu.agh.gratex.graph.GraphElementType;
+import pl.edu.agh.gratex.constants.GraphElementType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

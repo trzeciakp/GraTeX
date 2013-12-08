@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.editor;
 
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.*;
 import pl.edu.agh.gratex.gui.ControlManager;
 
@@ -160,7 +161,7 @@ public class CopyPasteOperation extends Operation {
             }
         }
 
-        return "Subgraph pasted";
+        return StringLiterals.INFO_SUBGRAPH_PASTE;
     }
 
     public String undoOperation() {
@@ -174,6 +175,6 @@ public class CopyPasteOperation extends Operation {
             itv.next().setPartOfNumeration(false);
         }
 
-        return "Pasting subgraph undone";
+        return StringLiterals.INFO_UNDO(StringLiterals.INFO_SUBGRAPH_PASTE);
     }
 }

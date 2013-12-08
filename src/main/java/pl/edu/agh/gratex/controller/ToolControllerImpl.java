@@ -1,14 +1,11 @@
 package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.gui.ControlManager;
-import pl.edu.agh.gratex.gui.ToolType;
+import pl.edu.agh.gratex.constants.ToolType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
 public class ToolControllerImpl implements ToolController {
     private List<ToolListener> listeners = new ArrayList<>();
 

@@ -1,5 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
+
 import java.awt.*;
 
 public class Application {
@@ -27,7 +29,7 @@ public class Application {
                     new MainWindow();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ControlManager.reportError("The application has encountered an error:\n" + e.toString());
+                    ControlManager.reportError(StringLiterals.MESSAGE_ERROR_GENERAL + e.toString());
                 }
             }
         });

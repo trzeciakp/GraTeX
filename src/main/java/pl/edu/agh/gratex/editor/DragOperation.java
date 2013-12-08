@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.editor;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.*;
 
 public class DragOperation extends Operation {
@@ -128,7 +129,7 @@ public class DragOperation extends Operation {
         if (draggedGraphElement instanceof Vertex) {
             ((Vertex) draggedGraphElement).setPosX(endPosX);
             ((Vertex) draggedGraphElement).setPosY(endPosY);
-            result = "Vertex moved";
+            result = StringLiterals.INFO_VERTEX_MOVE;
         } else if (draggedGraphElement instanceof Edge) {
             ((Edge) draggedGraphElement).setDirected(endEdgeDirection);
             ((Edge) draggedGraphElement).setRelativeEdgeAngle(endRelativeEdgeAngle);
@@ -137,14 +138,14 @@ public class DragOperation extends Operation {
             } else {
                 ((Edge) draggedGraphElement).setVertexB(endVertex);
             }
-            result = "Edge moved";
+            result = StringLiterals.INFO_EDGE_MOVE;
         } else if (draggedGraphElement instanceof LabelV) {
             ((LabelV) draggedGraphElement).setPosition(endAngle);
-            result = "Label moved";
+            result = StringLiterals.INFO_LABEL_V_MOVE;
         } else if (draggedGraphElement instanceof LabelE) {
             ((LabelE) draggedGraphElement).setPosition(endBias);
             ((LabelE) draggedGraphElement).setHorizontalPlacement(endLabelEHorizontal);
-            result = "Label moved";
+            result = StringLiterals.INFO_LABEL_E_MOVE;
         }
         return result;
     }
@@ -155,17 +156,17 @@ public class DragOperation extends Operation {
         if (draggedGraphElement instanceof Vertex) {
             ((Vertex) draggedGraphElement).setPosX(startPosX);
             ((Vertex) draggedGraphElement).setPosY(startPosY);
-            result = "Vertex moved back";
+            result = StringLiterals.INFO_UNDO(StringLiterals.INFO_VERTEX_MOVE);
         } else if (draggedGraphElement instanceof Edge) {
             restoreEdgeStartState();
-            result = "Edge moved back";
+            result = StringLiterals.INFO_UNDO(StringLiterals.INFO_EDGE_MOVE);
         } else if (draggedGraphElement instanceof LabelV) {
             ((LabelV) draggedGraphElement).setPosition(startAngle);
-            result = "Label moved back";
+            result = StringLiterals.INFO_UNDO(StringLiterals.INFO_LABEL_V_MOVE);
         } else if (draggedGraphElement instanceof LabelE) {
             ((LabelE) draggedGraphElement).setPosition(startBias);
             ((LabelE) draggedGraphElement).setHorizontalPlacement(startLabelEHorizontal);
-            result = "Label moved back";
+            result = StringLiterals.INFO_UNDO(StringLiterals.INFO_LABEL_E_MOVE);
         }
         return result;
     }

@@ -1,6 +1,6 @@
 package pl.edu.agh.gratex.model;
 
-import pl.edu.agh.gratex.graph.GraphElementType;
+import pl.edu.agh.gratex.constants.GraphElementType;
 
 /**
  *

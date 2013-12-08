@@ -1,6 +1,8 @@
 package pl.edu.agh.gratex.gui;
 
 
+import pl.edu.agh.gratex.constants.Constants;
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.editor.OperationList;
 import pl.edu.agh.gratex.graph.Graph;
 
@@ -22,20 +24,20 @@ public class OpenFileDialog extends JFileChooser {
     }
 
     private void init() {
-        setDialogTitle("Open...");
-        setApproveButtonText("Open");
-        setApproveButtonToolTipText("Open graph");
+        setDialogTitle(StringLiterals.TITLE_OPEN_FILE_DIALOG);
+        setApproveButtonText(StringLiterals.BUTTON_OPEN_FILE_DIALOG_APPROVE);
+        setApproveButtonToolTipText(StringLiterals.TOOLTIP_OPEN_FILE_DIALOG_APPROVE);
         setFileFilter(new FileFilter() {
             public boolean accept(File file) {
                 String fileName = file.getName().toLowerCase();
-                if (fileName.endsWith(".gph") || file.isDirectory()) {
+                if (fileName.endsWith(Constants.GRAPH_FILES_EXTENSION) || file.isDirectory()) {
                     return true;
                 }
                 return false;
             }
 
             public String getDescription() {
-                return "Graph file (*.gph)";
+                return StringLiterals.TOOLTIP_OPEN_FILE_DIALOG_DESCRIPTION;
             }
         });
     }
@@ -54,10 +56,10 @@ public class OpenFileDialog extends JFileChooser {
                     ControlManager.operations = new OperationList();
                     ControlManager.changeMade = false;
                     ControlManager.applyChange();
-                    ControlManager.publishInfo("Graph loaded successfully");
+                    ControlManager.publishInfo(StringLiterals.INFO_GRAPH_OPEN_OK);
                 } else {
-                    ControlManager.publishInfo("Loading graph failed!");
-                    ControlManager.reportError("Loading graph failed.\nThe chosen file has either improper format or is damaged.");
+                    ControlManager.publishInfo(StringLiterals.INFO_GRAPH_OPEN_FAIL);
+                    ControlManager.reportError(StringLiterals.MESSAGE_ERROR_OPEN_GRAPH);
                 }
             }
         }

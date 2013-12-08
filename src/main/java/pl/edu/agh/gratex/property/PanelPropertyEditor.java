@@ -2,7 +2,7 @@ package pl.edu.agh.gratex.property;
 
 import pl.edu.agh.gratex.controller.ModeController;
 import pl.edu.agh.gratex.controller.ModeListener;
-import pl.edu.agh.gratex.graph.GraphElementType;
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import javax.swing.*;

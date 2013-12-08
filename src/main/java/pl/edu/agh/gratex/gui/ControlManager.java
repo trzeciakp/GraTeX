@@ -1,6 +1,9 @@
 package pl.edu.agh.gratex.gui;
 
 
+import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.editor.*;
 import pl.edu.agh.gratex.graph.*;
 import pl.edu.agh.gratex.model.*;
@@ -87,7 +90,7 @@ public class ControlManager {
     }
 
     public static void reportError(String message) {
-        JOptionPane.showMessageDialog(mainWindow, message, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(mainWindow, message, StringLiterals.TITLE_ERROR_DIALOG, JOptionPane.ERROR_MESSAGE);
     }
 
     public static void selectAll() {
@@ -209,14 +212,7 @@ public class ControlManager {
 
     public static boolean saveGraphFile(boolean saveAs) {
         if (!saveAs && currentFile != null) {
-            if (FileManager.saveFile(currentFile, graph)) {
-                publishInfo("Graph saved successfully");
-                return true;
-            } else {
-                publishInfo("Saving graph failed!");
-                reportError("Saving graph failed.\nCheck whether the target file is write-protected.");
-                return false;
-            }
+            return FileManager.saveFile(currentFile, graph);
         } else {
             SaveFileDialog chooser = null;
             if (currentFile != null) {

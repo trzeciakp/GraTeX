@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.graph;
 
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.properties.LineType;

@@ -1,14 +1,11 @@
 package pl.edu.agh.gratex.controller;
 
-import pl.edu.agh.gratex.graph.GraphElementType;
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.gui.ControlManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
 //TODO get rid of using ControlManager. Use Field of type GraphElementType instead.
 public class ModeControllerTmpImpl implements ModeController {
     private List<ModeListener> listeners = new ArrayList<>();

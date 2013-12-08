@@ -2,9 +2,6 @@ package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.gui.ControlManager;
 
-/**
- *
- */
 public class GeneralControllerTmpImpl implements GeneralController {
 
     @Override

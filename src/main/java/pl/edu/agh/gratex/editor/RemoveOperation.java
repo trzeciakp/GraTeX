@@ -1,6 +1,8 @@
 package pl.edu.agh.gratex.editor;
 
 
+import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.*;
 import pl.edu.agh.gratex.gui.ControlManager;
 
@@ -11,6 +13,8 @@ public class RemoveOperation extends Operation {
     private LinkedList<GraphElement> elements;
     private int type;
     private LinkedList<Edge> connectedEdges;
+
+    // TODO Zmienic type na graphelementtype oraz usunac zbedne rzeczy z kodu ( GraphElementType graphElementType = null; i wszystko dalej)
 
     public RemoveOperation(LinkedList<GraphElement> _elements) {
         type = ControlManager.getMode().ordinal()+1;
@@ -24,8 +28,9 @@ public class RemoveOperation extends Operation {
     }
 
     public String doOperation() {
-        String result = null;
+        GraphElementType graphElementType = null;
         if (type == 1) {
+            graphElementType = GraphElementType.VERTEX;
             if (elements.size() > 1) {
                 connectedEdges = new LinkedList<Edge>();
                 Iterator<GraphElement> it = elements.listIterator();
@@ -37,54 +42,46 @@ public class RemoveOperation extends Operation {
                     ControlManager.graph.getEdges().removeAll(connectedEdges);
                 }
                 ControlManager.graph.getVertices().removeAll(elements);
-                result = elements.size() + " vertices removed";
             } else {
                 connectedEdges = ControlManager.graph.getAdjacentEdges((Vertex) elements.get(0));
                 ControlManager.graph.getEdges().removeAll(connectedEdges);
                 ControlManager.graph.getVertices().remove((Vertex) elements.get(0));
                 ((Vertex) elements.get(0)).setPartOfNumeration(false);
-                result = "Vertex removed";
             }
         } else if (type == 2) {
+            graphElementType = GraphElementType.EDGE;
             ControlManager.graph.getEdges().removeAll(elements);
-            if (elements.size() > 1) {
-                result = elements.size() + " edges removed";
-            } else {
-                result = "Edge removed";
-            }
         } else if (type == 3) {
+            graphElementType = GraphElementType.LABEL_VERTEX;
             if (elements.size() > 1) {
                 Iterator<GraphElement> it = elements.listIterator();
                 while (it.hasNext()) {
                     ((LabelV) it.next()).getOwner().setLabel(null);
                 }
-                result = elements.size() + " labels removed";
             } else {
                 ((LabelV) elements.getFirst()).getOwner().setLabel(null);
-                result = "Label removed";
             }
             ControlManager.graph.getLabelsV().removeAll(elements);
         } else {
+            graphElementType = GraphElementType.LABEL_EDGE;
             if (elements.size() > 1) {
                 Iterator<GraphElement> it = elements.listIterator();
                 while (it.hasNext()) {
                     ((LabelE) it.next()).getOwner().setLabel(null);
                 }
-                result = elements.size() + " labels removed";
             } else {
                 ((LabelE) elements.getFirst()).getOwner().setLabel(null);
-                result = "Label removed";
             }
             ControlManager.graph.getLabelsV().removeAll(elements);
         }
 
-        return result;
+        return StringLiterals.INFO_REMOVE_ELEMENT(graphElementType, elements.size());
     }
 
     public String undoOperation() {
-        String result = null;
-
+        GraphElementType graphElementType = null;
         if (type == 1) {
+            graphElementType = GraphElementType.VERTEX;
             if (elements.size() > 1) {
                 Iterator<GraphElement> it = elements.listIterator();
                 Vertex temp = null;
@@ -93,25 +90,23 @@ public class RemoveOperation extends Operation {
                     ControlManager.graph.getVertices().add(temp);
                     temp.setPartOfNumeration(true);
                 }
-                result = "Removing multiple vertices undone";
             } else {
                 ControlManager.graph.getVertices().add((Vertex) elements.get(0));
                 ((Vertex) elements.get(0)).setPartOfNumeration(true);
-                result = "Removing vertex undone";
             }
             ControlManager.graph.getEdges().addAll(connectedEdges);
         } else if (type == 2) {
+            graphElementType = GraphElementType.EDGE;
             if (elements.size() > 1) {
                 Iterator<GraphElement> it = elements.listIterator();
                 while (it.hasNext()) {
                     ControlManager.graph.getEdges().add((Edge) it.next());
                 }
-                result = "Removing multiple edges undone";
             } else {
                 ControlManager.graph.getEdges().add((Edge) elements.get(0));
-                result = "Removing edge undone";
             }
         } else if (type == 3) {
+            graphElementType = GraphElementType.LABEL_VERTEX;
             if (elements.size() > 1) {
                 Iterator<GraphElement> it = elements.listIterator();
                 LabelV temp = null;
@@ -120,13 +115,12 @@ public class RemoveOperation extends Operation {
                     ControlManager.graph.getLabelsV().add(temp);
                     temp.getOwner().setLabel(temp);
                 }
-                result = "Removing multiple labels undone";
             } else {
                 ControlManager.graph.getLabelsV().add((LabelV) elements.get(0));
                 ((LabelV) elements.getFirst()).getOwner().setLabel((LabelV) elements.getFirst());
-                result = "Removing label undone";
             }
         } else {
+            graphElementType = GraphElementType.LABEL_EDGE;
             if (elements.size() > 1) {
                 Iterator<GraphElement> it = elements.listIterator();
                 LabelE temp = null;
@@ -135,13 +129,11 @@ public class RemoveOperation extends Operation {
                     ControlManager.graph.getLabelsE().add(temp);
                     temp.getOwner().setLabel(temp);
                 }
-                result = "Removing multiple labels undone";
             } else {
                 ControlManager.graph.getLabelsE().add((LabelE) elements.get(0));
                 ((LabelE) elements.getFirst()).getOwner().setLabel((LabelE) elements.getFirst());
-                result = "Removing label undone";
             }
         }
-        return result;
+        return StringLiterals.INFO_UNDO(StringLiterals.INFO_REMOVE_ELEMENT(graphElementType, elements.size()));
     }
 }

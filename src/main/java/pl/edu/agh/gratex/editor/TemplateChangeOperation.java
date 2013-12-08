@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.editor;
 
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.Graph;
 import pl.edu.agh.gratex.graph.GraphElement;
 import pl.edu.agh.gratex.gui.ControlManager;
@@ -31,10 +32,10 @@ public class TemplateChangeOperation extends Operation {
     private PropertyChangeOperation labelEChange = null;
 
     public TemplateChangeOperation(Graph initialGraphState, Graph endGraphState) {
-        vertexStartModel = ControlManager.graph.getVertexDefaultModel();
-        edgeStartModel = ControlManager.graph.getEdgeDefaultModel();
-        labelVStartModel = ControlManager.graph.getLabelVDefaultModel();
-        labelEStartModel = ControlManager.graph.getLabelEDefaultModel();
+        vertexStartModel = initialGraphState.getVertexDefaultModel();
+        edgeStartModel = initialGraphState.getEdgeDefaultModel();
+        labelVStartModel = initialGraphState.getLabelVDefaultModel();
+        labelEStartModel = initialGraphState.getLabelEDefaultModel();
 
         vertexEndModel = endGraphState.getVertexDefaultModel();
         edgeEndModel = endGraphState.getEdgeDefaultModel();
@@ -76,9 +77,9 @@ public class TemplateChangeOperation extends Operation {
         }
 
         if (applyToAll) {
-            return "Template changed and applied globally";
+            return StringLiterals.INFO_TEMPLATE_CHANGE_AND_GLOBAL_APPLY;
         } else {
-            return "Template changed";
+            return StringLiterals.INFO_TEMPLATE_CHANGE;
         }
     }
 
@@ -104,9 +105,9 @@ public class TemplateChangeOperation extends Operation {
         }
 
         if (applyToAll) {
-            return "Template change and global applying undone";
+            return StringLiterals.INFO_UNDO(StringLiterals.INFO_TEMPLATE_CHANGE_AND_GLOBAL_APPLY);
         } else {
-            return "Template change undone";
+            return StringLiterals.INFO_UNDO(StringLiterals.INFO_TEMPLATE_CHANGE);
         }
     }
 }

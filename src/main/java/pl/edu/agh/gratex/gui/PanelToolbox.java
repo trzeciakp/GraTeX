@@ -1,8 +1,10 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.constants.ToolButtonType;
 import pl.edu.agh.gratex.controller.ModeController;
 import pl.edu.agh.gratex.controller.ToolController;
-import pl.edu.agh.gratex.graph.GraphElementType;
+import pl.edu.agh.gratex.constants.GraphElementType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +18,7 @@ public class PanelToolbox extends JPanel {
     private JComboBox<GraphElementType> comboBox_mode;
     private ToolController toolController;
     private ModeController modeController;
-    private final EnumMap<Tools,ToolButton> toolButtons;
+    private final EnumMap<ToolButtonType,ToolButton> toolButtons;
 
     public PanelToolbox(ToolController toolController, ModeController modeController) {
         super();
@@ -27,19 +29,19 @@ public class PanelToolbox extends JPanel {
         comboBox_mode = new JComboBox<>(GraphElementType.values());
         comboBox_mode.setSelectedIndex(0);
         comboBox_mode.setBounds(0, 11, 90, 30);
-        comboBox_mode.setToolTipText("Edition mode");
+        comboBox_mode.setToolTipText(StringLiterals.COMBOBOX_PANEL_TOOLBOX_MODE);
         comboBox_mode.setFocusable(false);
-        toolButtons = new EnumMap<>(Tools.class);
+        toolButtons = new EnumMap<>(ToolButtonType.class);
 
         comboBox_mode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 PanelToolbox.this.modeController.setMode((GraphElementType) comboBox_mode.getSelectedItem());
-                toolButtons.get(Tools.ADD).requestFocus();
+                toolButtons.get(ToolButtonType.ADD).requestFocus();
             }
         });
         add(comboBox_mode);
         int y = 65;
-        for(Tools tool : Tools.values()) {
+        for(ToolButtonType tool : ToolButtonType.values()) {
             ToolButton toolButton = new ToolButton(tool.getImageActiveName(), tool.getImagePassiveName(), toolController, tool.getToolType());
             toolButton.setToolTipText(tool.getTooltip());
             toolButton.setFocusable(false);
@@ -59,36 +61,5 @@ public class PanelToolbox extends JPanel {
         paintChildren(g);
     }
 
-    private enum Tools {
-        ADD("addtool.png", "addtoolpassive.png", "Add tool", ToolType.ADD),
-        REMOVE("removetool.png", "removetoolpassive.png", "Remove tool", ToolType.REMOVE),
-        SELECT("selecttool.png", "selecttoolpassive.png", "Select tool", ToolType.SELECT);
-        private String imageActiveName;
-        private String imagePassiveName;
-        private String tooltip;
-        private ToolType toolType;
 
-        Tools(String imageActiveName, String imagePassiveName, String tooltip, ToolType toolType) {
-            this.imageActiveName = imageActiveName;
-            this.imagePassiveName = imagePassiveName;
-            this.tooltip = tooltip;
-            this.toolType = toolType;
-        }
-
-        private String getImageActiveName() {
-            return imageActiveName;
-        }
-
-        private String getImagePassiveName() {
-            return imagePassiveName;
-        }
-
-        private String getTooltip() {
-            return tooltip;
-        }
-
-        private ToolType getToolType() {
-            return toolType;
-        }
-    }
 }

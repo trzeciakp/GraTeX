@@ -1,6 +1,8 @@
 package pl.edu.agh.gratex.gui;
 
 
+import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.ModeController;
 import pl.edu.agh.gratex.controller.ModeControllerImpl;
 import pl.edu.agh.gratex.graph.*;
@@ -61,7 +63,7 @@ public class GraphsTemplateDialog extends JDialog {
     }
 
     public GraphsTemplateDialog(MainWindow parent) {
-        super(parent, "Graph's template editor", true);
+        super(parent, StringLiterals.TITLE_GRAPH_TEMPLATE_EDITOR, true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(768, 511);
         setLocationRelativeTo(null);
@@ -158,7 +160,7 @@ public class GraphsTemplateDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 if (checkBox_applyToAll.isSelected()) {
                     if (0 != JOptionPane.showConfirmDialog(null,
-                            "Current settings will be applied to ALL existing elements of the graph.\nDo you wish to continue?", "Confirm decision",
+                            StringLiterals.MESSAGE_CONFIRM_GLOBAL_APPLY, StringLiterals.TITLE_CONFIRM_DIALOG,
                             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
                         return;
                     }
@@ -265,7 +267,7 @@ public class GraphsTemplateDialog extends JDialog {
         tabbedPane.setBounds(0, 0, 752, 427);
         getContentPane().add(tabbedPane);
 
-        label_hint = new JLabel("Edit graph properties, according to which new elements will be created.");
+        label_hint = new JLabel(StringLiterals.LABEL_TEMPLATE_EDITOR_HEADER);
         label_hint.setHorizontalAlignment(SwingConstants.CENTER);
         label_hint.setBounds(222, 10, 524, 20);
         panel_preview = new PanelPreview(graph);
@@ -306,24 +308,24 @@ public class GraphsTemplateDialog extends JDialog {
         labelEPanel.setLayout(null);
         tabbedPane.addTab("Label (E)", null, labelEPanel, null);
 
-        button_discard = new JButton("Discard");
-        button_discard.setToolTipText("Discard all changes");
+        button_discard = new JButton(StringLiterals.BUTTON_TEMPLATE_EDITOR_DISCARD);
+        button_discard.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_DISCARD);
         button_discard.setBounds(656, 433, 90, 34);
         getContentPane().add(button_discard);
 
-        button_save = new JButton("Save");
-        button_save.setToolTipText("Save changes");
+        button_save = new JButton(StringLiterals.BUTTON_TEMPLATE_EDITOR_SAVE);
+        button_save.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_SAVE);
         button_save.setBounds(554, 433, 90, 34);
         getContentPane().add(button_save);
 
-        button_restoreDefaultSettings = new JButton("Restore default settings");
-        button_restoreDefaultSettings.setToolTipText("Reset values to default");
+        button_restoreDefaultSettings = new JButton(StringLiterals.BUTTON_TEMPLATE_EDITOR_RESTORE_DEFAULT);
+        button_restoreDefaultSettings.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_RESTORE_DEFAULT);
         button_restoreDefaultSettings.setBounds(6, 433, 170, 34);
         getContentPane().add(button_restoreDefaultSettings);
 
-        checkBox_applyToAll = new JCheckBox("Apply to existing items");
+        checkBox_applyToAll = new JCheckBox(StringLiterals.CHECKBOX_TEMPLATE_EDITOR_GLOBAL_APPLY);
         checkBox_applyToAll.setBounds(393, 433, 149, 34);
-        checkBox_applyToAll.setToolTipText("Above settings will be applied to all existing elements of the graph");
+        checkBox_applyToAll.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_GLOBAL_APPLY);
         getContentPane().add(checkBox_applyToAll);
     }
 }

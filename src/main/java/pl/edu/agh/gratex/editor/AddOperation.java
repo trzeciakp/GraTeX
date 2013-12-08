@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.editor;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.*;
 import pl.edu.agh.gratex.gui.ControlManager;
 
@@ -16,37 +17,37 @@ public class AddOperation extends Operation {
         if (type == 1) {
             ControlManager.graph.getVertices().add((Vertex) element);
             ((Vertex) element).setPartOfNumeration(true);
-            return "Vertex added";
+            return StringLiterals.INFO_VERTEX_ADD;
         } else if (type == 2) {
             ControlManager.graph.getEdges().add((Edge) element);
-            return "Edge added";
+            return StringLiterals.INFO_EDGE_ADD;
         } else if (type == 3) {
             ControlManager.graph.getLabelsV().add((LabelV) element);
             ((LabelV) element).getOwner().setLabel((LabelV) element);
-            return "Label added to a vertex";
+            return StringLiterals.INFO_LABEL_V_ADD;
         } else {
             ControlManager.graph.getLabelsE().add((LabelE) element);
             ((LabelE) element).getOwner().setLabel((LabelE) element);
-            return "Label added to an edge";
+            return StringLiterals.INFO_LABEL_E_ADD;
         }
     }
 
     public String undoOperation() {
         if (type == 1) {
-            ControlManager.graph.getVertices().remove((Vertex) element);
+            ControlManager.graph.getVertices().remove(element);
             ((Vertex) element).setPartOfNumeration(false);
-            return "Adding vertex undone";
+            return StringLiterals.INFO_UNDO(StringLiterals.INFO_VERTEX_ADD);
         } else if (type == 2) {
-            ControlManager.graph.getEdges().remove((Edge) element);
-            return "Adding edge undone";
+            ControlManager.graph.getEdges().remove(element);
+            return StringLiterals.INFO_UNDO(StringLiterals.INFO_EDGE_ADD);
         } else if (type == 3) {
-            ControlManager.graph.getLabelsV().remove((LabelV) element);
+            ControlManager.graph.getLabelsV().remove(element);
             ((LabelV) element).getOwner().setLabel(null);
-            return "Adding label undone";
+            return StringLiterals.INFO_UNDO(StringLiterals.INFO_LABEL_V_ADD);
         } else {
-            ControlManager.graph.getLabelsE().remove((LabelE) element);
+            ControlManager.graph.getLabelsE().remove(element);
             ((LabelE) element).getOwner().setLabel(null);
-            return "Adding label undone";
+            return StringLiterals.INFO_UNDO(StringLiterals.INFO_LABEL_E_ADD);
         }
     }
 }

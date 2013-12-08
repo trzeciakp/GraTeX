@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.Graph;
 
 import javax.swing.*;
@@ -35,6 +36,6 @@ public class PanelPreview extends JPanel {
 
         g.setColor(Color.gray);
         g.setFont(new Font("Cambria", Font.ITALIC, 24));
-        g.drawString("Preview", 5, 23);
+        g.drawString(StringLiterals.LABEL_PANEL_PREVIEW_TITLE, 5, 23);
     }
 }

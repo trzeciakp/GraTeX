@@ -1,5 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -32,7 +34,7 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
     }
 
     public LatexCodeDialog(MainWindow parent, String code) {
-        super(parent, "LaTeX code for graph", true);
+        super(parent, StringLiterals.TITLE_LATEX_CODE_DIALOG, true);
         thisDialog = this;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(768, 768);
@@ -47,8 +49,8 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
 
         popupMenu = new JPopupMenu();
         addPopup(textArea_code, popupMenu);
-        menuItem = new JMenuItem("Copy to clipboard");
-        menuItem.setMnemonic('C');
+        menuItem = new JMenuItem(StringLiterals.MENU_ITEM_LATEX_DIALOG_COPY_TO_CLIPBOARD);
+        menuItem.setMnemonic(StringLiterals.MNEMONIC_LATEX_DIALOG_COPY_TO_CLIPBOARD);
         menuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 StringSelection stringSelection = new StringSelection(textArea_code.getText());
@@ -64,7 +66,7 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
-        button_copyToClipboard = new JButton("Copy to clipboard");
+        button_copyToClipboard = new JButton(StringLiterals.BUTTON_LATEX_DIALOG_COPY_TO_CLIPBOARD);
         button_copyToClipboard.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 StringSelection stringSelection = new StringSelection(textArea_code.getText());

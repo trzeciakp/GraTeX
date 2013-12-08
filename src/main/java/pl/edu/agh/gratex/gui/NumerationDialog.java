@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.Utilities;
 import pl.edu.agh.gratex.property.MyListFormatter;
 
@@ -44,7 +45,7 @@ public class NumerationDialog extends JDialog {
     }
 
     public NumerationDialog(MainWindow _mainWindow, boolean _digital, int initialStartNumber, int _maxNumber) {
-        super(_mainWindow, "Numeration preferences", true);
+        super(_mainWindow, StringLiterals.TITLE_NUMERATION_DIALOG, true);
         digital = _digital;
         startNumber = initialStartNumber;
         maxNumber = _maxNumber;
@@ -75,7 +76,7 @@ public class NumerationDialog extends JDialog {
         setSize(218, 175);
         getContentPane().setLayout(null);
 
-        radioButton_digital = new JRadioButton("digital numeration");
+        radioButton_digital = new JRadioButton(StringLiterals.RADIO_BUTTON_NUMERATION_DIALOG_DIGITAL);
         radioButton_digital.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 updateSpinner();
@@ -86,7 +87,7 @@ public class NumerationDialog extends JDialog {
         radioButton_digital.setSelected(digital);
         getContentPane().add(radioButton_digital);
 
-        radioButton_alphabetical = new JRadioButton("alphabetical numeration");
+        radioButton_alphabetical = new JRadioButton(StringLiterals.RADIO_BUTTON_NUMERATION_DIALOG_ALPHABETICAL);
         radioButton_alphabetical.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 updateSpinner();
@@ -127,11 +128,11 @@ public class NumerationDialog extends JDialog {
         updateSpinner();
         getContentPane().add(spinner_startingNumber);
 
-        label_startingNumber = new JLabel("Starting number:");
+        label_startingNumber = new JLabel(StringLiterals.LABEL_NUMERATION_DIALOG_STARTING_NUMBER);
         label_startingNumber.setBounds(8, 62, 104, 25);
         getContentPane().add(label_startingNumber);
 
-        button_ok = new JButton("OK");
+        button_ok = new JButton(StringLiterals.BUTTON_GENERAL_OK);
         button_ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int dig = 0;
@@ -146,7 +147,7 @@ public class NumerationDialog extends JDialog {
         button_ok.setBounds(8, 100, 89, 30);
         getContentPane().add(button_ok);
 
-        button_cancel = new JButton("Cancel");
+        button_cancel = new JButton(StringLiterals.BUTTON_GENERAL_CANCEL);
         button_cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 setVisible(false);

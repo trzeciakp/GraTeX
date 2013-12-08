@@ -1,11 +1,5 @@
 package pl.edu.agh.gratex.controller;
 
-import pl.edu.agh.gratex.graph.GraphElementType;
-import pl.edu.agh.gratex.gui.ToolType;
-
-/**
- *
- */
 public interface GeneralController {
     public void newGraphFile();
 

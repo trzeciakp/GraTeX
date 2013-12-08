@@ -1,5 +1,7 @@
 *.class
 
+gratex.iml
+
 # Package Files #
 *.jar
 *.war

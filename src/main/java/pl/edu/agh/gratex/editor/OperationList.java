@@ -1,7 +1,8 @@
 package pl.edu.agh.gratex.editor;
 
 
-import pl.edu.agh.gratex.graph.GraphElementType;
+import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.*;
 
@@ -30,7 +31,7 @@ public class OperationList {
 
     public String undo() {
         if (iterator < 1) {
-            return "Nothing to undo";
+            return StringLiterals.INFO_NOTHING_TO_UNDO;
         } else {
             return operations.get(--iterator).undoOperation();
         }
@@ -38,7 +39,7 @@ public class OperationList {
 
     public String redo() {
         if (iterator == operations.size()) {
-            return "Nothing to redo";
+            return StringLiterals.INFO_NOTHING_TO_REDO;
         } else {
             return operations.get(iterator++).doOperation();
         }

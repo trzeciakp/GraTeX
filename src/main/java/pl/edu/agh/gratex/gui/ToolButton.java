@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.ToolController;
 
 import javax.imageio.ImageIO;

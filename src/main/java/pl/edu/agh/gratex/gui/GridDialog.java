@@ -1,5 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,7 +36,7 @@ public class GridDialog extends JDialog {
     }
 
     public GridDialog(MainWindow _mainWindow, int _initialX, int _initialY) {
-        super(_mainWindow, "Grid properties", true);
+        super(_mainWindow, StringLiterals.TITLE_GRID_DIALOG, true);
         initialX = _initialX;
         initialY = _initialY;
         mainWindow = _mainWindow;
@@ -49,7 +51,7 @@ public class GridDialog extends JDialog {
         setSize(210, 157);
         getContentPane().setLayout(null);
 
-        label_horizontalSpacing = new JLabel("Horizontal spacing (px):");
+        label_horizontalSpacing = new JLabel(StringLiterals.LABEL_GRID_DIALOG_HORIZONTAL_SPACING);
         label_horizontalSpacing.setBounds(8, 11, 140, 25);
         getContentPane().add(label_horizontalSpacing);
 
@@ -58,7 +60,7 @@ public class GridDialog extends JDialog {
         spinner_horizontalSpacing.setBounds(144, 11, 50, 25);
         getContentPane().add(spinner_horizontalSpacing);
 
-        label_verticalSpacing = new JLabel("Vertical spacing (px):");
+        label_verticalSpacing = new JLabel(StringLiterals.LABEL_GRID_DIALOG_VERTICAL_SPACING);
         label_verticalSpacing.setBounds(8, 47, 140, 25);
         getContentPane().add(label_verticalSpacing);
 
@@ -67,7 +69,7 @@ public class GridDialog extends JDialog {
         spinner_verticalSpacing.setBounds(144, 47, 50, 25);
         getContentPane().add(spinner_verticalSpacing);
 
-        button_ok = new JButton("OK");
+        button_ok = new JButton(StringLiterals.BUTTON_GENERAL_OK);
         button_ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 result = new int[]{(Integer) spinner_horizontalSpacing.getValue(), (Integer) spinner_verticalSpacing.getValue()};
@@ -78,7 +80,7 @@ public class GridDialog extends JDialog {
         button_ok.setBounds(8, 83, 89, 30);
         getContentPane().add(button_ok);
 
-        button_cancel = new JButton("Cancel");
+        button_cancel = new JButton(StringLiterals.BUTTON_GENERAL_CANCEL);
         button_cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 setVisible(false);

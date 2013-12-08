@@ -1,5 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +12,6 @@ import java.net.URL;
 
 public class AboutDialog extends JDialog {
     private static final long serialVersionUID = 2858349132119113260L;
-    private final static String DIALOG_TEXT = "GraTeX version 1.0\r\n\r\nAuthors: Łukasz Opioła, Piotr Trzeciak\r\n\r\nUniversity of Science and Technology\r\nKraków, Poland, 2012";
-    private final static String DIALOG_TITLE = "About GraTeX";
 
     protected JRootPane createRootPane() {
         ActionListener actionListener = new ActionListener() {
@@ -27,7 +27,7 @@ public class AboutDialog extends JDialog {
     }
 
     public AboutDialog(MainWindow parent) {
-        super(parent, DIALOG_TITLE, true);
+        super(parent, StringLiterals.TITLE_ABOUT_DIALOG, true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(300, 137);
         setResizable(false);
@@ -47,7 +47,7 @@ public class AboutDialog extends JDialog {
             }
         };
         txtrGratexVersion
-                .setText(DIALOG_TEXT);
+                .setText(StringLiterals.MESSAGE_ABOUT_DIALOG);
         txtrGratexVersion.setFocusable(false);
         txtrGratexVersion.setBounds(0, 0, 294, 108);
         getContentPane().add(txtrGratexVersion);

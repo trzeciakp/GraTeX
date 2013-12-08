@@ -1,13 +1,10 @@
 package pl.edu.agh.gratex.controller;
 
-import pl.edu.agh.gratex.graph.GraphElementType;
+import pl.edu.agh.gratex.constants.GraphElementType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
 public class ModeControllerImpl implements ModeController {
     private GraphElementType mode = GraphElementType.VERTEX;
     private List<ModeListener> listeners = new ArrayList<>();
