@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -54,6 +55,13 @@ public class ControlManager {
         mainWindow = _mainWindow;
     }
 
+    public static GraphElementType getMode() {
+        return GraphElementType.values()[mode - 1];
+    }
+
+    public static ToolType getTool() {
+        return ToolType.values()[tool - 1];
+    }
     public static void applyChange() {
         selection.clear();
         mainWindow.panel_propertyEditor.setMode(ControlManager.mode);
@@ -84,31 +92,20 @@ public class ControlManager {
     }
 
     public static void selectAll() {
-        if (tool == SELECT_TOOL) {
+        if (getTool() == ToolType.SELECT) {
             selection.clear();
-            if (mode == VERTEX_MODE) {
-                selection.addAll(ControlManager.graph.getVertices());
-            } else if (mode == EDGE_MODE) {
-                selection.addAll(ControlManager.graph.getEdges());
-            } else if (mode == LABEL_V_MODE) {
-                selection.addAll(ControlManager.graph.getLabelsV());
-            } else {
-                selection.addAll(ControlManager.graph.getLabelsE());
-            }
+            selection.addAll(ControlManager.graph.getElements(getMode()));
             updatePropertyChangeOperationStatus(true);
             mainWindow.updateWorkspace();
         }
     }
 
-    public static void addToSelection(LinkedList<GraphElement> elements, boolean controlDown) {
+    public static void addToSelection(List<GraphElement> elements, boolean controlDown) {
         if (!controlDown) {
             selection.clear();
             selection.addAll(elements);
         } else {
-            Iterator<GraphElement> it = elements.listIterator();
-            GraphElement temp;
-            while (it.hasNext()) {
-                temp = it.next();
+            for(GraphElement temp : elements) {
                 if (selection.contains(temp)) {
                     selection.remove(temp);
                 } else {
@@ -116,7 +113,6 @@ public class ControlManager {
                 }
             }
         }
-
         updatePropertyChangeOperationStatus(true);
     }
 
@@ -305,46 +301,6 @@ public class ControlManager {
         if (templateGraph != null) {
             operations.addNewOperation(new TemplateChangeOperation(graph, templateGraph));
             publishInfo(operations.redo());
-        }
-    }
-
-    public static void processActionButtonClicking(int option) {
-        switch (option) {
-            case 0:
-                newGraphFile();
-                break;
-            case 1:
-                openGraphFile();
-                break;
-            case 2:
-                saveGraphFile(false);
-                break;
-            case 3:
-                editGraphTemplate();
-                break;
-            case 4:
-                copyToClipboard();
-                break;
-            case 5:
-                pasteFromClipboard();
-                break;
-            case 6:
-                undo();
-                break;
-            case 7:
-                redo();
-                break;
-            case 8:
-                toggleGrid();
-                break;
-            case 9:
-                setNumeration();
-                break;
-            case 10:
-                parseToTeX();
-                break;
-            default:
-                break;
         }
     }
 

@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URL;
 
+//TODO it is never used
 public class ModeSwitch extends JComponent implements MouseListener {
     private static final long serialVersionUID = -3210943331545567524L;
 

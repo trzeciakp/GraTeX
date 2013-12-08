@@ -2,17 +2,14 @@ package pl.edu.agh.gratex.graph;
 
 
 import pl.edu.agh.gratex.gui.ControlManager;
-import pl.edu.agh.gratex.model.EdgePropertyModel;
-import pl.edu.agh.gratex.model.LabelEdgePropertyModel;
-import pl.edu.agh.gratex.model.LabelVertexPropertyModel;
-import pl.edu.agh.gratex.model.VertexPropertyModel;
+import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
 import java.awt.geom.Area;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
+import java.util.List;
 
 
 public class Graph implements Serializable {
@@ -28,6 +25,9 @@ public class Graph implements Serializable {
     private LabelVertexPropertyModel labelVDefaultModel;
     private LabelEdgePropertyModel labelEDefaultModel;
 
+    private EnumMap<GraphElementType, List<? extends GraphElement>> elements;
+    private EnumMap<GraphElementType, List<? extends PropertyModel>> defaultModels;
+
     public int gridResolutionX = 20;
     public int gridResolutionY = 20;
     public boolean gridOn;
@@ -41,11 +41,15 @@ public class Graph implements Serializable {
     public boolean digitalNumeration = true;
 
     public Graph() {
-        setVertices(new LinkedList<Vertex>());
+        elements = new EnumMap<GraphElementType, List<? extends GraphElement>>(GraphElementType.class);
+        for(GraphElementType type : GraphElementType.values()) {
+            elements.put(type, new LinkedList<GraphElement>());
+            //defaultModels(type, )
+        }
+        /*setVertices(new LinkedList<Vertex>());
         setEdges(new LinkedList<Edge>());
         setLabelsV(new LinkedList<LabelV>());
-        setLabelsE(new LinkedList<LabelE>());
-
+        setLabelsE(new LinkedList<LabelE>());*/
         initDefaultModels();
 
         usedNumber = new boolean[maxNumber];
@@ -231,6 +235,7 @@ public class Graph implements Serializable {
     }
 
     public void initDefaultModels() {
+        //TODO
         setVertexDefaultModel(new VertexPropertyModel());
         getVertexDefaultModel().number = -1;
         getVertexDefaultModel().radius = 40;
@@ -264,36 +269,59 @@ public class Graph implements Serializable {
         getLabelEDefaultModel().horizontalPlacement = 0;
     }
 
-    public LinkedList<Vertex> getVertices() {
-        return vertices;
+    public List<Vertex> getVertices() {
+        return (List<Vertex>) elements.get(GraphElementType.VERTEX);
+        //return vertices;
     }
 
-    public void setVertices(LinkedList<Vertex> vertices) {
-        this.vertices = vertices;
+    public void setVertices(List<Vertex> vertices) {
+        this.elements.put(GraphElementType.VERTEX, vertices);
+        //this.vertices = vertices;
     }
 
-    public LinkedList<Edge> getEdges() {
-        return edges;
+    public List<Edge> getEdges() {
+        return (List<Edge>) elements.get(GraphElementType.EDGE);
     }
 
-    public void setEdges(LinkedList<Edge> edges) {
-        this.edges = edges;
+    public void setEdges(List<Edge> edges) {
+        this.elements.put(GraphElementType.EDGE, edges);
+        //this.edges = edges;
     }
 
-    public LinkedList<LabelV> getLabelsV() {
-        return labelsV;
+    public List<LabelV> getLabelsV() {
+        return (List<LabelV>) elements.get(GraphElementType.LABEL_VERTEX);
+        //return labelsV;
     }
 
     public void setLabelsV(LinkedList<LabelV> labelsV) {
-        this.labelsV = labelsV;
+        this.elements.put(GraphElementType.LABEL_VERTEX, labelsV);
+        //this.labelsV = labelsV;
     }
 
-    public LinkedList<LabelE> getLabelsE() {
-        return labelsE;
+    public List<LabelE> getLabelsE() {
+        return (List<LabelE>) elements.get(GraphElementType.LABEL_EDGE);
+        //return labelsE;
     }
 
     public void setLabelsE(LinkedList<LabelE> labelsE) {
-        this.labelsE = labelsE;
+        this.elements.put(GraphElementType.LABEL_EDGE, labelsE);
+        //this.labelsE = labelsE;
+    }
+
+    public List<? extends GraphElement> getElements(GraphElementType type) {
+        return elements.get(type);
+    }
+
+    public List<? extends GraphElement> getAllElements() {
+        List<GraphElement> result = new LinkedList<>();
+        for(GraphElementType type : GraphElementType.values()) {
+            result.addAll(elements.get(type));
+        }
+        return result;
+    }
+
+    public Map<GraphElementType, List<? extends GraphElement>> getElementsMap() {
+        return elements;
     }
 
     public VertexPropertyModel getVertexDefaultModel() {

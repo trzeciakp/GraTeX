@@ -1,7 +1,6 @@
 package pl.edu.agh.gratex.gui;
 
-import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.GeneralControllerTmpImpl;
+import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.property.PanelPropertyEditor;
 
 import javax.imageio.ImageIO;
@@ -32,7 +31,7 @@ public class MainWindow extends JFrame {
         setIconImage(ImageIO.read(url));
 
         ControlManager.passWindowHandle(this);
-        initializeFrame(new GeneralControllerTmpImpl());
+        initializeFrame(new GeneralControllerTmpImpl(), new ToolControllerImpl(), new ModeControllerImpl());
         initializeEvents();
         updateFunctions();
         ControlManager.newGraphFile();
@@ -135,7 +134,7 @@ public class MainWindow extends JFrame {
         });
     }
 
-    private void initializeFrame(GeneralController generalController) {
+    private void initializeFrame(GeneralController generalController, ToolController toolController, ModeController modeController ) {
         setMinimumSize(new Dimension(800, 500));
         setSize(1038, 768);
         setLocationRelativeTo(null);
@@ -167,7 +166,7 @@ public class MainWindow extends JFrame {
         label_info.setBounds(10, 430, 774, 36);
         getContentPane().add(label_info);
 
-        panel_toolbox = new PanelToolbox(generalController);
+        panel_toolbox = new PanelToolbox(toolController, modeController);
         panel_toolbox.setBounds(10, 85, 90, 344);
         getContentPane().add(panel_toolbox);
 

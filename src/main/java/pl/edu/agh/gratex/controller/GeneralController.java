@@ -44,5 +44,5 @@ public interface GeneralController {
 
     ToolType getTool();
 
-    Object getMode();
+    GraphElementType getMode();
 }

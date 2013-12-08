@@ -10,6 +10,7 @@ public class Design {
 
     public static Color currentModeColor;
 
+    //TODO method is not used
     public static void changeMode(int mode) {
         switch (mode) {
             case 1:

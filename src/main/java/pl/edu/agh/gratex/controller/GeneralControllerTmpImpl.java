@@ -102,7 +102,8 @@ public class GeneralControllerTmpImpl implements GeneralController {
     }
 
     @Override
-    public Object getMode() {
+    public GraphElementType getMode() {
+        //TODO
         return GraphElementType.values()[ControlManager.mode - 1];
     }
 }

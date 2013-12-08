@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
-import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.ModeController;
+import pl.edu.agh.gratex.controller.ToolController;
 import pl.edu.agh.gratex.graph.GraphElementType;
 
 import javax.swing.*;
@@ -13,12 +14,14 @@ public class PanelToolbox extends JPanel {
     private static final long serialVersionUID = 1477920757019877516L;
 ;
     private JComboBox<GraphElementType> comboBox_mode;
-    private GeneralController generalController;
+    private ToolController toolController;
+    private ModeController modeController;
     private final EnumMap<Tools,ToolButton> toolButtons;
 
-    public PanelToolbox(GeneralController generalController) {
+    public PanelToolbox(ToolController toolController, ModeController modeController) {
         super();
-        this.generalController = generalController;
+        this.toolController = toolController;
+        this.modeController = modeController;
         setLayout(null);
 
         comboBox_mode = new JComboBox<>(GraphElementType.values());
@@ -30,15 +33,14 @@ public class PanelToolbox extends JPanel {
 
         comboBox_mode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                PanelToolbox.this.generalController.changeMode((GraphElementType) comboBox_mode.getSelectedItem());
-
+                PanelToolbox.this.modeController.setMode((GraphElementType) comboBox_mode.getSelectedItem());
                 toolButtons.get(Tools.ADD).requestFocus();
             }
         });
         add(comboBox_mode);
         int y = 65;
         for(Tools tool : Tools.values()) {
-            ToolButton toolButton = new ToolButton(tool.getImageActiveName(), tool.getImagePassiveName(), generalController, tool.getToolType());
+            ToolButton toolButton = new ToolButton(tool.getImageActiveName(), tool.getImagePassiveName(), toolController, tool.getToolType());
             toolButton.setToolTipText(tool.getTooltip());
             toolButton.setFocusable(false);
             toolButton.setBounds(20, y, 50, 50);
@@ -50,9 +52,9 @@ public class PanelToolbox extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //TODO
-        if (comboBox_mode.getSelectedItem() != generalController.getMode()) {
-            comboBox_mode.setSelectedItem(generalController.getMode());
+        //TODO it should be changed to ModeListener
+        if (comboBox_mode.getSelectedItem() != modeController.getMode()) {
+            comboBox_mode.setSelectedItem(modeController.getMode());
         }
         paintChildren(g);
     }
