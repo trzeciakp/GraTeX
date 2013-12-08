@@ -161,7 +161,6 @@ public class StringLiterals {
     // MainWindow
     public static String INFO_MODE_AND_TOOL(GraphElementType mode, ToolType tool) {
         String tipPart1 = mode.toString() + " mode - ";
-        String tipPart2 = null;
         String tipPart3 = null;
         String tipPart4a = null;
         String tipPart4b = null;
@@ -190,7 +189,7 @@ public class StringLiterals {
         }
 
 
-        tipPart2 = tool.toString() + " tool. ";
+        String tipPart2 = tool.toString() + " tool. ";
         switch (tool) {
             case ADD: {
                 tipPart3 = "Left-click to add " + tipPart4a;
