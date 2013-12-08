@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.graph.GraphElementType;
-import pl.edu.agh.gratex.model.ToolType;
+import pl.edu.agh.gratex.gui.ToolType;
 
 /**
  *
@@ -41,4 +41,8 @@ public interface GeneralController {
     void deleteSelection();
 
     void changeTool(ToolType toolType);
+
+    ToolType getTool();
+
+    Object getMode();
 }

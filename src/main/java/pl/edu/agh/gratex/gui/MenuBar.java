@@ -2,7 +2,6 @@ package pl.edu.agh.gratex.gui;
 
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.graph.GraphElementType;
-import pl.edu.agh.gratex.model.ToolType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

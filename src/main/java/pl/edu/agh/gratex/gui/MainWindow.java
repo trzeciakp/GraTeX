@@ -167,7 +167,7 @@ public class MainWindow extends JFrame {
         label_info.setBounds(10, 430, 774, 36);
         getContentPane().add(label_info);
 
-        panel_toolbox = new PanelToolbox();
+        panel_toolbox = new PanelToolbox(generalController);
         panel_toolbox.setBounds(10, 85, 90, 344);
         getContentPane().add(panel_toolbox);
 

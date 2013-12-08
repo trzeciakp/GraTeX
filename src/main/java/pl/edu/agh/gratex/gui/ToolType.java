@@ -1,4 +1,4 @@
-package pl.edu.agh.gratex.model;
+package pl.edu.agh.gratex.gui;
 
 /**
  *
