@@ -66,7 +66,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     public void updateFunctions() {
         menuItems.get(MenuItem.COPY).setEnabled(false);
         menuItems.get(MenuItem.PASTE).setEnabled(false);
-        if (ControlManager.mode == ControlManager.VERTEX_MODE && ControlManager.selection.size() > 0) {
+        if (ControlManager.getMode() == GraphElementType.VERTEX && ControlManager.selection.size() > 0) {
             menuItems.get(MenuItem.COPY).setEnabled(true);
         }
         if (ControlManager.currentCopyPasteOperation != null) {
@@ -76,6 +76,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
 
     @Override
     public void fireModeChanged(GraphElementType previousMode, GraphElementType currentMode) {
+        //TODO add setSelected false to previousMode
         switch (currentMode) {
             case VERTEX:
                 menuItems.get(MenuItem.VERTEX_MODE).setSelected(true);

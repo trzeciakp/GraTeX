@@ -8,7 +8,7 @@ public class AddOperation extends Operation {
     private int type;
 
     public AddOperation(GraphElement _element) {
-        type = ControlManager.mode;
+        type = ControlManager.getMode().ordinal()+1;
         element = _element;
     }
 

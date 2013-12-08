@@ -13,12 +13,12 @@ public class RemoveOperation extends Operation {
     private LinkedList<Edge> connectedEdges;
 
     public RemoveOperation(LinkedList<GraphElement> _elements) {
-        type = ControlManager.mode;
+        type = ControlManager.getMode().ordinal()+1;
         elements = new LinkedList<GraphElement>(_elements);
     }
 
     public RemoveOperation(GraphElement _element) {
-        type = ControlManager.mode;
+        type = ControlManager.getMode().ordinal()+1;
         elements = new LinkedList<GraphElement>();
         elements.add(_element);
     }

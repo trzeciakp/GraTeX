@@ -75,7 +75,7 @@ public class Graph implements Serializable {
         LinkedList<GraphElement> result = new LinkedList<GraphElement>();
         Area rect = new Area(area);
 
-        if (ControlManager.mode == ControlManager.VERTEX_MODE) {
+        if (ControlManager.getMode() == GraphElementType.VERTEX) {
             Iterator<Vertex> itv = getVertices().listIterator();
             Vertex temp = null;
             while (itv.hasNext()) {
@@ -86,7 +86,7 @@ public class Graph implements Serializable {
                     result.add(temp);
                 }
             }
-        } else if (ControlManager.mode == ControlManager.EDGE_MODE) {
+        } else if (ControlManager.getMode() == GraphElementType.EDGE) {
             Iterator<Edge> ite = getEdges().listIterator();
             Edge temp = null;
             while (ite.hasNext()) {
@@ -95,7 +95,7 @@ public class Graph implements Serializable {
                     result.add(temp);
                 }
             }
-        } else if (ControlManager.mode == ControlManager.LABEL_V_MODE) {
+        } else if (ControlManager.getMode() == GraphElementType.LABEL_VERTEX) {
             Iterator<LabelV> itlv = getLabelsV().listIterator();
             LabelV temp = null;
             while (itlv.hasNext()) {
@@ -104,7 +104,7 @@ public class Graph implements Serializable {
                     result.add(temp);
                 }
             }
-        } else if (ControlManager.mode == ControlManager.LABEL_E_MODE) {
+        } else if (ControlManager.getMode() == GraphElementType.LABEL_EDGE) {
             Iterator<LabelE> itle = getLabelsE().listIterator();
             LabelE temp = null;
             while (itle.hasNext()) {

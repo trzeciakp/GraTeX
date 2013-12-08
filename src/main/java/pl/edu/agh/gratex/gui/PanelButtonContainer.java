@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.graph.GraphElementType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -66,7 +67,7 @@ public class PanelButtonContainer extends JPanel {
     public void updateFunctions() {
         buttons.get(ActionType.COPY_SUBGRAPH).setEnabled(false);
         buttons.get(ActionType.PASTE_SUBGRAPH).setEnabled(false);
-        if (ControlManager.mode == ControlManager.VERTEX_MODE && ControlManager.selection.size() > 0) {
+        if (ControlManager.getMode() == GraphElementType.VERTEX && ControlManager.selection.size() > 0) {
             buttons.get(ActionType.COPY_SUBGRAPH).setEnabled(true);
         }
         if (ControlManager.currentCopyPasteOperation != null) {
