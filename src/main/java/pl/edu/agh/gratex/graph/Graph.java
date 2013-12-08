@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.graph;
 
 
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -42,7 +43,7 @@ public class Graph implements Serializable {
     public boolean digitalNumeration = true;
 
     public Graph() {
-        elements = new EnumMap<GraphElementType, List<? extends GraphElement>>(GraphElementType.class);
+        elements = new EnumMap<>(GraphElementType.class);
         for(GraphElementType type : GraphElementType.values()) {
             elements.put(type, new LinkedList<GraphElement>());
             //defaultModels(type, )
@@ -76,7 +77,7 @@ public class Graph implements Serializable {
         LinkedList<GraphElement> result = new LinkedList<GraphElement>();
         Area rect = new Area(area);
 
-        if (ControlManager.getMode() == GraphElementType.VERTEX) {
+        if (ControlManager.getMode() == ModeType.VERTEX) {
             Iterator<Vertex> itv = getVertices().listIterator();
             Vertex temp = null;
             while (itv.hasNext()) {
@@ -87,7 +88,7 @@ public class Graph implements Serializable {
                     result.add(temp);
                 }
             }
-        } else if (ControlManager.getMode() == GraphElementType.EDGE) {
+        } else if (ControlManager.getMode() == ModeType.EDGE) {
             Iterator<Edge> ite = getEdges().listIterator();
             Edge temp = null;
             while (ite.hasNext()) {
@@ -96,7 +97,7 @@ public class Graph implements Serializable {
                     result.add(temp);
                 }
             }
-        } else if (ControlManager.getMode() == GraphElementType.LABEL_VERTEX) {
+        } else if (ControlManager.getMode() == ModeType.LABEL_VERTEX) {
             Iterator<LabelV> itlv = getLabelsV().listIterator();
             LabelV temp = null;
             while (itlv.hasNext()) {
@@ -105,7 +106,7 @@ public class Graph implements Serializable {
                     result.add(temp);
                 }
             }
-        } else if (ControlManager.getMode() == GraphElementType.LABEL_EDGE) {
+        } else if (ControlManager.getMode() == ModeType.LABEL_EDGE) {
             Iterator<LabelE> itle = getLabelsE().listIterator();
             LabelE temp = null;
             while (itle.hasNext()) {

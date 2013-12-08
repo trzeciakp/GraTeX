@@ -1,8 +1,8 @@
 package pl.edu.agh.gratex.editor;
 
 
+import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.*;
 
@@ -50,7 +50,7 @@ public class OperationList {
             if (operations.getLast() instanceof PropertyChangeOperation) {
                 PropertyChangeOperation operation = (PropertyChangeOperation) operations.getLast();
                 if (operation.selectionID == _selectionID) {
-                    if (ControlManager.getMode() == GraphElementType.VERTEX) {
+                    if (ControlManager.getMode() == ModeType.VERTEX) {
                         VertexPropertyModel oldInitialModel = (VertexPropertyModel) operation.initialModel;
                         VertexPropertyModel oldEndModel = (VertexPropertyModel) operation.endModel;
                         VertexPropertyModel newModel = (VertexPropertyModel) pm;
@@ -81,7 +81,7 @@ public class OperationList {
                             ControlManager.publishInfo(redo());
                             return true;
                         }
-                    } else if (ControlManager.getMode() == GraphElementType.EDGE) {
+                    } else if (ControlManager.getMode() == ModeType.EDGE) {
                         EdgePropertyModel oldInitialModel = (EdgePropertyModel) operation.initialModel;
                         EdgePropertyModel oldEndModel = (EdgePropertyModel) operation.endModel;
                         EdgePropertyModel newModel = (EdgePropertyModel) pm;
@@ -108,7 +108,7 @@ public class OperationList {
                             ControlManager.publishInfo(redo());
                             return true;
                         }
-                    } else if (ControlManager.getMode() == GraphElementType.LABEL_VERTEX) {
+                    } else if (ControlManager.getMode() == ModeType.LABEL_VERTEX) {
                         LabelVertexPropertyModel oldInitialModel = (LabelVertexPropertyModel) operation.initialModel;
                         LabelVertexPropertyModel oldEndModel = (LabelVertexPropertyModel) operation.endModel;
                         LabelVertexPropertyModel newModel = (LabelVertexPropertyModel) pm;

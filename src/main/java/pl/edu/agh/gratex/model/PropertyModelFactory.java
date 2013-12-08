@@ -1,13 +1,13 @@
 package pl.edu.agh.gratex.model;
 
-import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.constants.ModeType;
 
 /**
  *
  */
 public class PropertyModelFactory {
 
-    public PropertyModel create(GraphElementType type) {
+    public PropertyModel create(ModeType type) {
         switch (type) {
             case VERTEX:
                 return createVertexPropertyModel();

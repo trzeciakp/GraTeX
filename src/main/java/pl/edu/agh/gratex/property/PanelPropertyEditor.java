@@ -1,8 +1,8 @@
 package pl.edu.agh.gratex.property;
 
+import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.controller.ModeController;
 import pl.edu.agh.gratex.controller.ModeListener;
-import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import javax.swing.*;
@@ -12,9 +12,9 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
     private static final long serialVersionUID = -4423821822436250916L;
 
     //private int mode = 1;
-    private GraphElementType mode = GraphElementType.VERTEX;
+    private ModeType mode = ModeType.VERTEX;
     private JLabel label_title;
-    private EnumMap<GraphElementType, AbstractPropertyPanel> panelsMap = new EnumMap<GraphElementType, AbstractPropertyPanel>(GraphElementType.class);
+    private EnumMap<ModeType, AbstractPropertyPanel> panelsMap = new EnumMap<>(ModeType.class);
 
     public PanelPropertyEditor(ModeController modeController) {
         modeController.addModeListener(this);
@@ -27,8 +27,8 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
     }
 
     //TODO maybe move from here
-    private AbstractPropertyPanel createPropertyPanel(GraphElementType graphElementType) {
-        switch (graphElementType) {
+    private AbstractPropertyPanel createPropertyPanel(ModeType modeType) {
+        switch (modeType) {
             case VERTEX:
                 return new VertexPropertyPanel();
             case EDGE:
@@ -49,9 +49,9 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
         label_title.setBounds(10, 11, 180, 14);
         add(label_title);
 
-        for(GraphElementType graphElementType :GraphElementType.values()) {
-            AbstractPropertyPanel propertyPanel = createPropertyPanel(graphElementType);
-            panelsMap.put(graphElementType, propertyPanel);
+        for(ModeType modeType : ModeType.values()) {
+            AbstractPropertyPanel propertyPanel = createPropertyPanel(modeType);
+            panelsMap.put(modeType, propertyPanel);
             propertyPanel.setVisible(false);
             propertyPanel.setBounds(10, 30, 180, 340);
             add(propertyPanel);
@@ -72,7 +72,7 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
 
     public void setMode(int m) {
         panelsMap.get(mode).setVisible(false);
-        mode = GraphElementType.values()[m-1];
+        mode = ModeType.values()[m-1];
         panelsMap.get(mode).setVisible(true);
     }
 
@@ -86,17 +86,17 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
     }
 
     public void disableLabelEdition() {
-        disableLabelEdition(GraphElementType.LABEL_EDGE);
-        disableLabelEdition(GraphElementType.LABEL_VERTEX);
+        disableLabelEdition(ModeType.LABEL_EDGE);
+        disableLabelEdition(ModeType.LABEL_VERTEX);
     }
 
-    private void disableLabelEdition(GraphElementType type) {
+    private void disableLabelEdition(ModeType type) {
         panelsMap.get(type).components.get(0).setEnabled(false);
         panelsMap.get(type).components.get(0).setFocusable(false);
     }
 
     @Override
-    public void fireModeChanged(GraphElementType previousMode, GraphElementType currentMode) {
+    public void fireModeChanged(ModeType previousMode, ModeType currentMode) {
         panelsMap.get(previousMode).setVisible(false);
         panelsMap.get(currentMode).setVisible(true);
         mode = currentMode;

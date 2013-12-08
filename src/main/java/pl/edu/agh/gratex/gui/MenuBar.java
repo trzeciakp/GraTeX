@@ -1,10 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
-import pl.edu.agh.gratex.constants.MenuBarItem;
-import pl.edu.agh.gratex.constants.MenuBarSubmenu;
-import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.constants.*;
 import pl.edu.agh.gratex.controller.*;
-import pl.edu.agh.gratex.constants.GraphElementType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -68,7 +65,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     public void updateFunctions() {
         menuItems.get(MenuBarItem.COPY).setEnabled(false);
         menuItems.get(MenuBarItem.PASTE).setEnabled(false);
-        if (ControlManager.mode == ControlManager.VERTEX_MODE && ControlManager.selection.size() > 0) {
+        if (ControlManager.getMode() == ModeType.VERTEX && ControlManager.selection.size() > 0) {
             menuItems.get(MenuBarItem.COPY).setEnabled(true);
         }
         if (ControlManager.currentCopyPasteOperation != null) {
@@ -77,7 +74,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     }
 
     @Override
-    public void fireModeChanged(GraphElementType previousMode, GraphElementType currentMode) {
+    public void fireModeChanged(ModeType previousMode, ModeType currentMode) {
         switch (currentMode) {
             case VERTEX:
                 menuItems.get(MenuBarItem.VERTEX_MODE).setSelected(true);
@@ -220,28 +217,28 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        modeController.setMode(GraphElementType.VERTEX);
+                        modeController.setMode(ModeType.VERTEX);
                     }
                 };
             case EDGE_MODE:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        modeController.setMode(GraphElementType.EDGE);
+                        modeController.setMode(ModeType.EDGE);
                     }
                 };
             case LABELV_MODE:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        modeController.setMode(GraphElementType.LABEL_VERTEX);
+                        modeController.setMode(ModeType.LABEL_VERTEX);
                     }
                 };
             case LABELE_MODE:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        modeController.setMode(GraphElementType.LABEL_EDGE);
+                        modeController.setMode(ModeType.LABEL_EDGE);
                     }
                 };
             case ADD_TOOL:

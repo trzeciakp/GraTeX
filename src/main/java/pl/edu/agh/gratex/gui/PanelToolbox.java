@@ -1,10 +1,10 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolButtonType;
 import pl.edu.agh.gratex.controller.ModeController;
 import pl.edu.agh.gratex.controller.ToolController;
-import pl.edu.agh.gratex.constants.GraphElementType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ import java.util.EnumMap;
 public class PanelToolbox extends JPanel {
     private static final long serialVersionUID = 1477920757019877516L;
 ;
-    private JComboBox<GraphElementType> comboBox_mode;
+    private JComboBox<ModeType> comboBox_mode;
     private ToolController toolController;
     private ModeController modeController;
     private final EnumMap<ToolButtonType,ToolButton> toolButtons;
@@ -26,7 +26,7 @@ public class PanelToolbox extends JPanel {
         this.modeController = modeController;
         setLayout(null);
 
-        comboBox_mode = new JComboBox<>(GraphElementType.values());
+        comboBox_mode = new JComboBox<>(ModeType.values());
         comboBox_mode.setSelectedIndex(0);
         comboBox_mode.setBounds(0, 11, 90, 30);
         comboBox_mode.setToolTipText(StringLiterals.COMBOBOX_PANEL_TOOLBOX_MODE);
@@ -35,7 +35,7 @@ public class PanelToolbox extends JPanel {
 
         comboBox_mode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                PanelToolbox.this.modeController.setMode((GraphElementType) comboBox_mode.getSelectedItem());
+                PanelToolbox.this.modeController.setMode((ModeType) comboBox_mode.getSelectedItem());
                 toolButtons.get(ToolButtonType.ADD).requestFocus();
             }
         });

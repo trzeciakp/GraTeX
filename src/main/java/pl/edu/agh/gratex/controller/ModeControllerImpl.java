@@ -1,23 +1,23 @@
 package pl.edu.agh.gratex.controller;
 
-import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.constants.ModeType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModeControllerImpl implements ModeController {
-    private GraphElementType mode = GraphElementType.VERTEX;
+    private ModeType mode = ModeType.VERTEX;
     private List<ModeListener> listeners = new ArrayList<>();
 
     @Override
-    public GraphElementType getMode() {
+    public ModeType getMode() {
         return mode;
     }
 
     @Override
-    public void setMode(GraphElementType graphElementType) {
-        GraphElementType previousMode = mode;
-        mode = graphElementType;
+    public void setMode(ModeType modeType) {
+        ModeType previousMode = mode;
+        mode = modeType;
         for (ModeListener listener : listeners) {
             listener.fireModeChanged(previousMode, mode);
         }

@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.gui;
 
 
-import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.ModeController;
 import pl.edu.agh.gratex.controller.ModeControllerImpl;
@@ -129,7 +129,7 @@ public class GraphsTemplateDialog extends JDialog {
 
                 //panel_propertyEditor.setMode(tabbedPane.getSelectedIndex() + 1);
                 //TODO
-                modeController.setMode(GraphElementType.values()[tabbedPane.getSelectedIndex()]);
+                modeController.setMode(ModeType.values()[tabbedPane.getSelectedIndex()]);
                 refreshModels();
             }
         });

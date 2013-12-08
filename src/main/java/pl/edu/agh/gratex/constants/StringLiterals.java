@@ -54,7 +54,6 @@ public class StringLiterals {
     public final static String MESSAGE_ABOUT_DIALOG = "GraTeX version 1.1\n\nAuthors: Łukasz Opioła, Piotr Trzeciak\n\nUniversity of Science and Technology\nKraków, Poland, 2012";
 
 
-
     //==================================================
     // Labels, buttons etc.
 
@@ -118,48 +117,63 @@ public class StringLiterals {
     }
 
     // AddOperation
-    public final static String INFO_VERTEX_ADD = "Vertex added";
-    public final static String INFO_EDGE_ADD = "Edge added";
-    public final static String INFO_LABEL_V_ADD = "Label added to a vertex";
-    public final static String INFO_LABEL_E_ADD = "Label added to an edge";
+    public final static String INFO_VERTEX_ADD = "vertex added";
+    public final static String INFO_EDGE_ADD = "edge added";
+    public final static String INFO_LABEL_V_ADD = "label added to a vertex";
+    public final static String INFO_LABEL_E_ADD = "label added to an edge";
 
     // CopyPasteOperation
-    public final static String INFO_SUBGRAPH_PASTE = "Subgraph pasted";
+    public final static String INFO_SUBGRAPH_COPY = "Supgraph copied to the clipboard";
 
     // DragOperation
-    public final static String INFO_VERTEX_MOVE = "Vertex moved";
-    public final static String INFO_EDGE_MOVE = "Edge moved";
-    public final static String INFO_LABEL_V_MOVE = "Label (vertex) moved";
-    public final static String INFO_LABEL_E_MOVE = "Label (edge) moved";
+    public final static String INFO_VERTEX_MOVE = "vertex moved";
+    public final static String INFO_EDGE_MOVE = "edge moved";
+    public final static String INFO_LABEL_V_MOVE = "label (vertex) moved";
+    public final static String INFO_LABEL_E_MOVE = "label (edge) moved";
 
     // OperationList
-    public final static String INFO_NOTHING_TO_UNDO = "Nothing to undo";
-    public final static String INFO_NOTHING_TO_REDO = "Nothing to redo";
+    public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
+    public final static String INFO_NOTHING_TO_REDO = "nothing to redo";
 
     // PropertyChangeOperation
-    public final static String INFO_PROPERTY_CHANGE = "Property changed";
+    public final static String INFO_PROPERTY_CHANGE = "property changed";
 
     // RemoveOperation
-    public static String INFO_REMOVE_ELEMENT(GraphElementType type, int number) {
-        String elementName = number > 1 ? type.getPluralName() : type.getSingularName();
+    public static String INFO_REMOVE_ELEMENT(ModeType type, int number) {
+        String elementName = number > 1 ? type.getRelatedElementType().getPluralName() : type.getRelatedElementType().getSingularName();
         String amount = number > 1 ? number + " " : "";
         return amount + elementName + " removed";
     }
 
     // TemplateChangeOperation
-    public final static String INFO_TEMPLATE_CHANGE_AND_GLOBAL_APPLY = "Template changed and applied globally";
-    public final static String INFO_TEMPLATE_CHANGE = "Template changed";
+    public final static String INFO_TEMPLATE_CHANGE_AND_GLOBAL_APPLY = "template changed and applied globally";
+    public final static String INFO_TEMPLATE_CHANGE = "template changed";
+
+    // ControlManager
+    public final static String INFO_SUBGRAPH_WHERE_TO_PASTE = "choose location for the copy of subgraph";
+    public final static String INFO_SUBGRAPH_PASTE = "subgraph pasted";
+    public final static String INFO_CANNOT_PASTE_SUBGRAPH = "cannot paste this subgraph here - vertices collide with existing ones";
+    public final static String INFO_CANNOT_CREATE_VERTEX_BOUNDARY = "cannot create a vertex here - too close to page edge";
+    public final static String INFO_CANNOT_CREATE_VERTEX_COLLISION = "cannot create a vertex here - too close to another vertex";
+    public final static String INFO_CHOOSE_EDGE_START = "Choose a starting vertex for the edge (click)";
+    public final static String INFO_CHOOSE_EDGE_END = "Now choose the target vertex (click)";
+    public final static String INFO_EDGE_ADDING_CANCELLED = "Adding edge cancelled";
+    public final static String INFO_NOTHING_TO_REMOVE = "Nothing to remove";
+    public final static String INFO_CHOOSE_VERTEX_FOR_LABEL = "Choose a vertex to attach label to";
+    public final static String INFO_CANNOT_CREATE_LABEL_V_EXISTS = "This vertex already has a label";
+    public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "This edge already has a label";
+    public final static String INFO_CHOOSE_EDGE_FOR_LABEL = "Choose an edge to attach label to";
 
     // SaveFileDialog
-    public final static String INFO_GRAPH_SAVE_OK = "Graph saved successfully";
-    public final static String INFO_GRAPH_SAVE_FAIL = "Saving graph failed. Make sure you have write permissions in the target location.";
+    public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";
+    public final static String INFO_GRAPH_SAVE_FAIL = "saving graph failed. Make sure you have write permissions in the target location.";
 
     // OpenFileDialog
-    public final static String INFO_GRAPH_OPEN_OK = "Graph loaded successfully";
-    public final static String INFO_GRAPH_OPEN_FAIL = "Loading graph failed!";
+    public final static String INFO_GRAPH_OPEN_OK = "graph loaded successfully";
+    public final static String INFO_GRAPH_OPEN_FAIL = "loading graph failed!";
 
     // MainWindow
-    public static String INFO_MODE_AND_TOOL(GraphElementType mode, ToolType tool) {
+    public static String INFO_MODE_AND_TOOL(ModeType mode, ToolType tool) {
         String tipPart1 = mode.toString() + " mode - ";
         String tipPart3 = null;
         String tipPart4a = null;
