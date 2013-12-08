@@ -277,7 +277,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /************************ USTAWIANIE BOUNDS *******************************/
 
         int spacing = 35;
-        labels = new Vector<JComponent>();
+        labels = new Vector<>();
         labels.add(labelText);
         labels.add(lblColor);
         labels.add(lblPosition);
@@ -287,7 +287,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
 
         for (int i = 0; i < labels.size(); i++)
             labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
-        components = new Vector<JComponent>();
+        components = new Vector<>();
         components.add(textField);
         components.add(comboBoxFontColor);
         components.add(spinnerPosition);

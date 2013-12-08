@@ -1,6 +1,8 @@
 package pl.edu.agh.gratex.gui;
 
 
+import pl.edu.agh.gratex.controller.ModeController;
+import pl.edu.agh.gratex.controller.ModeControllerImpl;
 import pl.edu.agh.gratex.graph.*;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -65,9 +67,10 @@ public class GraphsTemplateDialog extends JDialog {
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
 
+        ModeController modeController = new ModeControllerImpl();
         initGraph();
-        initializeFrame();
-        initializeEvents();
+        initializeFrame(modeController);
+        initializeEvents(modeController);
     }
 
     public Graph displayDialog() {
@@ -115,14 +118,16 @@ public class GraphsTemplateDialog extends JDialog {
         }
     }
 
-    private void initializeEvents() {
+    private void initializeEvents(final ModeController modeController) {
         tabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_preview);
                 ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(label_hint);
                 ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_propertyEditor);
 
-                panel_propertyEditor.setMode(tabbedPane.getSelectedIndex() + 1);
+                //panel_propertyEditor.setMode(tabbedPane.getSelectedIndex() + 1);
+                //TODO
+                modeController.setMode(GraphElementType.values()[tabbedPane.getSelectedIndex()]);
                 refreshModels();
             }
         });
@@ -254,7 +259,7 @@ public class GraphsTemplateDialog extends JDialog {
         graph.getLabelsE().add(labelE3);
     }
 
-    private void initializeFrame() {
+    private void initializeFrame(ModeController modeController) {
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBorder(new MatteBorder(0, 0, 1, 0, (Color) Color.GRAY));
         tabbedPane.setBounds(0, 0, 752, 427);
@@ -266,7 +271,7 @@ public class GraphsTemplateDialog extends JDialog {
         panel_preview = new PanelPreview(graph);
         panel_preview.setBounds(222, 42, 520, 343);
 
-        panel_propertyEditor = new PanelPropertyEditor() {
+        panel_propertyEditor = new PanelPropertyEditor(modeController) {
             private static final long serialVersionUID = 4008480073440306159L;
 
             public void valueChanged(PropertyModel model) {
@@ -278,7 +283,7 @@ public class GraphsTemplateDialog extends JDialog {
         panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
         panel_propertyEditor.setEnabled(true);
         panel_propertyEditor.disableLabelEdition();
-        panel_propertyEditor.setMode(1);
+        //panel_propertyEditor.setMode(1);
         panel_propertyEditor.setModel(graph.getVertexDefaultModel());
 
         vertexPanel = new JPanel();

@@ -11,9 +11,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Vector;
 
 
 public class EdgePropertyPanel extends AbstractPropertyPanel {
@@ -310,7 +309,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /************************ USTAWIANIE BOUNDS *******************************/
 
         int spacing = 35;
-        labels = new Vector<JComponent>();
+        labels = new ArrayList<>();
         labels.add(lblLineType);
         labels.add(lblLineSize);
         labels.add(lblLineColor);
@@ -318,10 +317,11 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         labels.add(lblArrowType);
         labels.add(lblAngle);
 
-        for (int i = 0; i < labels.size(); i++)
+        for (int i = 0; i < labels.size(); i++) {
             labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
+        }
 
-        components = new Vector<JComponent>();
+        components = new ArrayList<>();
         components.add(comboBoxLineType);
         components.add(spinnerLineSize);
         components.add(comboBoxLineColor);
@@ -329,8 +329,9 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         components.add(comboBoxArrowType);
         components.add(spinnerAngle);
 
-        for (int i = 0; i < components.size(); i++)
+        for (int i = 0; i < components.size(); i++) {
             components.get(i).setBounds(90, 24 + i * spacing, 80, 25);
+        }
         comboBoxAngle.setBounds(spinnerAngle.getBounds());
         comboBoxAngle.setVisible(false);
     }

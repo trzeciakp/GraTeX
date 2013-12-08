@@ -440,7 +440,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /************************ USTAWIANIE BOUNDS *******************************/
 
         int spacing = 35;
-        labels = new Vector<JComponent>();
+        labels = new Vector<>();
         labels.add(lblVertexType);
         labels.add(lblVertexSize);
         labels.add(lblColor);
@@ -453,7 +453,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
         for (int i = 0; i < labels.size(); i++)
             labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
-        components = new Vector<JComponent>();
+        components = new Vector<>();
         components.add(comboBoxVertexType);
         components.add(spinnerVertexSize);
         components.add(comboBoxVertexColor);

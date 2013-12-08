@@ -31,7 +31,7 @@ public class MainWindow extends JFrame {
         setIconImage(ImageIO.read(url));
 
         ControlManager.passWindowHandle(this);
-        initializeFrame(new GeneralControllerTmpImpl(), new ToolControllerImpl(), new ModeControllerImpl(), ControlManager.graph.pageWidth, ControlManager.graph.pageHeight);
+        initializeFrame(new GeneralControllerTmpImpl(), new ToolControllerImpl(), new ModeControllerTmpImpl(), ControlManager.graph.pageWidth, ControlManager.graph.pageHeight);
         initializeEvents();
         updateFunctions();
         ControlManager.newGraphFile();
@@ -151,7 +151,7 @@ public class MainWindow extends JFrame {
         scrollPane_workspace.setBounds(110, 85, 472, 344);
         getContentPane().add(scrollPane_workspace);
 
-        panel_propertyEditor = new PanelPropertyEditor();
+        panel_propertyEditor = new PanelPropertyEditor(modeController);
         panel_propertyEditor.setBounds(592, 85, 200, 380);
         panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
         getContentPane().add(panel_propertyEditor);
