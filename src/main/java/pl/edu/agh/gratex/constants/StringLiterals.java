@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.constants;
 
 import pl.edu.agh.gratex.graph.GraphElementType;
+import pl.edu.agh.gratex.gui.ToolType;
 
 public class StringLiterals {
 
@@ -160,7 +161,7 @@ public class StringLiterals {
     private final static String INFO_GRAPH_LOAD_FAIL = "Loading graph failed!";
 
     // MainWindow
-    public static String INFO_MODE_AND_TOOL(int mode, int tool) {
+    public static String INFO_MODE_AND_TOOL(GraphElementType mode, ToolType tool) {
         String tipPart1 = null;
         String tipPart2 = null;
         String tipPart3 = null;
@@ -168,25 +169,25 @@ public class StringLiterals {
         String tipPart4b = null;
 
         switch (mode) {
-            case 1: {
+            case VERTEX: {
                 tipPart1 = "VERTEX mode - ";
                 tipPart4a = "a vertex. ";
                 tipPart4b = "a vertex. ";
                 break;
             }
-            case 2: {
+            case EDGE: {
                 tipPart1 = "EDGE mode - ";
                 tipPart4a = "an edge. Hold down SHIFT for directed edge.";
                 tipPart4b = "an edge. ";
                 break;
             }
-            case 3: {
+            case LABEL_VERTEX: {
                 tipPart1 = "LABEL (vertex) mode - ";
                 tipPart4a = "a label to a vertex. ";
                 tipPart4b = "a label of a vertex. ";
                 break;
             }
-            case 4: {
+            case LABEL_EDGE: {
                 tipPart1 = "LABEL (edge) mode - ";
                 tipPart4a = "a label to an edge. Hold down SHIFT for horizontal label.";
                 tipPart4b = "a label of an edge. ";
@@ -194,17 +195,17 @@ public class StringLiterals {
             }
         }
         switch (tool) {
-            case 1: {
+            case ADD: {
                 tipPart2 = "ADD tool. ";
                 tipPart3 = "Left-click to add " + tipPart4a;
                 break;
             }
-            case 2: {
+            case REMOVE: {
                 tipPart2 = "REMOVE tool. ";
                 tipPart3 = "Left-click to remove " + tipPart4b + "Click and drag to remove all items in the area.";
                 break;
             }
-            case 3: {
+            case SELECT: {
                 tipPart2 = "SELECT tool. ";
                 tipPart3 = "Left-click to select " + tipPart4b
                         + "Click and drag to select all items in the area. CTRL + click/drag to extend selection.";

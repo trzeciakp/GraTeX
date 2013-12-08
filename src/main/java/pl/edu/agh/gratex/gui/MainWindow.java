@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.gui;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.property.PanelPropertyEditor;
 
@@ -26,7 +27,7 @@ public class MainWindow extends JFrame {
     public JLabel label_info;
 
     public MainWindow() throws Exception {
-        super("GraTeX - graph code generator for LaTeX (TikZ)");
+        super(StringLiterals.TITLE_MAIN_WINDOW);
         URL url = this.getClass().getClassLoader().getResource("images/icon.png");
         setIconImage(ImageIO.read(url));
 
@@ -45,59 +46,7 @@ public class MainWindow extends JFrame {
     public void updateFunctions() {
         panel_toolbox.repaint();
         updateWorkspace();
-
-        String tipPart1 = null;
-        String tipPart2 = null;
-        String tipPart3 = null;
-        String tipPart4a = null;
-        String tipPart4b = null;
-
-        switch (ControlManager.getMode().ordinal()+1) {
-            case 1: {
-                tipPart1 = "VERTEX mode - ";
-                tipPart4a = "a vertex. ";
-                tipPart4b = "a vertex. ";
-                break;
-            }
-            case 2: {
-                tipPart1 = "EDGE mode - ";
-                tipPart4a = "an edge. Hold down SHIFT for directed edge.";
-                tipPart4b = "an edge. ";
-                break;
-            }
-            case 3: {
-                tipPart1 = "LABEL (vertex) mode - ";
-                tipPart4a = "a label to a vertex. ";
-                tipPart4b = "a label of a vertex. ";
-                break;
-            }
-            case 4: {
-                tipPart1 = "LABEL (edge) mode - ";
-                tipPart4a = "a label to an edge. Hold down SHIFT for horizontal label.";
-                tipPart4b = "a label of an edge. ";
-                break;
-            }
-        }
-        switch (ControlManager.getTool().ordinal()+1) {
-            case 1: {
-                tipPart2 = "ADD tool. ";
-                tipPart3 = "Left-click to add " + tipPart4a;
-                break;
-            }
-            case 2: {
-                tipPart2 = "REMOVE tool. ";
-                tipPart3 = "Left-click to remove " + tipPart4b + "Click and drag to remove all items in the area.";
-                break;
-            }
-            case 3: {
-                tipPart2 = "SELECT tool. ";
-                tipPart3 = "Left-click to select " + tipPart4b
-                        + "Click and drag to select all items in the area. CTRL + click/drag to extend selection.";
-                break;
-            }
-        }
-
-        label_info.setText(tipPart1 + tipPart2 + tipPart3);
+        label_info.setText(StringLiterals.INFO_MODE_AND_TOOL(ControlManager.getMode(), ControlManager.getTool()));
     }
 
     public void adjustSize() {
