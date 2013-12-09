@@ -60,7 +60,7 @@ public class ControlManager {
     }
     public static void applyChange() {
         selection.clear();
-        mainWindow.panel_propertyEditor.setMode(ControlManager.getMode().ordinal() + 1);
+        //mainWindow.panel_propertyEditor.setMode(ControlManager.getMode().ordinal() + 1);
         updatePropertyChangeOperationStatus(false);
         finishMovingElement();
         currentlyMovedElement = null;

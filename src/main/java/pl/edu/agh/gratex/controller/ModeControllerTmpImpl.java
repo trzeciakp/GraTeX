@@ -18,10 +18,10 @@ public class ModeControllerTmpImpl implements ModeController {
     @Override
     public void setMode(ModeType modeType) {
         ModeType previousMode = ControlManager.getMode();
-        ControlManager.changeMode(modeType);
         for(ModeListener modeListener : listeners) {
             modeListener.fireModeChanged(previousMode, modeType);
         }
+        ControlManager.changeMode(modeType);
     }
 
     @Override
