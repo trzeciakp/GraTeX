@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.editor.*;
 import pl.edu.agh.gratex.graph.*;
 import pl.edu.agh.gratex.model.*;
+import pl.edu.agh.gratex.parser.Parser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -337,7 +338,7 @@ public class ControlManager {
         if (!consumed) {
             if (getMode() == ModeType.VERTEX) {
                 if (getTool() == ToolType.ADD) {
-                    Vertex vertex = new Vertex();
+                    Vertex vertex = new Vertex(graph);
                     vertex.setModel(graph.getVertexDefaultModel());
                     vertex.setPosX(x);
                     vertex.setPosY(y);
@@ -383,7 +384,7 @@ public class ControlManager {
                         }
                     } else {
                         if (currentlyAddedEdge == null) {
-                            currentlyAddedEdge = new Edge();
+                            currentlyAddedEdge = new Edge(graph);
                             currentlyAddedEdge.setModel(graph.getEdgeDefaultModel());
                             currentlyAddedEdge.setVertexA(temp);
                             publishInfo(StringLiterals.INFO_CHOOSE_EDGE_END);
@@ -414,7 +415,7 @@ public class ControlManager {
                     Vertex temp = graph.getVertexFromPosition(x, y);
                     if (temp != null) {
                         if (temp.getLabel() == null) {
-                            LabelV labelV = new LabelV(temp);
+                            LabelV labelV = new LabelV(temp, graph);
                             labelV.setModel(graph.getLabelVDefaultModel());
                             operations.addNewOperation(new AddOperation(labelV));
                             publishInfo(operations.redo());
@@ -444,7 +445,7 @@ public class ControlManager {
                     Edge temp = graph.getEdgeFromPosition(x, y);
                     if (temp != null) {
                         if (temp.getLabel() == null) {
-                            LabelE labelE = new LabelE(temp);
+                            LabelE labelE = new LabelE(temp, graph);
                             labelE.setModel(graph.getLabelEDefaultModel());
                             labelE.setHorizontalPlacement(e.isShiftDown());
                             operations.addNewOperation(new AddOperation(labelE));
@@ -508,7 +509,7 @@ public class ControlManager {
                                 changingEdgeAngle = true;
                                 currentDragOperation.setEdgeStartState(edge, true);
                             } else {
-                                edgeDragDummy = new Vertex();
+                                edgeDragDummy = new Vertex(graph);
                                 edgeDragDummy.setPosX(x);
                                 edgeDragDummy.setPosY(y);
                                 edgeDragDummy.setRadius(2);
@@ -529,7 +530,7 @@ public class ControlManager {
                                 changingEdgeAngle = true;
                                 currentDragOperation.setEdgeStartState(edge, true);
                             } else {
-                                edgeDragDummy = new Vertex();
+                                edgeDragDummy = new Vertex(graph);
                                 edgeDragDummy.setPosX(x);
                                 edgeDragDummy.setPosY(y);
                                 edgeDragDummy.setRadius(2);
@@ -862,7 +863,7 @@ public class ControlManager {
     public static void paintCurrentlyAddedElement(Graphics2D g) {
         if (getTool() == ToolType.ADD) {
             if (getMode() == ModeType.VERTEX) {
-                Vertex vertex = new Vertex();
+                Vertex vertex = new Vertex(graph);
                 vertex.setModel(graph.getVertexDefaultModel());
                 vertex.updateNumber(graph.getNextFreeNumber());
                 vertex.setPosX(mouseX);
@@ -874,7 +875,7 @@ public class ControlManager {
                 if (currentlyAddedEdge != null) {
                     Vertex vertex = ControlManager.graph.getVertexFromPosition(mouseX, mouseY);
                     if (vertex == null) {
-                        vertex = new Vertex();
+                        vertex = new Vertex(graph);
                         vertex.setPosX(mouseX);
                         vertex.setPosY(mouseY);
                         vertex.setRadius(2);
@@ -911,7 +912,7 @@ public class ControlManager {
                 Vertex temp = graph.getVertexFromPosition(mouseX, mouseY);
                 if (temp != null) {
                     if (temp.getLabel() == null) {
-                        LabelV labelV = new LabelV(temp);
+                        LabelV labelV = new LabelV(temp, graph);
                         labelV.setModel(graph.getLabelVDefaultModel());
 
                         Point2D p1 = new Point(temp.getPosX(), temp.getPosY());
@@ -934,7 +935,7 @@ public class ControlManager {
                 Edge temp = graph.getEdgeFromPosition(mouseX, mouseY);
                 if (temp != null) {
                     if (temp.getLabel() == null) {
-                        LabelE labelE = new LabelE(temp);
+                        LabelE labelE = new LabelE(temp,graph);
                         labelE.setModel(graph.getLabelEDefaultModel());
                         labelE.setHorizontalPlacement(shiftDown);
 

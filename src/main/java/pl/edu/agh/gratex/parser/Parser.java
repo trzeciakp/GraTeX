@@ -1,4 +1,4 @@
-package pl.edu.agh.gratex.gui;
+package pl.edu.agh.gratex.parser;
 
 
 import pl.edu.agh.gratex.graph.*;
@@ -20,10 +20,10 @@ public class Parser {
         while (itv.hasNext()) {
             vtemp = itv.next();
             line = "\\node (" + vtemp.getNumber() + ") ";
-            if (vtemp.getType() == 1) {
+            if (vtemp.getShape() == 1) {
                 line += "[circle"; //ksztalt
             } else {
-                line += "[regular polygon, regular polygon sides=" + (vtemp.getType() + 1);
+                line += "[regular polygon, regular polygon sides=" + (vtemp.getShape() + 1);
             }
             line += ", minimum size=" + (1.25 * vtemp.getRadius()) + "pt"; //wielkosc
             if (vtemp.getVertexColor() != null)

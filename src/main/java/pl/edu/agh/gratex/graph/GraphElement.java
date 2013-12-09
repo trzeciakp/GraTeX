@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.graph;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
@@ -14,4 +15,12 @@ public abstract class GraphElement implements Serializable {
     public abstract void setModel(PropertyModel pm);
 
     public abstract PropertyModel getModel();
+
+    public abstract GraphElementType getType();
+
+    public abstract Graph getGraph();
+
+    public void remove() {
+        getGraph().getElements(getType()).remove(this);
+    }
 }

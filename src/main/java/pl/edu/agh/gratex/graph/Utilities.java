@@ -11,7 +11,7 @@ public class Utilities {
     public static Point calculateEdgeExitPoint(Vertex vertex, double angle) {
         Point result = new Point();
 
-        if (vertex.getType() == 1) {
+        if (vertex.getShape() == 1) {
             result.x = vertex.getPosX() + (int) Math.round((vertex.getRadius() + vertex.getLineWidth() / 2) * Math.cos(Math.toRadians(-angle)));
             result.y = vertex.getPosY() + (int) Math.round((vertex.getRadius() + vertex.getLineWidth() / 2) * Math.sin(Math.toRadians(-angle)));
         } else {
@@ -25,7 +25,7 @@ public class Utilities {
             double b2 = 0.0;
             double c2 = 0.0;
 
-            if (vertex.getType() == 2) {
+            if (vertex.getShape() == 2) {
                 a2 = 1;
                 b2 = Math.sqrt(3);
                 c2 = radius;
@@ -38,7 +38,7 @@ public class Utilities {
                     b2 = 0.0;
                     c2 = -radius / 2;
                 }
-            } else if (vertex.getType() == 3) {
+            } else if (vertex.getShape() == 3) {
                 a2 = 0.0;
                 b2 = 1;
                 c2 = radius / Math.sqrt(2);
@@ -59,7 +59,7 @@ public class Utilities {
                     c2 = -radius / Math.sqrt(2);
                 }
 
-            } else if (vertex.getType() == 4) {
+            } else if (vertex.getShape() == 4) {
                 a2 = 1;
                 b2 = -Math.tan(Math.toRadians(36));
                 c2 = radius;

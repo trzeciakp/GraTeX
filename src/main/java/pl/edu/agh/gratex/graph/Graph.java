@@ -82,7 +82,7 @@ public class Graph implements Serializable {
             Vertex temp = null;
             while (itv.hasNext()) {
                 temp = itv.next();
-                Area outline = new Area(Utilities.getVertexShape(temp.getType() + 1, temp.getRadius(), temp.getPosX(), temp.getPosY()));
+                Area outline = new Area(Utilities.getVertexShape(temp.getShape() + 1, temp.getRadius(), temp.getPosX(), temp.getPosY()));
                 outline.intersect(rect);
                 if (!outline.isEmpty()) {
                     result.add(temp);

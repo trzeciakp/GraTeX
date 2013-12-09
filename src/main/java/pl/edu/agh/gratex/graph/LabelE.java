@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.graph;
 
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -31,14 +32,16 @@ public class LabelE extends GraphElement implements Serializable {
     private Polygon outline;
     private int drawX;
     private int drawY;
+    private Graph graph;
 
-    public LabelE(Edge element) {
+    public LabelE(Edge element, Graph graph) {
         setOwner(element);
         setText("Label");
+        this.graph = graph;
     }
 
     public LabelE getCopy(Edge owner) {
-        LabelE result = new LabelE(owner);
+        LabelE result = new LabelE(owner, graph);
         result.setModel(getModel());
 
         return result;
@@ -48,7 +51,7 @@ public class LabelE extends GraphElement implements Serializable {
         LabelEdgePropertyModel model = (LabelEdgePropertyModel) pm;
 
         if (model.text != null) {
-            setText(new String(model.text));
+            setText(model.text);
         }
 
         if (model.fontColor != null) {
@@ -95,6 +98,16 @@ public class LabelE extends GraphElement implements Serializable {
         return result;
     }
 
+    @Override
+    public GraphElementType getType() {
+        return GraphElementType.LABEL_EDGE;
+    }
+
+    @Override
+    public Graph getGraph() {
+        return graph;
+    }
+
     public boolean intersects(int x, int y) {
         return getOutline().contains(x, y);
     }
@@ -120,16 +133,16 @@ public class LabelE extends GraphElement implements Serializable {
             }
 
             double offsetRate = 0.75;
-            if (getOwner().getVertexA().getType() == 2) {
+            if (getOwner().getVertexA().getShape() == 2) {
                 offsetRate = 0.375;
                 if (getOwner().getRelativeEdgeAngle() == 270) {
                     ellipseShortRadius /= 2;
                 }
-            } else if (getOwner().getVertexA().getType() == 3) {
+            } else if (getOwner().getVertexA().getShape() == 3) {
                 offsetRate = 0.5;
-            } else if (getOwner().getVertexA().getType() == 4) {
+            } else if (getOwner().getVertexA().getShape() == 4) {
                 offsetRate = 0.4375;
-            } else if (getOwner().getVertexA().getType() == 5) {
+            } else if (getOwner().getVertexA().getShape() == 5) {
                 offsetRate = 0.625;
             }
 

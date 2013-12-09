@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.graph;
 
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -28,14 +29,16 @@ public class LabelV extends GraphElement implements Serializable {
     private int drawX;
     private int drawY;
     private Rectangle outline;
+    private Graph graph;
 
-    public LabelV(Vertex element) {
+    public LabelV(Vertex element, Graph graph) {
+        this.graph = graph;
         setOwner(element);
         setText("Label");
     }
 
     public LabelV getCopy(Vertex owner) {
-        LabelV result = new LabelV(owner);
+        LabelV result = new LabelV(owner, graph);
         result.setModel(getModel());
 
         return result;
@@ -70,6 +73,16 @@ public class LabelV extends GraphElement implements Serializable {
         result.spacing = getSpacing();
 
         return result;
+    }
+
+    @Override
+    public GraphElementType getType() {
+        return GraphElementType.LABEL_VERTEX;
+    }
+
+    @Override
+    public Graph getGraph() {
+        return graph;
     }
 
     public boolean intersects(int x, int y) {

@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.graph;
 
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.VertexPropertyModel;
@@ -17,7 +18,7 @@ public class Vertex extends GraphElement implements Serializable {
     // Wartości edytowalne przez użytkowanika
     private int number;
     private int radius;
-    private int type;
+    private int shape;
     private Color vertexColor;
     private int lineWidth;
     private LineType lineType;
@@ -35,9 +36,14 @@ public class Vertex extends GraphElement implements Serializable {
     // Pozostałe
     private int tempX;
     private int tempY;
+    private Graph graph;
+
+    public Vertex(Graph graph) {
+        this.graph = graph;
+    }
 
     public Vertex getCopy() {
-        Vertex result = new Vertex();
+        Vertex result = new Vertex(graph);
         result.setModel(getModel());
         result.setLabelInside(false);
         result.setPosX(getPosX());
@@ -67,7 +73,7 @@ public class Vertex extends GraphElement implements Serializable {
         }
 
         if (model.type > -1) {
-            setType(model.type);
+            setShape(model.type);
         }
 
         if (model.vertexColor != null) {
@@ -100,7 +106,7 @@ public class Vertex extends GraphElement implements Serializable {
 
         result.number = number;
         result.radius = getRadius();
-        result.type = getType();
+        result.type = getShape();
         result.vertexColor = new Color(getVertexColor().getRGB());
         result.lineWidth = getLineWidth();
         result.lineType = getLineType();
@@ -112,6 +118,11 @@ public class Vertex extends GraphElement implements Serializable {
         }
 
         return result;
+    }
+
+    @Override
+    public GraphElementType getType() {
+        return GraphElementType.VERTEX;
     }
 
     public void updateNumber(int _number) // Sprawdzić z poziomu property editora czy ControlManager.graph.usedNumber[number] = false; aby było unikatowe
@@ -134,13 +145,13 @@ public class Vertex extends GraphElement implements Serializable {
     }
 
     public boolean collides(Vertex vertex) {
-        Area area = new Area(Utilities.getVertexShape(getType() + 1, getRadius(), getPosX(), getPosY()));
-        area.intersect(new Area(Utilities.getVertexShape(vertex.getType() + 1, vertex.getRadius(), vertex.getPosX(), vertex.getPosY())));
+        Area area = new Area(Utilities.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
+        area.intersect(new Area(Utilities.getVertexShape(vertex.getShape() + 1, vertex.getRadius(), vertex.getPosX(), vertex.getPosY())));
         return !area.isEmpty();
     }
 
     public boolean intersects(int x, int y) {
-        Area area = new Area(Utilities.getVertexShape(getType() + 1, getRadius(), getPosX(), getPosY()));
+        Area area = new Area(Utilities.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
         return area.contains(x, y);
     }
 
@@ -160,7 +171,7 @@ public class Vertex extends GraphElement implements Serializable {
 
         if (ControlManager.selection.contains(this)) {
             g.setColor(DrawingTools.selectionColor);
-            g.fill(Utilities.getVertexShape(getType() + 1, getRadius() + getLineWidth() / 2 + getRadius() / 4, getPosX(), getPosY()));
+            g.fill(Utilities.getVertexShape(getShape() + 1, getRadius() + getLineWidth() / 2 + getRadius() / 4, getPosX(), getPosY()));
         }
 
         g.setColor(getVertexColor());
@@ -170,19 +181,19 @@ public class Vertex extends GraphElement implements Serializable {
 
         if (getLineWidth() > 0 && getLineType() != LineType.NONE) {
             if (getLineType() == LineType.DOUBLE) {
-                Shape innerOutline = Utilities.getVertexShape(getType() + 1, getRadius() - 2 - (getLineWidth() * 23) / 16, getPosX(), getPosY());
-                if (getType() == pl.edu.agh.gratex.model.properties.Shape.CIRCLE.getValue()) {
-                    innerOutline = Utilities.getVertexShape(getType() + 1, getRadius() - 2 - (getLineWidth() * 9) / 8, getPosX(), getPosY());
+                Shape innerOutline = Utilities.getVertexShape(getShape() + 1, getRadius() - 2 - (getLineWidth() * 23) / 16, getPosX(), getPosY());
+                if (getShape() == pl.edu.agh.gratex.model.properties.Shape.CIRCLE.getValue()) {
+                    innerOutline = Utilities.getVertexShape(getShape() + 1, getRadius() - 2 - (getLineWidth() * 9) / 8, getPosX(), getPosY());
                 }
-                if (getType() == pl.edu.agh.gratex.model.properties.Shape.TRIANGLE.getValue()) {
-                    innerOutline = Utilities.getVertexShape(getType() + 1, getRadius() - 4 - (getLineWidth() * 11) / 5, getPosX(), getPosY());
+                if (getShape() == pl.edu.agh.gratex.model.properties.Shape.TRIANGLE.getValue()) {
+                    innerOutline = Utilities.getVertexShape(getShape() + 1, getRadius() - 4 - (getLineWidth() * 11) / 5, getPosX(), getPosY());
                 }
-                if (getType() == pl.edu.agh.gratex.model.properties.Shape.SQUARE.getValue()) {
-                    innerOutline = Utilities.getVertexShape(getType() + 1, getRadius() - 3 - (getLineWidth() * 13) / 8, getPosX(), getPosY());
+                if (getShape() == pl.edu.agh.gratex.model.properties.Shape.SQUARE.getValue()) {
+                    innerOutline = Utilities.getVertexShape(getShape() + 1, getRadius() - 3 - (getLineWidth() * 13) / 8, getPosX(), getPosY());
                 }
 
                 g.setColor(Color.white);
-                g.fill(Utilities.getVertexShape(getType() + 1, getRadius() + getLineWidth() / 2, getPosX(), getPosY()));
+                g.fill(Utilities.getVertexShape(getShape() + 1, getRadius() + getLineWidth() / 2, getPosX(), getPosY()));
 
                 g.setColor(getVertexColor());
                 if (dummy) {
@@ -195,10 +206,10 @@ public class Vertex extends GraphElement implements Serializable {
                     g.setColor(DrawingTools.getDummyColor(getLineColor()));
                 }
                 g.setStroke(DrawingTools.getStroke(getLineWidth(), LineType.SOLID, 0.0));
-                g.draw(Utilities.getVertexShape(getType() + 1, getRadius(), getPosX(), getPosY()));
+                g.draw(Utilities.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
                 g.draw(innerOutline);
             } else {
-                Shape vertexShape = Utilities.getVertexShape(getType() + 1, getRadius(), getPosX(), getPosY());
+                Shape vertexShape = Utilities.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY());
                 g.fill(vertexShape);
 
                 g.setColor(getLineColor());
@@ -207,16 +218,16 @@ public class Vertex extends GraphElement implements Serializable {
                 }
 
                 double girth = Math.PI * 2 * getRadius();
-                if (getType() == 2) {
+                if (getShape() == 2) {
                     girth = Math.sqrt(3) * getRadius();
                 }
-                if (getType() == 3) {
+                if (getShape() == 3) {
                     girth = Math.sqrt(2) * getRadius();
                 }
-                if (getType() == 4) {
+                if (getShape() == 4) {
                     girth = 2 * getRadius() * Math.cos(Math.toRadians(54));
                 }
-                if (getType() == 5) {
+                if (getShape() == 5) {
                     girth = getRadius();
                 }
 
@@ -261,12 +272,17 @@ public class Vertex extends GraphElement implements Serializable {
         this.radius = radius;
     }
 
-    public int getType() {
-        return type;
+    public int getShape() {
+        return shape;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    @Override
+    public Graph getGraph() {
+        return graph;
+    }
+
+    public void setShape(int shape) {
+        this.shape = shape;
     }
 
     public Color getVertexColor() {

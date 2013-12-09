@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.graph;
 
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.EdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -44,6 +45,11 @@ public class Edge extends GraphElement implements Serializable {
     private Arc2D.Double arc;
     private int[] arrowLine1 = null;
     private int[] arrowLine2 = null;
+    private Graph graph;
+
+    public Edge(Graph graph) {
+        this.graph = graph;
+    }
 
     public Edge getCopy(LinkedList<Vertex> vertices) {
         Vertex _vertexA = null;
@@ -60,7 +66,7 @@ public class Edge extends GraphElement implements Serializable {
             }
         }
 
-        Edge result = new Edge();
+        Edge result = new Edge(this.graph);
         result.setModel(getModel());
         if (_vertexA == null || _vertexB == null) {
             return null;
@@ -121,6 +127,16 @@ public class Edge extends GraphElement implements Serializable {
         }
 
         return result;
+    }
+
+    @Override
+    public GraphElementType getType() {
+        return GraphElementType.VERTEX;
+    }
+
+    @Override
+    public Graph getGraph() {
+        return graph;
     }
 
     public boolean intersects(int x, int y) {
@@ -318,7 +334,7 @@ public class Edge extends GraphElement implements Serializable {
             double arrowPosHorizRate = 0.965;
             double arrowPosVertRate = 0.265;
 
-            if (getVertexA().getType() == 2) {
+            if (getVertexA().getShape() == 2) {
                 offsetRate = 0.375;
                 arrowPosHorizRate = 0.84;
                 arrowPosVertRate = 0.325;
@@ -335,11 +351,11 @@ public class Edge extends GraphElement implements Serializable {
                     width /= 2;
                     height /= 2;
                 }
-            } else if (getVertexA().getType() == 3) {
+            } else if (getVertexA().getShape() == 3) {
                 offsetRate = 0.5;
                 arrowPosHorizRate = 0.72;
                 arrowPosVertRate = 0.265;
-            } else if (getVertexA().getType() == 4) {
+            } else if (getVertexA().getShape() == 4) {
                 offsetRate = 0.4375;
                 arrowPosHorizRate = 0.755;
                 arrowPosVertRate = 0.295;
@@ -354,7 +370,7 @@ public class Edge extends GraphElement implements Serializable {
                     arrowPosHorizRate = 0.815;
                     arrowPosVertRate = 0.335;
                 }
-            } else if (getVertexA().getType() == 5) {
+            } else if (getVertexA().getShape() == 5) {
                 offsetRate = 0.625;
                 arrowPosHorizRate = 0.85;
                 arrowPosVertRate = 0.27;
