@@ -1,7 +1,10 @@
 package pl.edu.agh.gratex.graph;
 
 
+import pl.edu.agh.gratex.constants.Constants;
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.graph.utils.DrawingTools;
+import pl.edu.agh.gratex.graph.utils.Geometry;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -451,15 +454,15 @@ public class LabelE extends GraphElement implements Serializable {
 
                     Point middle = new Point(getPosX(), getPosY());
                     Point draw = new Point(getPosX() - width / 2, getPosY() + height / 2 - descent);
-                    draw = Utilities.rotatePoint(middle, draw, getAngle());
+                    draw = Geometry.rotatePoint(middle, draw, getAngle());
                     Point p1 = new Point(getPosX() - width / 2, getPosY() - height / 2);
-                    p1 = Utilities.rotatePoint(middle, p1, getAngle());
+                    p1 = Geometry.rotatePoint(middle, p1, getAngle());
                     Point p2 = new Point(getPosX() + width / 2, getPosY() - height / 2);
-                    p2 = Utilities.rotatePoint(middle, p2, getAngle());
+                    p2 = Geometry.rotatePoint(middle, p2, getAngle());
                     Point p3 = new Point(getPosX() + width / 2, getPosY() + height / 2);
-                    p3 = Utilities.rotatePoint(middle, p3, getAngle());
+                    p3 = Geometry.rotatePoint(middle, p3, getAngle());
                     Point p4 = new Point(getPosX() - width / 2, getPosY() + height / 2);
-                    p4 = Utilities.rotatePoint(middle, p4, getAngle());
+                    p4 = Geometry.rotatePoint(middle, p4, getAngle());
 
                     setDrawX(draw.x);
                     setDrawY(draw.y);
@@ -477,7 +480,7 @@ public class LabelE extends GraphElement implements Serializable {
         updatePosition(g);
 
         if (ControlManager.selection.contains(this)) {
-            g.setColor(DrawingTools.selectionColor);
+            g.setColor(Constants.SELECTION_COLOR);
             g.fillPolygon(getOutline());
         }
 

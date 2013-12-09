@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.graph;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.graph.utils.Geometry;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -82,7 +83,7 @@ public class Graph implements Serializable {
             Vertex temp = null;
             while (itv.hasNext()) {
                 temp = itv.next();
-                Area outline = new Area(Utilities.getVertexShape(temp.getShape() + 1, temp.getRadius(), temp.getPosX(), temp.getPosY()));
+                Area outline = new Area(Geometry.getVertexShape(temp.getShape() + 1, temp.getRadius(), temp.getPosX(), temp.getPosY()));
                 outline.intersect(rect);
                 if (!outline.isEmpty()) {
                     result.add(temp);
@@ -93,7 +94,7 @@ public class Graph implements Serializable {
             Edge temp = null;
             while (ite.hasNext()) {
                 temp = ite.next();
-                if (Utilities.checkArcRectangleIntersection(temp, area)) {
+                if (Geometry.checkArcRectangleIntersection(temp, area)) {
                     result.add(temp);
                 }
             }

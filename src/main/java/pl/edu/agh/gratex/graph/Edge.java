@@ -1,7 +1,10 @@
 package pl.edu.agh.gratex.graph;
 
 
+import pl.edu.agh.gratex.constants.Constants;
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.graph.utils.DrawingTools;
+import pl.edu.agh.gratex.graph.utils.Geometry;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.EdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -186,8 +189,8 @@ public class Edge extends GraphElement implements Serializable {
 
     private void calculateInOutPoints() {
         double beta = (Math.toDegrees(Math.atan2(getVertexB().getPosX() - getVertexA().getPosX(), getVertexB().getPosY() - getVertexA().getPosY()))) + 270;
-        setOutPoint(Utilities.calculateEdgeExitPoint(getVertexA(), getRelativeEdgeAngle() + beta));
-        setInPoint(Utilities.calculateEdgeExitPoint(getVertexB(), 180 - getRelativeEdgeAngle() + beta));
+        setOutPoint(Geometry.calculateEdgeExitPoint(getVertexA(), getRelativeEdgeAngle() + beta));
+        setInPoint(Geometry.calculateEdgeExitPoint(getVertexB(), 180 - getRelativeEdgeAngle() + beta));
         setOutAngle((int) Math.round(Math.toDegrees(Math.atan2(getOutPoint().x - getVertexA().getPosX(), getOutPoint().y - getVertexA().getPosY())) + 270) % 360);
         setInAngle((int) Math.round(Math.toDegrees(Math.atan2(getInPoint().x - getVertexB().getPosX(), getInPoint().y - getVertexB().getPosY())) + 270) % 360);
     }
@@ -431,7 +434,7 @@ public class Edge extends GraphElement implements Serializable {
         if (getVertexA() != getVertexB()) {
             if (getRelativeEdgeAngle() != 0) {
                 if (ControlManager.selection.contains(this)) {
-                    g.setColor(DrawingTools.selectionColor);
+                    g.setColor(Constants.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
                     g.draw(getArc());
@@ -445,7 +448,7 @@ public class Edge extends GraphElement implements Serializable {
                 g.draw(getArc());
             } else {
                 if (ControlManager.selection.contains(this)) {
-                    g.setColor(DrawingTools.selectionColor);
+                    g.setColor(Constants.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
                     g.drawLine(getVertexA().getPosX(), getVertexA().getPosY(), getVertexB().getPosX(), getVertexB().getPosY());
@@ -463,7 +466,7 @@ public class Edge extends GraphElement implements Serializable {
             }
         } else {
             if (ControlManager.selection.contains(this)) {
-                g.setColor(DrawingTools.selectionColor);
+                g.setColor(Constants.SELECTION_COLOR);
                 Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                 g.setStroke(drawingStroke);
                 g.draw(getArc());
@@ -480,7 +483,7 @@ public class Edge extends GraphElement implements Serializable {
         if (isDirected()) {
             if (getArrowType() == ArrowType.BASIC.getValue()) {
                 if (ControlManager.selection.contains(this)) {
-                    g.setColor(DrawingTools.selectionColor);
+                    g.setColor(Constants.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
                     g.drawLine(getArrowLine1()[0], getArrowLine1()[1], getArrowLine1()[2], getArrowLine1()[3]);
@@ -496,7 +499,7 @@ public class Edge extends GraphElement implements Serializable {
                 g.drawLine(getArrowLine2()[0], getArrowLine2()[1], getArrowLine2()[2], getArrowLine2()[3]);
             } else {
                 if (ControlManager.selection.contains(this)) {
-                    g.setColor(DrawingTools.selectionColor);
+                    g.setColor(Constants.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
                     g.fillPolygon(new Polygon(new int[]{getArrowLine1()[0], getArrowLine1()[2], getArrowLine2()[0]}, new int[]{getArrowLine1()[1], getArrowLine1()[3], getArrowLine2()[1]}, 3));

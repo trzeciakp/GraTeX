@@ -2,7 +2,7 @@ package pl.edu.agh.gratex.gui;
 
 
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.graph.Utilities;
+import pl.edu.agh.gratex.graph.utils.Geometry;
 import pl.edu.agh.gratex.property.MyListFormatter;
 
 import javax.swing.*;
@@ -63,10 +63,10 @@ public class NumerationDialog extends JDialog {
         } else {
             String[] alpha = new String[ControlManager.graph.maxNumber];
             for (int i = 0; i < ControlManager.graph.maxNumber - 1; i++) {
-                alpha[i] = Utilities.getABC(i + 1);
+                alpha[i] = Geometry.getABC(i + 1);
             }
             spinner_startingNumber.setModel(new SpinnerListModel(alpha));
-            spinner_startingNumber.setValue(Utilities.getABC(startNumber));
+            spinner_startingNumber.setValue(Geometry.getABC(startNumber));
             ((ListEditor) spinner_startingNumber.getEditor()).getTextField().setFormatterFactory(new DefaultFormatterFactory(new MyListFormatter()));
         }
     }

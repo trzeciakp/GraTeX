@@ -1,4 +1,4 @@
-package pl.edu.agh.gratex.graph;
+package pl.edu.agh.gratex.graph.utils;
 
 import java.awt.*;
 

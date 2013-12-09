@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.property;
 
 
+import pl.edu.agh.gratex.graph.utils.Geometry;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.VertexPropertyModel;
@@ -91,7 +92,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         } else if (ControlManager.graph.digitalNumeration) {
             spinnerNumber.setValue(model.number);
         } else
-            spinnerNumber.setValue(pl.edu.agh.gratex.graph.Utilities.getABC(model.number));
+            spinnerNumber.setValue(Geometry.getABC(model.number));
         if (model.type == -1)
             comboBoxVertexType.setSelectedIndex(0);
         else
@@ -356,7 +357,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
         String[] alpha = new String[ControlManager.graph.maxNumber];
         for (int i = 0; i < ControlManager.graph.maxNumber; i++) {
-            alpha[i] = pl.edu.agh.gratex.graph.Utilities.getABC(i);
+            alpha[i] = Geometry.getABC(i);
         }
         listModels = new AbstractSpinnerModel[2];
         listModels[0] = new SpinnerListModel(alpha);
@@ -403,7 +404,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                 if (ControlManager.graph.digitalNumeration)
                     spinnerNumber.setValue(arg);
                 else
-                    spinnerNumber.setValue(pl.edu.agh.gratex.graph.Utilities.getABC(arg));
+                    spinnerNumber.setValue(Geometry.getABC(arg));
             }
 
             public void stateChanged(ChangeEvent arg0) {

@@ -1,7 +1,11 @@
 package pl.edu.agh.gratex.graph;
 
 
+import pl.edu.agh.gratex.constants.Constants;
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.graph.utils.DrawingTools;
+import pl.edu.agh.gratex.graph.utils.Geometry;
+import pl.edu.agh.gratex.graph.utils.VertexUtils;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.VertexPropertyModel;
@@ -34,8 +38,6 @@ public class Vertex extends GraphElement implements Serializable {
     private String text;
 
     // Pozostałe
-    private int tempX;
-    private int tempY;
     private Graph graph;
 
     public Vertex(Graph graph) {
@@ -131,7 +133,7 @@ public class Vertex extends GraphElement implements Serializable {
         if (ControlManager.graph.digitalNumeration) {
             setText(Integer.toString(number));
         } else {
-            setText(Utilities.getABC(number));
+            setText(Geometry.getABC(number));
         }
     }
 
@@ -145,13 +147,13 @@ public class Vertex extends GraphElement implements Serializable {
     }
 
     public boolean collides(Vertex vertex) {
-        Area area = new Area(Utilities.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
-        area.intersect(new Area(Utilities.getVertexShape(vertex.getShape() + 1, vertex.getRadius(), vertex.getPosX(), vertex.getPosY())));
+        Area area = new Area(Geometry.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
+        area.intersect(new Area(Geometry.getVertexShape(vertex.getShape() + 1, vertex.getRadius(), vertex.getPosX(), vertex.getPosY())));
         return !area.isEmpty();
     }
 
     public boolean intersects(int x, int y) {
-        Area area = new Area(Utilities.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
+        Area area = new Area(Geometry.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
         return area.contains(x, y);
     }
 
@@ -161,101 +163,7 @@ public class Vertex extends GraphElement implements Serializable {
     }
 
     public void draw(Graphics2D g2d, boolean dummy) {
-        Graphics2D g = (Graphics2D) g2d.create();
-
-        if (dummy && ControlManager.graph.gridOn) {
-            tempX = getPosX();
-            tempY = getPosY();
-            adjustToGrid();
-        }
-
-        if (ControlManager.selection.contains(this)) {
-            g.setColor(DrawingTools.selectionColor);
-            g.fill(Utilities.getVertexShape(getShape() + 1, getRadius() + getLineWidth() / 2 + getRadius() / 4, getPosX(), getPosY()));
-        }
-
-        g.setColor(getVertexColor());
-        if (dummy) {
-            g.setColor(DrawingTools.getDummyColor(getVertexColor()));
-        }
-
-        if (getLineWidth() > 0 && getLineType() != LineType.NONE) {
-            if (getLineType() == LineType.DOUBLE) {
-                Shape innerOutline = Utilities.getVertexShape(getShape() + 1, getRadius() - 2 - (getLineWidth() * 23) / 16, getPosX(), getPosY());
-                if (getShape() == pl.edu.agh.gratex.model.properties.Shape.CIRCLE.getValue()) {
-                    innerOutline = Utilities.getVertexShape(getShape() + 1, getRadius() - 2 - (getLineWidth() * 9) / 8, getPosX(), getPosY());
-                }
-                if (getShape() == pl.edu.agh.gratex.model.properties.Shape.TRIANGLE.getValue()) {
-                    innerOutline = Utilities.getVertexShape(getShape() + 1, getRadius() - 4 - (getLineWidth() * 11) / 5, getPosX(), getPosY());
-                }
-                if (getShape() == pl.edu.agh.gratex.model.properties.Shape.SQUARE.getValue()) {
-                    innerOutline = Utilities.getVertexShape(getShape() + 1, getRadius() - 3 - (getLineWidth() * 13) / 8, getPosX(), getPosY());
-                }
-
-                g.setColor(Color.white);
-                g.fill(Utilities.getVertexShape(getShape() + 1, getRadius() + getLineWidth() / 2, getPosX(), getPosY()));
-
-                g.setColor(getVertexColor());
-                if (dummy) {
-                    g.setColor(DrawingTools.getDummyColor(getVertexColor()));
-                }
-                g.fill(innerOutline);
-
-                g.setColor(getLineColor());
-                if (dummy) {
-                    g.setColor(DrawingTools.getDummyColor(getLineColor()));
-                }
-                g.setStroke(DrawingTools.getStroke(getLineWidth(), LineType.SOLID, 0.0));
-                g.draw(Utilities.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
-                g.draw(innerOutline);
-            } else {
-                Shape vertexShape = Utilities.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY());
-                g.fill(vertexShape);
-
-                g.setColor(getLineColor());
-                if (dummy) {
-                    g.setColor(DrawingTools.getDummyColor(getLineColor()));
-                }
-
-                double girth = Math.PI * 2 * getRadius();
-                if (getShape() == 2) {
-                    girth = Math.sqrt(3) * getRadius();
-                }
-                if (getShape() == 3) {
-                    girth = Math.sqrt(2) * getRadius();
-                }
-                if (getShape() == 4) {
-                    girth = 2 * getRadius() * Math.cos(Math.toRadians(54));
-                }
-                if (getShape() == 5) {
-                    girth = getRadius();
-                }
-
-                g.setStroke(DrawingTools.getStroke(getLineWidth(), getLineType(), girth));
-                g.draw(vertexShape);
-            }
-            g.setStroke(new BasicStroke());
-        }
-
-        if (isLabelInside()) {
-            g.setColor(getFontColor());
-            if (dummy) {
-                g.setColor(DrawingTools.getDummyColor(getFontColor()));
-            }
-            updateNumber(number);
-            if (getText() != null) {
-                g.setFont(getFont());
-                FontMetrics fm = g.getFontMetrics();
-                g.drawString(getText(), getPosX() - fm.stringWidth(getText()) / 2, getPosY() + (fm.getAscent() - fm.getDescent()) / 2);
-            }
-        }
-
-        if (dummy && ControlManager.graph.gridOn) {
-            setPosX(tempX);
-            setPosY(tempY);
-        }
-
-        g.dispose();
+        VertexUtils.drawVertex(this, g2d, dummy);
     }
 
     public void drawLabel(Graphics2D g, boolean dummy) {
@@ -263,6 +171,9 @@ public class Vertex extends GraphElement implements Serializable {
             getLabel().draw(g, dummy);
         }
     }
+
+    // ============================================
+    // Getters & setters
 
     public int getRadius() {
         return radius;

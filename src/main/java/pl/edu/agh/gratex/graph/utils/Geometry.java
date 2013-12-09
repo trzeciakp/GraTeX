@@ -1,10 +1,13 @@
-package pl.edu.agh.gratex.graph;
+package pl.edu.agh.gratex.graph.utils;
+
+import pl.edu.agh.gratex.graph.Edge;
+import pl.edu.agh.gratex.graph.Vertex;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
-public class Utilities {
+public class Geometry {
     public static final char[] letter = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
             'V', 'W', 'X', 'Y', 'Z'};
 

@@ -1,7 +1,10 @@
 package pl.edu.agh.gratex.graph;
 
 
+import pl.edu.agh.gratex.constants.Constants;
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.graph.utils.DrawingTools;
+import pl.edu.agh.gratex.graph.utils.Geometry;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -96,7 +99,7 @@ public class LabelV extends GraphElement implements Serializable {
         int height = fm.getAscent();
         int descent = fm.getDescent();
 
-        Point exitPoint = Utilities.calculateEdgeExitPoint(getOwner(), (450 - 45 * getPosition()) % 360);
+        Point exitPoint = Geometry.calculateEdgeExitPoint(getOwner(), (450 - 45 * getPosition()) % 360);
 
         double dposX = 0.0;
         double dposY = 0.0;
@@ -157,7 +160,7 @@ public class LabelV extends GraphElement implements Serializable {
         updatePosition(g);
 
         if (ControlManager.selection.contains(this)) {
-            g.setColor(DrawingTools.selectionColor);
+            g.setColor(Constants.SELECTION_COLOR);
             g.fillRect(getOutline().x, getOutline().y, getOutline().width, getOutline().height);
         }
 
