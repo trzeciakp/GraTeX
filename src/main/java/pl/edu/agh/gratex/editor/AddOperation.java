@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.editor;
 
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.*;
+import pl.edu.agh.gratex.graph.utils.VertexUtils;
 import pl.edu.agh.gratex.gui.ControlManager;
 
 public class AddOperation extends Operation {
@@ -16,7 +17,7 @@ public class AddOperation extends Operation {
     public String doOperation() {
         if (type == 1) {
             ControlManager.graph.getVertices().add((Vertex) element);
-            ((Vertex) element).setPartOfNumeration(true);
+            VertexUtils.setPartOfNumeration((Vertex) element, true);
             return StringLiterals.INFO_VERTEX_ADD;
         } else if (type == 2) {
             ControlManager.graph.getEdges().add((Edge) element);
@@ -35,7 +36,7 @@ public class AddOperation extends Operation {
     public String undoOperation() {
         if (type == 1) {
             ControlManager.graph.getVertices().remove(element);
-            ((Vertex) element).setPartOfNumeration(false);
+            VertexUtils.setPartOfNumeration((Vertex) element, false);
             return StringLiterals.INFO_UNDO(StringLiterals.INFO_VERTEX_ADD);
         } else if (type == 2) {
             ControlManager.graph.getEdges().remove(element);

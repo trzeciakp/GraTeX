@@ -1,10 +1,11 @@
 package pl.edu.agh.gratex.gui;
 
 
-import pl.edu.agh.gratex.constants.Constants;
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.editor.OperationList;
 import pl.edu.agh.gratex.graph.Graph;
+import pl.edu.agh.gratex.graph.utils.GraphUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -30,7 +31,7 @@ public class OpenFileDialog extends JFileChooser {
         setFileFilter(new FileFilter() {
             public boolean accept(File file) {
                 String fileName = file.getName().toLowerCase();
-                if (fileName.endsWith(Constants.GRAPH_FILES_EXTENSION) || file.isDirectory()) {
+                if (fileName.endsWith(Const.GRAPH_FILES_EXTENSION) || file.isDirectory()) {
                     return true;
                 }
                 return false;
@@ -51,7 +52,7 @@ public class OpenFileDialog extends JFileChooser {
                 Graph _graph;
                 if ((_graph = FileManager.openFile(file)) != null) {
                     ControlManager.currentFile = file;
-                    _graph.deleteUnusedLabels();
+                    GraphUtils.deleteUnusedLabels(_graph);
                     ControlManager.graph = _graph;
                     ControlManager.operations = new OperationList();
                     ControlManager.changeMade = false;

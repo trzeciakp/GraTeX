@@ -4,6 +4,7 @@ package pl.edu.agh.gratex.graph;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.graph.utils.Geometry;
+import pl.edu.agh.gratex.graph.utils.GraphUtils;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -38,10 +39,8 @@ public class Graph implements Serializable {
     public int pageWidth = 672;
     public int pageHeight = 880;
 
-    public boolean[] usedNumber;
-    public int startNumber = 1;
-    public int maxNumber = 703;    // ZZ tyle wynosi, 3 litery to za dużo
-    public boolean digitalNumeration = true;
+    // TODO przeniesc to gdzie indziej, do jakiegos kontrolera?
+    private GraphNumeration graphNumeration;
 
     public Graph() {
         elements = new EnumMap<>(GraphElementType.class);
@@ -55,185 +54,25 @@ public class Graph implements Serializable {
         setLabelsE(new LinkedList<LabelE>());*/
         initDefaultModels();
 
-        usedNumber = new boolean[maxNumber];
-        for (int i = 0; i < maxNumber; i++) {
-            usedNumber[i] = false;
-        }
-        if (startNumber < 1 || startNumber >= maxNumber) {
-            startNumber = 1;
-        }
+        graphNumeration = new GraphNumeration();
     }
 
-    public int getNextFreeNumber() {
-        for (int i = startNumber; i < maxNumber; i++) {
-            if (!usedNumber[i]) {
-                return i;
-            }
-        }
-        startNumber = 1;
-        return 1;
-    }
-
-    public LinkedList<GraphElement> getIntersectingElements(Rectangle area) {
-        LinkedList<GraphElement> result = new LinkedList<GraphElement>();
-        Area rect = new Area(area);
-
-        if (ControlManager.getMode() == ModeType.VERTEX) {
-            Iterator<Vertex> itv = getVertices().listIterator();
-            Vertex temp = null;
-            while (itv.hasNext()) {
-                temp = itv.next();
-                Area outline = new Area(Geometry.getVertexShape(temp.getShape() + 1, temp.getRadius(), temp.getPosX(), temp.getPosY()));
-                outline.intersect(rect);
-                if (!outline.isEmpty()) {
-                    result.add(temp);
-                }
-            }
-        } else if (ControlManager.getMode() == ModeType.EDGE) {
-            Iterator<Edge> ite = getEdges().listIterator();
-            Edge temp = null;
-            while (ite.hasNext()) {
-                temp = ite.next();
-                if (Geometry.checkArcRectangleIntersection(temp, area)) {
-                    result.add(temp);
-                }
-            }
-        } else if (ControlManager.getMode() == ModeType.LABEL_VERTEX) {
-            Iterator<LabelV> itlv = getLabelsV().listIterator();
-            LabelV temp = null;
-            while (itlv.hasNext()) {
-                temp = itlv.next();
-                if (temp.getOutline().intersects(area)) {
-                    result.add(temp);
-                }
-            }
-        } else if (ControlManager.getMode() == ModeType.LABEL_EDGE) {
-            Iterator<LabelE> itle = getLabelsE().listIterator();
-            LabelE temp = null;
-            while (itle.hasNext()) {
-                temp = itle.next();
-                if (temp.getOutline().intersects(area)) {
-                    result.add(temp);
-                }
-            }
-        }
-
-        return result;
-    }
-
-    public Vertex getVertexFromPosition(int x, int y) {
-        Iterator<Vertex> itv = getVertices().listIterator();
-        Vertex temp = null;
-        while (itv.hasNext()) {
-            temp = itv.next();
-            if (temp.intersects(x, y)) {
-                return temp;
-            }
-        }
-        return null;
-    }
-
-    public boolean vertexCollision(Vertex vertex) {
-        Iterator<Vertex> itv = getVertices().listIterator();
-        while (itv.hasNext()) {
-            if (itv.next().collides(vertex)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public LinkedList<Edge> getAdjacentEdges(Vertex vertex) {
-        LinkedList<Edge> result = new LinkedList<Edge>();
-
-        Iterator<Edge> ite = getEdges().listIterator();
-        Edge temp = null;
-        while (ite.hasNext()) {
-            temp = ite.next();
-            if (temp.getVertexA() == vertex || temp.getVertexB() == vertex) {
-                result.add(temp);
-            }
-        }
-        return result;
-    }
-
-    public Edge getEdgeFromPosition(int x, int y) {
-        Iterator<Edge> ite = getEdges().listIterator();
-        Edge temp = null;
-        while (ite.hasNext()) {
-            temp = ite.next();
-            if (temp.intersects(x, y)) {
-                return temp;
-            }
-        }
-        return null;
-    }
-
-    public LabelV getLabelVFromPosition(int x, int y) {
-        Iterator<LabelV> itlv = getLabelsV().listIterator();
-        LabelV temp = null;
-        while (itlv.hasNext()) {
-            temp = itlv.next();
-            if (temp.intersects(x, y)) {
-                return temp;
-            }
-        }
-        return null;
-    }
-
-    public LabelE getLabelEFromPosition(int x, int y) {
-        Iterator<LabelE> itle = getLabelsE().listIterator();
-        LabelE temp = null;
-        while (itle.hasNext()) {
-            temp = itle.next();
-            if (temp.intersects(x, y)) {
-                return temp;
-            }
-        }
-        return null;
+    public GraphNumeration getGraphNumeration() {
+        return graphNumeration;
     }
 
     public void drawAll(Graphics2D g) {
-        Iterator<Edge> ite = getEdges().listIterator();
-        while (ite.hasNext()) {
-            ite.next().draw(g, false);
+        for (Edge edge : getEdges()) {
+            edge.draw(g, false);
         }
-
-        Iterator<Vertex> itv = getVertices().listIterator();
-        while (itv.hasNext()) {
-            itv.next().draw(g, false);
+        for (Vertex vertex : getVertices()) {
+            vertex.draw(g, false);
         }
-
-        ite = getEdges().listIterator();
-        while (ite.hasNext()) {
-            ite.next().drawLabel(g, false);
+        for (Edge edge : getEdges()) {
+            edge.drawLabel(g, false);
         }
-
-        itv = getVertices().listIterator();
-        while (itv.hasNext()) {
-            itv.next().drawLabel(g, false);
-        }
-    }
-
-    public void adjustVerticesToGrid() {
-        Iterator<Vertex> itv = getVertices().listIterator();
-        while (itv.hasNext()) {
-            itv.next().adjustToGrid();
-        }
-    }
-
-    public void deleteUnusedLabels() {
-        Iterator<LabelV> itlv = getLabelsV().listIterator();
-        while (itlv.hasNext()) {
-            if (itlv.next().getOwner().getLabel() == null) {
-                itlv.remove();
-            }
-        }
-
-        for (LabelE edgeLabel : getLabelsE()) {
-            if (edgeLabel.getOwner() == null) {
-                getLabelsE().remove(edgeLabel);
-            }
+        for (Vertex vertex : getVertices()) {
+            vertex.drawLabel(g, false);
         }
     }
 

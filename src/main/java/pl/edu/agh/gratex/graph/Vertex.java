@@ -1,18 +1,13 @@
 package pl.edu.agh.gratex.graph;
 
 
-import pl.edu.agh.gratex.constants.Constants;
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.graph.utils.DrawingTools;
-import pl.edu.agh.gratex.graph.utils.Geometry;
 import pl.edu.agh.gratex.graph.utils.VertexUtils;
-import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.VertexPropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
-import java.awt.geom.Area;
 import java.io.Serializable;
 
 
@@ -61,13 +56,28 @@ public class Vertex extends GraphElement implements Serializable {
         return number;
     }
 
+    @Override
+    public GraphElementType getType() {
+        return GraphElementType.VERTEX;
+    }
+
+    public void draw(Graphics2D g2d, boolean dummy) {
+        VertexUtils.drawVertex(this, g2d, dummy);
+    }
+
+    public void drawLabel(Graphics2D g, boolean dummy) {
+        if (getLabel() != null) {
+            getLabel().draw(g, dummy);
+        }
+    }
+
     public void setModel(PropertyModel pm) {
         VertexPropertyModel model = (VertexPropertyModel) pm;
 
         if (model.number > -1) {
-            setPartOfNumeration(false);
-            updateNumber(model.number);
-            setPartOfNumeration(true);
+            VertexUtils.setPartOfNumeration(this, false);
+            VertexUtils.updateNumber(this, model.number);
+            VertexUtils.setPartOfNumeration(this, true);
         }
 
         if (model.radius > -1) {
@@ -120,56 +130,6 @@ public class Vertex extends GraphElement implements Serializable {
         }
 
         return result;
-    }
-
-    @Override
-    public GraphElementType getType() {
-        return GraphElementType.VERTEX;
-    }
-
-    public void updateNumber(int _number) // Sprawdzić z poziomu property editora czy ControlManager.graph.usedNumber[number] = false; aby było unikatowe
-    {
-        number = _number;
-        if (ControlManager.graph.digitalNumeration) {
-            setText(Integer.toString(number));
-        } else {
-            setText(Geometry.getABC(number));
-        }
-    }
-
-    public void setPartOfNumeration(boolean flag) {
-        ControlManager.graph.usedNumber[number] = flag;
-    }
-
-    public void adjustToGrid() {
-        setPosX(((getPosX() + (ControlManager.graph.gridResolutionX / 2)) / ControlManager.graph.gridResolutionX) * ControlManager.graph.gridResolutionX);
-        setPosY(((getPosY() + (ControlManager.graph.gridResolutionY / 2)) / ControlManager.graph.gridResolutionY) * ControlManager.graph.gridResolutionY);
-    }
-
-    public boolean collides(Vertex vertex) {
-        Area area = new Area(Geometry.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
-        area.intersect(new Area(Geometry.getVertexShape(vertex.getShape() + 1, vertex.getRadius(), vertex.getPosX(), vertex.getPosY())));
-        return !area.isEmpty();
-    }
-
-    public boolean intersects(int x, int y) {
-        Area area = new Area(Geometry.getVertexShape(getShape() + 1, getRadius(), getPosX(), getPosY()));
-        return area.contains(x, y);
-    }
-
-    public boolean fitsIntoPage() {
-        return !((getPosX() - getRadius() - getLineWidth() / 2 < 0) || (getPosX() + getRadius() + getLineWidth() / 2 > ControlManager.graph.pageWidth)
-                || (getPosY() - getRadius() - getLineWidth() / 2 < 0) || (getPosY() + getRadius() + getLineWidth() / 2 > ControlManager.graph.pageHeight));
-    }
-
-    public void draw(Graphics2D g2d, boolean dummy) {
-        VertexUtils.drawVertex(this, g2d, dummy);
-    }
-
-    public void drawLabel(Graphics2D g, boolean dummy) {
-        if (getLabel() != null) {
-            getLabel().draw(g, dummy);
-        }
     }
 
     // ============================================
@@ -282,5 +242,9 @@ public class Vertex extends GraphElement implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

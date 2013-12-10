@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.editor;
 
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.*;
+import pl.edu.agh.gratex.graph.utils.VertexUtils;
 import pl.edu.agh.gratex.gui.ControlManager;
 
 import java.awt.*;
@@ -94,12 +95,13 @@ public class CopyPasteOperation extends Operation {
             tempVD = itvd.next();
             itv = ControlManager.graph.getVertices().listIterator();
             while (itv.hasNext()) {
-                if (tempVD.collides(itv.next())) {
+
+                if (VertexUtils.collides(tempVD, itv.next())) {
                     return false;
                 }
             }
 
-            if (!tempVD.fitsIntoPage()) {
+            if (VertexUtils.fitsIntoPage(tempVD)) {
                 return false;
             }
         }
@@ -144,11 +146,11 @@ public class CopyPasteOperation extends Operation {
         Vertex tempV = null;
         while (itv.hasNext()) {
             tempV = itv.next();
-            tempV.updateNumber(ControlManager.graph.getNextFreeNumber());
-            tempV.setPartOfNumeration(true);
+            VertexUtils.updateNumber(tempV, ControlManager.graph.getGraphNumeration().getNextFreeNumber());
+            VertexUtils.setPartOfNumeration(tempV, true);
             tempV.setLabelInside((ControlManager.graph.getVertexDefaultModel().labelInside == 1));
             if (ControlManager.graph.gridOn) {
-                tempV.adjustToGrid();
+                VertexUtils.adjustToGrid(tempV);
             }
         }
 
@@ -172,7 +174,7 @@ public class CopyPasteOperation extends Operation {
 
         Iterator<Vertex> itv = vertices.listIterator();
         while (itv.hasNext()) {
-            itv.next().setPartOfNumeration(false);
+            VertexUtils.setPartOfNumeration(itv.next(), false);
         }
 
         return StringLiterals.INFO_UNDO(StringLiterals.INFO_SUBGRAPH_PASTE);

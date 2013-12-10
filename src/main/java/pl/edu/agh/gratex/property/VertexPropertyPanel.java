@@ -1,7 +1,8 @@
 package pl.edu.agh.gratex.property;
 
 
-import pl.edu.agh.gratex.graph.utils.Geometry;
+import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.graph.GraphNumeration;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.VertexPropertyModel;
@@ -52,7 +53,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
     }
 
     public void updateNumeration() {
-        if (ControlManager.graph.digitalNumeration) {
+        if (ControlManager.graph.getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setModel(listModels[1]);
             ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else
@@ -89,10 +90,10 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             lblNumber.setEnabled(false);
             spinnerNumber.setEnabled(false);
             spinnerNumber.setValue(" ");
-        } else if (ControlManager.graph.digitalNumeration) {
+        } else if (ControlManager.graph.getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setValue(model.number);
         } else
-            spinnerNumber.setValue(Geometry.getABC(model.number));
+            spinnerNumber.setValue(GraphNumeration.getABC(model.number));
         if (model.type == -1)
             comboBoxVertexType.setSelectedIndex(0);
         else
@@ -355,13 +356,13 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         lblNumber.setHorizontalAlignment(SwingConstants.LEFT);
         add(lblNumber);
 
-        String[] alpha = new String[ControlManager.graph.maxNumber];
-        for (int i = 0; i < ControlManager.graph.maxNumber; i++) {
-            alpha[i] = Geometry.getABC(i);
+        String[] alpha = new String[Const.MAX_VERTEX_NUMBER];
+        for (int i = 0; i < Const.MAX_VERTEX_NUMBER; i++) {
+            alpha[i] = GraphNumeration.getABC(i);
         }
         listModels = new AbstractSpinnerModel[2];
         listModels[0] = new SpinnerListModel(alpha);
-        listModels[1] = new SpinnerNumberModel(1, 1, ControlManager.graph.maxNumber - 1, 1);
+        listModels[1] = new SpinnerNumberModel(1, 1, Const.MAX_VERTEX_NUMBER - 1, 1);
 
         spinnerNumber = new JSpinner() {
             private static final long serialVersionUID = -3030254701594657020L;
@@ -374,7 +375,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             }
         };
 
-        if (ControlManager.graph.digitalNumeration) {
+        if (ControlManager.graph.getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setModel(listModels[1]);
             ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else {
@@ -386,7 +387,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
             private int getValue() {
                 int value;
-                if (ControlManager.graph.digitalNumeration)
+                if (ControlManager.graph.getGraphNumeration().isNumerationDigital())
                     value = (Integer) spinnerNumber.getValue();
                 else {
                     String s = (String) spinnerNumber.getValue();
@@ -401,10 +402,10 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             }
 
             private void setValue(int arg) {
-                if (ControlManager.graph.digitalNumeration)
+                if (ControlManager.graph.getGraphNumeration().isNumerationDigital())
                     spinnerNumber.setValue(arg);
                 else
-                    spinnerNumber.setValue(Geometry.getABC(arg));
+                    spinnerNumber.setValue(GraphNumeration.getABC(arg));
             }
 
             public void stateChanged(ChangeEvent arg0) {
@@ -413,8 +414,8 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                     int value = getValue();
                     if (value == previous) {
                     } else {
-                        while ((value > 0) && (value < ControlManager.graph.maxNumber)) {
-                            if (!ControlManager.graph.usedNumber[value]) {
+                        while ((value > 0) && (value < Const.MAX_VERTEX_NUMBER)) {
+                            if (!ControlManager.graph.getGraphNumeration().isUsed(value)) {
 
                                 model.number = value;
                                 previous = value;
@@ -424,7 +425,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                             }
                             value += Integer.signum((value - previous));
                         }
-                        if ((value == 0) || (value == ControlManager.graph.maxNumber)) {
+                        if ((value == 0) || (value == Const.MAX_VERTEX_NUMBER)) {
                             setValue(previous);
                         }
                     }

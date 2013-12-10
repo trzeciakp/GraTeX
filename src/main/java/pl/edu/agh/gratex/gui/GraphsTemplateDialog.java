@@ -6,6 +6,7 @@ import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.ModeController;
 import pl.edu.agh.gratex.controller.ModeControllerImpl;
 import pl.edu.agh.gratex.graph.*;
+import pl.edu.agh.gratex.graph.utils.VertexUtils;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.property.PanelPropertyEditor;
@@ -199,14 +200,14 @@ public class GraphsTemplateDialog extends JDialog {
 
         vertex1 = new Vertex(graph);
         vertex1.setModel(graph.getVertexDefaultModel());
-        vertex1.updateNumber(1);
+        VertexUtils.updateNumber(vertex1, 1);
         vertex1.setPosX(240);
         vertex1.setPosY(190);
         graph.getVertices().add(vertex1);
 
         vertex2 = new Vertex(graph);
         vertex2.setModel(graph.getVertexDefaultModel());
-        vertex2.updateNumber(2);
+        VertexUtils.updateNumber(vertex1, 2);
         vertex2.setShape(1);
         vertex2.setVertexColor(new Color(200, 200, 200));
         vertex2.setLineType(LineType.SOLID);

@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.graph;
 
 
-import pl.edu.agh.gratex.constants.Constants;
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.graph.utils.DrawingTools;
 import pl.edu.agh.gratex.graph.utils.Geometry;
@@ -434,7 +434,7 @@ public class Edge extends GraphElement implements Serializable {
         if (getVertexA() != getVertexB()) {
             if (getRelativeEdgeAngle() != 0) {
                 if (ControlManager.selection.contains(this)) {
-                    g.setColor(Constants.SELECTION_COLOR);
+                    g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
                     g.draw(getArc());
@@ -448,7 +448,7 @@ public class Edge extends GraphElement implements Serializable {
                 g.draw(getArc());
             } else {
                 if (ControlManager.selection.contains(this)) {
-                    g.setColor(Constants.SELECTION_COLOR);
+                    g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
                     g.drawLine(getVertexA().getPosX(), getVertexA().getPosY(), getVertexB().getPosX(), getVertexB().getPosY());
@@ -466,7 +466,7 @@ public class Edge extends GraphElement implements Serializable {
             }
         } else {
             if (ControlManager.selection.contains(this)) {
-                g.setColor(Constants.SELECTION_COLOR);
+                g.setColor(Const.SELECTION_COLOR);
                 Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                 g.setStroke(drawingStroke);
                 g.draw(getArc());
@@ -483,7 +483,7 @@ public class Edge extends GraphElement implements Serializable {
         if (isDirected()) {
             if (getArrowType() == ArrowType.BASIC.getValue()) {
                 if (ControlManager.selection.contains(this)) {
-                    g.setColor(Constants.SELECTION_COLOR);
+                    g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
                     g.drawLine(getArrowLine1()[0], getArrowLine1()[1], getArrowLine1()[2], getArrowLine1()[3]);
@@ -499,7 +499,7 @@ public class Edge extends GraphElement implements Serializable {
                 g.drawLine(getArrowLine2()[0], getArrowLine2()[1], getArrowLine2()[2], getArrowLine2()[3]);
             } else {
                 if (ControlManager.selection.contains(this)) {
-                    g.setColor(Constants.SELECTION_COLOR);
+                    g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
                     g.fillPolygon(new Polygon(new int[]{getArrowLine1()[0], getArrowLine1()[2], getArrowLine2()[0]}, new int[]{getArrowLine1()[1], getArrowLine1()[3], getArrowLine2()[1]}, 3));

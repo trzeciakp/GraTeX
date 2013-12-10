@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.graph;
 
 
-import pl.edu.agh.gratex.constants.Constants;
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.graph.utils.DrawingTools;
 import pl.edu.agh.gratex.graph.utils.Geometry;
@@ -480,7 +480,7 @@ public class LabelE extends GraphElement implements Serializable {
         updatePosition(g);
 
         if (ControlManager.selection.contains(this)) {
-            g.setColor(Constants.SELECTION_COLOR);
+            g.setColor(Const.SELECTION_COLOR);
             g.fillPolygon(getOutline());
         }
 

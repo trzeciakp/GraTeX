@@ -1,13 +1,50 @@
 package pl.edu.agh.gratex.graph.utils;
 
-import pl.edu.agh.gratex.constants.Constants;
+import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.graph.GraphNumeration;
 import pl.edu.agh.gratex.graph.Vertex;
 import pl.edu.agh.gratex.gui.ControlManager;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
+import java.awt.geom.Area;
 
 public class VertexUtils {
+    public static void updateNumber(Vertex vertex, int number)
+    {
+        vertex.setNumber( number);
+        if (ControlManager.graph.getGraphNumeration().isNumerationDigital()) {
+            vertex.setText(Integer.toString(number));
+        } else {
+            vertex.setText(GraphNumeration.getABC(number));
+        }
+    }
+
+    public static void setPartOfNumeration(Vertex vertex, boolean flag) {
+        ControlManager.graph.getGraphNumeration().setUsed(vertex.getNumber(), flag);
+    }
+
+    public static void adjustToGrid(Vertex vertex) {
+        vertex.setPosX(((vertex.getPosX() + (ControlManager.graph.gridResolutionX / 2)) / ControlManager.graph.gridResolutionX) * ControlManager.graph.gridResolutionX);
+        vertex.setPosY(((vertex.getPosY() + (ControlManager.graph.gridResolutionY / 2)) / ControlManager.graph.gridResolutionY) * ControlManager.graph.gridResolutionY);
+    }
+
+    public static boolean collides(Vertex vertex1, Vertex vertex2) {
+        Area area = new Area(Geometry.getVertexShape(vertex1.getShape() + 1, vertex1.getRadius(), vertex1.getPosX(), vertex1.getPosY()));
+        area.intersect(new Area(Geometry.getVertexShape(vertex2.getShape() + 1, vertex2.getRadius(), vertex2.getPosX(), vertex2.getPosY())));
+        return !area.isEmpty();
+    }
+
+    public static boolean intersects(Vertex vertex, int x, int y) {
+        Area area = new Area(Geometry.getVertexShape(vertex.getShape() + 1, vertex.getRadius(), vertex.getPosX(), vertex.getPosY()));
+        return area.contains(x, y);
+    }
+
+    public static boolean fitsIntoPage(Vertex vertex) {
+        return !((vertex.getPosX() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosX() + vertex.getRadius() + vertex.getLineWidth() / 2 > ControlManager.graph.pageWidth)
+                || (vertex.getPosY() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosY() + vertex.getRadius() + vertex.getLineWidth() / 2 > ControlManager.graph.pageHeight));
+    }
+
     public static void drawVertex(Vertex vertex, Graphics2D graphics, boolean dummy)
     {
         Graphics2D g = (Graphics2D) graphics.create();
@@ -26,11 +63,11 @@ public class VertexUtils {
         if (dummy && ControlManager.graph.gridOn) {
             tempX = posX;
             tempY = posY;
-            vertex.adjustToGrid();
+            adjustToGrid(vertex);
         }
 
         if (ControlManager.selection.contains(vertex)) {
-            g.setColor(Constants.SELECTION_COLOR);
+            g.setColor(Const.SELECTION_COLOR);
             g.fill(Geometry.getVertexShape(shape + 1, radius + lineWidth / 2 + radius / 4, posX, posY));
         }
 
@@ -104,7 +141,7 @@ public class VertexUtils {
             if (dummy) {
                 g.setColor(DrawingTools.getDummyColor(vertex.getFontColor()));
             }
-            vertex.updateNumber(vertex.getNumber());
+            updateNumber(vertex, vertex.getNumber());
             if (vertex.getText() != null) {
                 g.setFont(vertex.getFont());
                 FontMetrics fm = g.getFontMetrics();

@@ -8,8 +8,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
 public class Geometry {
-    public static final char[] letter = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-            'V', 'W', 'X', 'Y', 'Z'};
 
     public static Point calculateEdgeExitPoint(Vertex vertex, double angle) {
         Point result = new Point();
@@ -290,14 +288,5 @@ public class Geometry {
         double[] pt = {p.x, p.y};
         AffineTransform.getRotateInstance(Math.toRadians(360 - angle), center.x, center.y).transform(pt, 0, pt, 0, 1);
         return new Point((int) Math.round(pt[0]), (int) Math.round(pt[1]));
-    }
-
-    public static String getABC(int number) {
-        StringBuffer buffer = new StringBuffer();
-        while (number > 0) {
-            buffer.insert(0, letter[(number - 1) % 26]);
-            number = (number - 1) / 26;
-        }
-        return buffer.toString();
     }
 }

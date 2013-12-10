@@ -1,6 +1,6 @@
 package pl.edu.agh.gratex.gui;
 
-import pl.edu.agh.gratex.constants.Constants;
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.StringLiterals;
 
 import javax.swing.*;
@@ -27,7 +27,7 @@ public class SaveFileDialog extends JFileChooser {
         setFileFilter(new FileFilter() {
             public boolean accept(File file) {
                 String fileName = file.getName().toLowerCase();
-                if (fileName.endsWith(Constants.GRAPH_FILES_EXTENSION) || file.isDirectory()) {
+                if (fileName.endsWith(Const.GRAPH_FILES_EXTENSION) || file.isDirectory()) {
                     return true;
                 }
                 return false;
@@ -63,8 +63,8 @@ public class SaveFileDialog extends JFileChooser {
         if (option == JFileChooser.APPROVE_OPTION) {
             if (getSelectedFile() != null) {
                 File file = getSelectedFile();
-                if (!file.getName().endsWith(Constants.GRAPH_FILES_EXTENSION)) {
-                    file = new File(file.toString().concat(Constants.GRAPH_FILES_EXTENSION));
+                if (!file.getName().endsWith(Const.GRAPH_FILES_EXTENSION)) {
+                    file = new File(file.toString().concat(Const.GRAPH_FILES_EXTENSION));
                 }
 
                 if (FileManager.saveFile(file, ControlManager.graph)) {

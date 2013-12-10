@@ -1,11 +1,14 @@
 package pl.edu.agh.gratex.gui;
 
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.editor.*;
 import pl.edu.agh.gratex.graph.*;
+import pl.edu.agh.gratex.graph.utils.GraphUtils;
+import pl.edu.agh.gratex.graph.utils.VertexUtils;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.parser.Parser;
 
@@ -243,7 +246,7 @@ public class ControlManager {
                 graph.gridOn = true;
                 graph.gridResolutionX = result[0];
                 graph.gridResolutionY = result[1];
-                graph.adjustVerticesToGrid();
+                GraphUtils.adjustVerticesToGrid(graph);
             }
         }
         mainWindow.updateFunctions();
@@ -252,12 +255,12 @@ public class ControlManager {
     public static void setNumeration() {
         selection.clear();
         updatePropertyChangeOperationStatus(false);
-        NumerationDialog nd = new NumerationDialog(mainWindow, graph.digitalNumeration, graph.startNumber, graph.maxNumber);
+        NumerationDialog nd = new NumerationDialog(mainWindow, graph.getGraphNumeration().isNumerationDigital(), graph.getGraphNumeration().getStartingNumber(), Const.MAX_VERTEX_NUMBER);
         int[] result = nd.showDialog();
 
         if (result != null) {
-            graph.digitalNumeration = (result[0] == 0);
-            graph.startNumber = result[1];
+            graph.getGraphNumeration().setNumerationDigital(result[0] == 0);
+            graph.getGraphNumeration().setStartingNumber(result[1]);
         }
 
         mainWindow.updateFunctions();
@@ -343,13 +346,13 @@ public class ControlManager {
                     vertex.setPosX(x);
                     vertex.setPosY(y);
                     if (graph.gridOn) {
-                        vertex.adjustToGrid();
+                        VertexUtils.adjustToGrid(vertex);
                     }
 
-                    if (vertex.fitsIntoPage()) {
+                    if (VertexUtils.fitsIntoPage(vertex)) {
 
-                        if (!graph.vertexCollision(vertex)) {
-                            vertex.updateNumber(ControlManager.graph.getNextFreeNumber());
+                        if (!GraphUtils.checkVertexCollision(graph, vertex)) {
+                            VertexUtils.updateNumber(vertex, ControlManager.graph.getGraphNumeration().getNextFreeNumber());
                             operations.addNewOperation(new AddOperation(vertex));
                             publishInfo(operations.redo());
                             selection.add(vertex);
@@ -360,7 +363,7 @@ public class ControlManager {
                         publishInfo(StringLiterals.INFO_CANNOT_CREATE_VERTEX_BOUNDARY);
                     }
                 } else if (getTool() == ToolType.REMOVE) {
-                    Vertex temp = graph.getVertexFromPosition(x, y);
+                    Vertex temp = GraphUtils.getVertexFromPosition(graph, x, y);
                     if (temp != null) {
                         operations.addNewOperation(new RemoveOperation(temp));
                         publishInfo(operations.redo());
@@ -369,12 +372,12 @@ public class ControlManager {
                     }
                 } else if (getTool() == ToolType.SELECT) {
                     if (!mousePressed) {
-                        addToSelection(graph.getVertexFromPosition(x, y), e.isControlDown());
+                        addToSelection(GraphUtils.getVertexFromPosition(graph, x, y), e.isControlDown());
                     }
                 }
             } else if (getMode() == ModeType.EDGE) {
                 if (getTool() == ToolType.ADD) {
-                    Vertex temp = graph.getVertexFromPosition(x, y);
+                    Vertex temp = GraphUtils.getVertexFromPosition(graph, x, y);
                     if (temp == null) {
                         if (currentlyAddedEdge == null) {
                             publishInfo(StringLiterals.INFO_CHOOSE_EDGE_START);
@@ -398,7 +401,7 @@ public class ControlManager {
                         }
                     }
                 } else if (getTool() == ToolType.REMOVE) {
-                    Edge temp = graph.getEdgeFromPosition(x, y);
+                    Edge temp = GraphUtils.getEdgeFromPosition(graph, x, y);
                     if (temp != null) {
                         operations.addNewOperation(new RemoveOperation(temp));
                         publishInfo(operations.redo());
@@ -407,12 +410,12 @@ public class ControlManager {
                     }
                 } else if (getTool() == ToolType.SELECT) {
                     if (!mousePressed) {
-                        addToSelection(graph.getEdgeFromPosition(x, y), e.isControlDown());
+                        addToSelection(GraphUtils.getEdgeFromPosition(graph, x, y), e.isControlDown());
                     }
                 }
             } else if (getMode() == ModeType.LABEL_VERTEX) {
                 if (getTool() == ToolType.ADD) {
-                    Vertex temp = graph.getVertexFromPosition(x, y);
+                    Vertex temp = GraphUtils.getVertexFromPosition(graph, x, y);
                     if (temp != null) {
                         if (temp.getLabel() == null) {
                             LabelV labelV = new LabelV(temp, graph);
@@ -428,7 +431,7 @@ public class ControlManager {
                         publishInfo(StringLiterals.INFO_CHOOSE_VERTEX_FOR_LABEL);
                     }
                 } else if (getTool() == ToolType.REMOVE) {
-                    LabelV temp = graph.getLabelVFromPosition(x, y);
+                    LabelV temp = GraphUtils.getLabelVFromPosition(graph, x, y);
                     if (temp != null) {
                         operations.addNewOperation(new RemoveOperation(temp));
                         publishInfo(operations.redo());
@@ -437,12 +440,12 @@ public class ControlManager {
                     }
                 } else if (getTool() == ToolType.SELECT) {
                     if (!mousePressed) {
-                        addToSelection(graph.getLabelVFromPosition(x, y), e.isControlDown());
+                        addToSelection(GraphUtils.getLabelVFromPosition(graph, x, y), e.isControlDown());
                     }
                 }
             } else {
                 if (getTool() == ToolType.ADD) {
-                    Edge temp = graph.getEdgeFromPosition(x, y);
+                    Edge temp = GraphUtils.getEdgeFromPosition(graph, x, y);
                     if (temp != null) {
                         if (temp.getLabel() == null) {
                             LabelE labelE = new LabelE(temp, graph);
@@ -459,7 +462,7 @@ public class ControlManager {
                         publishInfo(StringLiterals.INFO_CHOOSE_EDGE_FOR_LABEL);
                     }
                 } else if (getTool() == ToolType.REMOVE) {
-                    LabelE temp = graph.getLabelEFromPosition(x, y);
+                    LabelE temp = GraphUtils.getLabelEFromPosition(graph, x, y);
                     if (temp != null) {
                         operations.addNewOperation(new RemoveOperation(temp));
                         publishInfo(operations.redo());
@@ -468,7 +471,7 @@ public class ControlManager {
                     }
                 } else if (getTool() == ToolType.SELECT) {
                     if (!mousePressed) {
-                        addToSelection(graph.getLabelEFromPosition(x, y), e.isControlDown());
+                        addToSelection(GraphUtils.getLabelEFromPosition(graph, x, y), e.isControlDown());
                     }
                 }
             }
@@ -489,17 +492,17 @@ public class ControlManager {
 
         if (getTool() != ToolType.REMOVE) {
             if (getMode() == ModeType.VERTEX) {
-                if (graph.getVertexFromPosition(x, y) != null) {
-                    if (selection.contains(graph.getVertexFromPosition(x, y))) {
-                        currentlyMovedElement = graph.getVertexFromPosition(x, y);
+                if (GraphUtils.getVertexFromPosition(graph, x, y) != null) {
+                    if (selection.contains(GraphUtils.getVertexFromPosition(graph, x, y))) {
+                        currentlyMovedElement = GraphUtils.getVertexFromPosition(graph, x, y);
                         currentDragOperation = new DragOperation(currentlyMovedElement);
                         currentDragOperation.setStartPos(((Vertex) currentlyMovedElement).getPosX(), ((Vertex) currentlyMovedElement).getPosY());
                     }
                 }
             } else if (getMode() == ModeType.EDGE) {
-                if (graph.getEdgeFromPosition(x, y) != null) {
-                    if (selection.contains(graph.getEdgeFromPosition(x, y))) {
-                        Edge edge = graph.getEdgeFromPosition(x, y);
+                if (GraphUtils.getEdgeFromPosition(graph, x, y) != null) {
+                    if (selection.contains(GraphUtils.getEdgeFromPosition(graph, x, y))) {
+                        Edge edge = GraphUtils.getEdgeFromPosition(graph, x, y);
                         currentlyMovedElement = edge;
                         currentDragOperation = new DragOperation(currentlyMovedElement);
                         if (edge.getVertexA() == edge.getVertexB()) {
@@ -546,17 +549,17 @@ public class ControlManager {
                     }
                 }
             } else if (getMode() == ModeType.LABEL_VERTEX) {
-                if (graph.getLabelVFromPosition(x, y) != null) {
-                    if (selection.contains(graph.getLabelVFromPosition(x, y))) {
-                        currentlyMovedElement = graph.getLabelVFromPosition(x, y);
+                if (GraphUtils.getLabelVFromPosition(graph, x, y) != null) {
+                    if (selection.contains(GraphUtils.getLabelVFromPosition(graph, x, y))) {
+                        currentlyMovedElement = GraphUtils.getLabelVFromPosition(graph, x, y);
                         currentDragOperation = new DragOperation(currentlyMovedElement);
                         currentDragOperation.setStartAngle(((LabelV) currentlyMovedElement).getPosition());
                     }
                 }
             } else if (getMode() == ModeType.LABEL_EDGE) {
-                if (graph.getLabelEFromPosition(x, y) != null) {
-                    if (selection.contains(graph.getLabelEFromPosition(x, y))) {
-                        currentlyMovedElement = graph.getLabelEFromPosition(x, y);
+                if (GraphUtils.getLabelEFromPosition(graph, x, y) != null) {
+                    if (selection.contains(GraphUtils.getLabelEFromPosition(graph, x, y))) {
+                        currentlyMovedElement = GraphUtils.getLabelEFromPosition(graph, x, y);
                         currentDragOperation = new DragOperation(currentlyMovedElement);
                         currentDragOperation.setLabelEStartState((LabelE) currentlyMovedElement);
                     }
@@ -640,10 +643,10 @@ public class ControlManager {
             if (width + height > 2) {
                 if (getTool() == ToolType.REMOVE) {
                     selection.clear();
-                    selection.addAll(graph.getIntersectingElements(new Rectangle(x1, y1, width, height)));
+                    selection.addAll(GraphUtils.getIntersectingElements(graph, mode, new Rectangle(x1, y1, width, height)));
                     deleteSelection();
                 } else if (getTool() == ToolType.SELECT) {
-                    addToSelection(graph.getIntersectingElements(new Rectangle(x1, y1, width, height)), e.isControlDown());
+                    addToSelection(GraphUtils.getIntersectingElements(graph, mode, new Rectangle(x1, y1, width, height)), e.isControlDown());
                 }
             }
         }
@@ -700,10 +703,10 @@ public class ControlManager {
                 vertex.setPosY(y);
 
                 if (graph.gridOn) {
-                    vertex.adjustToGrid();
+                    VertexUtils.adjustToGrid(vertex);
                 }
 
-                if (graph.vertexCollision(vertex) || !vertex.fitsIntoPage()) {
+                if (GraphUtils.checkVertexCollision(graph, vertex) || !VertexUtils.fitsIntoPage(vertex)) {
                     vertex.setPosX(oldPosX);
                     vertex.setPosY(oldPosY);
                 }
@@ -739,7 +742,7 @@ public class ControlManager {
                     }
                 } else {
                     Vertex vertex;
-                    if ((vertex = graph.getVertexFromPosition(x, y)) != null) {
+                    if ((vertex = GraphUtils.getVertexFromPosition(graph, x, y)) != null) {
                         Edge edge = (Edge) currentlyMovedElement;
                         if (currentDragOperation.draggingA()) {
                             edge.setVertexA(vertex);
@@ -865,15 +868,15 @@ public class ControlManager {
             if (getMode() == ModeType.VERTEX) {
                 Vertex vertex = new Vertex(graph);
                 vertex.setModel(graph.getVertexDefaultModel());
-                vertex.updateNumber(graph.getNextFreeNumber());
+                VertexUtils.updateNumber(vertex, graph.getGraphNumeration().getNextFreeNumber());
                 vertex.setPosX(mouseX);
                 vertex.setPosY(mouseY);
-                if (!graph.vertexCollision(vertex) && vertex.fitsIntoPage()) {
+                if (!GraphUtils.checkVertexCollision(graph, vertex) && VertexUtils.fitsIntoPage(vertex)) {
                     vertex.draw(g, true);
                 }
             } else if (getMode() == ModeType.EDGE) {
                 if (currentlyAddedEdge != null) {
-                    Vertex vertex = ControlManager.graph.getVertexFromPosition(mouseX, mouseY);
+                    Vertex vertex = GraphUtils.getVertexFromPosition(graph, mouseX, mouseY);
                     if (vertex == null) {
                         vertex = new Vertex(graph);
                         vertex.setPosX(mouseX);
@@ -882,7 +885,7 @@ public class ControlManager {
                         currentlyAddedEdge.setRelativeEdgeAngle(0);
                     }
                     currentlyAddedEdge.setVertexB(vertex);
-                    if (ControlManager.graph.getVertexFromPosition(mouseX, mouseY) != null) {
+                    if (GraphUtils.getVertexFromPosition(graph, mouseX, mouseY) != null) {
                         if (currentlyAddedEdge.getVertexA() != currentlyAddedEdge.getVertexB()) {
                             double angle = Math.toDegrees(Math.atan2(mouseX - currentlyAddedEdge.getVertexB().getPosX(), mouseY
                                     - currentlyAddedEdge.getVertexB().getPosY())) + 270;
@@ -909,7 +912,7 @@ public class ControlManager {
                     currentlyAddedEdge.draw(g, true);
                 }
             } else if (getMode() == ModeType.LABEL_VERTEX) {
-                Vertex temp = graph.getVertexFromPosition(mouseX, mouseY);
+                Vertex temp = GraphUtils.getVertexFromPosition(graph, mouseX, mouseY);
                 if (temp != null) {
                     if (temp.getLabel() == null) {
                         LabelV labelV = new LabelV(temp, graph);
@@ -932,7 +935,7 @@ public class ControlManager {
                     }
                 }
             } else {
-                Edge temp = graph.getEdgeFromPosition(mouseX, mouseY);
+                Edge temp = GraphUtils.getEdgeFromPosition(graph, mouseX, mouseY);
                 if (temp != null) {
                     if (temp.getLabel() == null) {
                         LabelE labelE = new LabelE(temp,graph);

@@ -92,12 +92,12 @@ public class StringLiterals {
     // OpenFileDialog
     public final static String BUTTON_OPEN_FILE_DIALOG_APPROVE = "Open";
     public final static String TOOLTIP_OPEN_FILE_DIALOG_APPROVE = "Open selected graph";
-    public final static String TOOLTIP_OPEN_FILE_DIALOG_DESCRIPTION = "Graph file (*" + Constants.GRAPH_FILES_EXTENSION + ")";
+    public final static String TOOLTIP_OPEN_FILE_DIALOG_DESCRIPTION = "Graph file (*" + Const.GRAPH_FILES_EXTENSION + ")";
 
     // SaveFileDialog
     public final static String BUTTON_SAVE_FILE_DIALOG_APPROVE = "Save";
     public final static String TOOLTIP_SAVE_FILE_DIALOG_APPROVE = "Save graph under selected filename";
-    public final static String TOOLTIP_SAVE_FILE_DIALOG_DESCRIPTION = "Graph file (*" + Constants.GRAPH_FILES_EXTENSION + ")";
+    public final static String TOOLTIP_SAVE_FILE_DIALOG_DESCRIPTION = "Graph file (*" + Const.GRAPH_FILES_EXTENSION + ")";
 
     // PanelPreview
     public final static String LABEL_PANEL_PREVIEW_TITLE = "Preview";

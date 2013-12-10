@@ -1,8 +1,9 @@
 package pl.edu.agh.gratex.gui;
 
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.graph.utils.Geometry;
+import pl.edu.agh.gratex.graph.GraphNumeration;
 import pl.edu.agh.gratex.property.MyListFormatter;
 
 import javax.swing.*;
@@ -61,12 +62,12 @@ public class NumerationDialog extends JDialog {
             spinner_startingNumber.setModel(new SpinnerNumberModel(startNumber, 1, maxNumber - 1, 1));
             ((JSpinner.DefaultEditor) spinner_startingNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else {
-            String[] alpha = new String[ControlManager.graph.maxNumber];
-            for (int i = 0; i < ControlManager.graph.maxNumber - 1; i++) {
-                alpha[i] = Geometry.getABC(i + 1);
+            String[] alpha = new String[Const.MAX_VERTEX_NUMBER];
+            for (int i = 0; i < Const.MAX_VERTEX_NUMBER - 1; i++) {
+                alpha[i] = GraphNumeration.getABC(i + 1);
             }
             spinner_startingNumber.setModel(new SpinnerListModel(alpha));
-            spinner_startingNumber.setValue(Geometry.getABC(startNumber));
+            spinner_startingNumber.setValue(GraphNumeration.getABC(startNumber));
             ((ListEditor) spinner_startingNumber.getEditor()).getTextField().setFormatterFactory(new DefaultFormatterFactory(new MyListFormatter()));
         }
     }

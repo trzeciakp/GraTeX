@@ -4,6 +4,8 @@ package pl.edu.agh.gratex.editor;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.graph.*;
+import pl.edu.agh.gratex.graph.utils.GraphUtils;
+import pl.edu.agh.gratex.graph.utils.VertexUtils;
 import pl.edu.agh.gratex.gui.ControlManager;
 
 import java.util.Iterator;
@@ -30,8 +32,8 @@ public class RemoveOperation extends Operation {
             connectedEdges = new LinkedList<>();
             for (GraphElement temp : elements) {
                 Vertex vertex = (Vertex) temp;
-                vertex.setPartOfNumeration(false);
-                connectedEdges.addAll(ControlManager.graph.getAdjacentEdges(vertex));
+                VertexUtils.setPartOfNumeration(vertex, false);
+                connectedEdges.addAll(GraphUtils.getAdjacentEdges(ControlManager.graph, vertex));
                 ControlManager.graph.getEdges().removeAll(connectedEdges);
             }
             ControlManager.graph.getVertices().removeAll(elements);
@@ -60,7 +62,7 @@ public class RemoveOperation extends Operation {
             for (GraphElement temp : elements) {
                 Vertex vertex = (Vertex) temp;
                 ControlManager.graph.getVertices().add(vertex);
-                vertex.setPartOfNumeration(true);
+                VertexUtils.setPartOfNumeration(vertex, true);
             }
             ControlManager.graph.getEdges().addAll(connectedEdges);
 
