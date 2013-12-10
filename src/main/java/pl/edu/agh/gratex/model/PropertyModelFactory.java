@@ -1,6 +1,11 @@
 package pl.edu.agh.gratex.model;
 
 import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
+import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
+import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
+import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
 /**
  *

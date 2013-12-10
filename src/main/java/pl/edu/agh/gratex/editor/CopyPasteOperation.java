@@ -2,9 +2,13 @@ package pl.edu.agh.gratex.editor;
 
 
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.graph.*;
-import pl.edu.agh.gratex.graph.utils.VertexUtils;
-import pl.edu.agh.gratex.gui.ControlManager;
+import pl.edu.agh.gratex.model.*;
+import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.labelE.LabelE;
+import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.vertex.VertexUtils;
+import pl.edu.agh.gratex.view.ControlManager;
+import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.awt.*;
 import java.util.Collections;

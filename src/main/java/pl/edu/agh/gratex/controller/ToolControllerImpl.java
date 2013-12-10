@@ -1,6 +1,6 @@
 package pl.edu.agh.gratex.controller;
 
-import pl.edu.agh.gratex.gui.ControlManager;
+import pl.edu.agh.gratex.view.ControlManager;
 import pl.edu.agh.gratex.constants.ToolType;
 
 import java.util.ArrayList;

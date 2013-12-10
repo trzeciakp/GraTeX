@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.editor;
 
 
-import pl.edu.agh.gratex.graph.Vertex;
+import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.util.Comparator;
 

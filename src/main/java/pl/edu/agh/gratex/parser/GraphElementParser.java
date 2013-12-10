@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.parser;
 
-import pl.edu.agh.gratex.graph.Graph;
-import pl.edu.agh.gratex.graph.GraphElement;
+import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.GraphElement;
 
 /**
  *

@@ -2,7 +2,7 @@ package pl.edu.agh.gratex.editor;
 
 
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.graph.GraphElement;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.util.Iterator;

@@ -1,8 +1,11 @@
-package pl.edu.agh.gratex.graph;
+package pl.edu.agh.gratex.model;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import static junit.framework.Assert.assertEquals;
 

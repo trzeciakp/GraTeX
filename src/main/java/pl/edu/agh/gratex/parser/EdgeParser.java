@@ -1,8 +1,8 @@
 package pl.edu.agh.gratex.parser;
 
-import pl.edu.agh.gratex.graph.Edge;
-import pl.edu.agh.gratex.graph.Graph;
-import pl.edu.agh.gratex.graph.GraphElement;
+import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.model.properties.LineType;

@@ -3,8 +3,12 @@ package pl.edu.agh.gratex.editor;
 
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.gui.ControlManager;
-import pl.edu.agh.gratex.model.*;
+import pl.edu.agh.gratex.view.ControlManager;
+import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
+import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
+import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
+import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
 import java.util.LinkedList;
 

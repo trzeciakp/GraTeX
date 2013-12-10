@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.ModeType;
-import pl.edu.agh.gratex.gui.ControlManager;
+import pl.edu.agh.gratex.view.ControlManager;
 
 import java.util.ArrayList;
 import java.util.List;
