@@ -65,7 +65,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     public void updateFunctions() {
         menuItems.get(MenuBarItem.COPY).setEnabled(false);
         menuItems.get(MenuBarItem.PASTE).setEnabled(false);
-        if (ControlManager.getMode() == ModeType.VERTEX && ControlManager.selection.size() > 0) {
+        if (ControlManager.getMode() == ModeType.VERTEX && ControlManager.mainWindow.getSelectionController().getSize() > 0) {
             menuItems.get(MenuBarItem.COPY).setEnabled(true);
         }
         if (ControlManager.currentCopyPasteOperation != null) {

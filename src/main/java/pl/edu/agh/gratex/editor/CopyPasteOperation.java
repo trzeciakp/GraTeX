@@ -2,15 +2,16 @@ package pl.edu.agh.gratex.editor;
 
 
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.model.*;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 import pl.edu.agh.gratex.view.ControlManager;
-import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -33,13 +34,13 @@ public class CopyPasteOperation extends Operation {
 
     public boolean pasting = false;
 
-    public CopyPasteOperation(LinkedList<GraphElement> selectedVertices) {
+    public CopyPasteOperation(List<GraphElement> selectedVertices) {
         vertices = new LinkedList<Vertex>();
         edges = new LinkedList<Edge>();
         labelsV = new LinkedList<LabelV>();
         labelsE = new LinkedList<LabelE>();
 
-        Iterator<GraphElement> it = selectedVertices.listIterator();
+        Iterator<GraphElement> it = (new LinkedList<GraphElement>(selectedVertices)).listIterator();
         Vertex tempV = null;
         while (it.hasNext()) {
             tempV = (Vertex) it.next();

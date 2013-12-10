@@ -13,13 +13,14 @@ import pl.edu.agh.gratex.view.ControlManager;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class RemoveOperation extends Operation {
     private LinkedList<GraphElement> elements;
     private ModeType type;
     private LinkedList<Edge> connectedEdges;
 
-    public RemoveOperation(LinkedList<GraphElement> _elements) {
+    public RemoveOperation(List<GraphElement> _elements) {
         type = ControlManager.getMode();
         elements = new LinkedList<>(_elements);
     }

@@ -61,5 +61,7 @@ public class PanelToolbox extends JPanel {
         paintChildren(g);
     }
 
-
+    public ModeController getModeController() {
+        return modeController;
+    }
 }

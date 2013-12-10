@@ -5,6 +5,8 @@ import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.controller.SelectionController;
+import pl.edu.agh.gratex.controller.SelectionControllerTmpImpl;
 import pl.edu.agh.gratex.editor.*;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.edge.Edge;
@@ -31,7 +33,7 @@ import java.util.List;
 
 
 public class ControlManager {
-    private static MainWindow mainWindow;
+    public static MainWindow mainWindow;
 
     public static File currentFile;
 
@@ -40,7 +42,7 @@ public class ControlManager {
 
     public static Graph graph = new Graph();
     public static Edge currentlyAddedEdge = null;
-    public static LinkedList<GraphElement> selection = new LinkedList<>();
+    //public static LinkedList<GraphElement> selection = new LinkedList<>();
     public static int selectionID = 0;
     public static OperationList operations = null;
     public static GraphElement currentlyMovedElement = null;
@@ -70,7 +72,7 @@ public class ControlManager {
         return tool;
     }
     public static void applyChange() {
-        selection.clear();
+        mainWindow.getSelectionController().clearSelection();
         //mainWindow.panel_propertyEditor.setMode(ControlManager.getMode().ordinal() + 1);
         updatePropertyChangeOperationStatus(false);
         finishMovingElement();
@@ -99,58 +101,61 @@ public class ControlManager {
     }
 
     public static void selectAll() {
-        if (getTool() == ToolType.SELECT) {
-            selection.clear();
-            selection.addAll(ControlManager.graph.getElements(getMode().getRelatedElementType()));
-            updatePropertyChangeOperationStatus(true);
-            mainWindow.updateWorkspace();
-        }
+        mainWindow.getSelectionController().selectAll();
+//        if (getTool() == ToolType.SELECT) {
+//            selection.clear();
+//            selection.addAll(ControlManager.graph.getElements(getMode().getRelatedElementType()));
+//            updatePropertyChangeOperationStatus(true);
+//            mainWindow.updateWorkspace();
+//        }
     }
 
     public static void addToSelection(List<GraphElement> elements, boolean controlDown) {
-        if (!controlDown) {
-            selection.clear();
-            selection.addAll(elements);
-        } else {
-            for(GraphElement temp : elements) {
-                if (selection.contains(temp)) {
-                    selection.remove(temp);
-                } else {
-                    selection.add(temp);
-                }
-            }
-        }
+        mainWindow.getSelectionController().addToSelection(elements, controlDown);
+//        if (!controlDown) {
+//            selection.clear();
+//            selection.addAll(elements);
+//        } else {
+//            for(GraphElement temp : elements) {
+//                if (selection.contains(temp)) {
+//                    selection.remove(temp);
+//                } else {
+//                    selection.add(temp);
+//                }
+//            }
+//        }
         updatePropertyChangeOperationStatus(true);
     }
 
     public static void addToSelection(GraphElement element, boolean controlDown) {
-        if (element != null) {
-            if (controlDown) {
-                if (selection.contains(element)) {
-                    selection.remove(element);
-                } else {
-                    selection.add(element);
-                }
-            } else {
-                selection.clear();
-                selection.add(element);
-            }
-        } else {
-            if (!controlDown) {
-                selection.clear();
-            }
-        }
+        mainWindow.getSelectionController().addToSelection(element, controlDown);
+//        if (element != null) {
+//            if (controlDown) {
+//                if (selection.contains(element)) {
+//                    selection.remove(element);
+//                } else {
+//                    selection.add(element);
+//                }
+//            } else {
+//                selection.clear();
+//                selection.add(element);
+//            }
+//        } else {
+//            if (!controlDown) {
+//                selection.clear();
+//            }
+//        }
 
         updatePropertyChangeOperationStatus(true);
     }
 
     public static void deleteSelection() {
-        if (selection.size() > 0) {
-            operations.addNewOperation(new RemoveOperation(selection));
+        if (mainWindow.getSelectionController().getSize() > 0) {
+            operations.addNewOperation(new RemoveOperation(mainWindow.getSelectionController().getSelection()));
             publishInfo(operations.redo());
             mainWindow.updateFunctions();
         }
-        selection.clear();
+        mainWindow.getSelectionController().clearSelection();
         updatePropertyChangeOperationStatus(false);
     }
 
@@ -158,12 +163,12 @@ public class ControlManager {
         mainWindow.menuBar.updateFunctions();
         mainWindow.panel_buttonContainer.updateFunctions();
 
-        if (selection.size() > 0) {
+        if (mainWindow.getSelectionController().getSize() > 0) {
             if (newSelection) {
                 selectionID++;
                 mainWindow.panel_propertyEditor.setEnabled(true);
             }
-            currentPropertyChangeOperation = new PropertyChangeOperation(selection, selectionID);
+            currentPropertyChangeOperation = new PropertyChangeOperation(mainWindow.getSelectionController().getSelection(), selectionID);
             mainWindow.panel_propertyEditor.setModel(currentPropertyChangeOperation.initialModel);
         } else {
             currentPropertyChangeOperation = null;
@@ -232,7 +237,7 @@ public class ControlManager {
     public static void undo() {
         publishInfo(operations.undo());
         mainWindow.updateWorkspace();
-        selection.clear();
+        mainWindow.getSelectionController().clearSelection();
         updatePropertyChangeOperationStatus(false);
         changeMade = true;
     }
@@ -240,7 +245,7 @@ public class ControlManager {
     public static void redo() {
         publishInfo(operations.redo());
         mainWindow.updateWorkspace();
-        selection.clear();
+        mainWindow.getSelectionController().clearSelection();
         changeMade = true;
     }
 
@@ -261,7 +266,7 @@ public class ControlManager {
     }
 
     public static void setNumeration() {
-        selection.clear();
+        mainWindow.getSelectionController().clearSelection();
         updatePropertyChangeOperationStatus(false);
         NumerationDialog nd = new NumerationDialog(mainWindow, graph.getGraphNumeration().isNumerationDigital(), graph.getGraphNumeration().getStartingNumber(), Const.MAX_VERTEX_NUMBER);
         int[] result = nd.showDialog();
@@ -279,7 +284,7 @@ public class ControlManager {
     }
 
     public static void copyToClipboard() {
-        currentCopyPasteOperation = new CopyPasteOperation(selection);
+        currentCopyPasteOperation = new CopyPasteOperation(mainWindow.getSelectionController().getSelection());
         mainWindow.menuBar.updateFunctions();
         mainWindow.panel_buttonContainer.updateFunctions();
         publishInfo(StringLiterals.INFO_SUBGRAPH_COPY);
@@ -324,7 +329,7 @@ public class ControlManager {
         changeMade = true;
 
         if (getTool() != ToolType.SELECT) {
-            selection.clear();
+            mainWindow.getSelectionController().clearSelection();
             updatePropertyChangeOperationStatus(false);
         }
 
@@ -335,7 +340,7 @@ public class ControlManager {
                 if (currentCopyPasteOperation.fitsIntoPosition()) {
                     operations.addNewOperation(currentCopyPasteOperation);
                     publishInfo(operations.redo());
-                    selection.addAll(currentCopyPasteOperation.vertices);
+                    mainWindow.getSelectionController().addToSelection(currentCopyPasteOperation.vertices, false);
                     updatePropertyChangeOperationStatus(true);
                     currentCopyPasteOperation = currentCopyPasteOperation.getCopy();
                     mainWindow.menuBar.updateFunctions();
@@ -363,7 +368,7 @@ public class ControlManager {
                             VertexUtils.updateNumber(vertex, ControlManager.graph.getGraphNumeration().getNextFreeNumber());
                             operations.addNewOperation(new AddOperation(vertex));
                             publishInfo(operations.redo());
-                            selection.add(vertex);
+                            mainWindow.getSelectionController().addToSelection(vertex, false);
                         } else {
                             publishInfo(StringLiterals.INFO_CANNOT_CREATE_VERTEX_COLLISION);
                         }
@@ -404,7 +409,7 @@ public class ControlManager {
                             currentlyAddedEdge.setDirected(e.isShiftDown());
                             operations.addNewOperation(new AddOperation(currentlyAddedEdge));
                             publishInfo(operations.redo());
-                            selection.add(currentlyAddedEdge);
+                            mainWindow.getSelectionController().addToSelection(currentlyAddedEdge, false);
                             currentlyAddedEdge = null;
                         }
                     }
@@ -430,7 +435,7 @@ public class ControlManager {
                             labelV.setModel(graph.getLabelVDefaultModel());
                             operations.addNewOperation(new AddOperation(labelV));
                             publishInfo(operations.redo());
-                            selection.add(labelV);
+                            mainWindow.getSelectionController().addToSelection(labelV, false);
                             createdLabel = true;
                         } else {
                             publishInfo(StringLiterals.INFO_CANNOT_CREATE_LABEL_V_EXISTS);
@@ -461,7 +466,7 @@ public class ControlManager {
                             labelE.setHorizontalPlacement(e.isShiftDown());
                             operations.addNewOperation(new AddOperation(labelE));
                             publishInfo(operations.redo());
-                            selection.add(labelE);
+                            mainWindow.getSelectionController().addToSelection(labelE, false);
                             createdLabel = true;
                         } else {
                             publishInfo(StringLiterals.INFO_CANNOT_CREATE_LABEL_E_EXISTS);
@@ -501,7 +506,7 @@ public class ControlManager {
         if (getTool() != ToolType.REMOVE) {
             if (getMode() == ModeType.VERTEX) {
                 if (GraphUtils.getVertexFromPosition(graph, x, y) != null) {
-                    if (selection.contains(GraphUtils.getVertexFromPosition(graph, x, y))) {
+                    if (mainWindow.getSelectionController().contains(GraphUtils.getVertexFromPosition(graph, x, y))) {
                         currentlyMovedElement = GraphUtils.getVertexFromPosition(graph, x, y);
                         currentDragOperation = new DragOperation(currentlyMovedElement);
                         currentDragOperation.setStartPos(((Vertex) currentlyMovedElement).getPosX(), ((Vertex) currentlyMovedElement).getPosY());
@@ -509,7 +514,7 @@ public class ControlManager {
                 }
             } else if (getMode() == ModeType.EDGE) {
                 if (GraphUtils.getEdgeFromPosition(graph, x, y) != null) {
-                    if (selection.contains(GraphUtils.getEdgeFromPosition(graph, x, y))) {
+                    if (mainWindow.getSelectionController().contains(GraphUtils.getEdgeFromPosition(graph, x, y))) {
                         Edge edge = GraphUtils.getEdgeFromPosition(graph, x, y);
                         currentlyMovedElement = edge;
                         currentDragOperation = new DragOperation(currentlyMovedElement);
@@ -558,7 +563,7 @@ public class ControlManager {
                 }
             } else if (getMode() == ModeType.LABEL_VERTEX) {
                 if (GraphUtils.getLabelVFromPosition(graph, x, y) != null) {
-                    if (selection.contains(GraphUtils.getLabelVFromPosition(graph, x, y))) {
+                    if (mainWindow.getSelectionController().contains(GraphUtils.getLabelVFromPosition(graph, x, y))) {
                         currentlyMovedElement = GraphUtils.getLabelVFromPosition(graph, x, y);
                         currentDragOperation = new DragOperation(currentlyMovedElement);
                         currentDragOperation.setStartAngle(((LabelV) currentlyMovedElement).getPosition());
@@ -566,7 +571,7 @@ public class ControlManager {
                 }
             } else if (getMode() == ModeType.LABEL_EDGE) {
                 if (GraphUtils.getLabelEFromPosition(graph, x, y) != null) {
-                    if (selection.contains(GraphUtils.getLabelEFromPosition(graph, x, y))) {
+                    if (mainWindow.getSelectionController().contains(GraphUtils.getLabelEFromPosition(graph, x, y))) {
                         currentlyMovedElement = GraphUtils.getLabelEFromPosition(graph, x, y);
                         currentDragOperation = new DragOperation(currentlyMovedElement);
                         currentDragOperation.setLabelEStartState((LabelE) currentlyMovedElement);
@@ -650,8 +655,8 @@ public class ControlManager {
 
             if (width + height > 2) {
                 if (getTool() == ToolType.REMOVE) {
-                    selection.clear();
-                    selection.addAll(GraphUtils.getIntersectingElements(graph, mode, new Rectangle(x1, y1, width, height)));
+                    mainWindow.getSelectionController().clearSelection();
+                    mainWindow.getSelectionController().addToSelection(GraphUtils.getIntersectingElements(graph, mode, new Rectangle(x1, y1, width, height)), false);
                     deleteSelection();
                 } else if (getTool() == ToolType.SELECT) {
                     addToSelection(GraphUtils.getIntersectingElements(graph, mode, new Rectangle(x1, y1, width, height)), e.isControlDown());
@@ -1023,7 +1028,7 @@ public class ControlManager {
 
     public static void paintGrid(Graphics2D g) {
         if (graph.gridOn) {
-            g.setColor(new Color(200, 200, 200));
+            g.setColor(Const.GRID_COLOR);
             int i = 0;
             while ((i += graph.gridResolutionX) < graph.pageWidth) {
                 g.drawLine(i, 0, i, graph.pageHeight);
@@ -1043,10 +1048,10 @@ public class ControlManager {
                 int y = Math.min(mousePressY, mouseY);
                 int height = Math.abs(mouseY - mousePressY);
 
-                g.setColor(new Color(140, 210, 255, 128));
+                g.setColor(Const.SELECTION_RECT_INSIDE_COLOR);
                 g.fillRect(x, y, width, height);
 
-                g.setColor(new Color(0, 0, 255, 128));
+                g.setColor(Const.SELECTION_RECT_BORDER_COLOR);
                 g.drawRect(x, y, width, height);
             }
         }

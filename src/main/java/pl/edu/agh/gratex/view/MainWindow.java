@@ -23,6 +23,11 @@ public class MainWindow extends JFrame {
     public PanelPropertyEditor panel_propertyEditor;
     public PanelButtonContainer panel_buttonContainer;
 
+    private GeneralController generalController;
+    private ModeController modeController;
+    private ToolController toolController;
+    private SelectionController selectionController;
+
     public MenuBar menuBar;
     public JLabel label_info;
 
@@ -31,8 +36,13 @@ public class MainWindow extends JFrame {
         URL url = this.getClass().getClassLoader().getResource("images/icon.png");
         setIconImage(ImageIO.read(url));
 
+        generalController = new GeneralControllerTmpImpl();
+        modeController = new ModeControllerTmpImpl();
+        toolController = new ToolControllerImpl();
+        selectionController = new SelectionControllerTmpImpl(modeController, toolController);
+
         ControlManager.passWindowHandle(this);
-        initializeFrame(new GeneralControllerTmpImpl(), new ToolControllerImpl(), new ModeControllerTmpImpl(), ControlManager.graph.pageWidth, ControlManager.graph.pageHeight);
+        initializeFrame(ControlManager.graph.pageWidth, ControlManager.graph.pageHeight);
         initializeEvents();
         updateFunctions();
         ControlManager.newGraphFile();
@@ -83,7 +93,7 @@ public class MainWindow extends JFrame {
         });
     }
 
-    private void initializeFrame(GeneralController generalController, ToolController toolController, ModeController modeController, int workspacePageWidth, int workspacePageHeight) {
+    private void initializeFrame(int workspacePageWidth, int workspacePageHeight) {
         setMinimumSize(new Dimension(800, 500));
         setSize(1038, 768);
         setLocationRelativeTo(null);
@@ -122,5 +132,21 @@ public class MainWindow extends JFrame {
         menuBar = new MenuBar(generalController, modeController, toolController);
         menuBar.setBounds(0, 0, 0, 25);
         getContentPane().add(menuBar);
+    }
+
+    public GeneralController getGeneralController() {
+        return generalController;
+    }
+
+    public ModeController getModeController() {
+        return modeController;
+    }
+
+    public ToolController getToolController() {
+        return toolController;
+    }
+
+    public SelectionController getSelectionController() {
+        return selectionController;
     }
 }

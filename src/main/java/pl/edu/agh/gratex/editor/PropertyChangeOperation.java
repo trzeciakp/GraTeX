@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 
 public class PropertyChangeOperation extends Operation {
@@ -16,9 +17,9 @@ public class PropertyChangeOperation extends Operation {
     public PropertyModel endModel;
     public int selectionID;
 
-    public PropertyChangeOperation(LinkedList<GraphElement> _elements, int _selectionID) {
+    public PropertyChangeOperation(List<GraphElement> _elements, int _selectionID) {
         selectionID = _selectionID;
-        elements = new LinkedList<GraphElement>(_elements);
+        elements = new LinkedList<>(_elements);
         initialModels = new LinkedList<PropertyModel>();
 
         Iterator<GraphElement> it = elements.listIterator();

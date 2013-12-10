@@ -67,7 +67,7 @@ public class VertexUtils {
             adjustToGrid(vertex);
         }
 
-        if (ControlManager.selection.contains(vertex)) {
+        if (ControlManager.mainWindow.getSelectionController().contains(vertex)) {
             g.setColor(Const.SELECTION_COLOR);
             g.fill(Geometry.getVertexShape(shape + 1, radius + lineWidth / 2 + radius / 4, posX, posY));
         }

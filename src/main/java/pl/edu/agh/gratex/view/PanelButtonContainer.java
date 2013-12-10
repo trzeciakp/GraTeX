@@ -37,7 +37,7 @@ public class PanelButtonContainer extends JPanel {
     public void updateFunctions() {
         buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(false);
         buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(false);
-        if (ControlManager.getMode() == ModeType.VERTEX && ControlManager.selection.size() > 0) {
+        if (ControlManager.getMode() == ModeType.VERTEX && ControlManager.mainWindow.getSelectionController().getSize() > 0) {
             buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(true);
         }
         if (ControlManager.currentCopyPasteOperation != null) {

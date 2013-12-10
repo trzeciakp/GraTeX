@@ -529,7 +529,7 @@ public class LabelE extends GraphElement implements Serializable {
 
         updatePosition(g);
 
-        if (ControlManager.selection.contains(this)) {
+        if (ControlManager.mainWindow.getSelectionController().contains(this)) {
             g.setColor(Const.SELECTION_COLOR);
             g.fillPolygon(getOutline());
         }
