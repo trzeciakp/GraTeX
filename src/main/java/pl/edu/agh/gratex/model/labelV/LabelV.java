@@ -18,9 +18,48 @@ import java.io.Serializable;
 public class LabelV extends GraphElement implements Serializable {
     private static final long serialVersionUID = 5054682946344977073L;
 
+    // TEST NOWEJ OPERACJI CTRL Z
+    @Override
+    public boolean equals(Object o2) {
+        if (!(o2 instanceof LabelV)) {
+            return false;
+        }
+        LabelV l = (LabelV) o2;
+
+        if (!text.equals(l.text)) {
+            return false;
+        }
+        if (!fontColor.equals(l.fontColor)) {
+            return false;
+        }
+        if (position != l.position) {
+            return false;
+        }
+        if (spacing != l.spacing) {
+            return false;
+        }
+        if (posX != l.posX) {
+            return false;
+        }
+        if (posY != l.posY) {
+            return false;
+        }
+        if (!owner.equals(l.owner)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return owner.hashCode() * 1000000 + posX * 1000 + posY;
+    }
+
     // Wartości edytowalne przez użytkowanika
     private String text;
-    private Font font = new Font("Cambria", Font.PLAIN, 16);
+    private Font font = Const.DEFAULT_FONT;
     private Color fontColor;
     private int position;                                        // 0-N; 1-NE; 2-E; ...; 7 - NW;
     private int spacing;                                        // odleglość napisu od obrysu wierzchołka

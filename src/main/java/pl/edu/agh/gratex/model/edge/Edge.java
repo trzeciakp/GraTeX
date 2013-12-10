@@ -26,6 +26,53 @@ import java.util.LinkedList;
 public class Edge extends GraphElement implements Serializable {
     private static final long serialVersionUID = -7941761380307220731L;
 
+    // TEST NOWEJ OPERACJI CTRL Z
+    @Override
+    public boolean equals(Object o2) {
+        if (!(o2 instanceof Edge)) {
+            return false;
+        }
+        Edge e = (Edge) o2;
+        if (lineType != e.lineType) {
+            return false;
+        }
+        if (lineWidth != e.lineWidth) {
+            return false;
+        }
+        if (directed != e.directed) {
+            return false;
+        }
+        if (arrowType != e.arrowType) {
+            return false;
+        }
+        if (!lineColor.equals(e.lineColor)) {
+            return false;
+        }
+        if (relativeEdgeAngle != e.relativeEdgeAngle) {
+            return false;
+        }
+        if (!vertexA.equals(e.vertexA)) {
+            return false;
+        }
+        if (!vertexB.equals(e.vertexB)) {
+            return false;
+        }
+        if (!vertexB.equals(e.vertexB)) {
+            return false;
+        }
+        if (label != e.label) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return vertexA.hashCode() * 1000000 + vertexB.hashCode();
+    }
+
     // Wartości edytowalne przez użytkowanika
     private LineType lineType;
     private int lineWidth;
@@ -42,8 +89,6 @@ public class Edge extends GraphElement implements Serializable {
     private int outAngle;
 
     // Pozostałe
-    private int arrowLengthFactor = 2;                        // Nakład na długość grota względem grubości linii - ustawienie z poziomu kodu
-    private int arrowLengthBasic = 10;                        // Podstawowa długość grota - ustawienie z poziomu kodu
     private Point arcMiddle = new Point();
     private int arcRadius;
     private Point outPoint;
@@ -249,7 +294,7 @@ public class Edge extends GraphElement implements Serializable {
             p2 = new int[]{ax + dy / 2, ay - dx / 2};
         }
 
-        double part = (arrowLengthBasic + arrowLengthFactor * getLineWidth())
+        double part = (Const.ARROW_LENGTH_BASIC + Const.ARROW_LENGTH_FACTOR * getLineWidth())
                 / Math.sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]));
 
         p1[0] = bx - (int) Math.round(part * (bx - p1[0]));

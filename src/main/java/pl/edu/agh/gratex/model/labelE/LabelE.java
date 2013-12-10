@@ -18,9 +18,57 @@ import java.io.Serializable;
 public class LabelE extends GraphElement implements Serializable {
     private static final long serialVersionUID = 7816741486248743237L;
 
+    // TEST NOWEJ OPERACJI CTRL Z
+    @Override
+    public boolean equals(Object o2) {
+        if (!(o2 instanceof LabelE)) {
+            return false;
+        }
+        LabelE l = (LabelE) o2;
+
+        if (!text.equals(l.text)) {
+            return false;
+        }
+        if (!fontColor.equals(l.fontColor)) {
+            return false;
+        }
+        if (position != l.position) {
+            return false;
+        }
+        if (spacing != l.spacing) {
+            return false;
+        }
+        if (topPlacement != l.topPlacement) {
+            return false;
+        }
+        if (horizontalPlacement != l.horizontalPlacement) {
+            return false;
+        }
+        if (posX != l.posX) {
+            return false;
+        }
+        if (posY != l.posY) {
+            return false;
+        }
+        if (angle != l.angle) {
+            return false;
+        }
+        if (!owner.equals(l.owner)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return owner.hashCode() * 1000000 + posX * 1000 + posY;
+    }
+
     // Wartości edytowalne przez użytkowanika
     private String text;
-    private Font font = new Font("Cambria", Font.PLAIN, 16);
+    private Font font = Const.DEFAULT_FONT;
     private Color fontColor;
     private int position;                                        // Procent przesunięcia na krawędzie
     private int spacing;                                        // odleglość napisu od krawędzi

@@ -12,4 +12,12 @@ public class Const {
 
     // Maximum number tht a vertex can have. Alphabetical "ZZ" corresponds to digital 703.
     public final static int MAX_VERTEX_NUMBER = 703;
+
+    // Default font for drawing graph elements
+    public final static Font DEFAULT_FONT = new Font("Cambria", Font.PLAIN, 16);
+
+    // Basic arrow head length
+    public final static int ARROW_LENGTH_BASIC = 10;
+    // Ratio: length of arrow head to lineWidth
+    public final static int ARROW_LENGTH_FACTOR = 2;
 }

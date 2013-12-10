@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.model.vertex;
 
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
@@ -23,24 +24,47 @@ public class Vertex extends GraphElement implements Serializable {
         }
         Vertex v = (Vertex) o2;
 
-        if (number != v.number)
-        {
+        if (number != v.number) {
             return false;
         }
-        if (radius != v.radius)
-        {
+        if (radius != v.radius) {
             return false;
         }
-        if (shape != v.shape)
-        {
+        if (shape != v.shape) {
             return false;
         }
-        if (!vertexColor.equals(vertexColor))
-        {
+        if (!vertexColor.equals(v.vertexColor)) {
+            return false;
+        }
+        if (lineWidth != v.lineWidth) {
+            return false;
+        }
+        if (lineType != v.lineType) {
+            return false;
+        }
+        if (!lineColor.equals(v.lineColor)) {
+            return false;
+        }
+        if (!fontColor.equals(v.fontColor)) {
+            return false;
+        }
+        if (labelInside != v.labelInside) {
+            return false;
+        }
+        if (posX != v.posX) {
+            return false;
+        }
+        if (posY != v.posY) {
             return false;
         }
 
         return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return posX * 1000 + posY;
     }
 
     // Wartości edytowalne przez użytkowanika
@@ -51,7 +75,7 @@ public class Vertex extends GraphElement implements Serializable {
     private int lineWidth;
     private LineType lineType;
     private Color lineColor;
-    private Font font;
+    private Font font = Const.DEFAULT_FONT;
     private Color fontColor;
     private boolean labelInside;
 
