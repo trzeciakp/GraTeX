@@ -1,6 +1,5 @@
 package pl.edu.agh.gratex.view;
 
-import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
@@ -30,6 +29,7 @@ public class MainWindow extends JFrame {
     private ModeController modeController;
     private ToolController toolController;
     private SelectionController selectionController;
+    private MouseController mouseController;
 
     public MenuBar menuBar;
     public JLabel label_info;
@@ -42,11 +42,14 @@ public class MainWindow extends JFrame {
         ControlManager.passWindowHandle(this);
 
         modeController = new ModeControllerTmpImpl();
-        toolController = new ToolControllerTmpImpl();
-        generalController = new GeneralControllerTmpImpl(this, modeController, toolController);
-        selectionController = new SelectionControllerTmpImpl(modeController, toolController);
+        toolController = new ToolControllerImpl();
+        mouseController = new MouseControllerImpl(this, modeController, toolController);
+        selectionController = new SelectionControllerImpl(modeController, toolController);
+        generalController = new GeneralControllerImpl(this, mouseController, selectionController, modeController, toolController);
 
-        initializeFrame(Const.PAGE_WIDTH, Const.PAGE_HEIGHT);
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler(mouseController));
+
+        initializeFrame();
         initializeEvents();
 
         modeController.setMode(ModeType.VERTEX);
@@ -64,7 +67,7 @@ public class MainWindow extends JFrame {
     public void updateFunctions() {
         panel_toolbox.repaint();
         updateWorkspace();
-        label_info.setText(StringLiterals.INFO_MODE_AND_TOOL(ControlManager.mainWindow.getGeneralController().getMode(), ControlManager.getTool()));
+        label_info.setText(StringLiterals.INFO_MODE_AND_TOOL(generalController.getMode(), generalController.getTool()));
     }
 
     public void adjustSize() {
@@ -84,8 +87,6 @@ public class MainWindow extends JFrame {
     }
 
     private void initializeEvents() {
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler());
-
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent arg0) {
@@ -101,7 +102,7 @@ public class MainWindow extends JFrame {
         });
     }
 
-    private void initializeFrame(int workspacePageWidth, int workspacePageHeight) {
+    private void initializeFrame() {
         setMinimumSize(new Dimension(800, 500));
         setSize(1038, 768);
         setLocationRelativeTo(null);
@@ -112,7 +113,7 @@ public class MainWindow extends JFrame {
 
         scrollPane_workspace = new JScrollPane();
         scrollPane_workspace.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
-        panel_workspace = new PanelWorkspace(scrollPane_workspace, toolController, workspacePageWidth, workspacePageHeight);
+        panel_workspace = new PanelWorkspace(scrollPane_workspace, toolController, mouseController);
         scrollPane_workspace.setViewportView(panel_workspace);
         panel_workspace.setLayout(null);
         scrollPane_workspace.setBounds(110, 85, 472, 344);
@@ -123,7 +124,7 @@ public class MainWindow extends JFrame {
         panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
         getContentPane().add(panel_propertyEditor);
 
-        panel_buttonContainer = new PanelButtonContainer(generalController);
+        panel_buttonContainer = new PanelButtonContainer(generalController, mouseController);
         panel_buttonContainer.setBounds(-5, 25, 802, 50);
         panel_buttonContainer.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 
@@ -137,7 +138,7 @@ public class MainWindow extends JFrame {
         panel_toolbox.setBounds(10, 85, 90, 344);
         getContentPane().add(panel_toolbox);
 
-        menuBar = new MenuBar(generalController, modeController, toolController);
+        menuBar = new MenuBar(generalController, mouseController, modeController, toolController);
         menuBar.setBounds(0, 0, 0, 25);
         getContentPane().add(menuBar);
     }
@@ -156,5 +157,9 @@ public class MainWindow extends JFrame {
 
     public SelectionController getSelectionController() {
         return selectionController;
+    }
+
+    public MouseController getMouseController() {
+        return mouseController;
     }
 }

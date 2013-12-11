@@ -9,12 +9,12 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SelectionControllerTmpImpl implements SelectionController, ToolListener, ModeListener {
+public class SelectionControllerImpl implements SelectionController, ToolListener, ModeListener {
     private LinkedList<GraphElement> selection;
     private ToolType tool;
     private ModeType mode;
 
-    public SelectionControllerTmpImpl(ModeController modeController, ToolController toolController) {
+    public SelectionControllerImpl(ModeController modeController, ToolController toolController) {
         selection = new LinkedList<>();
         modeController.addModeListener(this);
         toolController.addToolListener(this);
@@ -25,26 +25,26 @@ public class SelectionControllerTmpImpl implements SelectionController, ToolList
     // Listeners implementation
 
     @Override
-    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
-        tool = currentToolType;
-    }
-
-    @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
         mode = currentMode;
     }
 
     @Override
     public int modeUpdatePriority() {
-        return 10;
+        return 0;
+    }
+
+    @Override
+    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
+        tool = currentToolType;
     }
 
     @Override
     public int toolUpdatePriority() {
-        return 10;
+        return 0;
     }
 
-//===========================================
+    //===========================================
     // SelectionController interface implementation
 
     @Override
@@ -78,7 +78,7 @@ public class SelectionControllerTmpImpl implements SelectionController, ToolList
     @Override
     public void addToSelection(Collection<? extends GraphElement> elements, boolean controlDown) {
         if (controlDown) {
-            for(GraphElement temp : elements) {
+            for (GraphElement temp : elements) {
                 if (selection.contains(temp)) {
                     selection.remove(temp);
                 } else {
@@ -89,6 +89,7 @@ public class SelectionControllerTmpImpl implements SelectionController, ToolList
             selection.clear();
             selection.addAll(elements);
         }
+        ControlManager.updatePropertyChangeOperationStatus(true);
     }
 
     @Override
@@ -109,5 +110,6 @@ public class SelectionControllerTmpImpl implements SelectionController, ToolList
                 selection.clear();
             }
         }
+        ControlManager.updatePropertyChangeOperationStatus(true);
     }
 }

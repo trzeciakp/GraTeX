@@ -26,53 +26,6 @@ import java.util.LinkedList;
 public class Edge extends GraphElement implements Serializable {
     private static final long serialVersionUID = -7941761380307220731L;
 
-    // TEST NOWEJ OPERACJI CTRL Z
-    @Override
-    public boolean equals(Object o2) {
-        if (!(o2 instanceof Edge)) {
-            return false;
-        }
-        Edge e = (Edge) o2;
-        if (lineType != e.lineType) {
-            return false;
-        }
-        if (lineWidth != e.lineWidth) {
-            return false;
-        }
-        if (directed != e.directed) {
-            return false;
-        }
-        if (arrowType != e.arrowType) {
-            return false;
-        }
-        if (!lineColor.equals(e.lineColor)) {
-            return false;
-        }
-        if (relativeEdgeAngle != e.relativeEdgeAngle) {
-            return false;
-        }
-        if (!vertexA.equals(e.vertexA)) {
-            return false;
-        }
-        if (!vertexB.equals(e.vertexB)) {
-            return false;
-        }
-        if (!vertexB.equals(e.vertexB)) {
-            return false;
-        }
-        if (label != e.label) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return vertexA.hashCode() * 1000000 + vertexB.hashCode();
-    }
-
     // Wartości edytowalne przez użytkowanika
     private LineType lineType;
     private int lineWidth;
@@ -509,7 +462,7 @@ public class Edge extends GraphElement implements Serializable {
                 g.setStroke(DrawingTools.getStroke(getLineWidth(), getLineType(), 0.0));
                 g.drawLine(getVertexA().getPosX(), getVertexA().getPosY(), getVertexB().getPosX(), getVertexB().getPosY());
             }
-            if ((ControlManager.mainWindow.getSelectionController().contains(this) || ControlManager.currentlyAddedEdge == this) && getRelativeEdgeAngle() != 0) {
+            if ((ControlManager.mainWindow.getSelectionController().contains(this) || ControlManager.mainWindow.getMouseController().isEdgeCurrentlyAdded(this)) && getRelativeEdgeAngle() != 0) {
                 drawAngleVisualisation(g);
             }
         } else {

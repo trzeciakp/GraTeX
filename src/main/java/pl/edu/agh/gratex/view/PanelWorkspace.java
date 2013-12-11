@@ -1,7 +1,9 @@
 package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.constants.CursorType;
 import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.controller.MouseController;
 import pl.edu.agh.gratex.controller.ToolController;
 import pl.edu.agh.gratex.controller.ToolListener;
 import pl.edu.agh.gratex.model.graph.Graph;
@@ -18,42 +20,36 @@ import java.util.EnumMap;
 public class PanelWorkspace extends JPanel implements MouseListener, MouseMotionListener, ToolListener {
     private static final long serialVersionUID = -7736096439630674213L;
 
-    private Cursor addToolCursor;
-    private Cursor removeToolCursor;
-    private Cursor selectToolCursor;
-
+    private MouseController mouseController;
     private JScrollPane parent;
     private ToolType tool;
-    private int pageWidth;
-    private int pageHeight;
     private int mouseDragX = -1;
     private int mouseDragY = -1;
-    private EnumMap<ToolType, Cursor> cursors = new EnumMap<ToolType, Cursor>(ToolType.class);
+    private EnumMap<ToolType, Cursor> cursors = new EnumMap<>(ToolType.class);
 
 
     private boolean mouseInWorkspace;
 
-    public PanelWorkspace(JScrollPane _parent, ToolController toolController, int pageWidth, int pageHeight) {
+    public PanelWorkspace(JScrollPane parent, ToolController toolController, MouseController mouseController) {
         super();
-        parent = _parent;
-        this.pageWidth = pageWidth;
-        this.pageHeight = pageHeight;
+        this.mouseController = mouseController;
+        this.parent = parent;
         addMouseListener(this);
         addMouseMotionListener(this);
         toolController.addToolListener(this);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         try {
-            for(ToolCursor toolCursor : ToolCursor.values()) {
-                URL url = this.getClass().getClassLoader().getResource(toolCursor.getImageName());
+            for (CursorType cursorType : CursorType.values()) {
+                URL url = this.getClass().getClassLoader().getResource(cursorType.getImageName());
                 Image image = ImageIO.read(url);
-                Cursor cursor = toolkit.createCustomCursor(image, new Point(0, 0), toolCursor.getDescription());
-                cursors.put(toolCursor.getToolType(), cursor);
+                Cursor cursor = toolkit.createCustomCursor(image, new Point(0, 0), cursorType.getDescription());
+                cursors.put(cursorType.getToolType(), cursor);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        setPreferredSize(new Dimension(this.pageWidth, this.pageHeight));
+        setPreferredSize(new Dimension(Const.PAGE_WIDTH, Const.PAGE_HEIGHT));
         updateCursor(toolController.getTool());
     }
 
@@ -75,13 +71,13 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         g.setColor(Color.GRAY);
         g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, this.pageWidth, this.pageHeight);
+        g.fillRect(0, 0, Const.PAGE_WIDTH, Const.PAGE_HEIGHT);
 
         if (ControlManager.mainWindow.getGeneralController().getGraph() != null) {
             paintGrid(g2d, ControlManager.mainWindow.getGeneralController().getGraph());
 
             if (mouseInWorkspace) {
-                ControlManager.paintCurrentlyAddedElement(g2d);
+                mouseController.paintCurrentlyAddedElement(g2d);
                 paintCopiedSubgraph(g2d);
             }
 
@@ -91,11 +87,11 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     }
 
     public void mouseClicked(MouseEvent e) {
-        if (e.getX() <= this.pageWidth && e.getY() <= this.pageHeight && SwingUtilities.isLeftMouseButton(e)) {
-            ControlManager.processMouseClicking(e);
+        if (e.getX() <= Const.PAGE_WIDTH && e.getY() <= Const.PAGE_HEIGHT && SwingUtilities.isLeftMouseButton(e)) {
+            mouseController.processMouseClicking(e);
             repaint();
         } else if (SwingUtilities.isRightMouseButton(e)) {
-            ControlManager.cancelCurrentOperation();
+            ControlManager.mainWindow.getMouseController().cancelCurrentOperation();
             repaint();
         }
     }
@@ -114,14 +110,14 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         //updateCursor();
         mouseDragX = -1;
         if (SwingUtilities.isLeftMouseButton(e)) {
-            ControlManager.processMouseReleasing(e);
+            mouseController.processMouseReleasing(e);
             repaint();
         }
     }
 
     public void mousePressed(MouseEvent e) {
-        if (e.getX() <= this.pageWidth && e.getY() <= this.pageHeight && SwingUtilities.isLeftMouseButton(e)) {
-            ControlManager.processMousePressing(e);
+        if (e.getX() <= Const.PAGE_WIDTH && e.getY() <= Const.PAGE_HEIGHT && SwingUtilities.isLeftMouseButton(e)) {
+            mouseController.processMousePressing(e);
             repaint();
         } else if (!SwingUtilities.isLeftMouseButton(e)) {
             mouseDragX = MouseInfo.getPointerInfo().getLocation().x;
@@ -147,7 +143,14 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
             mouseDragX = mouseX;
             mouseDragY = mouseY;
         } else {
-            ControlManager.processMouseDragging(e);
+            mouseController.processMouseDragging(e);
+            repaint();
+        }
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        if (e.getX() <= Const.PAGE_WIDTH && e.getY() <= Const.PAGE_HEIGHT) {
+            mouseController.processMouseMoving(e);
             repaint();
         }
     }
@@ -169,40 +172,19 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
 
     public void paintSelectionArea(Graphics2D g) {
-        if (tool != ToolType.ADD && ControlManager.currentlyMovedElement == null) {
-            if (ControlManager.mousePressed && (ControlManager.mouseX != ControlManager.mousePressX || ControlManager.mouseY != ControlManager.mousePressY)) {
-                int x = Math.min(ControlManager.mousePressX, ControlManager.mouseX);
-                int width = Math.abs(ControlManager.mouseX - ControlManager.mousePressX);
-                int y = Math.min(ControlManager.mousePressY, ControlManager.mouseY);
-                int height = Math.abs(ControlManager.mouseY - ControlManager.mousePressY);
+        Rectangle selectionArea = mouseController.getSelectionArea();
+        if (selectionArea != null) {
+            g.setColor(Const.SELECTION_RECT_INSIDE_COLOR);
+            g.fill(selectionArea);
 
-                g.setColor(Const.SELECTION_RECT_INSIDE_COLOR);
-                g.fillRect(x, y, width, height);
-
-                g.setColor(Const.SELECTION_RECT_BORDER_COLOR);
-                g.drawRect(x, y, width, height);
-            }
+            g.setColor(Const.SELECTION_RECT_BORDER_COLOR);
+            g.draw(selectionArea);
         }
     }
+
 
     public void paintCopiedSubgraph(Graphics2D g) {
-        if (ControlManager.currentCopyPasteOperation != null) {
-            if (ControlManager.currentCopyPasteOperation.pasting) {
-                ControlManager.currentCopyPasteOperation.targetX = ControlManager.mouseX;
-                ControlManager.currentCopyPasteOperation.targetY = ControlManager.mouseY;
-                ControlManager.currentCopyPasteOperation.calculatePosition();
-                if (ControlManager.currentCopyPasteOperation.fitsIntoPosition()) {
-                    ControlManager.currentCopyPasteOperation.drawDummySubgraph(g);
-                }
-            }
-        }
-    }
-
-    public void mouseMoved(MouseEvent e) {
-        if (e.getX() <= this.pageWidth && e.getY() <= this.pageHeight) {
-            ControlManager.processMouseMoving(e);
-            repaint();
-        }
+        ControlManager.mainWindow.getMouseController().paintCopiedSubgraph(g);
     }
 
     @Override
@@ -214,34 +196,6 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     @Override
     public int toolUpdatePriority() {
         return 0;
-    }
-
-    private enum ToolCursor {
-        ADD(ToolType.ADD, "images/addtoolcursor.png", "add"),
-        REMOVE(ToolType.REMOVE, "images/removetoolcursor.png", "remove"),
-        SELECT(ToolType.SELECT, "images/selecttoolcursor.png", "select");
-
-        private ToolType toolType;
-        private String imageName;
-        private String description;
-
-        ToolCursor(ToolType toolType, String imageName, String description) {
-            this.toolType = toolType;
-            this.imageName = imageName;
-            this.description = description;
-        }
-
-        private ToolType getToolType() {
-            return toolType;
-        }
-
-        private String getImageName() {
-            return imageName;
-        }
-
-        private String getDescription() {
-            return description;
-        }
     }
 }
 

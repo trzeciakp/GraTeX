@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.view;
 import pl.edu.agh.gratex.constants.ActionButtonType;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.MouseController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,13 +14,15 @@ public class PanelButtonContainer extends JPanel {
     private static final long serialVersionUID = 4702408962784933450L;
 
     private GeneralController generalController;
+    private MouseController mouseController;
     private EnumMap<ActionButtonType, ActionButton> buttons = new EnumMap<ActionButtonType, ActionButton>(ActionButtonType.class);
 
-    public PanelButtonContainer(GeneralController generalController) {
+    public PanelButtonContainer(GeneralController generalController, MouseController mouseController) {
         super();
         setLayout(null);
         setFocusTraversalKeysEnabled(false);
         this.generalController = generalController;
+        this.mouseController = mouseController;
 
         int x = 10;
         for (ActionButtonType actionButtonType : ActionButtonType.values()) {
@@ -40,7 +43,7 @@ public class PanelButtonContainer extends JPanel {
         if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.VERTEX && ControlManager.mainWindow.getSelectionController().getSize() > 0) {
             buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(true);
         }
-        if (ControlManager.currentCopyPasteOperation != null) {
+        if (mouseController.clipboardNotEmpty()) {
             buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(true);
         }
     }

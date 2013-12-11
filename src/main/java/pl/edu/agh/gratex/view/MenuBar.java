@@ -14,16 +14,21 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     private GeneralController generalController;
     private ModeController modeController;
     private ToolController toolController;
+    private MouseController mouseController;
     private EnumMap<MenuBarItem, JMenuItem> menuItems;
 
-    public MenuBar(GeneralController generalController, ModeController modeController, ToolController toolController) {
+    public MenuBar(GeneralController generalController, MouseController mouseController, ModeController modeController, ToolController toolController) {
         super();
         this.generalController = generalController;
         this.modeController = modeController;
         this.toolController = toolController;
-        EnumMap<MenuBarSubmenu, JMenu> menus = new EnumMap<MenuBarSubmenu, JMenu>(MenuBarSubmenu.class);
-        EnumMap<MenuBarSubmenu, ButtonGroup> groups = new EnumMap<MenuBarSubmenu, ButtonGroup>(MenuBarSubmenu.class);
-        menuItems = new EnumMap<MenuBarItem, JMenuItem>(MenuBarItem.class);
+        this.mouseController = mouseController;
+        modeController.addModeListener(this);
+        toolController.addToolListener(this);
+
+        EnumMap<MenuBarSubmenu, JMenu> menus = new EnumMap<>(MenuBarSubmenu.class);
+        EnumMap<MenuBarSubmenu, ButtonGroup> groups = new EnumMap<>(MenuBarSubmenu.class);
+        menuItems = new EnumMap<>(MenuBarItem.class);
 
         for (MenuBarSubmenu menuBarSubmenu : MenuBarSubmenu.values()) {
             JMenu jMenu = new JMenu(menuBarSubmenu.getMenuName());
@@ -68,7 +73,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
         if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.VERTEX && ControlManager.mainWindow.getSelectionController().getSize() > 0) {
             menuItems.get(MenuBarItem.COPY).setEnabled(true);
         }
-        if (ControlManager.currentCopyPasteOperation != null) {
+        if (mouseController.clipboardNotEmpty()) {
             menuItems.get(MenuBarItem.PASTE).setEnabled(true);
         }
     }
@@ -101,12 +106,15 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
         switch (currentToolType) {
             case ADD:
                 menuItems.get(MenuBarItem.ADD_TOOL).setSelected(true);
+                menuItems.get(MenuBarItem.SELECT_ALL).setEnabled(false);
                 break;
             case REMOVE:
                 menuItems.get(MenuBarItem.REMOVE_TOOL).setSelected(true);
+                menuItems.get(MenuBarItem.SELECT_ALL).setEnabled(false);
                 break;
             case SELECT:
                 menuItems.get(MenuBarItem.SELECT_TOOL).setSelected(true);
+                menuItems.get(MenuBarItem.SELECT_ALL).setEnabled(true);
                 break;
         }
     }

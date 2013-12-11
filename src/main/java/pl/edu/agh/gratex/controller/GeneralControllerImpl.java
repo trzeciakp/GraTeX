@@ -1,27 +1,36 @@
 package pl.edu.agh.gratex.controller;
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.editor.OperationList;
+import pl.edu.agh.gratex.editor.RemoveOperation;
 import pl.edu.agh.gratex.editor.TemplateChangeOperation;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
+import pl.edu.agh.gratex.parser.Parser;
 import pl.edu.agh.gratex.utils.FileManager;
 import pl.edu.agh.gratex.view.*;
 
 import javax.swing.*;
 import java.io.File;
 
-public class GeneralControllerTmpImpl implements GeneralController, ToolListener, ModeListener {
+public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener {
     private MainWindow mainWindow;
+    private MouseController mouseController;
+    private SelectionController selectionController;
+
     private Graph graph;
     private File currentFile;
-    private ModeType mode;
-    private ToolType tool;
 
-    public GeneralControllerTmpImpl(MainWindow mainWindow, ModeController modeController, ToolController toolController) {
+    private ModeType mode = ModeType.VERTEX;
+    private ToolType tool = ToolType.ADD;
+
+    public GeneralControllerImpl(MainWindow mainWindow, MouseController mouseController, SelectionController selectionController, ModeController modeController, ToolController toolController) {
         this.mainWindow = mainWindow;
+        this.mouseController = mouseController;
+        this.selectionController = selectionController;
         graph = new Graph();
         currentFile = null;
         modeController.addModeListener(this);
@@ -38,7 +47,7 @@ public class GeneralControllerTmpImpl implements GeneralController, ToolListener
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
         mode = currentMode;
-        ControlManager.applyChange();
+        resetWorkspace();
     }
 
     @Override
@@ -49,6 +58,7 @@ public class GeneralControllerTmpImpl implements GeneralController, ToolListener
     @Override
     public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
         tool = currentToolType;
+        resetWorkspace();
     }
 
     @Override
@@ -90,7 +100,7 @@ public class GeneralControllerTmpImpl implements GeneralController, ToolListener
             currentFile = null;
             resetGraph();
             ControlManager.operations = new OperationList();
-            ControlManager.applyChange();
+            resetWorkspace();
             editGraphTemplate();
         }
     }
@@ -113,7 +123,7 @@ public class GeneralControllerTmpImpl implements GeneralController, ToolListener
                     GraphUtils.deleteUnusedLabels(newGraph);
                     graph = newGraph;
                     ControlManager.operations = new OperationList();
-                    ControlManager.applyChange();
+                    resetWorkspace();
                     publishInfo(StringLiterals.INFO_GRAPH_OPEN_OK);
                 } else {
                     publishInfo(StringLiterals.INFO_GRAPH_OPEN_FAIL);
@@ -156,49 +166,79 @@ public class GeneralControllerTmpImpl implements GeneralController, ToolListener
         Graph templateGraph = gdd.displayDialog();
 
         if (templateGraph != null) {
-            ControlManager.operations.addNewOperation(new TemplateChangeOperation(mainWindow.getGeneralController().getGraph(), templateGraph));
+            ControlManager.operations.addNewOperation(new TemplateChangeOperation(graph, templateGraph));
             mainWindow.getGeneralController().publishInfo(ControlManager.operations.redo());
         }
     }
 
     @Override
     public void copyToClipboard() {
-        ControlManager.copyToClipboard();
+        mouseController.copyToClipboard();
     }
 
     @Override
     public void pasteFromClipboard() {
-        ControlManager.pasteFromClipboard();
+        mouseController.pasteFromClipboard();
     }
 
     @Override
     public void undo() {
-        ControlManager.undo();
+        mainWindow.getGeneralController().publishInfo(ControlManager.operations.undo());
+        mainWindow.updateWorkspace();
+        mainWindow.getSelectionController().clearSelection();
+        ControlManager.updatePropertyChangeOperationStatus(false);
     }
 
     @Override
     public void redo() {
-        ControlManager.redo();
+        mainWindow.getGeneralController().publishInfo(ControlManager.operations.redo());
+        mainWindow.updateWorkspace();
+        mainWindow.getSelectionController().clearSelection();
     }
 
     @Override
     public void toggleGrid() {
-        ControlManager.toggleGrid();
+        if (graph.gridOn) {
+            graph.gridOn = false;
+        } else {
+            GridDialog gd = new GridDialog(mainWindow, graph.gridResolutionX, graph.gridResolutionY);
+            int[] result = gd.showDialog();
+            if (result != null) {
+                graph.gridOn = true;
+                graph.gridResolutionX = result[0];
+                graph.gridResolutionY = result[1];
+                GraphUtils.adjustVerticesToGrid(graph);
+            }
+        }
+        mainWindow.updateFunctions();
     }
 
     @Override
     public void setNumeration() {
-        ControlManager.setNumeration();
+        mainWindow.getSelectionController().clearSelection();
+        ControlManager.updatePropertyChangeOperationStatus(false);
+        NumerationDialog nd = new NumerationDialog(mainWindow, graph.getGraphNumeration().isNumerationDigital(),
+                graph.getGraphNumeration().getStartingNumber(), Const.MAX_VERTEX_NUMBER);
+        int[] result = nd.showDialog();
+
+        if (result != null) {
+            graph.getGraphNumeration().setNumerationDigital(result[0] == 0);
+            graph.getGraphNumeration().setStartingNumber(result[1]);
+        }
+
+        mainWindow.updateFunctions();
     }
 
     @Override
     public void parseToTeX() {
-        ControlManager.parseToTeX();
+        new LatexCodeDialog(mainWindow, Parser.parse(graph));
     }
 
     @Override
     public void selectAll() {
-        ControlManager.selectAll();
+        mainWindow.getSelectionController().selectAll();
+        ControlManager.updatePropertyChangeOperationStatus(true);
+        mainWindow.updateWorkspace();
     }
 
     @Override
@@ -215,7 +255,13 @@ public class GeneralControllerTmpImpl implements GeneralController, ToolListener
 
     @Override
     public void deleteSelection() {
-        ControlManager.deleteSelection();
+        if (mainWindow.getSelectionController().getSize() > 0) {
+            ControlManager.operations.addNewOperation(new RemoveOperation(mainWindow.getSelectionController().getSelection()));
+            publishInfo(ControlManager.operations.redo());
+            mainWindow.updateFunctions();
+        }
+        mainWindow.getSelectionController().clearSelection();
+        ControlManager.updatePropertyChangeOperationStatus(false);
     }
 
     @Override
@@ -248,5 +294,13 @@ public class GeneralControllerTmpImpl implements GeneralController, ToolListener
         } else {
             return true;
         }
+    }
+
+    public void resetWorkspace() {
+        selectionController.clearSelection();
+        ControlManager.updatePropertyChangeOperationStatus(false);
+        mouseController.finishMovingElement();
+        mouseController.resetCurrentOperation();
+        mainWindow.updateFunctions();
     }
 }

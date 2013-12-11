@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 public interface GeneralController {
+
     public ModeType getMode();
 
     public ToolType getTool();
@@ -49,4 +50,6 @@ public interface GeneralController {
     public void publishInfo(String entry);
 
     public void reportError(String message);
+
+    public void resetWorkspace();
 }
