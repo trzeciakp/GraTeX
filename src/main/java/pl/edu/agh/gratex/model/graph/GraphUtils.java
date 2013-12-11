@@ -119,7 +119,7 @@ public class GraphUtils {
 
     public static void adjustVerticesToGrid(Graph graph) {
         for (Vertex vertex : graph.getVertices()) {
-            VertexUtils.adjustToGrid(graph, vertex);
+            VertexUtils.adjustToGrid(vertex);
         }
     }
 

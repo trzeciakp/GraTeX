@@ -111,13 +111,13 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     vertex.setPosX(x);
                     vertex.setPosY(y);
                     if (generalController.getGraph().gridOn) {
-                        VertexUtils.adjustToGrid(generalController.getGraph(), vertex);
+                        VertexUtils.adjustToGrid(vertex);
                     }
 
                     if (VertexUtils.fitsIntoPage(vertex)) {
 
                         if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex)) {
-                            VertexUtils.updateNumber(generalController.getGraph(), vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
+                            VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
                             ControlManager.operations.addNewOperation(new AddOperation(generalController, vertex));
                             generalController.publishInfo(ControlManager.operations.redo());
                             generalController.getSelectionController().addToSelection(vertex, false);
@@ -399,7 +399,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                 vertex.setPosY(y);
 
                 if (generalController.getGraph().gridOn) {
-                    VertexUtils.adjustToGrid(generalController.getGraph(), vertex);
+                    VertexUtils.adjustToGrid(vertex);
                 }
 
                 if (GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) || !VertexUtils.fitsIntoPage(vertex)) {
@@ -647,7 +647,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
             if (generalController.getMode() == ModeType.VERTEX) {
                 Vertex vertex = new Vertex(generalController.getGraph());
                 vertex.setModel(generalController.getGraph().getVertexDefaultModel());
-                VertexUtils.updateNumber(generalController.getGraph(), vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
+                VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
                 vertex.setPosX(mouseX);
                 vertex.setPosY(mouseY);
                 if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) && VertexUtils.fitsIntoPage(vertex)) {

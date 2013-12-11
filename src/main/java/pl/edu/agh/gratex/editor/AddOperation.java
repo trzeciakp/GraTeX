@@ -24,7 +24,7 @@ public class AddOperation extends Operation {
     public String doOperation() {
         if (type == 1) {
             generalController.getGraph().getVertices().add((Vertex) element);
-            VertexUtils.setPartOfNumeration(generalController.getGraph(), (Vertex) element, true);
+            VertexUtils.setPartOfNumeration((Vertex) element, true);
             return StringLiterals.INFO_VERTEX_ADD;
         } else if (type == 2) {
             generalController.getGraph().getEdges().add((Edge) element);
@@ -43,7 +43,7 @@ public class AddOperation extends Operation {
     public String undoOperation() {
         if (type == 1) {
             generalController.getGraph().getVertices().remove(element);
-            VertexUtils.setPartOfNumeration(generalController.getGraph(), (Vertex) element, false);
+            VertexUtils.setPartOfNumeration((Vertex) element, false);
             return StringLiterals.INFO_UNDO(StringLiterals.INFO_VERTEX_ADD);
         } else if (type == 2) {
             generalController.getGraph().getEdges().remove(element);
