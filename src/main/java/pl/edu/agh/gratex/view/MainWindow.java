@@ -26,10 +26,6 @@ public class MainWindow extends JFrame {
     public PanelButtonContainer panel_buttonContainer;
 
     private GeneralController generalController;
-    private ModeController modeController;
-    private ToolController toolController;
-    private SelectionController selectionController;
-    private MouseController mouseController;
 
     public MenuBar menuBar;
     public JLabel label_info;
@@ -40,20 +36,14 @@ public class MainWindow extends JFrame {
         setIconImage(ImageIO.read(url));
 
         ControlManager.passWindowHandle(this);
-
-        modeController = new ModeControllerTmpImpl();
-        toolController = new ToolControllerImpl();
-        mouseController = new MouseControllerImpl(this, modeController, toolController);
-        selectionController = new SelectionControllerImpl(modeController, toolController);
-        generalController = new GeneralControllerImpl(this, mouseController, selectionController, modeController, toolController);
-
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler(mouseController));
+        generalController = new GeneralControllerImpl(this);
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler(generalController.getMouseController()));
 
         initializeFrame();
         initializeEvents();
 
-        modeController.setMode(ModeType.VERTEX);
-        toolController.setTool(ToolType.ADD);
+        generalController.getModeController().setMode(ModeType.VERTEX);
+        generalController.getToolController().setTool(ToolType.ADD);
         generalController.newGraphFile();
 
         updateFunctions();
@@ -68,6 +58,16 @@ public class MainWindow extends JFrame {
         panel_toolbox.repaint();
         updateWorkspace();
         label_info.setText(StringLiterals.INFO_MODE_AND_TOOL(generalController.getMode(), generalController.getTool()));
+    }
+
+    public void updateMenuBarAndActions() {
+        menuBar.updateFunctions();
+        panel_buttonContainer.updateFunctions();
+    }
+
+    public void giveFocusToLabelTextfield()
+    {
+        panel_propertyEditor.giveFocusToLabelTextfield();
     }
 
     public void adjustSize() {
@@ -113,18 +113,18 @@ public class MainWindow extends JFrame {
 
         scrollPane_workspace = new JScrollPane();
         scrollPane_workspace.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
-        panel_workspace = new PanelWorkspace(scrollPane_workspace, toolController, mouseController);
+        panel_workspace = new PanelWorkspace(scrollPane_workspace, generalController, generalController.getMouseController(), generalController.getToolController());
         scrollPane_workspace.setViewportView(panel_workspace);
         panel_workspace.setLayout(null);
         scrollPane_workspace.setBounds(110, 85, 472, 344);
         getContentPane().add(scrollPane_workspace);
 
-        panel_propertyEditor = new PanelPropertyEditor(modeController);
+        panel_propertyEditor = new PanelPropertyEditor(generalController, generalController.getModeController());
         panel_propertyEditor.setBounds(592, 85, 200, 380);
         panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
         getContentPane().add(panel_propertyEditor);
 
-        panel_buttonContainer = new PanelButtonContainer(generalController, mouseController);
+        panel_buttonContainer = new PanelButtonContainer(generalController, generalController.getMouseController());
         panel_buttonContainer.setBounds(-5, 25, 802, 50);
         panel_buttonContainer.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 
@@ -134,32 +134,17 @@ public class MainWindow extends JFrame {
         label_info.setBounds(10, 430, 774, 36);
         getContentPane().add(label_info);
 
-        panel_toolbox = new PanelToolbox(toolController, modeController);
+        panel_toolbox = new PanelToolbox(generalController.getToolController(), generalController.getModeController());
         panel_toolbox.setBounds(10, 85, 90, 344);
         getContentPane().add(panel_toolbox);
 
-        menuBar = new MenuBar(generalController, mouseController, modeController, toolController);
+        menuBar = new MenuBar(generalController, generalController.getMouseController(), generalController.getModeController(), generalController.getToolController());
         menuBar.setBounds(0, 0, 0, 25);
         getContentPane().add(menuBar);
     }
 
+    // TODO wywalic jak nie bedzie controlmaangera
     public GeneralController getGeneralController() {
         return generalController;
-    }
-
-    public ModeController getModeController() {
-        return modeController;
-    }
-
-    public ToolController getToolController() {
-        return toolController;
-    }
-
-    public SelectionController getSelectionController() {
-        return selectionController;
-    }
-
-    public MouseController getMouseController() {
-        return mouseController;
     }
 }

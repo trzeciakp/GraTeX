@@ -1,34 +1,32 @@
 package pl.edu.agh.gratex.model.vertex;
 
 import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphNumeration;
 import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
-import pl.edu.agh.gratex.view.ControlManager;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
 import java.awt.geom.Area;
 
 public class VertexUtils {
-    public static void updateNumber(Vertex vertex, int number) {
+    public static void updateNumber(Graph graph, Vertex vertex, int number) {
         vertex.setNumber(number);
-        if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital()) {
+        if (graph.getGraphNumeration().isNumerationDigital()) {
             vertex.setText(Integer.toString(number));
         } else {
             vertex.setText(GraphNumeration.getABC(number));
         }
     }
 
-    public static void setPartOfNumeration(Vertex vertex, boolean flag) {
-        ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().setUsed(vertex.getNumber(), flag);
+    public static void setPartOfNumeration(Graph graph, Vertex vertex, boolean flag) {
+        graph.getGraphNumeration().setUsed(vertex.getNumber(), flag);
     }
 
-    public static void adjustToGrid(Vertex vertex) {
-        vertex.setPosX(((vertex.getPosX() + (ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionX / 2)) / ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionX) *
-                ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionX);
-        vertex.setPosY(((vertex.getPosY() + (ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionY / 2)) / ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionY) *
-                ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionY);
+    public static void adjustToGrid(Graph graph, Vertex vertex) {
+        vertex.setPosX(((vertex.getPosX() + (graph.gridResolutionX / 2)) / graph.gridResolutionX) * graph.gridResolutionX);
+        vertex.setPosY(((vertex.getPosY() + (graph.gridResolutionY / 2)) / graph.gridResolutionY) * graph.gridResolutionY);
     }
 
     public static boolean collides(Vertex vertex1, Vertex vertex2) {
@@ -48,7 +46,7 @@ public class VertexUtils {
                 || (vertex.getPosY() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosY() + vertex.getRadius() + vertex.getLineWidth() / 2 > Const.PAGE_HEIGHT));
     }
 
-    public static void drawVertex(Vertex vertex, Graphics2D graphics, boolean dummy) {
+    public static void drawVertex(Graph graph, Vertex vertex, Graphics2D graphics, boolean dummy) {
         Graphics2D g = (Graphics2D) graphics.create();
 
         int posX = vertex.getPosX();
@@ -62,13 +60,13 @@ public class VertexUtils {
 
         int tempX = 0;
         int tempY = 0;
-        if (dummy && ControlManager.mainWindow.getGeneralController().getGraph().gridOn) {
+        if (dummy && graph.gridOn) {
             tempX = posX;
             tempY = posY;
-            adjustToGrid(vertex);
+            adjustToGrid(graph, vertex);
         }
 
-        if (ControlManager.mainWindow.getSelectionController().contains(vertex)) {
+        if (graph.getGeneralController().getSelectionController().selectionContains(vertex)) {
             g.setColor(Const.SELECTION_COLOR);
             g.fill(Geometry.getVertexShape(shape + 1, radius + lineWidth / 2 + radius / 4, posX, posY));
         }
@@ -143,7 +141,7 @@ public class VertexUtils {
             if (dummy) {
                 g.setColor(DrawingTools.getDummyColor(vertex.getFontColor()));
             }
-            updateNumber(vertex, vertex.getNumber());
+            updateNumber(graph, vertex, vertex.getNumber());
             if (vertex.getText() != null) {
                 g.setFont(vertex.getFont());
                 FontMetrics fm = g.getFontMetrics();
@@ -151,7 +149,7 @@ public class VertexUtils {
             }
         }
 
-        if (dummy && ControlManager.mainWindow.getGeneralController().getGraph().gridOn) {
+        if (dummy && graph.gridOn) {
             vertex.setPosX(tempX);
             vertex.setPosY(tempY);
         }

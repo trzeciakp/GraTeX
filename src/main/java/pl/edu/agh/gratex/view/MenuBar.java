@@ -70,7 +70,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     public void updateFunctions() {
         menuItems.get(MenuBarItem.COPY).setEnabled(false);
         menuItems.get(MenuBarItem.PASTE).setEnabled(false);
-        if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.VERTEX && ControlManager.mainWindow.getSelectionController().getSize() > 0) {
+        if (generalController.getMode() == ModeType.VERTEX && generalController.getSelectionController().selectionSize() > 0) {
             menuItems.get(MenuBarItem.COPY).setEnabled(true);
         }
         if (mouseController.clipboardNotEmpty()) {

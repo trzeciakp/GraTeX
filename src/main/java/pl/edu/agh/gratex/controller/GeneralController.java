@@ -6,6 +6,20 @@ import pl.edu.agh.gratex.model.graph.Graph;
 
 public interface GeneralController {
 
+    public ModeController getModeController();
+
+    public ToolController getToolController();
+
+    public SelectionController getSelectionController();
+
+    public MouseController getMouseController();
+
+    public void updateWorkspace();
+
+    public void updateMenuBarAndActions();
+
+    public void giveFocusToLabelTextfield();
+
     public ModeType getMode();
 
     public ToolType getTool();

@@ -2,12 +2,13 @@ package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.ModeType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ModeControllerTmpImpl implements ModeController {
+public class ModeControllerTmpImpl implements ModeController, Serializable {
     private ModeType mode = ModeType.VERTEX;
     private List<ModeListener> listeners = new ArrayList<>();
 

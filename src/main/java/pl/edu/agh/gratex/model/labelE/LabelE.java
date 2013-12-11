@@ -8,7 +8,6 @@ import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
-import pl.edu.agh.gratex.view.ControlManager;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
@@ -481,7 +480,7 @@ public class LabelE extends GraphElement implements Serializable {
 
         updatePosition(g);
 
-        if (ControlManager.mainWindow.getSelectionController().contains(this)) {
+        if (graph.getGeneralController().getSelectionController().selectionContains(this)) {
             g.setColor(Const.SELECTION_COLOR);
             g.fillPolygon(getOutline());
         }

@@ -2,12 +2,12 @@ package pl.edu.agh.gratex.view.propertyPanel;
 
 
 import pl.edu.agh.gratex.constants.Const;
-import pl.edu.agh.gratex.model.graph.GraphNumeration;
-import pl.edu.agh.gratex.view.ControlManager;
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.PropertyModel;
-import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
+import pl.edu.agh.gratex.model.graph.GraphNumeration;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.Shape;
+import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
 import javax.swing.*;
 import javax.swing.JSpinner.ListEditor;
@@ -19,9 +19,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
-
+@SuppressWarnings("serial")
 public class VertexPropertyPanel extends AbstractPropertyPanel {
-    private static final long serialVersionUID = 722367652545807127L;
+
+    GeneralController generalController;
 
     private VertexPropertyModel model;
     private JLabel lblVertexType;
@@ -53,14 +54,16 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
     }
 
     public void updateNumeration() {
-        if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital()) {
+        if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setModel(listModels[1]);
             ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else
             spinnerNumber.setModel(listModels[0]);
     }
 
-    public VertexPropertyPanel() {
+    public VertexPropertyPanel(GeneralController generalController) {
+        this.generalController = generalController;
+
         model = new VertexPropertyModel();
         initialize();
         setModel(model);
@@ -90,7 +93,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             lblNumber.setEnabled(false);
             spinnerNumber.setEnabled(false);
             spinnerNumber.setValue(" ");
-        } else if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital()) {
+        } else if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setValue(model.number);
         } else
             spinnerNumber.setValue(GraphNumeration.getABC(model.number));
@@ -375,7 +378,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             }
         };
 
-        if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital()) {
+        if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setModel(listModels[1]);
             ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else {
@@ -387,7 +390,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
             private int getValue() {
                 int value;
-                if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital())
+                if (generalController.getGraph().getGraphNumeration().isNumerationDigital())
                     value = (Integer) spinnerNumber.getValue();
                 else {
                     String s = (String) spinnerNumber.getValue();
@@ -402,7 +405,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             }
 
             private void setValue(int arg) {
-                if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital())
+                if (generalController.getGraph().getGraphNumeration().isNumerationDigital())
                     spinnerNumber.setValue(arg);
                 else
                     spinnerNumber.setValue(GraphNumeration.getABC(arg));
@@ -415,7 +418,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                     if (value == previous) {
                     } else {
                         while ((value > 0) && (value < Const.MAX_VERTEX_NUMBER)) {
-                            if (!ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isUsed(value)) {
+                            if (!generalController.getGraph().getGraphNumeration().isUsed(value)) {
 
                                 model.number = value;
                                 previous = value;

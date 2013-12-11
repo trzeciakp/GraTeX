@@ -64,7 +64,7 @@ public class Vertex extends GraphElement implements Serializable {
     }
 
     public void draw(Graphics2D g2d, boolean dummy) {
-        VertexUtils.drawVertex(this, g2d, dummy);
+        VertexUtils.drawVertex(graph, this, g2d, dummy);
     }
 
     public void drawLabel(Graphics2D g, boolean dummy) {
@@ -77,9 +77,9 @@ public class Vertex extends GraphElement implements Serializable {
         VertexPropertyModel model = (VertexPropertyModel) pm;
 
         if (model.number > -1) {
-            VertexUtils.setPartOfNumeration(this, false);
-            VertexUtils.updateNumber(this, model.number);
-            VertexUtils.setPartOfNumeration(this, true);
+            VertexUtils.setPartOfNumeration(graph, this, false);
+            VertexUtils.updateNumber(graph, this, model.number);
+            VertexUtils.setPartOfNumeration(graph, this, true);
         }
 
         if (model.radius > -1) {

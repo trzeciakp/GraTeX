@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.StringLiterals;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Application {
@@ -29,7 +30,7 @@ public class Application {
                     new MainWindow();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ControlManager.mainWindow.getGeneralController().reportError(StringLiterals.MESSAGE_ERROR_GENERAL + e.toString());
+                    JOptionPane.showMessageDialog(null, StringLiterals.MESSAGE_ERROR_GENERAL + e.toString(), StringLiterals.TITLE_ERROR_DIALOG, JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

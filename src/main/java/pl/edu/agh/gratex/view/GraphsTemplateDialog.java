@@ -3,6 +3,8 @@ package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.GeneralControllerImpl;
 import pl.edu.agh.gratex.controller.ModeController;
 import pl.edu.agh.gratex.controller.ModeControllerTmpImpl;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -28,8 +30,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+@SuppressWarnings("serial")
 public class GraphsTemplateDialog extends JDialog {
-    private static final long serialVersionUID = 3521596195996666926L;
+
+    private GeneralController generalController;
 
     private Graph graph;
     private Graph result = null;
@@ -71,8 +75,9 @@ public class GraphsTemplateDialog extends JDialog {
         return rootPane;
     }
 
-    public GraphsTemplateDialog(MainWindow parent) {
+    public GraphsTemplateDialog(MainWindow parent, GeneralController generalController) {
         super(parent, StringLiterals.TITLE_GRAPH_TEMPLATE_EDITOR, true);
+        this.generalController = generalController;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(768, 511);
         setLocationRelativeTo(null);
@@ -194,28 +199,28 @@ public class GraphsTemplateDialog extends JDialog {
     }
 
     private void initGraph() {
-        graph = new Graph();
+        graph = new Graph(null);
         graph.gridOn = false;
 
-        graph.setVertexDefaultModel(new VertexPropertyModel(ControlManager.mainWindow.getGeneralController().getGraph().getVertexDefaultModel()));
-        graph.setEdgeDefaultModel(new EdgePropertyModel(ControlManager.mainWindow.getGeneralController().getGraph().getEdgeDefaultModel()));
+        graph.setVertexDefaultModel(new VertexPropertyModel(generalController.getGraph().getVertexDefaultModel()));
+        graph.setEdgeDefaultModel(new EdgePropertyModel(generalController.getGraph().getEdgeDefaultModel()));
         graph.getEdgeDefaultModel().isLoop = -1;
         graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
-        graph.setLabelVDefaultModel(new LabelVertexPropertyModel(ControlManager.mainWindow.getGeneralController().getGraph().getLabelVDefaultModel()));
+        graph.setLabelVDefaultModel(new LabelVertexPropertyModel(generalController.getGraph().getLabelVDefaultModel()));
         graph.getLabelVDefaultModel().text = null;
-        graph.setLabelEDefaultModel(new LabelEdgePropertyModel(ControlManager.mainWindow.getGeneralController().getGraph().getLabelEDefaultModel()));
+        graph.setLabelEDefaultModel(new LabelEdgePropertyModel(generalController.getGraph().getLabelEDefaultModel()));
         graph.getLabelEDefaultModel().text = null;
 
         vertex1 = new Vertex(graph);
         vertex1.setModel(graph.getVertexDefaultModel());
-        VertexUtils.updateNumber(vertex1, 1);
+        VertexUtils.updateNumber(graph, vertex1, 1);
         vertex1.setPosX(240);
         vertex1.setPosY(190);
         graph.getVertices().add(vertex1);
 
         vertex2 = new Vertex(graph);
         vertex2.setModel(graph.getVertexDefaultModel());
-        VertexUtils.updateNumber(vertex1, 2);
+        VertexUtils.updateNumber(graph, vertex1, 2);
         vertex2.setShape(1);
         vertex2.setVertexColor(new Color(200, 200, 200));
         vertex2.setLineType(LineType.SOLID);
@@ -282,7 +287,7 @@ public class GraphsTemplateDialog extends JDialog {
         panel_preview = new PanelPreview(graph);
         panel_preview.setBounds(222, 42, 520, 343);
 
-        panel_propertyEditor = new PanelPropertyEditor(modeController) {
+        panel_propertyEditor = new PanelPropertyEditor(generalController, modeController) {
             private static final long serialVersionUID = 4008480073440306159L;
 
             public void valueChanged(PropertyModel model) {

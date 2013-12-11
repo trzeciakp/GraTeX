@@ -3,7 +3,7 @@ package pl.edu.agh.gratex.editor;
 
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.view.ControlManager;
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
@@ -14,11 +14,14 @@ import java.util.LinkedList;
 
 
 public class OperationList {
+    private GeneralController generalController;
+
     public static final int MAX_OPERATIONS = 256;
     private LinkedList<Operation> operations;
     private int iterator;
 
-    public OperationList() {
+    public OperationList(GeneralController generalController) {
+        this.generalController = generalController;
         operations = new LinkedList<Operation>();
         iterator = 0;
     }
@@ -54,7 +57,7 @@ public class OperationList {
             if (operations.getLast() instanceof PropertyChangeOperation) {
                 PropertyChangeOperation operation = (PropertyChangeOperation) operations.getLast();
                 if (operation.selectionID == _selectionID) {
-                    if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.VERTEX) {
+                    if (generalController.getMode() == ModeType.VERTEX) {
                         VertexPropertyModel oldInitialModel = (VertexPropertyModel) operation.initialModel;
                         VertexPropertyModel oldEndModel = (VertexPropertyModel) operation.endModel;
                         VertexPropertyModel newModel = (VertexPropertyModel) pm;
@@ -82,10 +85,10 @@ public class OperationList {
                         if (merge) {
                             operation.endModel = newModel;
                             undo();
-                            ControlManager.mainWindow.getGeneralController().publishInfo(redo());
+                            generalController.publishInfo(redo());
                             return true;
                         }
-                    } else if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.EDGE) {
+                    } else if (generalController.getMode() == ModeType.EDGE) {
                         EdgePropertyModel oldInitialModel = (EdgePropertyModel) operation.initialModel;
                         EdgePropertyModel oldEndModel = (EdgePropertyModel) operation.endModel;
                         EdgePropertyModel newModel = (EdgePropertyModel) pm;
@@ -109,10 +112,10 @@ public class OperationList {
                         if (merge) {
                             operation.endModel = newModel;
                             undo();
-                            ControlManager.mainWindow.getGeneralController().publishInfo(redo());
+                            generalController.publishInfo(redo());
                             return true;
                         }
-                    } else if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.LABEL_VERTEX) {
+                    } else if (generalController.getMode() == ModeType.LABEL_VERTEX) {
                         LabelVertexPropertyModel oldInitialModel = (LabelVertexPropertyModel) operation.initialModel;
                         LabelVertexPropertyModel oldEndModel = (LabelVertexPropertyModel) operation.endModel;
                         LabelVertexPropertyModel newModel = (LabelVertexPropertyModel) pm;
@@ -128,7 +131,7 @@ public class OperationList {
                         if (merge) {
                             operation.endModel = newModel;
                             undo();
-                            ControlManager.mainWindow.getGeneralController().publishInfo(redo());
+                            generalController.publishInfo(redo());
                             return true;
                         }
                     } else {
@@ -152,7 +155,7 @@ public class OperationList {
                         if (merge) {
                             operation.endModel = newModel;
                             undo();
-                            ControlManager.mainWindow.getGeneralController().publishInfo(redo());
+                            generalController.publishInfo(redo());
                             return true;
                         }
                     }

@@ -2,21 +2,23 @@ package pl.edu.agh.gratex.editor;
 
 
 import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
-import pl.edu.agh.gratex.view.ControlManager;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 public class CopyPasteOperation extends Operation {
+    private GeneralController generalController;
+
     public LinkedList<Vertex> vertices;
     public LinkedList<Edge> edges;
     public LinkedList<LabelV> labelsV;
@@ -34,7 +36,8 @@ public class CopyPasteOperation extends Operation {
 
     public boolean pasting = false;
 
-    public CopyPasteOperation(List<GraphElement> selectedVertices) {
+    public CopyPasteOperation(GeneralController generalController, List<GraphElement> selectedVertices) {
+        this.generalController = generalController;
         vertices = new LinkedList<Vertex>();
         edges = new LinkedList<Edge>();
         labelsV = new LinkedList<LabelV>();
@@ -58,7 +61,7 @@ public class CopyPasteOperation extends Operation {
             }
         }
 
-        Iterator<Edge> ite = ControlManager.mainWindow.getGeneralController().getGraph().getEdges().listIterator();
+        Iterator<Edge> ite = generalController.getGraph().getEdges().listIterator();
         Edge tempE = null;
         while (ite.hasNext()) {
             tempE = ite.next();
@@ -98,7 +101,7 @@ public class CopyPasteOperation extends Operation {
 
         while (itvd.hasNext()) {
             tempVD = itvd.next();
-            itv = ControlManager.mainWindow.getGeneralController().getGraph().getVertices().listIterator();
+            itv = generalController.getGraph().getVertices().listIterator();
             while (itv.hasNext()) {
 
                 if (VertexUtils.collides(tempVD, itv.next())) {
@@ -136,25 +139,25 @@ public class CopyPasteOperation extends Operation {
     }
 
     public CopyPasteOperation getCopy() {
-        return new CopyPasteOperation(new LinkedList<GraphElement>(vertices));
+        return new CopyPasteOperation(generalController, new LinkedList<GraphElement>(vertices));
     }
 
     public String doOperation() {
-        ControlManager.mainWindow.getGeneralController().getGraph().getVertices().addAll(vertices);
-        ControlManager.mainWindow.getGeneralController().getGraph().getEdges().addAll(edges);
-        ControlManager.mainWindow.getGeneralController().getGraph().getLabelsV().addAll(labelsV);
-        ControlManager.mainWindow.getGeneralController().getGraph().getLabelsE().addAll(labelsE);
+        generalController.getGraph().getVertices().addAll(vertices);
+        generalController.getGraph().getEdges().addAll(edges);
+        generalController.getGraph().getLabelsV().addAll(labelsV);
+        generalController.getGraph().getLabelsE().addAll(labelsE);
 
         Collections.sort(vertices, new VertexOrderComparator());
         Iterator<Vertex> itv = vertices.listIterator();
         Vertex tempV = null;
         while (itv.hasNext()) {
             tempV = itv.next();
-            VertexUtils.updateNumber(tempV, ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().getNextFreeNumber());
-            VertexUtils.setPartOfNumeration(tempV, true);
-            tempV.setLabelInside((ControlManager.mainWindow.getGeneralController().getGraph().getVertexDefaultModel().labelInside == 1));
-            if (ControlManager.mainWindow.getGeneralController().getGraph().gridOn) {
-                VertexUtils.adjustToGrid(tempV);
+            VertexUtils.updateNumber(generalController.getGraph(), tempV, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
+            VertexUtils.setPartOfNumeration(generalController.getGraph(), tempV, true);
+            tempV.setLabelInside((generalController.getGraph().getVertexDefaultModel().labelInside == 1));
+            if (generalController.getGraph().gridOn) {
+                VertexUtils.adjustToGrid(generalController.getGraph(), tempV);
             }
         }
 
@@ -171,14 +174,14 @@ public class CopyPasteOperation extends Operation {
     }
 
     public String undoOperation() {
-        ControlManager.mainWindow.getGeneralController().getGraph().getVertices().removeAll(vertices);
-        ControlManager.mainWindow.getGeneralController().getGraph().getEdges().removeAll(edges);
-        ControlManager.mainWindow.getGeneralController().getGraph().getLabelsV().removeAll(labelsV);
-        ControlManager.mainWindow.getGeneralController().getGraph().getLabelsE().removeAll(labelsE);
+        generalController.getGraph().getVertices().removeAll(vertices);
+        generalController.getGraph().getEdges().removeAll(edges);
+        generalController.getGraph().getLabelsV().removeAll(labelsV);
+        generalController.getGraph().getLabelsE().removeAll(labelsE);
 
         Iterator<Vertex> itv = vertices.listIterator();
         while (itv.hasNext()) {
-            VertexUtils.setPartOfNumeration(itv.next(), false);
+            VertexUtils.setPartOfNumeration(generalController.getGraph(), itv.next(), false);
         }
 
         return StringLiterals.INFO_UNDO(StringLiterals.INFO_SUBGRAPH_PASTE);

@@ -5,19 +5,24 @@ import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.view.ControlManager;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SelectionControllerImpl implements SelectionController, ToolListener, ModeListener {
+public class SelectionControllerImpl implements SelectionController, ToolListener, ModeListener, Serializable {
+    private GeneralController generalController;
+
     private LinkedList<GraphElement> selection;
     private ToolType tool;
     private ModeType mode;
 
-    public SelectionControllerImpl(ModeController modeController, ToolController toolController) {
-        selection = new LinkedList<>();
+    public SelectionControllerImpl(GeneralController generalController, ModeController modeController, ToolController toolController) {
+        this.generalController = generalController;
         modeController.addModeListener(this);
         toolController.addToolListener(this);
+
+        selection = new LinkedList<>();
     }
 
 
@@ -53,12 +58,12 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     }
 
     @Override
-    public int getSize() {
+    public int selectionSize() {
         return selection.size();
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean selectionContains(Object o) {
         return selection.contains(o);
     }
 
@@ -71,7 +76,7 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     public void selectAll() {
         if (tool == ToolType.SELECT) {
             selection.clear();
-            selection.addAll(ControlManager.mainWindow.getGeneralController().getGraph().getElements(mode.getRelatedElementType()));
+            selection.addAll(generalController.getGraph().getElements(mode.getRelatedElementType()));
         }
     }
 

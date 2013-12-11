@@ -26,12 +26,12 @@ public class ControlManager {
         mainWindow.menuBar.updateFunctions();
         mainWindow.panel_buttonContainer.updateFunctions();
 
-        if (mainWindow.getSelectionController().getSize() > 0) {
+        if (mainWindow.getGeneralController().getSelectionController().selectionSize() > 0) {
             if (newSelection) {
                 selectionID++;
                 mainWindow.panel_propertyEditor.setEnabled(true);
             }
-            currentPropertyChangeOperation = new PropertyChangeOperation(mainWindow.getSelectionController().getSelection(), selectionID);
+            currentPropertyChangeOperation = new PropertyChangeOperation(mainWindow.getGeneralController().getSelectionController().getSelection(), selectionID);
             mainWindow.panel_propertyEditor.setModel(currentPropertyChangeOperation.initialModel);
         } else {
             currentPropertyChangeOperation = null;

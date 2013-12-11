@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.view.propertyPanel;
 
 import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.ModeController;
 import pl.edu.agh.gratex.controller.ModeListener;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -8,21 +9,25 @@ import pl.edu.agh.gratex.model.PropertyModel;
 import javax.swing.*;
 import java.util.EnumMap;
 
+@SuppressWarnings("serial")
 public class PanelPropertyEditor extends JPanel implements ModeListener {
-    private static final long serialVersionUID = -4423821822436250916L;
+    GeneralController generalController;
 
     //private int mode = 1;
     private ModeType mode = ModeType.VERTEX;
     private JLabel label_title;
     private EnumMap<ModeType, AbstractPropertyPanel> panelsMap = new EnumMap<>(ModeType.class);
 
-    public PanelPropertyEditor(ModeController modeController) {
+    public PanelPropertyEditor(GeneralController generalController, ModeController modeController) {
+        this.generalController = generalController;
+
         modeController.addModeListener(this);
         initialize();
         setEnabled(false);
     }
 
     public void valueChanged(PropertyModel model) {
+        // TODO to bedzie jakies wywolanie general controllera albo innego wariata
         pl.edu.agh.gratex.view.ControlManager.updateSelectedItemsModel(model);
     }
 
@@ -30,7 +35,7 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
     private AbstractPropertyPanel createPropertyPanel(ModeType modeType) {
         switch (modeType) {
             case VERTEX:
-                return new VertexPropertyPanel();
+                return new VertexPropertyPanel(generalController);
             case EDGE:
                 return new EdgePropertyPanel();
             case LABEL_VERTEX:
@@ -80,7 +85,7 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
         return panelsMap.get(mode).getModel();
     }
 
-    public void giveFocusToTextField() {
+    public void giveFocusToLabelTextfield() {
         panelsMap.get(mode).components.get(0).requestFocus();
         ((JTextField) panelsMap.get(mode).components.get(0)).selectAll();
     }

@@ -8,7 +8,6 @@ import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
-import pl.edu.agh.gratex.view.ControlManager;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.ArrowType;
@@ -434,7 +433,7 @@ public class Edge extends GraphElement implements Serializable {
 
         if (getVertexA() != getVertexB()) {
             if (getRelativeEdgeAngle() != 0) {
-                if (ControlManager.mainWindow.getSelectionController().contains(this)) {
+                if (graph.getGeneralController().getSelectionController().selectionContains(this)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
@@ -448,7 +447,7 @@ public class Edge extends GraphElement implements Serializable {
                 g.setStroke(DrawingTools.getStroke(getLineWidth(), getLineType(), 0.0));
                 g.draw(getArc());
             } else {
-                if (ControlManager.mainWindow.getSelectionController().contains(this)) {
+                if (graph.getGeneralController().getSelectionController().selectionContains(this)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
@@ -462,11 +461,11 @@ public class Edge extends GraphElement implements Serializable {
                 g.setStroke(DrawingTools.getStroke(getLineWidth(), getLineType(), 0.0));
                 g.drawLine(getVertexA().getPosX(), getVertexA().getPosY(), getVertexB().getPosX(), getVertexB().getPosY());
             }
-            if ((ControlManager.mainWindow.getSelectionController().contains(this) || ControlManager.mainWindow.getMouseController().isEdgeCurrentlyAdded(this)) && getRelativeEdgeAngle() != 0) {
+            if ((graph.getGeneralController().getSelectionController().selectionContains(this) || graph.getGeneralController().getMouseController().isEdgeCurrentlyAdded(this)) && getRelativeEdgeAngle() != 0) {
                 drawAngleVisualisation(g);
             }
         } else {
-            if (ControlManager.mainWindow.getSelectionController().contains(this)) {
+            if (graph.getGeneralController().getSelectionController().selectionContains(this)) {
                 g.setColor(Const.SELECTION_COLOR);
                 Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                 g.setStroke(drawingStroke);
@@ -483,7 +482,7 @@ public class Edge extends GraphElement implements Serializable {
 
         if (isDirected()) {
             if (getArrowType() == ArrowType.BASIC.getValue()) {
-                if (ControlManager.mainWindow.getSelectionController().contains(this)) {
+                if (graph.getGeneralController().getSelectionController().selectionContains(this)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
@@ -499,7 +498,7 @@ public class Edge extends GraphElement implements Serializable {
                 g.drawLine(getArrowLine1()[0], getArrowLine1()[1], getArrowLine1()[2], getArrowLine1()[3]);
                 g.drawLine(getArrowLine2()[0], getArrowLine2()[1], getArrowLine2()[2], getArrowLine2()[3]);
             } else {
-                if (ControlManager.mainWindow.getSelectionController().contains(this)) {
+                if (graph.getGeneralController().getSelectionController().selectionContains(this)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);

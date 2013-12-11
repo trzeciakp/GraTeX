@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.view;
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.CursorType;
 import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.MouseController;
 import pl.edu.agh.gratex.controller.ToolController;
 import pl.edu.agh.gratex.controller.ToolListener;
@@ -17,12 +18,13 @@ import java.awt.event.MouseMotionListener;
 import java.net.URL;
 import java.util.EnumMap;
 
+@SuppressWarnings("serial")
 public class PanelWorkspace extends JPanel implements MouseListener, MouseMotionListener, ToolListener {
-    private static final long serialVersionUID = -7736096439630674213L;
 
+    private GeneralController generalController;
     private MouseController mouseController;
+
     private JScrollPane parent;
-    private ToolType tool;
     private int mouseDragX = -1;
     private int mouseDragY = -1;
     private EnumMap<ToolType, Cursor> cursors = new EnumMap<>(ToolType.class);
@@ -30,8 +32,9 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
     private boolean mouseInWorkspace;
 
-    public PanelWorkspace(JScrollPane parent, ToolController toolController, MouseController mouseController) {
+    public PanelWorkspace(JScrollPane parent, GeneralController generalController, MouseController mouseController, ToolController toolController) {
         super();
+        this.generalController = generalController;
         this.mouseController = mouseController;
         this.parent = parent;
         addMouseListener(this);
@@ -73,15 +76,15 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, Const.PAGE_WIDTH, Const.PAGE_HEIGHT);
 
-        if (ControlManager.mainWindow.getGeneralController().getGraph() != null) {
-            paintGrid(g2d, ControlManager.mainWindow.getGeneralController().getGraph());
+        if (generalController.getGraph() != null) {
+            paintGrid(g2d, generalController.getGraph());
 
             if (mouseInWorkspace) {
                 mouseController.paintCurrentlyAddedElement(g2d);
                 paintCopiedSubgraph(g2d);
             }
 
-            ControlManager.mainWindow.getGeneralController().getGraph().drawAll(g2d);
+            generalController.getGraph().drawAll(g2d);
             paintSelectionArea(g2d);
         }
     }
@@ -91,7 +94,7 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
             mouseController.processMouseClicking(e);
             repaint();
         } else if (SwingUtilities.isRightMouseButton(e)) {
-            ControlManager.mainWindow.getMouseController().cancelCurrentOperation();
+            generalController.getMouseController().cancelCurrentOperation();
             repaint();
         }
     }
@@ -184,12 +187,11 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
 
     public void paintCopiedSubgraph(Graphics2D g) {
-        ControlManager.mainWindow.getMouseController().paintCopiedSubgraph(g);
+        generalController.getMouseController().paintCopiedSubgraph(g);
     }
 
     @Override
     public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
-        tool = currentToolType;
         updateCursor(currentToolType);
     }
 

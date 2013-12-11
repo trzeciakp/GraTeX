@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.utils;
 
 
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 import java.io.*;
@@ -8,7 +9,8 @@ import java.nio.file.Files;
 import java.util.Arrays;
 
 public class FileManager {
-    public static boolean contentChanged(Graph content, File currentFile) {
+    // TODO GeneralControler nie bedzie juz potrzebny jak bedzie implementacja parsera wstecznego, wtedy wywalic
+    public static boolean contentChanged(GeneralController gc, Graph content, File currentFile) {
         try {
             if (currentFile == null) {
                 ByteArrayOutputStream bOut = new ByteArrayOutputStream();
@@ -19,7 +21,7 @@ public class FileManager {
 
                 bOut = new ByteArrayOutputStream();
                 out = new ObjectOutputStream(bOut);
-                out.writeObject(new Graph());
+                out.writeObject(new Graph(gc));
                 out.close();
                 byte[] newGraphBytes = bOut.toByteArray();
 
@@ -37,6 +39,7 @@ public class FileManager {
                 return !Arrays.equals(currentBytes, fileBytes);
             }
         } catch (Exception e) {
+            System.out.println(e.toString() + e.getMessage());
             return true;
         }
     }

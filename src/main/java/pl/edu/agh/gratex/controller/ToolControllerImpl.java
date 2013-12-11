@@ -2,12 +2,13 @@ package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.ToolType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ToolControllerImpl implements ToolController {
+public class ToolControllerImpl implements ToolController, Serializable {
     private ToolType tool = ToolType.ADD;
     private List<ToolListener> listeners = new ArrayList<>();
 

@@ -15,11 +15,14 @@ import pl.edu.agh.gratex.view.*;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.Serializable;
 
-public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener {
+public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener, Serializable {
     private MainWindow mainWindow;
-    private MouseController mouseController;
+    private ModeController modeController;
+    private ToolController toolController;
     private SelectionController selectionController;
+    private MouseController mouseController;
 
     private Graph graph;
     private File currentFile;
@@ -27,22 +30,38 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     private ModeType mode = ModeType.VERTEX;
     private ToolType tool = ToolType.ADD;
 
-    public GeneralControllerImpl(MainWindow mainWindow, MouseController mouseController, SelectionController selectionController, ModeController modeController, ToolController toolController) {
+    public GeneralControllerImpl(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
-        this.mouseController = mouseController;
-        this.selectionController = selectionController;
-        graph = new Graph();
-        currentFile = null;
+        modeController = new ModeControllerTmpImpl();
+        toolController = new ToolControllerImpl();
+        mouseController = new MouseControllerImpl(this, modeController, toolController);
+        selectionController = new SelectionControllerImpl(this, modeController, toolController);
+
         modeController.addModeListener(this);
         toolController.addToolListener(this);
-    }
 
-    public MainWindow getMainWindow() {
-        return mainWindow;
+        graph = new Graph(this);
+        currentFile = null;
     }
 
     //===========================================
     // Listeners implementation
+
+    public ModeController getModeController() {
+        return modeController;
+    }
+
+    public ToolController getToolController() {
+        return toolController;
+    }
+
+    public SelectionController getSelectionController() {
+        return selectionController;
+    }
+
+    public MouseController getMouseController() {
+        return mouseController;
+    }
 
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
@@ -91,7 +110,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void resetGraph() {
-        graph = new Graph();
+        graph = new Graph(this);
     }
 
     @Override
@@ -99,7 +118,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         if (checkForUnsavedProgress()) {
             currentFile = null;
             resetGraph();
-            ControlManager.operations = new OperationList();
+            ControlManager.operations = new OperationList(this);
             resetWorkspace();
             editGraphTemplate();
         }
@@ -122,7 +141,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     currentFile = file;
                     GraphUtils.deleteUnusedLabels(newGraph);
                     graph = newGraph;
-                    ControlManager.operations = new OperationList();
+                    ControlManager.operations = new OperationList(this);
                     resetWorkspace();
                     publishInfo(StringLiterals.INFO_GRAPH_OPEN_OK);
                 } else {
@@ -162,12 +181,12 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void editGraphTemplate() {
-        GraphsTemplateDialog gdd = new GraphsTemplateDialog(mainWindow);
+        GraphsTemplateDialog gdd = new GraphsTemplateDialog(mainWindow, this);
         Graph templateGraph = gdd.displayDialog();
 
         if (templateGraph != null) {
-            ControlManager.operations.addNewOperation(new TemplateChangeOperation(graph, templateGraph));
-            mainWindow.getGeneralController().publishInfo(ControlManager.operations.redo());
+            ControlManager.operations.addNewOperation(new TemplateChangeOperation(this, graph, templateGraph));
+            publishInfo(ControlManager.operations.redo());
         }
     }
 
@@ -183,17 +202,17 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void undo() {
-        mainWindow.getGeneralController().publishInfo(ControlManager.operations.undo());
+        publishInfo(ControlManager.operations.undo());
         mainWindow.updateWorkspace();
-        mainWindow.getSelectionController().clearSelection();
+        selectionController.clearSelection();
         ControlManager.updatePropertyChangeOperationStatus(false);
     }
 
     @Override
     public void redo() {
-        mainWindow.getGeneralController().publishInfo(ControlManager.operations.redo());
+        publishInfo(ControlManager.operations.redo());
         mainWindow.updateWorkspace();
-        mainWindow.getSelectionController().clearSelection();
+        selectionController.clearSelection();
     }
 
     @Override
@@ -215,7 +234,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void setNumeration() {
-        mainWindow.getSelectionController().clearSelection();
+        selectionController.clearSelection();
         ControlManager.updatePropertyChangeOperationStatus(false);
         NumerationDialog nd = new NumerationDialog(mainWindow, graph.getGraphNumeration().isNumerationDigital(),
                 graph.getGraphNumeration().getStartingNumber(), Const.MAX_VERTEX_NUMBER);
@@ -236,7 +255,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void selectAll() {
-        mainWindow.getSelectionController().selectAll();
+        selectionController.selectAll();
         ControlManager.updatePropertyChangeOperationStatus(true);
         mainWindow.updateWorkspace();
     }
@@ -255,12 +274,12 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void deleteSelection() {
-        if (mainWindow.getSelectionController().getSize() > 0) {
-            ControlManager.operations.addNewOperation(new RemoveOperation(mainWindow.getSelectionController().getSelection()));
+        if (selectionController.selectionSize() > 0) {
+            ControlManager.operations.addNewOperation(new RemoveOperation(this, selectionController.getSelection()));
             publishInfo(ControlManager.operations.redo());
             mainWindow.updateFunctions();
         }
-        mainWindow.getSelectionController().clearSelection();
+        selectionController.clearSelection();
         ControlManager.updatePropertyChangeOperationStatus(false);
     }
 
@@ -278,8 +297,10 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     // Internal functions
 
     private boolean checkForUnsavedProgress() {
-        if (FileManager.contentChanged(graph, currentFile)) {
+        // TODO this nie bedzie potrzebne, czytaj FileManager
+        if (FileManager.contentChanged(this, graph, currentFile)) {
             Object[] options = {"Save", "Don't save", "Cancel"};
+            System.out.println(" " + mainWindow);
             int option = JOptionPane.showOptionDialog(mainWindow, "There have been changes since last save.\n"
                     + "Would you like to save your graph now?", "Unsaved progress", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
                     null, options, options[0]);
@@ -302,5 +323,20 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         mouseController.finishMovingElement();
         mouseController.resetCurrentOperation();
         mainWindow.updateFunctions();
+    }
+
+    @Override
+    public void updateMenuBarAndActions() {
+        mainWindow.updateMenuBarAndActions();
+    }
+
+    @Override
+    public void giveFocusToLabelTextfield() {
+        mainWindow.giveFocusToLabelTextfield();
+    }
+
+    @Override
+    public void updateWorkspace() {
+        mainWindow.updateWorkspace();
     }
 }
