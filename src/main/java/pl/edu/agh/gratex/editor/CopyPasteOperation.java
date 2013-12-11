@@ -58,7 +58,7 @@ public class CopyPasteOperation extends Operation {
             }
         }
 
-        Iterator<Edge> ite = ControlManager.graph.getEdges().listIterator();
+        Iterator<Edge> ite = ControlManager.mainWindow.getGeneralController().getGraph().getEdges().listIterator();
         Edge tempE = null;
         while (ite.hasNext()) {
             tempE = ite.next();
@@ -98,15 +98,14 @@ public class CopyPasteOperation extends Operation {
 
         while (itvd.hasNext()) {
             tempVD = itvd.next();
-            itv = ControlManager.graph.getVertices().listIterator();
+            itv = ControlManager.mainWindow.getGeneralController().getGraph().getVertices().listIterator();
             while (itv.hasNext()) {
 
                 if (VertexUtils.collides(tempVD, itv.next())) {
                     return false;
                 }
             }
-
-            if (VertexUtils.fitsIntoPage(tempVD)) {
+            if (!VertexUtils.fitsIntoPage(tempVD)) {
                 return false;
             }
         }
@@ -141,20 +140,20 @@ public class CopyPasteOperation extends Operation {
     }
 
     public String doOperation() {
-        ControlManager.graph.getVertices().addAll(vertices);
-        ControlManager.graph.getEdges().addAll(edges);
-        ControlManager.graph.getLabelsV().addAll(labelsV);
-        ControlManager.graph.getLabelsE().addAll(labelsE);
+        ControlManager.mainWindow.getGeneralController().getGraph().getVertices().addAll(vertices);
+        ControlManager.mainWindow.getGeneralController().getGraph().getEdges().addAll(edges);
+        ControlManager.mainWindow.getGeneralController().getGraph().getLabelsV().addAll(labelsV);
+        ControlManager.mainWindow.getGeneralController().getGraph().getLabelsE().addAll(labelsE);
 
         Collections.sort(vertices, new VertexOrderComparator());
         Iterator<Vertex> itv = vertices.listIterator();
         Vertex tempV = null;
         while (itv.hasNext()) {
             tempV = itv.next();
-            VertexUtils.updateNumber(tempV, ControlManager.graph.getGraphNumeration().getNextFreeNumber());
+            VertexUtils.updateNumber(tempV, ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().getNextFreeNumber());
             VertexUtils.setPartOfNumeration(tempV, true);
-            tempV.setLabelInside((ControlManager.graph.getVertexDefaultModel().labelInside == 1));
-            if (ControlManager.graph.gridOn) {
+            tempV.setLabelInside((ControlManager.mainWindow.getGeneralController().getGraph().getVertexDefaultModel().labelInside == 1));
+            if (ControlManager.mainWindow.getGeneralController().getGraph().gridOn) {
                 VertexUtils.adjustToGrid(tempV);
             }
         }
@@ -172,10 +171,10 @@ public class CopyPasteOperation extends Operation {
     }
 
     public String undoOperation() {
-        ControlManager.graph.getVertices().removeAll(vertices);
-        ControlManager.graph.getEdges().removeAll(edges);
-        ControlManager.graph.getLabelsV().removeAll(labelsV);
-        ControlManager.graph.getLabelsE().removeAll(labelsE);
+        ControlManager.mainWindow.getGeneralController().getGraph().getVertices().removeAll(vertices);
+        ControlManager.mainWindow.getGeneralController().getGraph().getEdges().removeAll(edges);
+        ControlManager.mainWindow.getGeneralController().getGraph().getLabelsV().removeAll(labelsV);
+        ControlManager.mainWindow.getGeneralController().getGraph().getLabelsE().removeAll(labelsE);
 
         Iterator<Vertex> itv = vertices.listIterator();
         while (itv.hasNext()) {

@@ -29,7 +29,7 @@ public class Application {
                     new MainWindow();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ControlManager.reportError(StringLiterals.MESSAGE_ERROR_GENERAL + e.toString());
+                    ControlManager.mainWindow.getGeneralController().reportError(StringLiterals.MESSAGE_ERROR_GENERAL + e.toString());
                 }
             }
         });

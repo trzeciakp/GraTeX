@@ -45,32 +45,32 @@ public class TemplateChangeOperation extends Operation {
     }
 
     public String doOperation() {
-        ControlManager.graph.setVertexDefaultModel(vertexEndModel);
-        ControlManager.graph.setEdgeDefaultModel(edgeEndModel);
-        ControlManager.graph.setLabelVDefaultModel(labelVEndModel);
-        ControlManager.graph.setLabelEDefaultModel(labelEEndModel);
+        ControlManager.mainWindow.getGeneralController().getGraph().setVertexDefaultModel(vertexEndModel);
+        ControlManager.mainWindow.getGeneralController().getGraph().setEdgeDefaultModel(edgeEndModel);
+        ControlManager.mainWindow.getGeneralController().getGraph().setLabelVDefaultModel(labelVEndModel);
+        ControlManager.mainWindow.getGeneralController().getGraph().setLabelEDefaultModel(labelEEndModel);
 
         if (applyToAll) {
-            if (ControlManager.graph.getVertices().size() > 0) {
-                vertexChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.getVertices()), -1);
+            if (ControlManager.mainWindow.getGeneralController().getGraph().getVertices().size() > 0) {
+                vertexChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.mainWindow.getGeneralController().getGraph().getVertices()), -1);
                 vertexChange.setEndModel(vertexEndModel);
                 vertexChange.doOperation();
             }
 
-            if (ControlManager.graph.getEdges().size() > 0) {
-                edgeChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.getEdges()), -1);
+            if (ControlManager.mainWindow.getGeneralController().getGraph().getEdges().size() > 0) {
+                edgeChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.mainWindow.getGeneralController().getGraph().getEdges()), -1);
                 edgeChange.setEndModel(edgeEndModel);
                 edgeChange.doOperation();
             }
 
-            if (ControlManager.graph.getLabelsV().size() > 0) {
-                labelVChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.getLabelsV()), -1);
+            if (ControlManager.mainWindow.getGeneralController().getGraph().getLabelsV().size() > 0) {
+                labelVChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.mainWindow.getGeneralController().getGraph().getLabelsV()), -1);
                 labelVChange.setEndModel(labelVEndModel);
                 labelVChange.doOperation();
             }
 
-            if (ControlManager.graph.getLabelsE().size() > 0) {
-                labelEChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.graph.getLabelsE()), -1);
+            if (ControlManager.mainWindow.getGeneralController().getGraph().getLabelsE().size() > 0) {
+                labelEChange = new PropertyChangeOperation(new LinkedList<GraphElement>(ControlManager.mainWindow.getGeneralController().getGraph().getLabelsE()), -1);
                 labelEChange.setEndModel(labelEEndModel);
                 labelEChange.doOperation();
             }
@@ -84,10 +84,10 @@ public class TemplateChangeOperation extends Operation {
     }
 
     public String undoOperation() {
-        ControlManager.graph.setVertexDefaultModel(vertexStartModel);
-        ControlManager.graph.setEdgeDefaultModel(edgeStartModel);
-        ControlManager.graph.setLabelVDefaultModel(labelVStartModel);
-        ControlManager.graph.setLabelEDefaultModel(labelEStartModel);
+        ControlManager.mainWindow.getGeneralController().getGraph().setVertexDefaultModel(vertexStartModel);
+        ControlManager.mainWindow.getGeneralController().getGraph().setEdgeDefaultModel(edgeStartModel);
+        ControlManager.mainWindow.getGeneralController().getGraph().setLabelVDefaultModel(labelVStartModel);
+        ControlManager.mainWindow.getGeneralController().getGraph().setLabelEDefaultModel(labelEStartModel);
 
         if (applyToAll) {
             if (vertexChange != null) {

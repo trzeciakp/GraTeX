@@ -20,15 +20,32 @@ public class SelectionControllerTmpImpl implements SelectionController, ToolList
         toolController.addToolListener(this);
     }
 
+
+    //===========================================
+    // Listeners implementation
+
     @Override
-    public void fireToolChanged(ToolType previousToolType, ToolType currentToolType) {
+    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
         tool = currentToolType;
     }
 
     @Override
-    public void fireModeChanged(ModeType previousMode, ModeType currentMode) {
+    public void modeChanged(ModeType previousMode, ModeType currentMode) {
         mode = currentMode;
     }
+
+    @Override
+    public int modeUpdatePriority() {
+        return 10;
+    }
+
+    @Override
+    public int toolUpdatePriority() {
+        return 10;
+    }
+
+//===========================================
+    // SelectionController interface implementation
 
     @Override
     public List<GraphElement> getSelection() {
@@ -54,7 +71,7 @@ public class SelectionControllerTmpImpl implements SelectionController, ToolList
     public void selectAll() {
         if (tool == ToolType.SELECT) {
             selection.clear();
-            selection.addAll(ControlManager.graph.getElements(mode.getRelatedElementType()));
+            selection.addAll(ControlManager.mainWindow.getGeneralController().getGraph().getElements(mode.getRelatedElementType()));
         }
     }
 

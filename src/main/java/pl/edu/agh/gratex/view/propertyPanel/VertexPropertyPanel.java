@@ -53,7 +53,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
     }
 
     public void updateNumeration() {
-        if (ControlManager.graph.getGraphNumeration().isNumerationDigital()) {
+        if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setModel(listModels[1]);
             ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else
@@ -90,7 +90,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             lblNumber.setEnabled(false);
             spinnerNumber.setEnabled(false);
             spinnerNumber.setValue(" ");
-        } else if (ControlManager.graph.getGraphNumeration().isNumerationDigital()) {
+        } else if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setValue(model.number);
         } else
             spinnerNumber.setValue(GraphNumeration.getABC(model.number));
@@ -375,7 +375,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             }
         };
 
-        if (ControlManager.graph.getGraphNumeration().isNumerationDigital()) {
+        if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setModel(listModels[1]);
             ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else {
@@ -387,7 +387,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
             private int getValue() {
                 int value;
-                if (ControlManager.graph.getGraphNumeration().isNumerationDigital())
+                if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital())
                     value = (Integer) spinnerNumber.getValue();
                 else {
                     String s = (String) spinnerNumber.getValue();
@@ -402,7 +402,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             }
 
             private void setValue(int arg) {
-                if (ControlManager.graph.getGraphNumeration().isNumerationDigital())
+                if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital())
                     spinnerNumber.setValue(arg);
                 else
                     spinnerNumber.setValue(GraphNumeration.getABC(arg));
@@ -415,7 +415,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                     if (value == previous) {
                     } else {
                         while ((value > 0) && (value < Const.MAX_VERTEX_NUMBER)) {
-                            if (!ControlManager.graph.getGraphNumeration().isUsed(value)) {
+                            if (!ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isUsed(value)) {
 
                                 model.number = value;
                                 previous = value;

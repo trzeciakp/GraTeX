@@ -58,27 +58,17 @@ public class SaveFileDialog extends JFileChooser {
         super.approveSelection();
     }
 
-    public boolean showDialog(MainWindow mainWindow) {
+    public File showDialog(MainWindow mainWindow) {
         int option = showOpenDialog(mainWindow);
         if (option == JFileChooser.APPROVE_OPTION) {
             if (getSelectedFile() != null) {
                 File file = getSelectedFile();
                 if (!file.getName().endsWith(Const.GRAPH_FILES_EXTENSION)) {
-                    file = new File(file.toString().concat(Const.GRAPH_FILES_EXTENSION));
+                    return new File(file.toString().concat(Const.GRAPH_FILES_EXTENSION));
                 }
-
-                if (FileManager.saveFile(file, ControlManager.graph)) {
-                    ControlManager.publishInfo(StringLiterals.INFO_GRAPH_SAVE_OK);
-                    ControlManager.currentFile = file;
-                    ControlManager.changeMade = false;
-                    return true;
-                } else {
-                    ControlManager.publishInfo(StringLiterals.INFO_GRAPH_SAVE_FAIL);
-                    ControlManager.reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH);
-                }
+                return file;
             }
         }
-
-        return false;
+        return null;
     }
 }

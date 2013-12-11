@@ -4,7 +4,7 @@ package pl.edu.agh.gratex.view;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.ModeController;
-import pl.edu.agh.gratex.controller.ModeControllerImpl;
+import pl.edu.agh.gratex.controller.ModeControllerTmpImpl;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
@@ -78,7 +78,7 @@ public class GraphsTemplateDialog extends JDialog {
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
 
-        ModeController modeController = new ModeControllerImpl();
+        ModeController modeController = new ModeControllerTmpImpl();
         initGraph();
         initializeFrame(modeController);
         initializeEvents(modeController);
@@ -197,13 +197,13 @@ public class GraphsTemplateDialog extends JDialog {
         graph = new Graph();
         graph.gridOn = false;
 
-        graph.setVertexDefaultModel(new VertexPropertyModel(ControlManager.graph.getVertexDefaultModel()));
-        graph.setEdgeDefaultModel(new EdgePropertyModel(ControlManager.graph.getEdgeDefaultModel()));
+        graph.setVertexDefaultModel(new VertexPropertyModel(ControlManager.mainWindow.getGeneralController().getGraph().getVertexDefaultModel()));
+        graph.setEdgeDefaultModel(new EdgePropertyModel(ControlManager.mainWindow.getGeneralController().getGraph().getEdgeDefaultModel()));
         graph.getEdgeDefaultModel().isLoop = -1;
         graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
-        graph.setLabelVDefaultModel(new LabelVertexPropertyModel(ControlManager.graph.getLabelVDefaultModel()));
+        graph.setLabelVDefaultModel(new LabelVertexPropertyModel(ControlManager.mainWindow.getGeneralController().getGraph().getLabelVDefaultModel()));
         graph.getLabelVDefaultModel().text = null;
-        graph.setLabelEDefaultModel(new LabelEdgePropertyModel(ControlManager.graph.getLabelEDefaultModel()));
+        graph.setLabelEDefaultModel(new LabelEdgePropertyModel(ControlManager.mainWindow.getGeneralController().getGraph().getLabelEDefaultModel()));
         graph.getLabelEDefaultModel().text = null;
 
         vertex1 = new Vertex(graph);

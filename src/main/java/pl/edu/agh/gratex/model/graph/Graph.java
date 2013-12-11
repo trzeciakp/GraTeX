@@ -40,9 +40,6 @@ public class Graph implements Serializable {
     public int gridResolutionY = 20;
     public boolean gridOn;
 
-    public int pageWidth = 672;
-    public int pageHeight = 880;
-
     // TODO przeniesc to gdzie indziej, do jakiegos kontrolera?
     private GraphNumeration graphNumeration;
 

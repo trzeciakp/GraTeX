@@ -65,7 +65,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     public void updateFunctions() {
         menuItems.get(MenuBarItem.COPY).setEnabled(false);
         menuItems.get(MenuBarItem.PASTE).setEnabled(false);
-        if (ControlManager.getMode() == ModeType.VERTEX && ControlManager.mainWindow.getSelectionController().getSize() > 0) {
+        if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.VERTEX && ControlManager.mainWindow.getSelectionController().getSize() > 0) {
             menuItems.get(MenuBarItem.COPY).setEnabled(true);
         }
         if (ControlManager.currentCopyPasteOperation != null) {
@@ -74,7 +74,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     }
 
     @Override
-    public void fireModeChanged(ModeType previousMode, ModeType currentMode) {
+    public void modeChanged(ModeType previousMode, ModeType currentMode) {
         switch (currentMode) {
             case VERTEX:
                 menuItems.get(MenuBarItem.VERTEX_MODE).setSelected(true);
@@ -92,7 +92,12 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     }
 
     @Override
-    public void fireToolChanged(ToolType previousToolType, ToolType currentToolType) {
+    public int modeUpdatePriority() {
+        return 0;
+    }
+
+    @Override
+    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
         switch (currentToolType) {
             case ADD:
                 menuItems.get(MenuBarItem.ADD_TOOL).setSelected(true);
@@ -104,6 +109,11 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
                 menuItems.get(MenuBarItem.SELECT_TOOL).setSelected(true);
                 break;
         }
+    }
+
+    @Override
+    public int toolUpdatePriority() {
+        return 0;
     }
 
     private ActionListener getPerformedAction(MenuBarItem menuBarItem) {

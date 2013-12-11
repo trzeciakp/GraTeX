@@ -96,9 +96,14 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
     }
 
     @Override
-    public void fireModeChanged(ModeType previousMode, ModeType currentMode) {
+    public void modeChanged(ModeType previousMode, ModeType currentMode) {
         panelsMap.get(previousMode).setVisible(false);
         panelsMap.get(currentMode).setVisible(true);
         mode = currentMode;
+    }
+
+    @Override
+    public int modeUpdatePriority() {
+        return 0;
     }
 }

@@ -11,10 +11,9 @@ import java.awt.*;
 import java.awt.geom.Area;
 
 public class VertexUtils {
-    public static void updateNumber(Vertex vertex, int number)
-    {
-        vertex.setNumber( number);
-        if (ControlManager.graph.getGraphNumeration().isNumerationDigital()) {
+    public static void updateNumber(Vertex vertex, int number) {
+        vertex.setNumber(number);
+        if (ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().isNumerationDigital()) {
             vertex.setText(Integer.toString(number));
         } else {
             vertex.setText(GraphNumeration.getABC(number));
@@ -22,12 +21,14 @@ public class VertexUtils {
     }
 
     public static void setPartOfNumeration(Vertex vertex, boolean flag) {
-        ControlManager.graph.getGraphNumeration().setUsed(vertex.getNumber(), flag);
+        ControlManager.mainWindow.getGeneralController().getGraph().getGraphNumeration().setUsed(vertex.getNumber(), flag);
     }
 
     public static void adjustToGrid(Vertex vertex) {
-        vertex.setPosX(((vertex.getPosX() + (ControlManager.graph.gridResolutionX / 2)) / ControlManager.graph.gridResolutionX) * ControlManager.graph.gridResolutionX);
-        vertex.setPosY(((vertex.getPosY() + (ControlManager.graph.gridResolutionY / 2)) / ControlManager.graph.gridResolutionY) * ControlManager.graph.gridResolutionY);
+        vertex.setPosX(((vertex.getPosX() + (ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionX / 2)) / ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionX) *
+                ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionX);
+        vertex.setPosY(((vertex.getPosY() + (ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionY / 2)) / ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionY) *
+                ControlManager.mainWindow.getGeneralController().getGraph().gridResolutionY);
     }
 
     public static boolean collides(Vertex vertex1, Vertex vertex2) {
@@ -41,13 +42,13 @@ public class VertexUtils {
         return area.contains(x, y);
     }
 
+
     public static boolean fitsIntoPage(Vertex vertex) {
-        return !((vertex.getPosX() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosX() + vertex.getRadius() + vertex.getLineWidth() / 2 > ControlManager.graph.pageWidth)
-                || (vertex.getPosY() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosY() + vertex.getRadius() + vertex.getLineWidth() / 2 > ControlManager.graph.pageHeight));
+        return !((vertex.getPosX() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosX() + vertex.getRadius() + vertex.getLineWidth() / 2 > Const.PAGE_WIDTH)
+                || (vertex.getPosY() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosY() + vertex.getRadius() + vertex.getLineWidth() / 2 > Const.PAGE_HEIGHT));
     }
 
-    public static void drawVertex(Vertex vertex, Graphics2D graphics, boolean dummy)
-    {
+    public static void drawVertex(Vertex vertex, Graphics2D graphics, boolean dummy) {
         Graphics2D g = (Graphics2D) graphics.create();
 
         int posX = vertex.getPosX();
@@ -61,7 +62,7 @@ public class VertexUtils {
 
         int tempX = 0;
         int tempY = 0;
-        if (dummy && ControlManager.graph.gridOn) {
+        if (dummy && ControlManager.mainWindow.getGeneralController().getGraph().gridOn) {
             tempX = posX;
             tempY = posY;
             adjustToGrid(vertex);
@@ -150,7 +151,7 @@ public class VertexUtils {
             }
         }
 
-        if (dummy && ControlManager.graph.gridOn) {
+        if (dummy && ControlManager.mainWindow.getGeneralController().getGraph().gridOn) {
             vertex.setPosX(tempX);
             vertex.setPosY(tempY);
         }

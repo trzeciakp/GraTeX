@@ -1,8 +1,10 @@
 package pl.edu.agh.gratex.view;
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.ToolController;
 import pl.edu.agh.gratex.controller.ToolListener;
+import pl.edu.agh.gratex.model.graph.Graph;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,7 +23,7 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     private Cursor selectToolCursor;
 
     private JScrollPane parent;
-    private ToolController toolController;
+    private ToolType tool;
     private int pageWidth;
     private int pageHeight;
     private int mouseDragX = -1;
@@ -34,7 +36,6 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     public PanelWorkspace(JScrollPane _parent, ToolController toolController, int pageWidth, int pageHeight) {
         super();
         parent = _parent;
-        this.toolController = toolController;
         this.pageWidth = pageWidth;
         this.pageHeight = pageHeight;
         addMouseListener(this);
@@ -76,16 +77,16 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, this.pageWidth, this.pageHeight);
 
-        if (ControlManager.graph != null) {
-            ControlManager.paintGrid(g2d);
+        if (ControlManager.mainWindow.getGeneralController().getGraph() != null) {
+            paintGrid(g2d, ControlManager.mainWindow.getGeneralController().getGraph());
 
             if (mouseInWorkspace) {
                 ControlManager.paintCurrentlyAddedElement(g2d);
-                ControlManager.paintCopiedSubgraph(g2d);
+                paintCopiedSubgraph(g2d);
             }
 
-            ControlManager.graph.drawAll(g2d);
-            ControlManager.paintSelectionArea(g2d);
+            ControlManager.mainWindow.getGeneralController().getGraph().drawAll(g2d);
+            paintSelectionArea(g2d);
         }
     }
 
@@ -151,6 +152,52 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         }
     }
 
+
+    private void paintGrid(Graphics2D g, Graph graph) {
+        if (graph.gridOn) {
+            g.setColor(Const.GRID_COLOR);
+            int i = 0;
+            while ((i += graph.gridResolutionX) < Const.PAGE_WIDTH) {
+                g.drawLine(i, 0, i, Const.PAGE_HEIGHT);
+            }
+            i = 0;
+            while ((i += graph.gridResolutionY) < Const.PAGE_HEIGHT) {
+                g.drawLine(0, i, Const.PAGE_WIDTH, i);
+            }
+        }
+    }
+
+
+    public void paintSelectionArea(Graphics2D g) {
+        if (tool != ToolType.ADD && ControlManager.currentlyMovedElement == null) {
+            if (ControlManager.mousePressed && (ControlManager.mouseX != ControlManager.mousePressX || ControlManager.mouseY != ControlManager.mousePressY)) {
+                int x = Math.min(ControlManager.mousePressX, ControlManager.mouseX);
+                int width = Math.abs(ControlManager.mouseX - ControlManager.mousePressX);
+                int y = Math.min(ControlManager.mousePressY, ControlManager.mouseY);
+                int height = Math.abs(ControlManager.mouseY - ControlManager.mousePressY);
+
+                g.setColor(Const.SELECTION_RECT_INSIDE_COLOR);
+                g.fillRect(x, y, width, height);
+
+                g.setColor(Const.SELECTION_RECT_BORDER_COLOR);
+                g.drawRect(x, y, width, height);
+            }
+        }
+    }
+
+    public void paintCopiedSubgraph(Graphics2D g) {
+        if (ControlManager.currentCopyPasteOperation != null) {
+            if (ControlManager.currentCopyPasteOperation.pasting) {
+                ControlManager.currentCopyPasteOperation.targetX = ControlManager.mouseX;
+                ControlManager.currentCopyPasteOperation.targetY = ControlManager.mouseY;
+                ControlManager.currentCopyPasteOperation.calculatePosition();
+                if (ControlManager.currentCopyPasteOperation.fitsIntoPosition()) {
+                    ControlManager.currentCopyPasteOperation.drawDummySubgraph(g);
+                }
+            }
+        }
+    }
+
     public void mouseMoved(MouseEvent e) {
         if (e.getX() <= this.pageWidth && e.getY() <= this.pageHeight) {
             ControlManager.processMouseMoving(e);
@@ -159,8 +206,14 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     }
 
     @Override
-    public void fireToolChanged(ToolType previousToolType, ToolType currentToolType) {
+    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
+        tool = currentToolType;
         updateCursor(currentToolType);
+    }
+
+    @Override
+    public int toolUpdatePriority() {
+        return 0;
     }
 
     private enum ToolCursor {

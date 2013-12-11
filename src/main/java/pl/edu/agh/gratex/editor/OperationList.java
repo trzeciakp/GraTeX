@@ -54,7 +54,7 @@ public class OperationList {
             if (operations.getLast() instanceof PropertyChangeOperation) {
                 PropertyChangeOperation operation = (PropertyChangeOperation) operations.getLast();
                 if (operation.selectionID == _selectionID) {
-                    if (ControlManager.getMode() == ModeType.VERTEX) {
+                    if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.VERTEX) {
                         VertexPropertyModel oldInitialModel = (VertexPropertyModel) operation.initialModel;
                         VertexPropertyModel oldEndModel = (VertexPropertyModel) operation.endModel;
                         VertexPropertyModel newModel = (VertexPropertyModel) pm;
@@ -82,10 +82,10 @@ public class OperationList {
                         if (merge) {
                             operation.endModel = newModel;
                             undo();
-                            ControlManager.publishInfo(redo());
+                            ControlManager.mainWindow.getGeneralController().publishInfo(redo());
                             return true;
                         }
-                    } else if (ControlManager.getMode() == ModeType.EDGE) {
+                    } else if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.EDGE) {
                         EdgePropertyModel oldInitialModel = (EdgePropertyModel) operation.initialModel;
                         EdgePropertyModel oldEndModel = (EdgePropertyModel) operation.endModel;
                         EdgePropertyModel newModel = (EdgePropertyModel) pm;
@@ -109,10 +109,10 @@ public class OperationList {
                         if (merge) {
                             operation.endModel = newModel;
                             undo();
-                            ControlManager.publishInfo(redo());
+                            ControlManager.mainWindow.getGeneralController().publishInfo(redo());
                             return true;
                         }
-                    } else if (ControlManager.getMode() == ModeType.LABEL_VERTEX) {
+                    } else if (ControlManager.mainWindow.getGeneralController().getMode() == ModeType.LABEL_VERTEX) {
                         LabelVertexPropertyModel oldInitialModel = (LabelVertexPropertyModel) operation.initialModel;
                         LabelVertexPropertyModel oldEndModel = (LabelVertexPropertyModel) operation.endModel;
                         LabelVertexPropertyModel newModel = (LabelVertexPropertyModel) pm;
@@ -128,7 +128,7 @@ public class OperationList {
                         if (merge) {
                             operation.endModel = newModel;
                             undo();
-                            ControlManager.publishInfo(redo());
+                            ControlManager.mainWindow.getGeneralController().publishInfo(redo());
                             return true;
                         }
                     } else {
@@ -152,7 +152,7 @@ public class OperationList {
                         if (merge) {
                             operation.endModel = newModel;
                             undo();
-                            ControlManager.publishInfo(redo());
+                            ControlManager.mainWindow.getGeneralController().publishInfo(redo());
                             return true;
                         }
                     }

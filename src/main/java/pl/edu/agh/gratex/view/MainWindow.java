@@ -1,6 +1,9 @@
 package pl.edu.agh.gratex.view;
 
+import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.view.propertyPanel.PanelPropertyEditor;
 
@@ -36,16 +39,21 @@ public class MainWindow extends JFrame {
         URL url = this.getClass().getClassLoader().getResource("images/icon.png");
         setIconImage(ImageIO.read(url));
 
-        generalController = new GeneralControllerTmpImpl();
+        ControlManager.passWindowHandle(this);
+
         modeController = new ModeControllerTmpImpl();
-        toolController = new ToolControllerImpl();
+        toolController = new ToolControllerTmpImpl();
+        generalController = new GeneralControllerTmpImpl(this, modeController, toolController);
         selectionController = new SelectionControllerTmpImpl(modeController, toolController);
 
-        ControlManager.passWindowHandle(this);
-        initializeFrame(ControlManager.graph.pageWidth, ControlManager.graph.pageHeight);
+        initializeFrame(Const.PAGE_WIDTH, Const.PAGE_HEIGHT);
         initializeEvents();
+
+        modeController.setMode(ModeType.VERTEX);
+        toolController.setTool(ToolType.ADD);
+        generalController.newGraphFile();
+
         updateFunctions();
-        ControlManager.newGraphFile();
     }
 
     public void updateWorkspace() {
@@ -56,7 +64,7 @@ public class MainWindow extends JFrame {
     public void updateFunctions() {
         panel_toolbox.repaint();
         updateWorkspace();
-        label_info.setText(StringLiterals.INFO_MODE_AND_TOOL(ControlManager.getMode(), ControlManager.getTool()));
+        label_info.setText(StringLiterals.INFO_MODE_AND_TOOL(ControlManager.mainWindow.getGeneralController().getMode(), ControlManager.getTool()));
     }
 
     public void adjustSize() {
@@ -88,7 +96,7 @@ public class MainWindow extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent arg0) {
-                ControlManager.exitApplication();
+                generalController.exitApplication();
             }
         });
     }

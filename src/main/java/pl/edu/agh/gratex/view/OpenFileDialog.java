@@ -43,27 +43,12 @@ public class OpenFileDialog extends JFileChooser {
         });
     }
 
-    public void showDialog(MainWindow mainWindow) {
+    public File showDialog(MainWindow mainWindow) {
         int option = showOpenDialog(mainWindow);
         if (option == JFileChooser.APPROVE_OPTION) {
-            if (getSelectedFile() != null) {
-                File file = getSelectedFile();
-
-                Graph _graph;
-                if ((_graph = FileManager.openFile(file)) != null) {
-                    ControlManager.currentFile = file;
-                    GraphUtils.deleteUnusedLabels(_graph);
-                    ControlManager.graph = _graph;
-                    ControlManager.operations = new OperationList();
-                    ControlManager.changeMade = false;
-                    ControlManager.applyChange();
-                    ControlManager.publishInfo(StringLiterals.INFO_GRAPH_OPEN_OK);
-                } else {
-                    ControlManager.publishInfo(StringLiterals.INFO_GRAPH_OPEN_FAIL);
-                    ControlManager.reportError(StringLiterals.MESSAGE_ERROR_OPEN_GRAPH);
-                }
-            }
+            return getSelectedFile();
         }
+        return null;
     }
 
 }
