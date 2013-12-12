@@ -42,6 +42,19 @@ public class Graph implements Serializable {
     public int gridResolutionY = 20;
     public boolean gridOn;
 
+    //TODO
+    public Vertex getVertexById(int id) {
+        for (Vertex vertex : getVertices()) {
+            if(vertex.getNumber() == id) {
+                return vertex;
+            }
+        }
+        return null;
+    }
+
+    public Edge getEdgeById(int id) {
+        return null;
+    }
     // TODO przeniesc to gdzie indziej, do jakiegos kontrolera?
     private GraphNumeration graphNumeration;
 
