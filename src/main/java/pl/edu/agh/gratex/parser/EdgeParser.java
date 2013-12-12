@@ -1,16 +1,21 @@
 package pl.edu.agh.gratex.parser;
 
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.parser.elements.ParseElement;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  *
  */
 public class EdgeParser extends GraphElementParser {
+    private static final String BEGINING = "\\draw ";
     @Override
     public String parse(GraphElement graphElement) {
         Edge edge = (Edge) graphElement;
@@ -54,6 +59,16 @@ public class EdgeParser extends GraphElementParser {
             line += " (" + edge.getVertexB().getNumber() + ");\n";
         }
         return line;
+    }
+
+    @Override
+    public Pattern getPattern() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<ParseElement> getParseList() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
