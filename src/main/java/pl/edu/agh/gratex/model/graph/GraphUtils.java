@@ -4,7 +4,9 @@ import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
+import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.utils.Geometry;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
@@ -80,7 +82,7 @@ public class GraphUtils {
     // TODO Mozna by te getXXXFromPosition dac do jednego, ale one beda chyba uzywane z roznych kontrolerow, wiec na razie tego nie robie
     public static LabelV getLabelVFromPosition(Graph graph, int x, int y) {
         for (LabelV labelV : graph.getLabelsV()) {
-            if (labelV.intersects(x, y)) {
+            if (LabelVUtils.intersects(labelV, x, y)) {
                 return labelV;
             }
         }
@@ -90,7 +92,7 @@ public class GraphUtils {
     // TODO Mozna by te getXXXFromPosition dac do jednego, ale one beda chyba uzywane z roznych kontrolerow, wiec na razie tego nie robie
     public static LabelE getLabelEFromPosition(Graph graph, int x, int y) {
         for (LabelE labelE : graph.getLabelsE()) {
-            if (labelE.intersects(x, y)) {
+            if (LabelEUtils.intersects(labelE, x, y)) {
                 return labelE;
             }
         }

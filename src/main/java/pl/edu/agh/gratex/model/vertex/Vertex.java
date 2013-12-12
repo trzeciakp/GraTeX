@@ -13,8 +13,8 @@ import java.awt.*;
 import java.io.Serializable;
 
 
+@SuppressWarnings("serial")
 public class Vertex extends GraphElement implements Serializable {
-    private static final long serialVersionUID = -3978311311955384768L;
 
     // Wartości edytowalne przez użytkowanika
     private int number;

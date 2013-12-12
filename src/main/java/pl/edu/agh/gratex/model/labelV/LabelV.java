@@ -3,12 +3,10 @@ package pl.edu.agh.gratex.model.labelV;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
-import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.utils.DrawingTools;
-import pl.edu.agh.gratex.utils.Geometry;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -89,90 +87,9 @@ public class LabelV extends GraphElement implements Serializable {
         return graph;
     }
 
-    public boolean intersects(int x, int y) {
-        return getOutline().contains(x, y);
-    }
-
-    public void updatePosition(Graphics2D g) {
-        g.setFont(getFont());
-        FontMetrics fm = g.getFontMetrics();
-        int width = fm.stringWidth(getText());
-        int height = fm.getAscent();
-        int descent = fm.getDescent();
-
-        Point exitPoint = Geometry.calculateEdgeExitPoint(getOwner(), (450 - 45 * getPosition()) % 360);
-
-        double dposX = 0.0;
-        double dposY = 0.0;
-
-        switch (getPosition()) {
-            case 0: {
-                dposX = exitPoint.x;
-                dposY = exitPoint.y - getSpacing() - height / 2;
-                break;
-            }
-            case 1: {
-                dposX = exitPoint.x + getSpacing() / 1.4142 + width / 2;
-                dposY = exitPoint.y - getSpacing() / 1.4142 - height / 2;
-                break;
-            }
-            case 2: {
-                dposX = exitPoint.x + getSpacing() + width / 2;
-                dposY = exitPoint.y;
-                break;
-            }
-            case 3: {
-                dposX = exitPoint.x + getSpacing() / 1.4142 + width / 2;
-                dposY = exitPoint.y + getSpacing() / 1.4142 + height / 2;
-                break;
-            }
-            case 4: {
-                dposX = exitPoint.x;
-                dposY = exitPoint.y + getSpacing() + height / 2 + 0.5;
-                break;
-            }
-            case 5: {
-                dposX = exitPoint.x - getSpacing() / 1.4142 - width / 2;
-                dposY = exitPoint.y + getSpacing() / 1.4142 + height / 2;
-                break;
-            }
-            case 6: {
-                dposX = exitPoint.x - getSpacing() - width / 2;
-                dposY = exitPoint.y;
-                break;
-            }
-            case 7: {
-                dposX = exitPoint.x - getSpacing() / 1.4142 - width / 2;
-                dposY = exitPoint.y - getSpacing() / 1.4142 - height / 2;
-                break;
-            }
-
-        }
-        setPosX((int) dposX);
-        setPosY((int) dposY);
-        setDrawX((int) (dposX - width / 2));
-        setDrawY((int) (dposY - descent + height / 2));
-        setOutline(new Rectangle(getPosX() - width / 2, getPosY() - height / 2, width, height));
-    }
-
-    public void draw(Graphics2D g2d, boolean dummy) {
-        Graphics2D g = (Graphics2D) g2d.create();
-
-        updatePosition(g);
-
-        if (graph.getGeneralController().getSelectionController().selectionContains(this)) {
-            g.setColor(Const.SELECTION_COLOR);
-            g.fillRect(getOutline().x, getOutline().y, getOutline().width, getOutline().height);
-        }
-
-        g.setFont(getFont());
-        g.setColor(getFontColor());
-        if (dummy) {
-            g.setColor(DrawingTools.getDummyColor(getFontColor()));
-        }
-        g.drawString(getText(), getDrawX(), getDrawY());
-
-        g.dispose();
+    @Override
+    public void draw(Graphics2D g, boolean dummy) {
+        LabelVUtils.draw(this, g, dummy);
     }
 
     public String getText() {
