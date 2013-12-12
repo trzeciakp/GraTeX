@@ -40,7 +40,7 @@ public class RemoveOperation extends Operation {
             connectedEdges = new LinkedList<>();
             for (GraphElement temp : elements) {
                 Vertex vertex = (Vertex) temp;
-                VertexUtils.setPartOfNumeration(generalController.getGraph(), vertex, false);
+                VertexUtils.setPartOfNumeration(vertex, false);
                 connectedEdges.addAll(GraphUtils.getAdjacentEdges(generalController.getGraph(), vertex));
                 generalController.getGraph().getEdges().removeAll(connectedEdges);
             }
@@ -70,7 +70,7 @@ public class RemoveOperation extends Operation {
             for (GraphElement temp : elements) {
                 Vertex vertex = (Vertex) temp;
                 generalController.getGraph().getVertices().add(vertex);
-                VertexUtils.setPartOfNumeration(generalController.getGraph(), vertex, true);
+                VertexUtils.setPartOfNumeration(vertex, true);
             }
             generalController.getGraph().getEdges().addAll(connectedEdges);
 

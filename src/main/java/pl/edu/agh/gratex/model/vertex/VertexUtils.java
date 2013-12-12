@@ -11,20 +11,21 @@ import java.awt.*;
 import java.awt.geom.Area;
 
 public class VertexUtils {
-    public static void updateNumber(Graph graph, Vertex vertex, int number) {
+    public static void updateNumber(Vertex vertex, int number) {
         vertex.setNumber(number);
-        if (graph.getGraphNumeration().isNumerationDigital()) {
+        if (vertex.getGraph().getGraphNumeration().isNumerationDigital()) {
             vertex.setText(Integer.toString(number));
         } else {
             vertex.setText(GraphNumeration.getABC(number));
         }
     }
 
-    public static void setPartOfNumeration(Graph graph, Vertex vertex, boolean flag) {
-        graph.getGraphNumeration().setUsed(vertex.getNumber(), flag);
+    public static void setPartOfNumeration(Vertex vertex, boolean flag) {
+        vertex.getGraph().getGraphNumeration().setUsed(vertex.getNumber(), flag);
     }
 
-    public static void adjustToGrid(Graph graph, Vertex vertex) {
+    public static void adjustToGrid(Vertex vertex) {
+        Graph graph = vertex.getGraph();
         vertex.setPosX(((vertex.getPosX() + (graph.gridResolutionX / 2)) / graph.gridResolutionX) * graph.gridResolutionX);
         vertex.setPosY(((vertex.getPosY() + (graph.gridResolutionY / 2)) / graph.gridResolutionY) * graph.gridResolutionY);
     }
@@ -46,8 +47,9 @@ public class VertexUtils {
                 || (vertex.getPosY() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosY() + vertex.getRadius() + vertex.getLineWidth() / 2 > Const.PAGE_HEIGHT));
     }
 
-    public static void drawVertex(Graph graph, Vertex vertex, Graphics2D graphics, boolean dummy) {
+    public static void drawVertex(Vertex vertex, Graphics2D graphics, boolean dummy) {
         Graphics2D g = (Graphics2D) graphics.create();
+        Graph graph = vertex.getGraph();
 
         int posX = vertex.getPosX();
         int posY = vertex.getPosY();
@@ -63,7 +65,7 @@ public class VertexUtils {
         if (dummy && graph.gridOn) {
             tempX = posX;
             tempY = posY;
-            adjustToGrid(graph, vertex);
+            adjustToGrid(vertex);
         }
 
         if (graph.getGeneralController().getSelectionController().selectionContains(vertex)) {
@@ -141,7 +143,7 @@ public class VertexUtils {
             if (dummy) {
                 g.setColor(DrawingTools.getDummyColor(vertex.getFontColor()));
             }
-            updateNumber(graph, vertex, vertex.getNumber());
+            updateNumber(vertex, vertex.getNumber());
             if (vertex.getText() != null) {
                 g.setFont(vertex.getFont());
                 FontMetrics fm = g.getFontMetrics();

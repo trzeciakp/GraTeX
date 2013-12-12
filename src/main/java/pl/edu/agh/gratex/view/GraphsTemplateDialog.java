@@ -213,14 +213,14 @@ public class GraphsTemplateDialog extends JDialog {
 
         vertex1 = new Vertex(graph);
         vertex1.setModel(graph.getVertexDefaultModel());
-        VertexUtils.updateNumber(graph, vertex1, 1);
+        VertexUtils.updateNumber(vertex1, 1);
         vertex1.setPosX(240);
         vertex1.setPosY(190);
         graph.getVertices().add(vertex1);
 
         vertex2 = new Vertex(graph);
         vertex2.setModel(graph.getVertexDefaultModel());
-        VertexUtils.updateNumber(graph, vertex1, 2);
+        VertexUtils.updateNumber(vertex1, 2);
         vertex2.setShape(1);
         vertex2.setVertexColor(new Color(200, 200, 200));
         vertex2.setLineType(LineType.SOLID);

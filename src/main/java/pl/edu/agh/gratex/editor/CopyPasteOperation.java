@@ -153,11 +153,11 @@ public class CopyPasteOperation extends Operation {
         Vertex tempV = null;
         while (itv.hasNext()) {
             tempV = itv.next();
-            VertexUtils.updateNumber(generalController.getGraph(), tempV, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
-            VertexUtils.setPartOfNumeration(generalController.getGraph(), tempV, true);
+            VertexUtils.updateNumber(tempV, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
+            VertexUtils.setPartOfNumeration(tempV, true);
             tempV.setLabelInside((generalController.getGraph().getVertexDefaultModel().labelInside == 1));
             if (generalController.getGraph().gridOn) {
-                VertexUtils.adjustToGrid(generalController.getGraph(), tempV);
+                VertexUtils.adjustToGrid(tempV);
             }
         }
 
@@ -181,7 +181,7 @@ public class CopyPasteOperation extends Operation {
 
         Iterator<Vertex> itv = vertices.listIterator();
         while (itv.hasNext()) {
-            VertexUtils.setPartOfNumeration(generalController.getGraph(), itv.next(), false);
+            VertexUtils.setPartOfNumeration(itv.next(), false);
         }
 
         return StringLiterals.INFO_UNDO(StringLiterals.INFO_SUBGRAPH_PASTE);
