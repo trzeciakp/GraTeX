@@ -85,7 +85,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
         currentlyAddedEdge = null;
         currentlyMovedElement = null;
 
-        operationController.reportOperationProgress(null);
+        operationController.reportGenericOperation(null);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                 ((LabelE) currentlyMovedElement).setHorizontalPlacement(!flag);
             }
         }
-        generalController.updateWorkspace();
+        operationController.reportGenericOperation(null);
     }
 
     @Override
@@ -253,7 +253,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
 
         if (!consumed) {
             if (mode == ModeType.VERTEX) {
-                if (generalController.getTool() == ToolType.ADD) {
+                if (tool == ToolType.ADD) {
                     Vertex vertex = new Vertex(generalController.getGraph());
                     vertex.setModel(generalController.getGraph().getVertexDefaultModel());
                     vertex.setPosX(x);
@@ -275,7 +275,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     } else {
                         generalController.publishInfo(StringLiterals.INFO_CANNOT_CREATE_VERTEX_BOUNDARY);
                     }
-                } else if (generalController.getTool() == ToolType.REMOVE) {
+                } else if (tool == ToolType.REMOVE) {
                     Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y);
                     if (temp != null) {
                         ControlManager.operations.addNewOperation(new RemoveOperation(generalController, temp));
@@ -283,13 +283,13 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     } else {
                         generalController.publishInfo(StringLiterals.INFO_NOTHING_TO_REMOVE);
                     }
-                } else if (generalController.getTool() == ToolType.SELECT) {
+                } else if (tool == ToolType.SELECT) {
                     if (!mousePressed) {
                         generalController.getSelectionController().addToSelection(GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y), e.isControlDown());
                     }
                 }
             } else if (mode == ModeType.EDGE) {
-                if (generalController.getTool() == ToolType.ADD) {
+                if (tool == ToolType.ADD) {
                     Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y);
                     if (temp == null) {
                         if (currentlyAddedEdge == null) {
@@ -313,7 +313,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                             currentlyAddedEdge = null;
                         }
                     }
-                } else if (generalController.getTool() == ToolType.REMOVE) {
+                } else if (tool == ToolType.REMOVE) {
                     Edge temp = GraphUtils.getEdgeFromPosition(generalController.getGraph(), x, y);
                     if (temp != null) {
                         ControlManager.operations.addNewOperation(new RemoveOperation(generalController, temp));
@@ -321,13 +321,13 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     } else {
                         generalController.publishInfo(StringLiterals.INFO_NOTHING_TO_REMOVE);
                     }
-                } else if (generalController.getTool() == ToolType.SELECT) {
+                } else if (tool == ToolType.SELECT) {
                     if (!mousePressed) {
                         generalController.getSelectionController().addToSelection(GraphUtils.getEdgeFromPosition(generalController.getGraph(), x, y), e.isControlDown());
                     }
                 }
             } else if (mode == ModeType.LABEL_VERTEX) {
-                if (generalController.getTool() == ToolType.ADD) {
+                if (tool == ToolType.ADD) {
                     Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y);
                     if (temp != null) {
                         if (temp.getLabel() == null) {
@@ -343,7 +343,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     } else {
                         generalController.publishInfo(StringLiterals.INFO_CHOOSE_VERTEX_FOR_LABEL);
                     }
-                } else if (generalController.getTool() == ToolType.REMOVE) {
+                } else if (tool == ToolType.REMOVE) {
                     LabelV temp = GraphUtils.getLabelVFromPosition(generalController.getGraph(), x, y);
                     if (temp != null) {
                         ControlManager.operations.addNewOperation(new RemoveOperation(generalController, temp));
@@ -351,13 +351,13 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     } else {
                         generalController.publishInfo(StringLiterals.INFO_NOTHING_TO_REMOVE);
                     }
-                } else if (generalController.getTool() == ToolType.SELECT) {
+                } else if (tool == ToolType.SELECT) {
                     if (!mousePressed) {
                         generalController.getSelectionController().addToSelection(GraphUtils.getLabelVFromPosition(generalController.getGraph(), x, y), e.isControlDown());
                     }
                 }
             } else {
-                if (generalController.getTool() == ToolType.ADD) {
+                if (tool == ToolType.ADD) {
                     Edge temp = GraphUtils.getEdgeFromPosition(generalController.getGraph(), x, y);
                     if (temp != null) {
                         if (temp.getLabel() == null) {
@@ -374,7 +374,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     } else {
                         generalController.publishInfo(StringLiterals.INFO_CHOOSE_EDGE_FOR_LABEL);
                     }
-                } else if (generalController.getTool() == ToolType.REMOVE) {
+                } else if (tool == ToolType.REMOVE) {
                     LabelE temp = GraphUtils.getLabelEFromPosition(generalController.getGraph(), x, y);
                     if (temp != null) {
                         ControlManager.operations.addNewOperation(new RemoveOperation(generalController, temp));
@@ -382,7 +382,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     } else {
                         generalController.publishInfo(StringLiterals.INFO_NOTHING_TO_REMOVE);
                     }
-                } else if (generalController.getTool() == ToolType.SELECT) {
+                } else if (tool == ToolType.SELECT) {
                     if (!mousePressed) {
                         generalController.getSelectionController().addToSelection(GraphUtils.getLabelEFromPosition(generalController.getGraph(), x, y), e.isControlDown());
                     }
@@ -394,7 +394,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
             }
         }
 
-        operationController.reportOperationProgress(null);
+        operationController.reportGenericOperation(null);
     }
 
     @Override
@@ -405,7 +405,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
         mousePressX = x;
         mousePressY = y;
 
-        if (generalController.getTool() != ToolType.REMOVE) {
+        if (tool != ToolType.REMOVE) {
             if (mode == ModeType.VERTEX) {
                 if (GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y) != null) {
                     if (generalController.getSelectionController().selectionContains(GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y))) {
@@ -482,7 +482,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
             }
         }
 
-        operationController.reportOperationProgress(null);
+        operationController.reportGenericOperation(null);
     }
 
     @Override
@@ -493,18 +493,18 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
         mousePressed = false;
         finishMovingElement();
 
-        if (generalController.getTool() != ToolType.ADD && currentlyMovedElement == null) {
+        if (tool != ToolType.ADD && currentlyMovedElement == null) {
             int x1 = Math.min(mousePressX, x);
             int width = Math.abs(x - mousePressX);
             int y1 = Math.min(mousePressY, y);
             int height = Math.abs(y - mousePressY);
 
             if (width + height > 2) {
-                if (generalController.getTool() == ToolType.REMOVE) {
+                if (tool == ToolType.REMOVE) {
                     generalController.getSelectionController().clearSelection();
                     generalController.getSelectionController().addToSelection(GraphUtils.getIntersectingElements(generalController.getGraph(), mode, new Rectangle(x1, y1, width, height)), false);
                     generalController.deleteSelection();
-                } else if (generalController.getTool() == ToolType.SELECT) {
+                } else if (tool == ToolType.SELECT) {
                     generalController.getSelectionController().addToSelection(GraphUtils.getIntersectingElements(generalController.getGraph(), mode, new Rectangle(x1, y1, width, height)), e.isControlDown());
                 }
             }
@@ -512,7 +512,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
 
         currentlyMovedElement = null;
         currentDragOperation = null;
-        operationController.reportOperationProgress(null);
+        operationController.reportGenericOperation(null);
     }
 
     @Override
@@ -534,7 +534,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
 
         }
 
-        operationController.reportOperationProgress(null);
+        operationController.reportGenericOperation(null);
     }
 
     @Override
@@ -714,12 +714,12 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
             }
         }
 
-        operationController.reportOperationProgress(null);
+        operationController.reportGenericOperation(null);
     }
 
     @Override
     public void paintCurrentlyAddedElement(Graphics2D g) {
-        if (generalController.getTool() == ToolType.ADD) {
+        if (tool == ToolType.ADD) {
             if (mode == ModeType.VERTEX) {
                 Vertex vertex = new Vertex(generalController.getGraph());
                 vertex.setModel(generalController.getGraph().getVertexDefaultModel());

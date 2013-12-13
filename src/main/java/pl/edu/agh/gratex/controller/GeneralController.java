@@ -1,7 +1,5 @@
 package pl.edu.agh.gratex.controller;
 
-import pl.edu.agh.gratex.constants.ModeType;
-import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 public interface GeneralController {
@@ -16,21 +14,13 @@ public interface GeneralController {
 
     public OperationController getOperationController();
 
-    public void updateWorkspace();
+    public Graph getGraph();
+
+    public void resetWorkspace();
 
     public void updateMenuBarAndActions();
 
     public void giveFocusToLabelTextfield();
-
-    public ModeType getMode();
-
-    public ToolType getTool();
-
-    public Graph getGraph();
-
-    public void setGraph(Graph graph);
-
-    public void resetGraph();
 
     public void newGraphFile();
 
@@ -54,14 +44,11 @@ public interface GeneralController {
 
     public void parseToTeX();
 
-    //TODO maybe it should select even if not in select mode
+    public void showAboutDialog();
+
     public void selectAll();
 
-    void exitApplication();
-
-    void showAboutDialog();
-
-    void deleteSelection();
+    public void deleteSelection();
 
     public void publishInfo(String entry);
 
@@ -69,5 +56,5 @@ public interface GeneralController {
 
     public void criticalError(String message, Exception e);
 
-    public void resetWorkspace();
+    public void exitApplication();
 }

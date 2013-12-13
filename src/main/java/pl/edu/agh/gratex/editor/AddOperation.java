@@ -18,7 +18,7 @@ public class AddOperation extends Operation {
     public AddOperation(GeneralController generalController, GraphElement element) {
         this.generalController = generalController;
         this.element = element;
-        type = generalController.getMode().ordinal()+1;
+        type = generalController.getModeController().getMode().ordinal()+1;
     }
 
     public String doOperation() {

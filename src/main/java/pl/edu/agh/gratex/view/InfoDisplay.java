@@ -28,6 +28,7 @@ public class InfoDisplay extends JLabel implements ModeListener, ToolListener, O
         }
     }
 
+
     // ===================================
     // ModeListener implementation
     @Override

@@ -52,25 +52,16 @@ public class MainWindow extends JFrame {
         generalController.getToolController().setTool(ToolType.ADD);
         generalController.newGraphFile();
 
-        updateFunctions();
+        generalController.getOperationController().reportGenericOperation(null);
     }
 
-    // TODO to jest tutaj tymczasowo
+    // TODO to jest tutaj tymczasowo, az wyleci ControlManager
     public PanelPropertyEditor getPanelPropertyEditor() {
         return panel_propertyEditor;
     }
 
-    public void updateWorkspace() {
-        panel_workspace.repaint();
-    }
-
-    public void updateFunctions() {
-        updateWorkspace();
-    }
-
     public void publishInfo(String entry) {
-        generalController.getOperationController().finishOperation(entry);
-        //infoDisplay.setText(entry);
+        generalController.getOperationController().reportGenericOperation(entry);
     }
 
     public void updateMenuBarAndActions() {

@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.editor.OperationList;
 import pl.edu.agh.gratex.editor.RemoveOperation;
 import pl.edu.agh.gratex.editor.TemplateChangeOperation;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.graph.GraphNumeration;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.parser.Parser;
 import pl.edu.agh.gratex.utils.FileManager;
@@ -100,35 +101,15 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     }
 
     @Override
-    public ModeType getMode() {
-        return mode;
-    }
-
-    @Override
-    public ToolType getTool() {
-        return tool;
-    }
-
-    @Override
     public Graph getGraph() {
         return graph;
-    }
-
-    @Override
-    public void setGraph(Graph graph) {
-        this.graph = graph;
-    }
-
-    @Override
-    public void resetGraph() {
-        graph = new Graph(this);
     }
 
     @Override
     public void newGraphFile() {
         if (checkForUnsavedProgress()) {
             currentFile = null;
-            resetGraph();
+            graph = new Graph(this);
             ControlManager.operations = new OperationList(this);
             resetWorkspace();
             editGraphTemplate();
@@ -145,8 +126,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                 chooser = new OpenFileDialog();
             }
             File file = chooser.showDialog(mainWindow);
-            if (file != null) {
 
+            if (file != null) {
                 Graph newGraph;
                 if ((newGraph = FileManager.openFile(file)) != null) {
                     currentFile = file;
@@ -165,28 +146,29 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public boolean saveGraphFile(boolean saveAs) {
-        if (!saveAs && currentFile != null) {
-            return FileManager.saveFile(graph, currentFile);
-        } else {
+        File file = currentFile;
+
+        if (saveAs || currentFile == null) {
             SaveFileDialog chooser;
             if (currentFile != null) {
                 chooser = new SaveFileDialog(currentFile);
             } else {
                 chooser = new SaveFileDialog();
             }
-            File file = chooser.showDialog(mainWindow);
+            file = chooser.showDialog(mainWindow);
+        }
 
-            if (file != null) {
-                if (FileManager.saveFile(graph, file)) {
-                    publishInfo(StringLiterals.INFO_GRAPH_SAVE_OK);
-                    currentFile = file;
-                    return true;
-                } else {
-                    publishInfo(StringLiterals.INFO_GRAPH_SAVE_FAIL);
-                    reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH, null);
-                }
+        if (file != null) {
+            if (FileManager.saveFile(graph, file)) {
+                publishInfo(StringLiterals.INFO_GRAPH_SAVE_OK);
+                currentFile = file;
+                return true;
+            } else {
+                publishInfo(StringLiterals.INFO_GRAPH_SAVE_FAIL);
+                reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH, null);
             }
         }
+
         return false;
     }
 
@@ -214,16 +196,16 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void undo() {
         publishInfo(ControlManager.operations.undo());
-        mainWindow.updateWorkspace();
         selectionController.clearSelection();
         ControlManager.updatePropertyChangeOperationStatus(false);
+        operationController.reportGenericOperation(null);
     }
 
     @Override
     public void redo() {
         publishInfo(ControlManager.operations.redo());
-        mainWindow.updateWorkspace();
         selectionController.clearSelection();
+        operationController.reportGenericOperation(null);
     }
 
     @Override
@@ -240,7 +222,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                 GraphUtils.adjustVerticesToGrid(graph);
             }
         }
-        mainWindow.updateFunctions();
+        operationController.reportGenericOperation(StringLiterals.INFO_GENERIC_GRID(graph.gridOn, graph.gridResolutionX, graph.gridResolutionY));
     }
 
     @Override
@@ -254,9 +236,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         if (result != null) {
             graph.getGraphNumeration().setNumerationDigital(result[0] == 0);
             graph.getGraphNumeration().setStartingNumber(result[1]);
+            operationController.reportGenericOperation(StringLiterals.INFO_GENERIC_NUMERATION(result[0] == 0, result[1]));
         }
-
-        mainWindow.updateFunctions();
     }
 
     @Override
@@ -266,9 +247,10 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void selectAll() {
+        toolController.setTool(ToolType.SELECT);
         selectionController.selectAll();
         ControlManager.updatePropertyChangeOperationStatus(true);
-        mainWindow.updateWorkspace();
+        operationController.reportGenericOperation(StringLiterals.INFO_GENERIC_SELECT_ALL(mode));
     }
 
     @Override
@@ -288,7 +270,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         if (selectionController.selectionSize() > 0) {
             ControlManager.operations.addNewOperation(new RemoveOperation(this, selectionController.getSelection()));
             publishInfo(ControlManager.operations.redo());
-            mainWindow.updateFunctions();
+            operationController.reportGenericOperation(null);
         }
         selectionController.clearSelection();
         ControlManager.updatePropertyChangeOperationStatus(false);
@@ -334,7 +316,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         ControlManager.updatePropertyChangeOperationStatus(false);
         mouseController.finishMovingElement();
         mouseController.cancelCurrentOperation();
-        mainWindow.updateFunctions();
+        operationController.reportGenericOperation(null);
     }
 
     @Override
@@ -345,11 +327,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void giveFocusToLabelTextfield() {
         mainWindow.giveFocusToLabelTextfield();
-    }
-
-    @Override
-    public void updateWorkspace() {
-        mainWindow.updateWorkspace();
     }
 
     @Override

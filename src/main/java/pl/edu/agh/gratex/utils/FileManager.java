@@ -52,8 +52,8 @@ public class FileManager {
             output = new ObjectOutputStream(new FileOutputStream(target));
             output.writeObject(content);
         } catch (Exception e) {
-            e.printStackTrace();
             result = false;
+            e.printStackTrace();
         } finally {
             try {
                 output.close();

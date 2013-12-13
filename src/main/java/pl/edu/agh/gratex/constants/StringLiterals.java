@@ -1,5 +1,7 @@
 package pl.edu.agh.gratex.constants;
 
+import pl.edu.agh.gratex.model.graph.GraphNumeration;
+
 public class StringLiterals {
     //==================================================
     // Window titles
@@ -227,4 +229,21 @@ public class StringLiterals {
         return tipPart1 + tipPart2 + tipPart3;
     }
 
+    public final static String INFO_GENERIC_GRID(boolean gridOn, int gridResolutionX, int gridResolutionY) {
+        if (gridOn) {
+            return String.format("%dx%d grid enabled", gridResolutionX, gridResolutionY);
+        } else {
+            return "grid disabled";
+        }
+    }
+
+    public final static String INFO_GENERIC_NUMERATION(boolean digital, int startingNumber) {
+        String numerationType = digital ? "digital" : "alphabetical";
+        String startingNumString = digital ? Integer.toString(startingNumber) : GraphNumeration.digitalToAlphabetical(startingNumber);
+        return String.format("%s numeration enabled (starting with '%s')", numerationType, startingNumString);
+    }
+
+    public final static String INFO_GENERIC_SELECT_ALL(ModeType mode){
+        return "all " + mode.getRelatedElementType().getPluralName() + " selected";
+    }
 }

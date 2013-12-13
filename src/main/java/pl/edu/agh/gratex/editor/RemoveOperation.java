@@ -25,12 +25,12 @@ public class RemoveOperation extends Operation {
     public RemoveOperation(GeneralController generalController, List<GraphElement> elements) {
         this.generalController = generalController;
         this.elements = new LinkedList<>(elements);
-        type = generalController.getMode();
+        type = generalController.getModeController().getMode();
     }
 
     public RemoveOperation(GeneralController generalController, GraphElement element) {
         this.generalController = generalController;
-        type = generalController.getMode();
+        type = generalController.getModeController().getMode();
         elements = new LinkedList<>();
         elements.add(element);
     }

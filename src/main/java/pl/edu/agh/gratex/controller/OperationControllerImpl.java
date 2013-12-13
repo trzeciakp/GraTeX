@@ -28,7 +28,7 @@ public class OperationControllerImpl implements OperationController {
     }
 
     @Override
-    public void reportOperationProgress(String info) {
+    public void reportGenericOperation(String info) {
         for (OperationListener listener : listeners)
         {
             listener.operationInProgress(info);

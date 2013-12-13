@@ -31,10 +31,10 @@ public class ModeControllerImpl implements ModeController, Serializable {
     @Override
     public void setMode(ModeType newMode) {
         ModeType previousMode = mode;
+        mode = newMode;
         for (ModeListener modeListener : listeners) {
             modeListener.modeChanged(previousMode, newMode);
         }
-        mode = newMode;
     }
 
     @Override

@@ -36,7 +36,10 @@ public class PanelToolbox extends JPanel implements ModeListener {
 
         comboBox_mode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                PanelToolbox.this.modeController.setMode((ModeType) comboBox_mode.getSelectedItem());
+                // This if ensures there is no event loop (setSelectedItem -> actionPerformed -> setMode -> setSelectedItem)
+                if (PanelToolbox.this.modeController.getMode() != comboBox_mode.getSelectedItem()) {
+                    PanelToolbox.this.modeController.setMode((ModeType) comboBox_mode.getSelectedItem());
+                }
             }
         });
         add(comboBox_mode);
@@ -54,6 +57,7 @@ public class PanelToolbox extends JPanel implements ModeListener {
 
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
+        // This if ensures there is no event loop (setSelectedItem -> actionPerformed -> setMode -> setSelectedItem)
         if (comboBox_mode.getSelectedItem() != currentMode) {
             comboBox_mode.setSelectedItem(currentMode);
         }

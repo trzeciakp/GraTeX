@@ -35,13 +35,13 @@ public class ControlManager {
         } else {
             currentPropertyChangeOperation = null;
             mainWindow.getPanelPropertyEditor().setEnabled(false);
-            if (mainWindow.getGeneralController().getMode() == ModeType.VERTEX) {
+            if (mainWindow.getGeneralController().getModeController().getMode() == ModeType.VERTEX) {
                 mainWindow.getPanelPropertyEditor().setModel(new VertexPropertyModel());
-            } else if (mainWindow.getGeneralController().getMode() == ModeType.EDGE) {
+            } else if (mainWindow.getGeneralController().getModeController().getMode() == ModeType.EDGE) {
                 mainWindow.getPanelPropertyEditor().setModel(new EdgePropertyModel());
-            } else if (mainWindow.getGeneralController().getMode() == ModeType.LABEL_VERTEX) {
+            } else if (mainWindow.getGeneralController().getModeController().getMode() == ModeType.LABEL_VERTEX) {
                 mainWindow.getPanelPropertyEditor().setModel(new LabelVertexPropertyModel());
-            } else if (mainWindow.getGeneralController().getMode() == ModeType.LABEL_EDGE) {
+            } else if (mainWindow.getGeneralController().getModeController().getMode() == ModeType.LABEL_EDGE) {
                 mainWindow.getPanelPropertyEditor().setModel(new LabelEdgePropertyModel());
             }
         }
@@ -54,7 +54,7 @@ public class ControlManager {
                 operations.addNewOperation(currentPropertyChangeOperation);
                 mainWindow.getGeneralController().publishInfo(operations.redo());
             }
-            mainWindow.updateWorkspace();
+            mainWindow.getGeneralController().getOperationController().reportGenericOperation(null);
             updatePropertyChangeOperationStatus(false);
         }
     }
