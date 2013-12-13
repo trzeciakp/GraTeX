@@ -14,6 +14,8 @@ public interface GeneralController {
 
     public MouseController getMouseController();
 
+    public OperationController getOperationController();
+
     public void updateWorkspace();
 
     public void updateMenuBarAndActions();

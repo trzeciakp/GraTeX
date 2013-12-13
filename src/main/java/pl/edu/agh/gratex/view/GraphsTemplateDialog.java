@@ -4,9 +4,9 @@ package pl.edu.agh.gratex.view;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.GeneralControllerImpl;
 import pl.edu.agh.gratex.controller.ModeController;
-import pl.edu.agh.gratex.controller.ModeControllerTmpImpl;
+import pl.edu.agh.gratex.controller.ModeControllerImpl;
+import pl.edu.agh.gratex.controller.ModeListener;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
@@ -15,10 +15,10 @@ import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
+import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
-import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.view.propertyPanel.PanelPropertyEditor;
 
 import javax.swing.*;
@@ -31,9 +31,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 @SuppressWarnings("serial")
-public class GraphsTemplateDialog extends JDialog {
-
+public class GraphsTemplateDialog extends JDialog implements ModeListener {
     private GeneralController generalController;
+
+    // This dialog needs its own ModeController, so that it does not change mode globally
+    private ModeController modeController;
 
     private Graph graph;
     private Graph result = null;
@@ -77,16 +79,19 @@ public class GraphsTemplateDialog extends JDialog {
 
     public GraphsTemplateDialog(MainWindow parent, GeneralController generalController) {
         super(parent, StringLiterals.TITLE_GRAPH_TEMPLATE_EDITOR, true);
+
         this.generalController = generalController;
+        modeController = new ModeControllerImpl(generalController);
+        modeController.addModeListener(this);
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(768, 511);
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
 
-        ModeController modeController = new ModeControllerTmpImpl(generalController);
         initGraph();
-        initializeFrame(modeController);
-        initializeEvents(modeController);
+        initializeFrame();
+        initializeEvents();
     }
 
     public Graph displayDialog() {
@@ -97,54 +102,38 @@ public class GraphsTemplateDialog extends JDialog {
     private void updateModel(PropertyModel model) {
         if (model instanceof VertexPropertyModel) {
             ((VertexPropertyModel) model).number = -1;
-            vertex1.setModel((VertexPropertyModel) model);
+            vertex1.setModel(model);
             graph.setVertexDefaultModel((VertexPropertyModel) vertex1.getModel());
             graph.getVertexDefaultModel().number = -1;
         } else if (model instanceof EdgePropertyModel) {
             ((EdgePropertyModel) model).relativeEdgeAngle = -1;
-            edge1.setModel((EdgePropertyModel) model);
-            edge2.setModel((EdgePropertyModel) model);
-            edge3.setModel((EdgePropertyModel) model);
+            edge1.setModel(model);
+            edge2.setModel(model);
+            edge3.setModel(model);
             graph.setEdgeDefaultModel((EdgePropertyModel) edge1.getModel());
             graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
         } else if (model instanceof LabelVertexPropertyModel) {
-            labelV1.setModel((LabelVertexPropertyModel) model);
+            labelV1.setModel(model);
             graph.setLabelVDefaultModel((LabelVertexPropertyModel) labelV1.getModel());
             graph.getLabelVDefaultModel().text = null;
         } else {
-            labelE1.setModel((LabelEdgePropertyModel) model);
-            labelE2.setModel((LabelEdgePropertyModel) model);
-            labelE3.setModel((LabelEdgePropertyModel) model);
+            labelE1.setModel(model);
+            labelE2.setModel(model);
+            labelE3.setModel(model);
             graph.setLabelEDefaultModel((LabelEdgePropertyModel) labelE1.getModel());
             graph.getLabelEDefaultModel().text = null;
         }
 
-        refreshModels();
+        //refreshModels();
     }
 
-    private void refreshModels() {
-        if (tabbedPane.getSelectedIndex() == 0) {
-            panel_propertyEditor.setModel(graph.getVertexDefaultModel());
-        } else if (tabbedPane.getSelectedIndex() == 1) {
-            panel_propertyEditor.setModel(graph.getEdgeDefaultModel());
-        } else if (tabbedPane.getSelectedIndex() == 2) {
-            panel_propertyEditor.setModel(graph.getLabelVDefaultModel());
-        } else if (tabbedPane.getSelectedIndex() == 3) {
-            panel_propertyEditor.setModel(graph.getLabelEDefaultModel());
-        }
-    }
-
-    private void initializeEvents(final ModeController modeController) {
+    private void initializeEvents() {
         tabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_preview);
                 ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(label_hint);
                 ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_propertyEditor);
-
-                //panel_propertyEditor.setMode(tabbedPane.getSelectedIndex() + 1);
-                //TODO
                 modeController.setMode(ModeType.values()[tabbedPane.getSelectedIndex()]);
-                refreshModels();
             }
         });
 
@@ -182,7 +171,8 @@ public class GraphsTemplateDialog extends JDialog {
                     graph.gridOn = true;
 
                 }
-                refreshModels();
+                // TODO Nie rozumiem, czemu to tu bylo??
+                //refreshModels();
                 result = graph;
                 setVisible(false);
                 dispose();
@@ -275,9 +265,9 @@ public class GraphsTemplateDialog extends JDialog {
         graph.getLabelsE().add(labelE3);
     }
 
-    private void initializeFrame(ModeController modeController) {
+    private void initializeFrame() {
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        tabbedPane.setBorder(new MatteBorder(0, 0, 1, 0, (Color) Color.GRAY));
+        tabbedPane.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
         tabbedPane.setBounds(0, 0, 752, 427);
         getContentPane().add(tabbedPane);
 
@@ -288,8 +278,6 @@ public class GraphsTemplateDialog extends JDialog {
         panel_preview.setBounds(222, 42, 520, 343);
 
         panel_propertyEditor = new PanelPropertyEditor(generalController, modeController) {
-            private static final long serialVersionUID = 4008480073440306159L;
-
             public void valueChanged(PropertyModel model) {
                 updateModel(model);
                 panel_preview.repaint();
@@ -299,7 +287,6 @@ public class GraphsTemplateDialog extends JDialog {
         panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
         panel_propertyEditor.setEnabled(true);
         panel_propertyEditor.disableLabelEdition();
-        //panel_propertyEditor.setMode(1);
         panel_propertyEditor.setModel(graph.getVertexDefaultModel());
 
         vertexPanel = new JPanel();
@@ -341,5 +328,29 @@ public class GraphsTemplateDialog extends JDialog {
         checkBox_applyToAll.setBounds(393, 433, 149, 34);
         checkBox_applyToAll.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_GLOBAL_APPLY);
         getContentPane().add(checkBox_applyToAll);
+    }
+
+    @Override
+    public void modeChanged(ModeType previousMode, ModeType currentMode) {
+        switch(currentMode)
+        {
+            case VERTEX:
+                panel_propertyEditor.setModel(graph.getVertexDefaultModel());
+                break;
+            case EDGE:
+                panel_propertyEditor.setModel(graph.getEdgeDefaultModel());
+                break;
+            case LABEL_VERTEX:
+                panel_propertyEditor.setModel(graph.getLabelVDefaultModel());
+                break;
+            case LABEL_EDGE:
+                panel_propertyEditor.setModel(graph.getLabelEDefaultModel());
+                break;
+        }
+    }
+
+    @Override
+    public int modeUpdatePriority() {
+        return 10;
     }
 }

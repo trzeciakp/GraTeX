@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.view;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.ToolController;
 import pl.edu.agh.gratex.controller.ToolListener;
@@ -29,7 +30,7 @@ public class ToolButton extends JButton implements ToolListener {
             url = this.getClass().getClassLoader().getResource("images/" + imagePassiveName);
             imagePassive = ImageIO.read(url);
         } catch (Exception e) {
-            toolController.getGeneralController().criticalError("Unable to load button icons.", e);
+            toolController.getGeneralController().criticalError(StringLiterals.MESSAGE_ERROR_GET_RESOURCE, e);
         }
         addActionListener(new ActionListener() {
             @Override
@@ -55,7 +56,7 @@ public class ToolButton extends JButton implements ToolListener {
     }
 
     @Override
-    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
+    public void toolChanged(ToolType previousTool, ToolType currentTool) {
         repaint();
     }
 

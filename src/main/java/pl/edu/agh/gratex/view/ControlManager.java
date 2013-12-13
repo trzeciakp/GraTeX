@@ -23,27 +23,26 @@ public class ControlManager {
     }
 
     public static void updatePropertyChangeOperationStatus(boolean newSelection) {
-        mainWindow.menuBar.updateFunctions();
-        mainWindow.panel_buttonContainer.updateFunctions();
+        mainWindow.updateMenuBarAndActions();
 
         if (mainWindow.getGeneralController().getSelectionController().selectionSize() > 0) {
             if (newSelection) {
                 selectionID++;
-                mainWindow.panel_propertyEditor.setEnabled(true);
+                mainWindow.getPanelPropertyEditor().setEnabled(true);
             }
             currentPropertyChangeOperation = new PropertyChangeOperation(mainWindow.getGeneralController().getSelectionController().getSelection(), selectionID);
-            mainWindow.panel_propertyEditor.setModel(currentPropertyChangeOperation.initialModel);
+            mainWindow.getPanelPropertyEditor().setModel(currentPropertyChangeOperation.initialModel);
         } else {
             currentPropertyChangeOperation = null;
-            mainWindow.panel_propertyEditor.setEnabled(false);
+            mainWindow.getPanelPropertyEditor().setEnabled(false);
             if (mainWindow.getGeneralController().getMode() == ModeType.VERTEX) {
-                mainWindow.panel_propertyEditor.setModel(new VertexPropertyModel());
+                mainWindow.getPanelPropertyEditor().setModel(new VertexPropertyModel());
             } else if (mainWindow.getGeneralController().getMode() == ModeType.EDGE) {
-                mainWindow.panel_propertyEditor.setModel(new EdgePropertyModel());
+                mainWindow.getPanelPropertyEditor().setModel(new EdgePropertyModel());
             } else if (mainWindow.getGeneralController().getMode() == ModeType.LABEL_VERTEX) {
-                mainWindow.panel_propertyEditor.setModel(new LabelVertexPropertyModel());
+                mainWindow.getPanelPropertyEditor().setModel(new LabelVertexPropertyModel());
             } else if (mainWindow.getGeneralController().getMode() == ModeType.LABEL_EDGE) {
-                mainWindow.panel_propertyEditor.setModel(new LabelEdgePropertyModel());
+                mainWindow.getPanelPropertyEditor().setModel(new LabelEdgePropertyModel());
             }
         }
     }

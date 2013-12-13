@@ -3,7 +3,8 @@ package pl.edu.agh.gratex.view;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
-import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.GeneralControllerImpl;
 import pl.edu.agh.gratex.view.propertyPanel.PanelPropertyEditor;
 
 import javax.imageio.ImageIO;
@@ -22,22 +23,27 @@ public class MainWindow extends JFrame {
     private PanelToolbox panel_toolbox;
     private JScrollPane scrollPane_workspace;
     private PanelWorkspace panel_workspace;
-    public PanelPropertyEditor panel_propertyEditor;
-    public PanelButtonContainer panel_buttonContainer;
+    private PanelPropertyEditor panel_propertyEditor;
+    private PanelButtonContainer panel_buttonContainer;
 
     private GeneralController generalController;
 
-    public MenuBar menuBar;
-    private JLabel label_info;
+    private MenuBar menuBar;
+    private InfoDisplay infoDisplay;
 
-    public MainWindow() throws Exception {
+    public MainWindow() {
         super(StringLiterals.TITLE_MAIN_WINDOW);
-        URL url = this.getClass().getClassLoader().getResource("images/icon.png");
-        setIconImage(ImageIO.read(url));
+
+        try {
+            URL url = this.getClass().getClassLoader().getResource("images/icon.png");
+            setIconImage(ImageIO.read(url));
+        } catch (Exception e) {
+            generalController.criticalError(StringLiterals.MESSAGE_ERROR_GET_RESOURCE, e);
+        }
 
         ControlManager.passWindowHandle(this);
         generalController = new GeneralControllerImpl(this);
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler(generalController.getMouseController()));
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler(generalController));
 
         initializeFrame();
         initializeEvents();
@@ -49,18 +55,22 @@ public class MainWindow extends JFrame {
         updateFunctions();
     }
 
+    // TODO to jest tutaj tymczasowo
+    public PanelPropertyEditor getPanelPropertyEditor() {
+        return panel_propertyEditor;
+    }
+
     public void updateWorkspace() {
-        //panel_workspace.updateCursor();
         panel_workspace.repaint();
     }
 
     public void updateFunctions() {
         updateWorkspace();
-        label_info.setText(StringLiterals.INFO_MODE_AND_TOOL(generalController.getMode(), generalController.getTool()));
     }
 
     public void publishInfo(String entry) {
-        label_info.setText(entry);
+        generalController.getOperationController().finishOperation(entry);
+        //infoDisplay.setText(entry);
     }
 
     public void updateMenuBarAndActions() {
@@ -68,8 +78,7 @@ public class MainWindow extends JFrame {
         panel_buttonContainer.updateFunctions();
     }
 
-    public void giveFocusToLabelTextfield()
-    {
+    public void giveFocusToLabelTextfield() {
         panel_propertyEditor.giveFocusToLabelTextfield();
     }
 
@@ -84,7 +93,7 @@ public class MainWindow extends JFrame {
 
         panel_buttonContainer.setSize(width + 10, 50);
 
-        label_info.setBounds(10, height - 36, width - 20, 36);
+        infoDisplay.setBounds(10, height - 36, width - 20, 36);
 
         menuBar.setSize(width, 25);
     }
@@ -116,7 +125,7 @@ public class MainWindow extends JFrame {
 
         scrollPane_workspace = new JScrollPane();
         scrollPane_workspace.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
-        panel_workspace = new PanelWorkspace(scrollPane_workspace, generalController, generalController.getMouseController(), generalController.getToolController());
+        panel_workspace = new PanelWorkspace(scrollPane_workspace, generalController);
         scrollPane_workspace.setViewportView(panel_workspace);
         panel_workspace.setLayout(null);
         scrollPane_workspace.setBounds(110, 85, 472, 344);
@@ -133,9 +142,9 @@ public class MainWindow extends JFrame {
 
         getContentPane().add(panel_buttonContainer);
 
-        label_info = new JLabel("");
-        label_info.setBounds(10, 430, 774, 36);
-        getContentPane().add(label_info);
+        infoDisplay = new InfoDisplay(generalController);
+        infoDisplay.setBounds(10, 430, 774, 36);
+        getContentPane().add(infoDisplay);
 
         panel_toolbox = new PanelToolbox(generalController.getToolController(), generalController.getModeController());
         panel_toolbox.setBounds(10, 85, 90, 344);

@@ -8,16 +8,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ModeControllerTmpImpl implements ModeController, Serializable {
+public class ModeControllerImpl implements ModeController, Serializable {
     private GeneralController generalController;
 
-    private ModeType mode;
-    private List<ModeListener> listeners;
+    private ModeType mode = ModeType.VERTEX;
+    private List<ModeListener> listeners = new ArrayList<>();
 
-    public ModeControllerTmpImpl(GeneralController generalController) {
+    public ModeControllerImpl(GeneralController generalController) {
         this.generalController = generalController;
-        this.mode = ModeType.VERTEX;
-        this.listeners = new ArrayList<>();
     }
 
     @Override

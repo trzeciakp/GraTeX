@@ -11,13 +11,11 @@ import java.util.List;
 public class ToolControllerImpl implements ToolController, Serializable {
     private GeneralController generalController;
 
-    private ToolType tool;
-    private List<ToolListener> listeners;
+    private ToolType tool = ToolType.ADD;
+    private List<ToolListener> listeners = new ArrayList<>();
 
     public ToolControllerImpl(GeneralController generalController) {
         this.generalController = generalController;
-        this.tool = ToolType.ADD;
-        this.listeners = new ArrayList<>();
     }
 
     @Override

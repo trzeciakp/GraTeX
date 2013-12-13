@@ -35,8 +35,6 @@ public class AboutDialog extends JDialog {
         getContentPane().setLayout(null);
 
         JTextArea aboutTextArea = new JTextArea() {
-            private static final long serialVersionUID = 1L;
-
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 try {

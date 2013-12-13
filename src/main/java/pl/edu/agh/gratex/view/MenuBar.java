@@ -102,8 +102,8 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     }
 
     @Override
-    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
-        switch (currentToolType) {
+    public void toolChanged(ToolType previousTool, ToolType currentTool) {
+        switch (currentTool) {
             case ADD:
                 menuItems.get(MenuBarItem.ADD_TOOL).setSelected(true);
                 menuItems.get(MenuBarItem.SELECT_ALL).setEnabled(false);

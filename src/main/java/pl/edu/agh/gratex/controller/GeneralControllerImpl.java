@@ -19,10 +19,11 @@ import java.io.Serializable;
 
 public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener, Serializable {
     private MainWindow mainWindow;
+    private OperationController operationController;
     private ModeController modeController;
     private ToolController toolController;
-    private SelectionController selectionController;
     private MouseController mouseController;
+    private SelectionController selectionController;
 
     private Graph graph;
     private File currentFile;
@@ -32,9 +33,10 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     public GeneralControllerImpl(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
-        modeController = new ModeControllerTmpImpl(this);
+        operationController = new OperationControllerImpl(this);
+        modeController = new ModeControllerImpl(this);
         toolController = new ToolControllerImpl(this);
-        mouseController = new MouseControllerImpl(this, modeController, toolController);
+        mouseController = new MouseControllerImpl(this, operationController, modeController, toolController);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
 
         modeController.addModeListener(this);
@@ -44,25 +46,9 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         currentFile = null;
     }
 
+
     //===========================================
     // Listeners implementation
-
-    public ModeController getModeController() {
-        return modeController;
-    }
-
-    public ToolController getToolController() {
-        return toolController;
-    }
-
-    public SelectionController getSelectionController() {
-        return selectionController;
-    }
-
-    public MouseController getMouseController() {
-        return mouseController;
-    }
-
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
         mode = currentMode;
@@ -75,8 +61,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     }
 
     @Override
-    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
-        tool = currentToolType;
+    public void toolChanged(ToolType previousTool, ToolType currentTool) {
+        tool = currentTool;
         resetWorkspace();
     }
 
@@ -85,8 +71,33 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         return 10;
     }
 
-//===========================================
+    //===========================================
     // GeneralController interface implementation
+
+    @Override
+    public ModeController getModeController() {
+        return modeController;
+    }
+
+    @Override
+    public ToolController getToolController() {
+        return toolController;
+    }
+
+    @Override
+    public SelectionController getSelectionController() {
+        return selectionController;
+    }
+
+    @Override
+    public MouseController getMouseController() {
+        return mouseController;
+    }
+
+    @Override
+    public OperationController getOperationController() {
+        return operationController;
+    }
 
     @Override
     public ModeType getMode() {
@@ -322,7 +333,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         selectionController.clearSelection();
         ControlManager.updatePropertyChangeOperationStatus(false);
         mouseController.finishMovingElement();
-        mouseController.resetCurrentOperation();
+        mouseController.cancelCurrentOperation();
         mainWindow.updateFunctions();
     }
 

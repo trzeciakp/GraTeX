@@ -26,8 +26,5 @@ public interface MouseController {
 
     public boolean isEdgeCurrentlyAdded(Edge edge);
 
-    public void resetCurrentOperation();
-
-    // TODO to powiino isc gdzies indziej
     public void cancelCurrentOperation();
 }

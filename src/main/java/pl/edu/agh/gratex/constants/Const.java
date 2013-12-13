@@ -20,6 +20,12 @@ public class Const {
     public final static Color SELECTION_RECT_BORDER_COLOR = new Color(72, 118, 255, 128);
 
 
+    // Color of deletion rectangle inside
+    public final static Color DELETION_RECT_INSIDE_COLOR = new Color(255, 80, 80, 128);
+    // Color of deletion rectangle border
+    public final static Color DELETION_RECT_BORDER_COLOR = new Color(255, 0, 0, 128);
+
+
     // Color used to draw grid
     public final static Color GRID_COLOR = new Color(200, 200, 200);
 

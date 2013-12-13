@@ -2,11 +2,9 @@ package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.CursorType;
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
-import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.MouseController;
-import pl.edu.agh.gratex.controller.ToolController;
-import pl.edu.agh.gratex.controller.ToolListener;
+import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 import javax.imageio.ImageIO;
@@ -19,7 +17,8 @@ import java.net.URL;
 import java.util.EnumMap;
 
 @SuppressWarnings("serial")
-public class PanelWorkspace extends JPanel implements MouseListener, MouseMotionListener, ToolListener {
+public class PanelWorkspace extends JPanel implements MouseListener, MouseMotionListener, OperationListener, ToolListener {
+    public static int WIELKIE_DUPSKOOO = 0;
 
     private GeneralController generalController;
     private MouseController mouseController;
@@ -27,19 +26,21 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     private JScrollPane parent;
     private int mouseDragX = -1;
     private int mouseDragY = -1;
-    private EnumMap<ToolType, Cursor> cursors = new EnumMap<>(ToolType.class);
 
+    private EnumMap<ToolType, Cursor> cursors = new EnumMap<>(ToolType.class);
+    private ToolType tool;
 
     private boolean mouseInWorkspace;
 
-    public PanelWorkspace(JScrollPane parent, GeneralController generalController, MouseController mouseController, ToolController toolController) {
+    public PanelWorkspace(JScrollPane parent, GeneralController generalController) {
         super();
         this.generalController = generalController;
-        this.mouseController = mouseController;
+        this.mouseController = generalController.getMouseController();
         this.parent = parent;
         addMouseListener(this);
         addMouseMotionListener(this);
-        toolController.addToolListener(this);
+        generalController.getOperationController().addOperationListener(this);
+        generalController.getToolController().addToolListener(this);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         try {
             for (CursorType cursorType : CursorType.values()) {
@@ -49,18 +50,17 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
                 cursors.put(cursorType.getToolType(), cursor);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            generalController.criticalError(StringLiterals.MESSAGE_ERROR_GET_RESOURCE, e);
         }
 
         setPreferredSize(new Dimension(Const.PAGE_WIDTH, Const.PAGE_HEIGHT));
-        updateCursor(toolController.getTool());
+        updateCursor(generalController.getToolController().getTool());
     }
 
     private void updateCursor(ToolType toolType) {
         setCursor(cursors.get(toolType));
     }
 
-    //TODO maybe introduce WorkspaceController?
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
@@ -89,13 +89,47 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         }
     }
 
+    private void paintGrid(Graphics2D g, Graph graph) {
+        if (graph.gridOn) {
+            g.setColor(Const.GRID_COLOR);
+
+            for (int i = graph.gridResolutionX; i < Const.PAGE_WIDTH; i += graph.gridResolutionX)
+                g.drawLine(i, 0, i, Const.PAGE_HEIGHT);
+
+            for (int i = graph.gridResolutionY; i < Const.PAGE_HEIGHT; i += graph.gridResolutionY)
+                g.drawLine(0, i, Const.PAGE_WIDTH, i);
+        }
+    }
+
+    public void paintSelectionArea(Graphics2D g) {
+        Rectangle selectionArea = mouseController.getSelectionArea();
+        if (selectionArea != null) {
+            if (tool == ToolType.REMOVE) {
+                g.setColor(Const.DELETION_RECT_INSIDE_COLOR);
+                g.fill(selectionArea);
+                g.setColor(Const.DELETION_RECT_BORDER_COLOR);
+                g.draw(selectionArea);
+            } else if (tool == ToolType.SELECT) {
+                g.setColor(Const.SELECTION_RECT_INSIDE_COLOR);
+                g.fill(selectionArea);
+                g.setColor(Const.SELECTION_RECT_BORDER_COLOR);
+                g.draw(selectionArea);
+            }
+        }
+    }
+
+    public void paintCopiedSubgraph(Graphics2D g) {
+        mouseController.paintCopiedSubgraph(g);
+    }
+
+
+    // ===================================
+    // mouse listeners implementation
     public void mouseClicked(MouseEvent e) {
         if (e.getX() <= Const.PAGE_WIDTH && e.getY() <= Const.PAGE_HEIGHT && SwingUtilities.isLeftMouseButton(e)) {
             mouseController.processMouseClicking(e);
-            repaint();
         } else if (SwingUtilities.isRightMouseButton(e)) {
-            generalController.getMouseController().cancelCurrentOperation();
-            repaint();
+            mouseController.cancelCurrentOperation();
         }
     }
 
@@ -105,23 +139,21 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
     public void mouseExited(MouseEvent e) {
         mouseInWorkspace = false;
+        // Repaint needed to hide currently added element when navigating out of workspace
         repaint();
     }
 
     public void mouseReleased(MouseEvent e) {
-        //TODO why was it here?
-        //updateCursor();
+        updateCursor(tool);
         mouseDragX = -1;
         if (SwingUtilities.isLeftMouseButton(e)) {
             mouseController.processMouseReleasing(e);
-            repaint();
         }
     }
 
     public void mousePressed(MouseEvent e) {
         if (e.getX() <= Const.PAGE_WIDTH && e.getY() <= Const.PAGE_HEIGHT && SwingUtilities.isLeftMouseButton(e)) {
             mouseController.processMousePressing(e);
-            repaint();
         } else if (!SwingUtilities.isLeftMouseButton(e)) {
             mouseDragX = MouseInfo.getPointerInfo().getLocation().x;
             mouseDragY = MouseInfo.getPointerInfo().getLocation().y;
@@ -147,52 +179,46 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
             mouseDragY = mouseY;
         } else {
             mouseController.processMouseDragging(e);
-            repaint();
         }
     }
 
     public void mouseMoved(MouseEvent e) {
         if (e.getX() <= Const.PAGE_WIDTH && e.getY() <= Const.PAGE_HEIGHT) {
+            mouseInWorkspace = true;
             mouseController.processMouseMoving(e);
+        } else {
+            mouseInWorkspace = false;
+            // Repaint needed to hide currently added element when navigating out of page
             repaint();
         }
     }
 
 
-    private void paintGrid(Graphics2D g, Graph graph) {
-        if (graph.gridOn) {
-            g.setColor(Const.GRID_COLOR);
-            int i = 0;
-            while ((i += graph.gridResolutionX) < Const.PAGE_WIDTH) {
-                g.drawLine(i, 0, i, Const.PAGE_HEIGHT);
-            }
-            i = 0;
-            while ((i += graph.gridResolutionY) < Const.PAGE_HEIGHT) {
-                g.drawLine(0, i, Const.PAGE_WIDTH, i);
-            }
-        }
-    }
+    // ===================================
+    // OperationListener implementation
 
-
-    public void paintSelectionArea(Graphics2D g) {
-        Rectangle selectionArea = mouseController.getSelectionArea();
-        if (selectionArea != null) {
-            g.setColor(Const.SELECTION_RECT_INSIDE_COLOR);
-            g.fill(selectionArea);
-
-            g.setColor(Const.SELECTION_RECT_BORDER_COLOR);
-            g.draw(selectionArea);
-        }
-    }
-
-
-    public void paintCopiedSubgraph(Graphics2D g) {
-        generalController.getMouseController().paintCopiedSubgraph(g);
+    @Override
+    public void operationStarted(String info) {
+        repaint();
     }
 
     @Override
-    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
-        updateCursor(currentToolType);
+    public void operationInProgress(String info) {
+        repaint();
+    }
+
+    @Override
+    public void operationFinished(String info) {
+        repaint();
+    }
+
+
+    // ===================================
+    // ToolListener implementation
+    @Override
+    public void toolChanged(ToolType previousTool, ToolType currentTool) {
+        tool = currentTool;
+        updateCursor(currentTool);
     }
 
     @Override

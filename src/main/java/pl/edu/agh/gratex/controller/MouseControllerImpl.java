@@ -24,8 +24,9 @@ import java.io.Serializable;
 
 public class MouseControllerImpl implements MouseController, ModeListener, ToolListener, Serializable {
     private GeneralController generalController;
-    private ModeType mode;
-    private ToolType tool;
+    private OperationController operationController;
+    private ModeType mode = ModeType.VERTEX;
+    private ToolType tool = ToolType.ADD;
 
     private DragOperation currentDragOperation = null;
     private CopyPasteOperation currentCopyPasteOperation = null;
@@ -34,26 +35,22 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
     private boolean changingEdgeAngle;
     private GraphElement currentlyMovedElement = null;
 
-    private  boolean shiftDown;
+    private boolean shiftDown;
     private boolean mousePressed;
     private int mousePressX;
     private int mousePressY;
     private int mouseX;
     private int mouseY;
 
-    public MouseControllerImpl(GeneralController generalController, ModeController modeController, ToolController toolController) {
+    public MouseControllerImpl(GeneralController generalController, OperationController operationController, ModeController modeController, ToolController toolController) {
         this.generalController = generalController;
+        this.operationController = operationController;
         modeController.addModeListener(this);
         toolController.addToolListener(this);
     }
 
     //===========================================
     // Listeners implementation
-
-    @Override
-    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
-        tool = currentToolType;
-    }
 
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
@@ -66,6 +63,11 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
     }
 
     @Override
+    public void toolChanged(ToolType previousTool, ToolType currentTool) {
+        tool = currentTool;
+    }
+
+    @Override
     public int toolUpdatePriority() {
         return 0;
     }
@@ -73,6 +75,152 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
 
     //===========================================
     // MouseController implementation
+
+    @Override
+    public void cancelCurrentOperation() {
+        if (currentCopyPasteOperation != null) {
+            currentCopyPasteOperation = currentCopyPasteOperation.getCopy();
+        }
+        currentDragOperation = null;
+        currentlyAddedEdge = null;
+        currentlyMovedElement = null;
+
+        operationController.reportOperationProgress(null);
+    }
+
+    @Override
+    public void copyToClipboard() {
+        currentCopyPasteOperation = new CopyPasteOperation(generalController, generalController.getSelectionController().getSelection());
+        generalController.updateMenuBarAndActions();
+        generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_COPY);
+    }
+
+    @Override
+    public void pasteFromClipboard() {
+        if (!currentCopyPasteOperation.pasting) {
+            generalController.getModeController().setMode(ModeType.VERTEX);
+            generalController.getToolController().setTool(ToolType.SELECT);
+            currentCopyPasteOperation.startPasting();
+            generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_WHERE_TO_PASTE);
+        }
+    }
+
+    @Override
+    public boolean clipboardNotEmpty() {
+        return currentCopyPasteOperation != null;
+    }
+
+    @Override
+    public void paintCopiedSubgraph(Graphics2D g) {
+        if (currentCopyPasteOperation != null) {
+            if (currentCopyPasteOperation.pasting) {
+                currentCopyPasteOperation.targetX = mouseX;
+                currentCopyPasteOperation.targetY = mouseY;
+                currentCopyPasteOperation.calculatePosition();
+                if (currentCopyPasteOperation.fitsIntoPosition()) {
+                    currentCopyPasteOperation.drawDummySubgraph(g);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void processShiftPressing(boolean flag) {
+        shiftDown = flag;
+        if (currentlyAddedEdge != null) {
+            currentlyAddedEdge.setDirected(flag);
+        }
+        if (currentlyMovedElement != null) {
+            if (currentlyMovedElement instanceof Edge) {
+                ((Edge) currentlyMovedElement).setDirected(flag);
+            }
+            if (currentlyMovedElement instanceof LabelE) {
+                ((LabelE) currentlyMovedElement).setHorizontalPlacement(!flag);
+            }
+        }
+        generalController.updateWorkspace();
+    }
+
+    @Override
+    public boolean isEdgeCurrentlyAdded(Edge edge) {
+        return edge == currentlyAddedEdge;
+    }
+
+    @Override
+    public Rectangle getSelectionArea() {
+        if (tool != ToolType.ADD && currentlyMovedElement == null) {
+            if (mousePressed && (mouseX != mousePressX || mouseY != mousePressY)) {
+                int x = Math.min(mousePressX, mouseX);
+                int width = Math.abs(mouseX - mousePressX);
+                int y = Math.min(mousePressY, mouseY);
+                int height = Math.abs(mouseY - mousePressY);
+                return new Rectangle(x, y, width, height);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public void finishMovingElement() {
+        if (currentlyMovedElement != null) {
+            if (currentlyMovedElement instanceof Vertex) {
+                currentDragOperation.setEndPos(((Vertex) currentlyMovedElement).getPosX(), ((Vertex) currentlyMovedElement).getPosY());
+                if (currentDragOperation.changeMade()) {
+                    ControlManager.operations.addNewOperation(currentDragOperation);
+                    generalController.publishInfo(ControlManager.operations.redo());
+                }
+            }
+            if (currentlyMovedElement instanceof Edge) {
+                Edge edge = (Edge) currentlyMovedElement;
+                if (changingEdgeAngle) {
+                    currentDragOperation.setEdgeEndState(edge);
+                    if (currentDragOperation.changeMade()) {
+                        ControlManager.operations.addNewOperation(currentDragOperation);
+                        generalController.publishInfo(ControlManager.operations.redo());
+                    }
+                    changingEdgeAngle = false;
+                } else {
+                    if (currentDragOperation.draggingA()) {
+                        if (edge.getVertexA() != currentDragOperation.getDisjointedVertex()) {
+                            if (edge.getVertexA() != edgeDragDummy) {
+                                currentDragOperation.setEdgeEndState(edge);
+                                ControlManager.operations.addNewOperation(currentDragOperation);
+                                generalController.publishInfo(ControlManager.operations.redo());
+                            } else {
+                                currentDragOperation.restoreEdgeStartState();
+                            }
+                        }
+                    } else {
+                        if (edge.getVertexB() != currentDragOperation.getDisjointedVertex()) {
+                            if (edge.getVertexB() != edgeDragDummy) {
+                                currentDragOperation.setEdgeEndState(edge);
+                                ControlManager.operations.addNewOperation(currentDragOperation);
+                                generalController.publishInfo(ControlManager.operations.redo());
+                            } else {
+                                currentDragOperation.restoreEdgeStartState();
+                            }
+                        }
+                    }
+                }
+            } else if (currentlyMovedElement instanceof LabelV) {
+                currentDragOperation.setEndAngle(((LabelV) currentlyMovedElement).getPosition());
+                if (currentDragOperation.changeMade()) {
+                    ControlManager.operations.addNewOperation(currentDragOperation);
+                    generalController.publishInfo(ControlManager.operations.redo());
+                }
+            } else if (currentlyMovedElement instanceof LabelE) {
+                currentDragOperation.setLabelEEndState((LabelE) currentlyMovedElement);
+                if (currentDragOperation.changeMade()) {
+                    ControlManager.operations.addNewOperation(currentDragOperation);
+                    generalController.publishInfo(ControlManager.operations.redo());
+                }
+            }
+
+            ControlManager.updatePropertyChangeOperationStatus(true);
+        }
+    }
+
 
     @Override
     public void processMouseClicking(MouseEvent e) {
@@ -104,7 +252,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
         }
 
         if (!consumed) {
-            if (generalController.getMode() == ModeType.VERTEX) {
+            if (mode == ModeType.VERTEX) {
                 if (generalController.getTool() == ToolType.ADD) {
                     Vertex vertex = new Vertex(generalController.getGraph());
                     vertex.setModel(generalController.getGraph().getVertexDefaultModel());
@@ -140,7 +288,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                         generalController.getSelectionController().addToSelection(GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y), e.isControlDown());
                     }
                 }
-            } else if (generalController.getMode() == ModeType.EDGE) {
+            } else if (mode == ModeType.EDGE) {
                 if (generalController.getTool() == ToolType.ADD) {
                     Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y);
                     if (temp == null) {
@@ -178,7 +326,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                         generalController.getSelectionController().addToSelection(GraphUtils.getEdgeFromPosition(generalController.getGraph(), x, y), e.isControlDown());
                     }
                 }
-            } else if (generalController.getMode() == ModeType.LABEL_VERTEX) {
+            } else if (mode == ModeType.LABEL_VERTEX) {
                 if (generalController.getTool() == ToolType.ADD) {
                     Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y);
                     if (temp != null) {
@@ -246,6 +394,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
             }
         }
 
+        operationController.reportOperationProgress(null);
     }
 
     @Override
@@ -257,7 +406,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
         mousePressY = y;
 
         if (generalController.getTool() != ToolType.REMOVE) {
-            if (generalController.getMode() == ModeType.VERTEX) {
+            if (mode == ModeType.VERTEX) {
                 if (GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y) != null) {
                     if (generalController.getSelectionController().selectionContains(GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y))) {
                         currentlyMovedElement = GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y);
@@ -265,7 +414,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                         currentDragOperation.setStartPos(((Vertex) currentlyMovedElement).getPosX(), ((Vertex) currentlyMovedElement).getPosY());
                     }
                 }
-            } else if (generalController.getMode() == ModeType.EDGE) {
+            } else if (mode == ModeType.EDGE) {
                 if (GraphUtils.getEdgeFromPosition(generalController.getGraph(), x, y) != null) {
                     if (generalController.getSelectionController().selectionContains(GraphUtils.getEdgeFromPosition(generalController.getGraph(), x, y))) {
                         Edge edge = GraphUtils.getEdgeFromPosition(generalController.getGraph(), x, y);
@@ -314,7 +463,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                         }
                     }
                 }
-            } else if (generalController.getMode() == ModeType.LABEL_VERTEX) {
+            } else if (mode == ModeType.LABEL_VERTEX) {
                 if (GraphUtils.getLabelVFromPosition(generalController.getGraph(), x, y) != null) {
                     if (generalController.getSelectionController().selectionContains(GraphUtils.getLabelVFromPosition(generalController.getGraph(), x, y))) {
                         currentlyMovedElement = GraphUtils.getLabelVFromPosition(generalController.getGraph(), x, y);
@@ -322,7 +471,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                         currentDragOperation.setStartAngle(((LabelV) currentlyMovedElement).getPosition());
                     }
                 }
-            } else if (generalController.getMode() == ModeType.LABEL_EDGE) {
+            } else if (mode == ModeType.LABEL_EDGE) {
                 if (GraphUtils.getLabelEFromPosition(generalController.getGraph(), x, y) != null) {
                     if (generalController.getSelectionController().selectionContains(GraphUtils.getLabelEFromPosition(generalController.getGraph(), x, y))) {
                         currentlyMovedElement = GraphUtils.getLabelEFromPosition(generalController.getGraph(), x, y);
@@ -333,6 +482,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
             }
         }
 
+        operationController.reportOperationProgress(null);
     }
 
     @Override
@@ -352,18 +502,17 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
             if (width + height > 2) {
                 if (generalController.getTool() == ToolType.REMOVE) {
                     generalController.getSelectionController().clearSelection();
-                    generalController.getSelectionController().addToSelection(GraphUtils.getIntersectingElements(generalController.getGraph(), generalController.getMode(), new Rectangle(x1, y1, width, height)), false);
+                    generalController.getSelectionController().addToSelection(GraphUtils.getIntersectingElements(generalController.getGraph(), mode, new Rectangle(x1, y1, width, height)), false);
                     generalController.deleteSelection();
                 } else if (generalController.getTool() == ToolType.SELECT) {
-                    generalController.getSelectionController().addToSelection(GraphUtils.getIntersectingElements(generalController.getGraph(), generalController.getMode(), new Rectangle(x1, y1, width, height)), e.isControlDown());
+                    generalController.getSelectionController().addToSelection(GraphUtils.getIntersectingElements(generalController.getGraph(), mode, new Rectangle(x1, y1, width, height)), e.isControlDown());
                 }
             }
         }
 
         currentlyMovedElement = null;
         currentDragOperation = null;
-
-
+        operationController.reportOperationProgress(null);
     }
 
     @Override
@@ -371,14 +520,21 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
         mouseX = e.getX();
         mouseY = e.getY();
 
-        if (currentlyAddedEdge != null) {
-            currentlyAddedEdge.setDirected(e.isShiftDown());
-        }
-        if (currentlyMovedElement != null) {
-            if (currentlyMovedElement instanceof Edge) {
-                ((Edge) currentlyMovedElement).setDirected(e.isShiftDown());
+        if (tool == ToolType.ADD) {
+
+            if (currentlyAddedEdge != null) {
+                currentlyAddedEdge.setDirected(e.isShiftDown());
             }
+
+            if (currentlyMovedElement != null) {
+                if (currentlyMovedElement instanceof Edge) {
+                    ((Edge) currentlyMovedElement).setDirected(e.isShiftDown());
+                }
+            }
+
         }
+
+        operationController.reportOperationProgress(null);
     }
 
     @Override
@@ -389,7 +545,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
         mouseY = y;
 
         if (currentlyMovedElement != null) {
-            if (generalController.getMode() == ModeType.VERTEX) {
+            if (mode == ModeType.VERTEX) {
                 Vertex vertex = (Vertex) currentlyMovedElement;
                 generalController.getGraph().getVertices().remove(vertex);
                 int oldPosX = vertex.getPosX();
@@ -407,11 +563,11 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     vertex.setPosY(oldPosY);
                 }
                 generalController.getGraph().getVertices().add(vertex);
-            } else if (generalController.getMode() == ModeType.EDGE) {
+            } else if (mode == ModeType.EDGE) {
                 if (changingEdgeAngle) {
                     Edge edge = (Edge) currentlyMovedElement;
                     if (edge.getVertexA() == edge.getVertexB()) {
-                        double angle = (Math.toDegrees(Math.atan2(mouseX - edge.getVertexB().getPosX(), mouseY - edge.getVertexB().getPosY())) + 270) % 360;
+                        double angle = (Math.toDegrees(Math.atan2(x - edge.getVertexB().getPosX(), y - edge.getVertexB().getPosY())) + 270) % 360;
                         edge.setRelativeEdgeAngle(((int) Math.floor((angle + 45) / 90) % 4) * 90);
                     } else {
                         double angle;
@@ -447,7 +603,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                         }
 
                         if (edge.getVertexA() == edge.getVertexB()) {
-                            double angle = (Math.toDegrees(Math.atan2(mouseX - edge.getVertexB().getPosX(), mouseY - edge.getVertexB().getPosY())) + 270) % 360;
+                            double angle = (Math.toDegrees(Math.atan2(x - edge.getVertexB().getPosX(), y - edge.getVertexB().getPosY())) + 270) % 360;
                             edge.setRelativeEdgeAngle(((int) Math.floor((angle + 45) / 90) % 4) * 90);
                         } else {
                             double angle;
@@ -485,7 +641,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                         }
                     }
                 }
-            } else if (generalController.getMode() == ModeType.LABEL_VERTEX) {
+            } else if (mode == ModeType.LABEL_VERTEX) {
                 Vertex vertex = ((LabelV) currentlyMovedElement).getOwner();
                 Point2D p1 = new Point(vertex.getPosX(), vertex.getPosY());
                 Point2D p2 = new Point(x, y);
@@ -498,7 +654,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     angle = 180 - angle;
                 }
                 ((LabelV) currentlyMovedElement).setPosition(((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8);
-            } else if (generalController.getMode() == ModeType.LABEL_EDGE) {
+            } else if (mode == ModeType.LABEL_EDGE) {
                 int bias;
                 Edge edge = ((LabelE) currentlyMovedElement).getOwner();
                 LabelE labelE = (LabelE) currentlyMovedElement;
@@ -557,94 +713,14 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                 }
             }
         }
-    }
 
-    @Override
-    public void finishMovingElement() {
-        if (currentlyMovedElement != null) {
-            if (currentlyMovedElement instanceof Vertex) {
-                currentDragOperation.setEndPos(((Vertex) currentlyMovedElement).getPosX(), ((Vertex) currentlyMovedElement).getPosY());
-                if (currentDragOperation.changeMade()) {
-                    ControlManager.operations.addNewOperation(currentDragOperation);
-                    generalController.publishInfo(ControlManager.operations.redo());
-                }
-            }
-            if (currentlyMovedElement instanceof Edge) {
-                Edge edge = (Edge) currentlyMovedElement;
-                if (changingEdgeAngle) {
-                    currentDragOperation.setEdgeEndState(edge);
-                    if (currentDragOperation.changeMade()) {
-                        ControlManager.operations.addNewOperation(currentDragOperation);
-                        generalController.publishInfo(ControlManager.operations.redo());
-                    }
-                    changingEdgeAngle = false;
-                } else {
-                    if (currentDragOperation.draggingA()) {
-                        if (edge.getVertexA() != currentDragOperation.getDisjointedVertex()) {
-                            if (edge.getVertexA() != edgeDragDummy) {
-                                currentDragOperation.setEdgeEndState(edge);
-                                ControlManager.operations.addNewOperation(currentDragOperation);
-                                generalController.publishInfo(ControlManager.operations.redo());
-                            } else {
-                                currentDragOperation.restoreEdgeStartState();
-                            }
-                        }
-                    } else {
-                        if (edge.getVertexB() != currentDragOperation.getDisjointedVertex()) {
-                            if (edge.getVertexB() != edgeDragDummy) {
-                                currentDragOperation.setEdgeEndState(edge);
-                                ControlManager.operations.addNewOperation(currentDragOperation);
-                                generalController.publishInfo(ControlManager.operations.redo());
-                            } else {
-                                currentDragOperation.restoreEdgeStartState();
-                            }
-                        }
-                    }
-                }
-            } else if (currentlyMovedElement instanceof LabelV) {
-                currentDragOperation.setEndAngle(((LabelV) currentlyMovedElement).getPosition());
-                if (currentDragOperation.changeMade()) {
-                    ControlManager.operations.addNewOperation(currentDragOperation);
-                    generalController.publishInfo(ControlManager.operations.redo());
-                }
-            } else if (currentlyMovedElement instanceof LabelE) {
-                currentDragOperation.setLabelEEndState((LabelE) currentlyMovedElement);
-                if (currentDragOperation.changeMade()) {
-                    ControlManager.operations.addNewOperation(currentDragOperation);
-                    generalController.publishInfo(ControlManager.operations.redo());
-                }
-            }
-
-            ControlManager.updatePropertyChangeOperationStatus(true);
-        }
-    }
-
-    @Override
-    public void resetCurrentOperation() {
-        currentDragOperation = null;
-        currentlyAddedEdge = null;
-        currentlyMovedElement = null;
-    }
-
-    @Override
-    public Rectangle getSelectionArea() {
-        if (tool != ToolType.ADD && currentlyMovedElement == null) {
-            if (mousePressed && (mouseX != mousePressX || mouseY != mousePressY)) {
-                int x = Math.min(mousePressX, mouseX);
-                int width = Math.abs(mouseX - mousePressX);
-                int y = Math.min(mousePressY, mouseY);
-                int height = Math.abs(mouseY - mousePressY);
-                return new Rectangle(x, y, width, height);
-            }
-        }
-
-        return null;
+        operationController.reportOperationProgress(null);
     }
 
     @Override
     public void paintCurrentlyAddedElement(Graphics2D g) {
         if (generalController.getTool() == ToolType.ADD) {
-            if (generalController.getMode() == ModeType.VERTEX) {
+            if (mode == ModeType.VERTEX) {
                 Vertex vertex = new Vertex(generalController.getGraph());
                 vertex.setModel(generalController.getGraph().getVertexDefaultModel());
                 VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
@@ -653,7 +729,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                 if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) && VertexUtils.fitsIntoPage(vertex)) {
                     vertex.draw(g, true);
                 }
-            } else if (generalController.getMode() == ModeType.EDGE) {
+            } else if (mode == ModeType.EDGE) {
                 if (currentlyAddedEdge != null) {
                     Vertex vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
                     if (vertex == null) {
@@ -690,7 +766,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     }
                     currentlyAddedEdge.draw(g, true);
                 }
-            } else if (generalController.getMode() == ModeType.LABEL_VERTEX) {
+            } else if (mode == ModeType.LABEL_VERTEX) {
                 Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
                 if (temp != null) {
                     if (temp.getLabel() == null) {
@@ -790,72 +866,5 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                 }
             }
         }
-    }
-
-    // TODO Czym to sie rozni od resetCurrentOperation
-    @Override
-    public void cancelCurrentOperation() {
-        if (currentCopyPasteOperation != null) {
-            currentCopyPasteOperation = currentCopyPasteOperation.getCopy();
-        }
-        currentlyAddedEdge = null;
-    }
-
-    @Override
-    public void copyToClipboard() {
-        currentCopyPasteOperation = new CopyPasteOperation(generalController, generalController.getSelectionController().getSelection());
-        generalController.updateMenuBarAndActions();
-        generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_COPY);
-    }
-
-    @Override
-    public void pasteFromClipboard() {
-        if (!currentCopyPasteOperation.pasting) {
-            currentCopyPasteOperation.startPasting();
-            generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_WHERE_TO_PASTE);
-            generalController.getModeController().setMode(ModeType.VERTEX);
-            generalController.getToolController().setTool(ToolType.SELECT);
-        }
-    }
-
-    @Override
-    public boolean clipboardNotEmpty() {
-        return currentCopyPasteOperation != null;
-    }
-
-    @Override
-    public void paintCopiedSubgraph(Graphics2D g) {
-        if (currentCopyPasteOperation != null) {
-            if (currentCopyPasteOperation.pasting) {
-                currentCopyPasteOperation.targetX = mouseX;
-                currentCopyPasteOperation.targetY = mouseY;
-                currentCopyPasteOperation.calculatePosition();
-                if (currentCopyPasteOperation.fitsIntoPosition()) {
-                    currentCopyPasteOperation.drawDummySubgraph(g);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void processShiftPressing(boolean flag) {
-        shiftDown = flag;
-        if (currentlyAddedEdge != null) {
-            currentlyAddedEdge.setDirected(flag);
-        }
-        if (currentlyMovedElement != null) {
-            if (currentlyMovedElement instanceof Edge) {
-                ((Edge) currentlyMovedElement).setDirected(flag);
-            }
-            if (currentlyMovedElement instanceof LabelE) {
-                ((LabelE) currentlyMovedElement).setHorizontalPlacement(!flag);
-            }
-        }
-        generalController.updateWorkspace();
-    }
-
-    @Override
-    public boolean isEdgeCurrentlyAdded(Edge edge) {
-        return edge == currentlyAddedEdge;
     }
 }

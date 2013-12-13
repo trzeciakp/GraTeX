@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.view;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
 
 import javax.imageio.ImageIO;
@@ -18,7 +19,7 @@ public class ActionButton extends JButton {
             URL url = this.getClass().getClassLoader().getResource("images/" + imageName);
             image = ImageIO.read(url);
         } catch (Exception e) {
-            generalController.criticalError("Unable to load button icons.", e);
+            generalController.criticalError(StringLiterals.MESSAGE_ERROR_GET_RESOURCE, e);
         }
         setToolTipText(tooltip);
         addActionListener(actionListener);

@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.view;
 
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.MouseController;
 
 import java.awt.*;
@@ -8,8 +9,8 @@ import java.awt.event.KeyEvent;
 public class KeyHandler implements KeyEventDispatcher {
     MouseController mouseController;
 
-    public KeyHandler(MouseController mouseController) {
-        this.mouseController = mouseController;
+    public KeyHandler(GeneralController generalController) {
+        this.mouseController = generalController.getMouseController();
     }
 
     public boolean dispatchKeyEvent(KeyEvent e) {

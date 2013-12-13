@@ -46,6 +46,8 @@ public class StringLiterals {
     // OpenFileDialog
     public final static String MESSAGE_ERROR_OPEN_GRAPH = "Loading graph failed.\nThe chosen file has either improper format or is damaged.";
 
+    public final static String MESSAGE_ERROR_GET_RESOURCE = "Unable to load resources. The .jar file might be corrupted.";
+
     // GraphsTemplateEditor
     public final static String MESSAGE_CONFIRM_GLOBAL_APPLY = "Current settings will be applied to ALL existing elements of the graph.\nDo you wish to continue?";
 

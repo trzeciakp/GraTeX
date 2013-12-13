@@ -13,16 +13,14 @@ import java.util.List;
 public class SelectionControllerImpl implements SelectionController, ToolListener, ModeListener, Serializable {
     private GeneralController generalController;
 
-    private LinkedList<GraphElement> selection;
-    private ToolType tool;
-    private ModeType mode;
+    private LinkedList<GraphElement> selection = new LinkedList<>();
+    private ModeType mode = ModeType.VERTEX;
+    private ToolType tool = ToolType.ADD;
 
     public SelectionControllerImpl(GeneralController generalController, ModeController modeController, ToolController toolController) {
         this.generalController = generalController;
         modeController.addModeListener(this);
         toolController.addToolListener(this);
-
-        selection = new LinkedList<>();
     }
 
 
@@ -40,8 +38,8 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     }
 
     @Override
-    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
-        tool = currentToolType;
+    public void toolChanged(ToolType previousTool, ToolType currentTool) {
+        tool = currentTool;
     }
 
     @Override
