@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.editor2.Operation2;
 
+// TODO Zastanowic sie czy nie zrobic enuma z operacjami, stringami info do nich etc. To by bylo ladne.
 public interface OperationController {
     public GeneralController getGeneralController();
 

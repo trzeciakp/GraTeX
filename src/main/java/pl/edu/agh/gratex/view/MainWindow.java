@@ -34,6 +34,8 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         super(StringLiterals.TITLE_MAIN_WINDOW);
 
+        generalController = new GeneralControllerImpl(this);
+
         try {
             URL url = this.getClass().getClassLoader().getResource("images/icon.png");
             setIconImage(ImageIO.read(url));
@@ -42,37 +44,34 @@ public class MainWindow extends JFrame {
         }
 
         ControlManager.passWindowHandle(this);
-        generalController = new GeneralControllerImpl(this);
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler(generalController));
 
         initializeFrame();
         initializeEvents();
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler(generalController));
 
         generalController.getModeController().setMode(ModeType.VERTEX);
         generalController.getToolController().setTool(ToolType.ADD);
         generalController.newGraphFile();
-
-        generalController.getOperationController().reportGenericOperation(null);
     }
 
-    // TODO to jest tutaj tymczasowo, az wyleci ControlManager
-    public PanelPropertyEditor getPanelPropertyEditor() {
-        return panel_propertyEditor;
-    }
-
+    // TODO to wyleci jak wszystkie info beda szly po OperationControllerze
+    // TODO jestem w trakcie przerobek
     public void publishInfo(String entry) {
         generalController.getOperationController().reportGenericOperation(entry);
     }
 
+    // TODO zastanowic sie jak mozna za pomoca sluchania operacji to zrobic, ale to kiedys
     public void updateMenuBarAndActions() {
         menuBar.updateFunctions();
         panel_buttonContainer.updateFunctions();
     }
 
+    // TODO property editor moglby byc sluchaczem operacji i wykrywac, jak dodano labelka i automatycznie dawac focus
     public void giveFocusToLabelTextfield() {
         panel_propertyEditor.giveFocusToLabelTextfield();
     }
 
+    // TODO Trzeba zmienic layout Mainwindow na jakis typu border (on akurat chyba sie nada idealnie) i to pojdzie do piachu
     public void adjustSize() {
         int width = getContentPane().getWidth();
         int height = getContentPane().getHeight();
@@ -146,6 +145,11 @@ public class MainWindow extends JFrame {
         getContentPane().add(menuBar);
     }
 
+
+    // TODO to jest tutaj tymczasowo, az wyleci ControlManager
+    public PanelPropertyEditor getPanelPropertyEditor() {
+        return panel_propertyEditor;
+    }
     // TODO wywalic jak nie bedzie controlmaangera
     public GeneralController getGeneralController() {
         return generalController;
