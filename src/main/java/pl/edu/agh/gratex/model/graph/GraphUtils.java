@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model.graph;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
@@ -72,7 +73,7 @@ public class GraphUtils {
     // TODO Mozna by te getXXXFromPosition dac do jednego, ale one beda chyba uzywane z roznych kontrolerow, wiec na razie tego nie robie
     public static Edge getEdgeFromPosition(Graph graph, int x, int y) {
         for (Edge edge : graph.getEdges()) {
-            if (edge.intersects(x, y)) {
+            if (EdgeUtils.intersects(edge, x, y)) {
                 return edge;
             }
         }
