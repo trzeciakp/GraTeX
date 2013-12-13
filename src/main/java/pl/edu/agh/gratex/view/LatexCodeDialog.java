@@ -10,13 +10,12 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 
+@SuppressWarnings("serial")
 public class LatexCodeDialog extends JDialog implements ClipboardOwner {
-    private static final long serialVersionUID = 5513028986064141103L;
 
     private JTextArea textArea_code;
     private JScrollPane scrollPane;
     private JButton button_copyToClipboard;
-    private LatexCodeDialog thisDialog;
     private JPopupMenu popupMenu;
     private JMenuItem menuItem;
 
@@ -35,7 +34,6 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
 
     public LatexCodeDialog(MainWindow parent, String code) {
         super(parent, StringLiterals.TITLE_LATEX_CODE_DIALOG, true);
-        thisDialog = this;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(768, 768);
         setMinimumSize(new Dimension(200, 200));
@@ -55,7 +53,7 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
             public void actionPerformed(ActionEvent e) {
                 StringSelection stringSelection = new StringSelection(textArea_code.getText());
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(stringSelection, thisDialog);
+                clipboard.setContents(stringSelection, LatexCodeDialog.this);
             }
         });
         popupMenu.add(menuItem);
@@ -71,13 +69,14 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
             public void actionPerformed(ActionEvent arg0) {
                 StringSelection stringSelection = new StringSelection(textArea_code.getText());
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(stringSelection, thisDialog);
+                clipboard.setContents(stringSelection, LatexCodeDialog.this);
             }
         });
         getContentPane().add(button_copyToClipboard, BorderLayout.SOUTH);
         setVisible(true);
     }
 
+    @Override
     public void lostOwnership(Clipboard aClipboard, Transferable aContents) {
     }
 

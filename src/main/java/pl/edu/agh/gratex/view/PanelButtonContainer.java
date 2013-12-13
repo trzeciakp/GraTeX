@@ -15,7 +15,7 @@ public class PanelButtonContainer extends JPanel {
 
     private GeneralController generalController;
     private MouseController mouseController;
-    private EnumMap<ActionButtonType, ActionButton> buttons = new EnumMap<ActionButtonType, ActionButton>(ActionButtonType.class);
+    private EnumMap<ActionButtonType, ActionButton> buttons = new EnumMap<>(ActionButtonType.class);
 
     public PanelButtonContainer(GeneralController generalController, MouseController mouseController) {
         super();
@@ -26,7 +26,8 @@ public class PanelButtonContainer extends JPanel {
 
         int x = 10;
         for (ActionButtonType actionButtonType : ActionButtonType.values()) {
-            ActionButton actionButton = new ActionButton(actionButtonType.getImageName(), actionButtonType.getTooltip(), getPerformedAction(actionButtonType));
+            ActionButton actionButton = new ActionButton(generalController, actionButtonType.getImageName(),
+                    actionButtonType.getTooltip(), getActionListener(actionButtonType));
             actionButton.setBounds(x, 5, 40, 40);
             actionButton.setFocusable(false);
             add(actionButton);
@@ -48,7 +49,7 @@ public class PanelButtonContainer extends JPanel {
         }
     }
 
-    private ActionListener getPerformedAction(ActionButtonType ActionButtonType) {
+    private ActionListener getActionListener(ActionButtonType ActionButtonType) {
         switch (ActionButtonType) {
             case NEW_GRAPH:
                 return new ActionListener() {
@@ -128,12 +129,7 @@ public class PanelButtonContainer extends JPanel {
                     }
                 };
             default:
-                //TODO maybe null? in case when you forgot to add action
-                return new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                    }
-                };
+                throw new RuntimeException("An action button is missing ActionListener");
         }
     }
 }

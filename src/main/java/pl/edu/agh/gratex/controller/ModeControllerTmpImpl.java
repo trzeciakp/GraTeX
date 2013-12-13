@@ -9,8 +9,21 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ModeControllerTmpImpl implements ModeController, Serializable {
-    private ModeType mode = ModeType.VERTEX;
-    private List<ModeListener> listeners = new ArrayList<>();
+    private GeneralController generalController;
+
+    private ModeType mode;
+    private List<ModeListener> listeners;
+
+    public ModeControllerTmpImpl(GeneralController generalController) {
+        this.generalController = generalController;
+        this.mode = ModeType.VERTEX;
+        this.listeners = new ArrayList<>();
+    }
+
+    @Override
+    public GeneralController getGeneralController() {
+        return generalController;
+    }
 
     @Override
     public ModeType getMode() {
@@ -20,7 +33,7 @@ public class ModeControllerTmpImpl implements ModeController, Serializable {
     @Override
     public void setMode(ModeType newMode) {
         ModeType previousMode = mode;
-        for(ModeListener modeListener : listeners) {
+        for (ModeListener modeListener : listeners) {
             modeListener.modeChanged(previousMode, newMode);
         }
         mode = newMode;
@@ -38,8 +51,7 @@ public class ModeControllerTmpImpl implements ModeController, Serializable {
         sortListeners();
     }
 
-    private void sortListeners()
-    {
+    private void sortListeners() {
         Collections.sort(listeners, new Comparator<ModeListener>() {
             public int compare(ModeListener l1, ModeListener l2) {
                 return Integer.compare(l1.modeUpdatePriority(), l2.modeUpdatePriority());

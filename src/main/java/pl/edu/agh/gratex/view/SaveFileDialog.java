@@ -7,8 +7,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
+@SuppressWarnings("serial")
 public class SaveFileDialog extends JFileChooser {
-    private static final long serialVersionUID = 2052316076238542736L;
 
     public SaveFileDialog(File currentFile) {
         super(currentFile.getParent());
@@ -25,14 +25,13 @@ public class SaveFileDialog extends JFileChooser {
         setApproveButtonText(StringLiterals.BUTTON_SAVE_FILE_DIALOG_APPROVE);
         setApproveButtonToolTipText(StringLiterals.TOOLTIP_SAVE_FILE_DIALOG_APPROVE);
         setFileFilter(new FileFilter() {
+            @Override
             public boolean accept(File file) {
                 String fileName = file.getName().toLowerCase();
-                if (fileName.endsWith(Const.GRAPH_FILES_EXTENSION) || file.isDirectory()) {
-                    return true;
-                }
-                return false;
+                return fileName.endsWith(Const.GRAPH_FILES_EXTENSION) || file.isDirectory();
             }
 
+            @Override
             public String getDescription() {
                 return StringLiterals.TOOLTIP_SAVE_FILE_DIALOG_DESCRIPTION;
             }

@@ -6,8 +6,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import java.text.ParseException;
 
+@SuppressWarnings("serial")
 public class MyListFormatter extends JFormattedTextField.AbstractFormatter {
-    private static final long serialVersionUID = 5913713259661444353L;
 
     private DocumentFilter filter;
 

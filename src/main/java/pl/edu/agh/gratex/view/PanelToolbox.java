@@ -4,64 +4,63 @@ import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolButtonType;
 import pl.edu.agh.gratex.controller.ModeController;
+import pl.edu.agh.gratex.controller.ModeListener;
 import pl.edu.agh.gratex.controller.ToolController;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.EnumMap;
 
-public class PanelToolbox extends JPanel {
-    private static final long serialVersionUID = 1477920757019877516L;
-;
-    private JComboBox<ModeType> comboBox_mode;
-    private ToolController toolController;
+@SuppressWarnings("serial")
+public class PanelToolbox extends JPanel implements ModeListener {
     private ModeController modeController;
-    private final EnumMap<ToolButtonType,ToolButton> toolButtons;
+
+    private JComboBox<ModeType> comboBox_mode;
+
+    // TODO wyglada na to, ze nie bedziemy potrzebowali wyciagac tych guzikow, wiec nie ma potrzeby pakowac ich do mapy
+    //private final EnumMap<ToolButtonType, ToolButton> toolButtons;
 
     public PanelToolbox(ToolController toolController, ModeController modeController) {
         super();
-        this.toolController = toolController;
-        this.modeController = modeController;
-        setLayout(null);
 
+        this.modeController = modeController;
+        modeController.addModeListener(this);
+
+        setLayout(null);
         comboBox_mode = new JComboBox<>(ModeType.values());
         comboBox_mode.setSelectedIndex(0);
         comboBox_mode.setBounds(0, 11, 90, 30);
         comboBox_mode.setToolTipText(StringLiterals.COMBOBOX_PANEL_TOOLBOX_MODE);
         comboBox_mode.setFocusable(false);
-        toolButtons = new EnumMap<>(ToolButtonType.class);
+        //toolButtons = new EnumMap<>(ToolButtonType.class);
 
         comboBox_mode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 PanelToolbox.this.modeController.setMode((ModeType) comboBox_mode.getSelectedItem());
-                toolButtons.get(ToolButtonType.ADD).requestFocus();
             }
         });
         add(comboBox_mode);
         int y = 65;
-        for(ToolButtonType tool : ToolButtonType.values()) {
-            ToolButton toolButton = new ToolButton(tool.getImageActiveName(), tool.getImagePassiveName(), toolController, tool.getToolType());
-            toolButton.setToolTipText(tool.getTooltip());
+        for (ToolButtonType toolButtonType : ToolButtonType.values()) {
+            ToolButton toolButton = new ToolButton(toolButtonType.getImageActiveName(), toolButtonType.getImagePassiveName(), toolController, toolButtonType.getToolType());
+            toolButton.setToolTipText(toolButtonType.getTooltip());
             toolButton.setFocusable(false);
             toolButton.setBounds(20, y, 50, 50);
-            toolButtons.put(tool, toolButton);
+            //toolButtons.put(toolButtonType, toolButton);
             add(toolButton);
             y += 60;
         }
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        //TODO it should be changed to ModeListener
-        if (comboBox_mode.getSelectedItem() != modeController.getMode()) {
-            comboBox_mode.setSelectedItem(modeController.getMode());
+    @Override
+    public void modeChanged(ModeType previousMode, ModeType currentMode) {
+        if (comboBox_mode.getSelectedItem() != currentMode) {
+            comboBox_mode.setSelectedItem(currentMode);
         }
-        paintChildren(g);
     }
 
-    public ModeController getModeController() {
-        return modeController;
+    @Override
+    public int modeUpdatePriority() {
+        return 0;
     }
 }

@@ -28,7 +28,7 @@ public class MainWindow extends JFrame {
     private GeneralController generalController;
 
     public MenuBar menuBar;
-    public JLabel label_info;
+    private JLabel label_info;
 
     public MainWindow() throws Exception {
         super(StringLiterals.TITLE_MAIN_WINDOW);
@@ -55,9 +55,12 @@ public class MainWindow extends JFrame {
     }
 
     public void updateFunctions() {
-        panel_toolbox.repaint();
         updateWorkspace();
         label_info.setText(StringLiterals.INFO_MODE_AND_TOOL(generalController.getMode(), generalController.getTool()));
+    }
+
+    public void publishInfo(String entry) {
+        label_info.setText(entry);
     }
 
     public void updateMenuBarAndActions() {

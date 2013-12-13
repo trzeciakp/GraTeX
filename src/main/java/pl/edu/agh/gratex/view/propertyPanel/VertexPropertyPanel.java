@@ -96,7 +96,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         } else if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setValue(model.number);
         } else
-            spinnerNumber.setValue(GraphNumeration.getABC(model.number));
+            spinnerNumber.setValue(GraphNumeration.digitalToAlphabetical(model.number));
         if (model.type == -1)
             comboBoxVertexType.setSelectedIndex(0);
         else
@@ -361,7 +361,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
         String[] alpha = new String[Const.MAX_VERTEX_NUMBER];
         for (int i = 0; i < Const.MAX_VERTEX_NUMBER; i++) {
-            alpha[i] = GraphNumeration.getABC(i);
+            alpha[i] = GraphNumeration.digitalToAlphabetical(i);
         }
         listModels = new AbstractSpinnerModel[2];
         listModels[0] = new SpinnerListModel(alpha);
@@ -408,7 +408,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                 if (generalController.getGraph().getGraphNumeration().isNumerationDigital())
                     spinnerNumber.setValue(arg);
                 else
-                    spinnerNumber.setValue(GraphNumeration.getABC(arg));
+                    spinnerNumber.setValue(GraphNumeration.digitalToAlphabetical(arg));
             }
 
             public void stateChanged(ChangeEvent arg0) {

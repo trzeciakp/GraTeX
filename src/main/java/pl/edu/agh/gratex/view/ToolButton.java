@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.ToolController;
+import pl.edu.agh.gratex.controller.ToolListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,18 +11,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
-public class ToolButton extends JButton {
-    private static final long serialVersionUID = -6621417247591518118L;
+@SuppressWarnings("serial")
+public class ToolButton extends JButton implements ToolListener {
 
     private Image imageActive;
     private Image imagePassive;
-    private boolean hovering;
     private ToolController toolController;
     private ToolType toolType;
 
-    //TODO maybe it should be tool listener and change icon when tool changes
     public ToolButton(String imageActiveName, String imagePassiveName, ToolController toolController, ToolType toolType) {
         this.toolController = toolController;
+        toolController.addToolListener(this);
         this.toolType = toolType;
         try {
             URL url = this.getClass().getClassLoader().getResource("images/" + imageActiveName);
@@ -29,7 +29,7 @@ public class ToolButton extends JButton {
             url = this.getClass().getClassLoader().getResource("images/" + imagePassiveName);
             imagePassive = ImageIO.read(url);
         } catch (Exception e) {
-            //TODO
+            toolController.getGeneralController().criticalError("Unable to load button icons.", e);
         }
         addActionListener(new ActionListener() {
             @Override
@@ -42,16 +42,25 @@ public class ToolButton extends JButton {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        //TODO hovering when mouse entered. why?
-        if (hovering || toolType == toolController.getTool()) {
+        if (toolType == toolController.getTool()) {
             g.drawImage(imageActive, 10, 10, null);
         } else {
             g.drawImage(imagePassive, 10, 10, null);
         }
 
         if (toolType == toolController.getTool()) {
-            g.setColor(new Color(50, 150, 250, 40));
+            g.setColor(new Color(50, 150, 250, 50));
             g.fillRect(3, 3, 44, 44);
         }
+    }
+
+    @Override
+    public void toolChanged(ToolType previousToolType, ToolType currentToolType) {
+        repaint();
+    }
+
+    @Override
+    public int toolUpdatePriority() {
+        return 0;
     }
 }

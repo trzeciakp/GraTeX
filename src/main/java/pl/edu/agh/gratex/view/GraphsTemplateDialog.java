@@ -83,7 +83,7 @@ public class GraphsTemplateDialog extends JDialog {
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
 
-        ModeController modeController = new ModeControllerTmpImpl();
+        ModeController modeController = new ModeControllerTmpImpl(generalController);
         initGraph();
         initializeFrame(modeController);
         initializeEvents(modeController);

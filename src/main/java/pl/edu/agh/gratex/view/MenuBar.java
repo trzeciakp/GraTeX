@@ -8,8 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EnumMap;
 
+@SuppressWarnings("serial")
 public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
-    private static final long serialVersionUID = 5037237692507363783L;
 
     private GeneralController generalController;
     private ModeController modeController;
@@ -288,11 +288,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
                     }
                 };
             default:
-                return new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                    }
-                };
+                throw new RuntimeException("A menu bar item is missing ActionListener");
         }
     }
 }

@@ -10,8 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.net.URL;
 
+@SuppressWarnings("serial")
 public class AboutDialog extends JDialog {
-    private static final long serialVersionUID = 2858349132119113260L;
 
     protected JRootPane createRootPane() {
         ActionListener actionListener = new ActionListener() {
@@ -34,7 +34,7 @@ public class AboutDialog extends JDialog {
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
 
-        JTextArea txtrGratexVersion = new JTextArea() {
+        JTextArea aboutTextArea = new JTextArea() {
             private static final long serialVersionUID = 1L;
 
             public void paintComponent(Graphics g) {
@@ -46,11 +46,10 @@ public class AboutDialog extends JDialog {
                 }
             }
         };
-        txtrGratexVersion
-                .setText(StringLiterals.MESSAGE_ABOUT_DIALOG);
-        txtrGratexVersion.setFocusable(false);
-        txtrGratexVersion.setBounds(0, 0, 294, 108);
-        getContentPane().add(txtrGratexVersion);
+        aboutTextArea.setText(StringLiterals.MESSAGE_ABOUT_DIALOG);
+        aboutTextArea.setFocusable(false);
+        aboutTextArea.setBounds(0, 0, 294, 108);
+        getContentPane().add(aboutTextArea);
         setVisible(true);
     }
 }

@@ -15,8 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+@SuppressWarnings("serial")
 public class NumerationDialog extends JDialog {
-    private static final long serialVersionUID = 8082961708684770814L;
 
     private MainWindow mainWindow;
     private boolean digital;
@@ -32,6 +32,7 @@ public class NumerationDialog extends JDialog {
 
     private int[] result = null;
 
+    @Override
     protected JRootPane createRootPane() {
         ActionListener actionListener = new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
@@ -45,12 +46,12 @@ public class NumerationDialog extends JDialog {
         return rootPane;
     }
 
-    public NumerationDialog(MainWindow _mainWindow, boolean _digital, int initialStartNumber, int _maxNumber) {
-        super(_mainWindow, StringLiterals.TITLE_NUMERATION_DIALOG, true);
-        digital = _digital;
-        startNumber = initialStartNumber;
-        maxNumber = _maxNumber;
-        mainWindow = _mainWindow;
+    public NumerationDialog(MainWindow mainWindow, boolean digital, int startNumber, int maxNumber) {
+        super(mainWindow, StringLiterals.TITLE_NUMERATION_DIALOG, true);
+        this.mainWindow = mainWindow;
+        this.digital = digital;
+        this.startNumber = startNumber;
+        this.maxNumber = maxNumber;
         initComponents();
         rootPane.setDefaultButton(button_ok);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -62,12 +63,12 @@ public class NumerationDialog extends JDialog {
             spinner_startingNumber.setModel(new SpinnerNumberModel(startNumber, 1, maxNumber - 1, 1));
             ((JSpinner.DefaultEditor) spinner_startingNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else {
-            String[] alpha = new String[Const.MAX_VERTEX_NUMBER];
+            String[] values = new String[Const.MAX_VERTEX_NUMBER];
             for (int i = 0; i < Const.MAX_VERTEX_NUMBER - 1; i++) {
-                alpha[i] = GraphNumeration.getABC(i + 1);
+                values[i] = GraphNumeration.digitalToAlphabetical(i + 1);
             }
-            spinner_startingNumber.setModel(new SpinnerListModel(alpha));
-            spinner_startingNumber.setValue(GraphNumeration.getABC(startNumber));
+            spinner_startingNumber.setModel(new SpinnerListModel(values));
+            spinner_startingNumber.setValue(GraphNumeration.digitalToAlphabetical(startNumber));
             ((ListEditor) spinner_startingNumber.getEditor()).getTextField().setFormatterFactory(new DefaultFormatterFactory(new MyListFormatter()));
         }
     }
@@ -111,11 +112,11 @@ public class NumerationDialog extends JDialog {
                     value = (Integer) spinner_startingNumber.getValue();
                 } else {
                     String s = (String) spinner_startingNumber.getValue();
-                    int podst = 1;
+                    int base = 1;
                     value = 0;
-                    for (int i = s.length(); i > 0; i--) {
-                        value += (s.charAt(i - 1) - 'A' + 1) * podst;
-                        podst *= 26;
+                    for (int i = s.length() - 1; i >= 0; i--) {
+                        value += (s.charAt(i) - 'A' + 1) * base;
+                        base *= 26;
                     }
                 }
                 return value;

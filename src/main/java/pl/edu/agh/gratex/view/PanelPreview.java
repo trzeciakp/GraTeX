@@ -7,8 +7,8 @@ import pl.edu.agh.gratex.model.graph.Graph;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("serial")
 public class PanelPreview extends JPanel {
-    private static final long serialVersionUID = -8882633408669094896L;
 
     private Graph graph;
 

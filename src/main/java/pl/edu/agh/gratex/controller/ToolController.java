@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.controller;
 import pl.edu.agh.gratex.constants.ToolType;
 
 public interface ToolController {
+    public GeneralController getGeneralController();
 
     public void setTool(ToolType toolType);
 

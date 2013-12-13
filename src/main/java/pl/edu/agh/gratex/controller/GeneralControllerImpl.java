@@ -32,8 +32,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     public GeneralControllerImpl(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
-        modeController = new ModeControllerTmpImpl();
-        toolController = new ToolControllerImpl();
+        modeController = new ModeControllerTmpImpl(this);
+        toolController = new ToolControllerImpl(this);
         mouseController = new MouseControllerImpl(this, modeController, toolController);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
 
@@ -146,7 +146,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     publishInfo(StringLiterals.INFO_GRAPH_OPEN_OK);
                 } else {
                     publishInfo(StringLiterals.INFO_GRAPH_OPEN_FAIL);
-                    reportError(StringLiterals.MESSAGE_ERROR_OPEN_GRAPH);
+                    reportError(StringLiterals.MESSAGE_ERROR_OPEN_GRAPH, null);
                 }
             }
         }
@@ -172,7 +172,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     return true;
                 } else {
                     publishInfo(StringLiterals.INFO_GRAPH_SAVE_FAIL);
-                    reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH);
+                    reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH, null);
                 }
             }
         }
@@ -285,12 +285,13 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void publishInfo(String entry) {
-        mainWindow.label_info.setText(entry);
+        mainWindow.publishInfo(entry);
     }
 
     @Override
-    public void reportError(String message) {
-        JOptionPane.showMessageDialog(mainWindow, message, StringLiterals.TITLE_ERROR_DIALOG, JOptionPane.ERROR_MESSAGE);
+    public void reportError(String message, Exception e) {
+        String fullMessage = message + (e == null ? "" : "\n\n" + e.toString());
+        JOptionPane.showMessageDialog(mainWindow, fullMessage, StringLiterals.TITLE_ERROR_DIALOG, JOptionPane.ERROR_MESSAGE);
     }
 
     //===========================================
@@ -338,5 +339,11 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void updateWorkspace() {
         mainWindow.updateWorkspace();
+    }
+
+    @Override
+    public void criticalError(String message, Exception e) {
+        reportError(StringLiterals.MESSAGE_ERROR_CRITICAL + message, e);
+        System.exit(1);
     }
 }

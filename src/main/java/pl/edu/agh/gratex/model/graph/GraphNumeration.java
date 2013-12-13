@@ -31,7 +31,7 @@ public class GraphNumeration implements Serializable {
     }
 
 
-    public static String getABC(int number) {
+    public static String digitalToAlphabetical(int number) {
         StringBuffer buffer = new StringBuffer();
         while (number > 0) {
             buffer.insert(0, letters[(number - 1) % 26]);

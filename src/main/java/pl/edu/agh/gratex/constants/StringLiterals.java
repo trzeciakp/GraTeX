@@ -38,6 +38,8 @@ public class StringLiterals {
 
     public final static String MESSAGE_ERROR_GENERAL = "The application has encountered an error:\n";
 
+    public final static String MESSAGE_ERROR_CRITICAL = "The application has encountered a critical error and will now terminate:\n";
+
     // SaveFileDialog
     public final static String MESSAGE_ERROR_SAVE_GRAPH = "Saving graph failed. Make sure you have write permissions in the target location.";
 

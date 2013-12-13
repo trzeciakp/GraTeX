@@ -16,7 +16,7 @@ public class VertexUtils {
         if (vertex.getGraph().getGraphNumeration().isNumerationDigital()) {
             vertex.setText(Integer.toString(number));
         } else {
-            vertex.setText(GraphNumeration.getABC(number));
+            vertex.setText(GraphNumeration.digitalToAlphabetical(number));
         }
     }
 
