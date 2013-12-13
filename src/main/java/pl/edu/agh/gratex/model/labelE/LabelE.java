@@ -6,8 +6,8 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
-import pl.edu.agh.gratex.utils.DrawingTools;
-import pl.edu.agh.gratex.utils.Geometry;
+import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
+import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
@@ -164,12 +164,28 @@ public class LabelE extends GraphElement implements Serializable {
         this.topPlacement = topPlacement;
     }
 
+    public void setTopPlacement(LabelTopPlacement topPlacement) {
+        this.topPlacement = (topPlacement == LabelTopPlacement.ABOVE);
+    }
+
+    public LabelTopPlacement getTopPlacement() {
+        return (topPlacement? LabelTopPlacement.ABOVE: LabelTopPlacement.BELOW);
+    }
+
     public boolean isHorizontalPlacement() {
         return horizontalPlacement;
     }
 
     public void setHorizontalPlacement(boolean horizontalPlacement) {
         this.horizontalPlacement = horizontalPlacement;
+    }
+
+    public void setHorizontalPlacement(LabelHorizontalPlacement horizontalPlacement) {
+        this.horizontalPlacement = (horizontalPlacement == LabelHorizontalPlacement.LEVEL);
+    }
+
+    public LabelHorizontalPlacement getHorizontalPlacement() {
+        return (horizontalPlacement? LabelHorizontalPlacement.LEVEL: LabelHorizontalPlacement.TANGENT);
     }
 
     public int getPosX() {

@@ -46,6 +46,9 @@ public class LabelEdgeRotationParser extends ParseElement {
     @Override
     public String getProperty(GraphElement element) {
         LabelE labelE = (LabelE) element;
+        if(labelE.getAngle() <= 0) {
+            return "";
+        }
         String result = String.format(ROTATE_FORMAT, Integer.valueOf(labelE.getAngle()));
         return result;
     }

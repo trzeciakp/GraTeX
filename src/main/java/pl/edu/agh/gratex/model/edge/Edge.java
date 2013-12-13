@@ -54,6 +54,34 @@ public class Edge extends GraphElement implements Serializable {
         this.graph = graph;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Edge edge = (Edge) o;
+
+        if (inAngle != edge.inAngle) return false;
+        if (outAngle != edge.outAngle) return false;
+        if (vertexA != null ? !vertexA.equals(edge.vertexA) : edge.vertexA != null) return false;
+        if (vertexB != null ? !vertexB.equals(edge.vertexB) : edge.vertexB != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = vertexA != null ? vertexA.getNumber() : 0;
+        result = 31 * result + (vertexB != null ? vertexB.getNumber() : 0);
+        result = 31 * result + inAngle;
+        result = 31 * result + outAngle;
+        return result;
+    }
+
+    public int getNumber() {
+        return hashCode();
+    }
+
     public Edge getCopy(LinkedList<Vertex> vertices) {
         Vertex _vertexA = null;
         Vertex _vertexB = null;

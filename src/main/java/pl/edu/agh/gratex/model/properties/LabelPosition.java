@@ -19,6 +19,6 @@ public enum LabelPosition implements Serializable {
     }
 
     public String toString() {
-        return name().toLowerCase();
+        return name();
     }
 }

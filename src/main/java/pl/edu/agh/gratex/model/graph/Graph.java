@@ -53,6 +53,11 @@ public class Graph implements Serializable {
     }
 
     public Edge getEdgeById(int id) {
+        for (Edge edge : getEdges()) {
+            if(edge.getNumber() == id) {
+                return edge;
+            }
+        }
         return null;
     }
     // TODO przeniesc to gdzie indziej, do jakiegos kontrolera?

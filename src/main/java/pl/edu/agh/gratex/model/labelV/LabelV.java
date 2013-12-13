@@ -6,6 +6,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.awt.*;
@@ -118,6 +119,14 @@ public class LabelV extends GraphElement implements Serializable {
 
     public int getPosition() {
         return position;
+    }
+
+    public LabelPosition getLabelPosition() {
+        return LabelPosition.values()[position+1];
+    }
+
+    public void setLabelPosition(LabelPosition labelPosition) {
+        this.position = labelPosition.getValue();
     }
 
     public void setPosition(int position) {

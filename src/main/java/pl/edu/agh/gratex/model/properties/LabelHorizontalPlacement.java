@@ -2,7 +2,7 @@ package pl.edu.agh.gratex.model.properties;
 
 import java.io.Serializable;
 
-public enum LabelRotation implements Serializable {
+public enum LabelHorizontalPlacement implements Serializable {
     EMPTY(-1) {
         public String toString() {
             return " ";
@@ -14,7 +14,7 @@ public enum LabelRotation implements Serializable {
         return value;
     }
 
-    LabelRotation(int value) {
+    LabelHorizontalPlacement(int value) {
         this.value = value;
     }
 

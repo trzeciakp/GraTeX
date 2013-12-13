@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 import pl.edu.agh.gratex.parser.elements.StaticParseElement;
+import pl.edu.agh.gratex.parser.elements.labeledge.CommentedParamatersLabelEdgeParser;
 import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgePositionParser;
 import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgeRotationParser;
 import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgeTextColorParseElement;
@@ -30,6 +31,7 @@ public class LabelEdgeParser extends GraphElementParser {
         parseList.add(new LabelEdgeRotationParser());
         parseList.add(new LabelEdgeTextColorParseElement(colorMapper));
         parseList.add(new StaticParseElement(";", false));
+        parseList.add(new CommentedParamatersLabelEdgeParser());
         pattern = evaluatePattern();
     }
 

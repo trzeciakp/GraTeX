@@ -2,7 +2,7 @@ package pl.edu.agh.gratex.model.properties;
 
 import java.io.Serializable;
 
-public enum LabelPlacement implements Serializable {
+public enum LabelTopPlacement implements Serializable {
     EMPTY(-1) {
         public String toString() {
             return " ";
@@ -14,7 +14,7 @@ public enum LabelPlacement implements Serializable {
         return value;
     }
 
-    LabelPlacement(int value) {
+    LabelTopPlacement(int value) {
         this.value = value;
     }
 
