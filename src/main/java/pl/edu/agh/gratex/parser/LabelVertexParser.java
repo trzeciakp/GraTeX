@@ -32,14 +32,14 @@ public class LabelVertexParser extends GraphElementParser {
     }
 
     @Override
-    public String parse(GraphElement graphElement) {
-        return super.parseUsingParseList(graphElement);
+    public String parseToLatex(GraphElement graphElement) {
+        return super.parseToLatexUsingParseList(graphElement);
     }
 
     @Override
-    public GraphElement unparse(String code, Graph graph) throws ParserException {
+    public GraphElement parseToGraph(String code, Graph graph) throws ParserException {
         LabelV result = new LabelV(null, graph);
-        unparseUsingParseList(code, result);
+        parseToGraphUsingParseList(code, result);
         return result;
     }
 

@@ -2,9 +2,8 @@ package pl.edu.agh.gratex.parser.elements.labeledge;
 
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
-import pl.edu.agh.gratex.parser.elements.TextColorParseElement;
+import pl.edu.agh.gratex.parser.elements.vertex.TextColorParseElement;
 
 /**
  *

@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model.vertex;
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphNumeration;
+import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -83,13 +84,13 @@ public class VertexUtils {
             // TODO Czyli przerobic metode CompositeStroke.createStrokenShape().
             if (lineType == LineType.DOUBLE) {
                 Shape innerOutline = Geometry.getVertexShape(shape + 1, radius - 2 - (lineWidth * 23) / 16, posX, posY);
-                if (shape == pl.edu.agh.gratex.model.properties.Shape.CIRCLE.getValue()) {
+                if (shape == ShapeType.CIRCLE.getValue()) {
                     innerOutline = Geometry.getVertexShape(shape + 1, radius - 2 - (lineWidth * 9) / 8, posX, posY);
                 }
-                if (shape == pl.edu.agh.gratex.model.properties.Shape.TRIANGLE.getValue()) {
+                if (shape == ShapeType.TRIANGLE.getValue()) {
                     innerOutline = Geometry.getVertexShape(shape + 1, radius - 4 - (lineWidth * 11) / 5, posX, posY);
                 }
-                if (shape == pl.edu.agh.gratex.model.properties.Shape.SQUARE.getValue()) {
+                if (shape == ShapeType.SQUARE.getValue()) {
                     innerOutline = Geometry.getVertexShape(shape + 1, radius - 3 - (lineWidth * 13) / 8, posX, posY);
                 }
 

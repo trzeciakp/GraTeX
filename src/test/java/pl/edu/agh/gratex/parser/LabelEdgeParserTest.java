@@ -6,10 +6,8 @@ import org.mockito.Mockito;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
-import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 
 import java.awt.*;
@@ -49,7 +47,7 @@ public class LabelEdgeParserTest {
     public void testParse() throws Exception {
         LabelEdgeParser testObject = new LabelEdgeParser(COLOR_MAPPER);
 
-        LabelE result = (LabelE) testObject.unparse(TEST_STRING, MOCKED_GRAPH);
+        LabelE result = (LabelE) testObject.parseToGraph(TEST_STRING, MOCKED_GRAPH);
 
         assertEquals(EXPECTED_POS_X, result.getPosX());
         assertEquals(EXPECTED_POS_Y, result.getPosY());
@@ -77,7 +75,7 @@ public class LabelEdgeParserTest {
         Mockito.when(labelE.getTopPlacement()).thenReturn(EXPECTED_TOP_PLACEMENT);
         Mockito.when(labelE.getHorizontalPlacement()).thenReturn(EXPECTED_HORIZONTAL_PLACEMENT);
 
-        String result = testObject.parse(labelE);
+        String result = testObject.parseToLatex(labelE);
 
         assertEquals(TEST_STRING, result);
     }

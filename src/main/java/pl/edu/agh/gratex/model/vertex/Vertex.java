@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.model.properties.ShapeType;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -156,6 +157,14 @@ public class Vertex extends GraphElement implements Serializable {
 
     public void setShape(int shape) {
         this.shape = shape;
+    }
+
+    public void setShape(ShapeType shape) {
+        this.shape = shape.getValue();
+    }
+
+    public ShapeType getShapeENUM() {
+        return ShapeType.values()[shape];
     }
 
     public Color getVertexColor() {

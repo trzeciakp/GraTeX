@@ -2,10 +2,19 @@ package pl.edu.agh.gratex.parser.elements;
 
 import pl.edu.agh.gratex.model.GraphElement;
 
+import java.util.regex.Pattern;
+
 /**
  *
  */
 public abstract class ParseElement {
+
+    public static final double COEFFICIENT = 0.625;
+    protected final Pattern PATTERN;
+
+    public ParseElement() {
+        PATTERN = Pattern.compile(regex());
+    }
 
     public abstract boolean isOptional();
     public abstract String regex();
@@ -13,5 +22,18 @@ public abstract class ParseElement {
     public abstract String getProperty(GraphElement element);
     public int groups() {
         return 1;
+    }
+    protected int getIntFromDoublePt(String doubleString) {
+        double x = Double.parseDouble(doubleString);
+        int result = (int) (x/ COEFFICIENT);
+        return result;
+    }
+
+    protected double getDoublePt(int x) {
+        return x*COEFFICIENT;
+    }
+
+    protected Pattern getPattern() {
+        return PATTERN;
     }
 }

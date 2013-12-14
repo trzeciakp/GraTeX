@@ -6,7 +6,7 @@ import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.GraphNumeration;
 import pl.edu.agh.gratex.model.properties.LineType;
-import pl.edu.agh.gratex.model.properties.Shape;
+import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
 import javax.swing.*;
@@ -127,9 +127,9 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         lblVertexType.setBounds(6, 92, 64, 14);
         add(lblVertexType);
 
-        Option[] vertexTypes = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(Shape.CIRCLE.getValue(), "circle"),
-                new Option(Shape.TRIANGLE.getValue(), "triangle"), new Option(Shape.SQUARE.getValue(), "square"),
-                new Option(Shape.PENTAGON.getValue(), "pentagon"), new Option(Shape.HEXAGON.getValue(), "hexagon")};
+        Option[] vertexTypes = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(ShapeType.CIRCLE.getValue(), "circle"),
+                new Option(ShapeType.TRIANGLE.getValue(), "triangle"), new Option(ShapeType.SQUARE.getValue(), "square"),
+                new Option(ShapeType.PENTAGON.getValue(), "pentagon"), new Option(ShapeType.HEXAGON.getValue(), "hexagon")};
         comboBoxVertexType = new JComboBox<Option>(vertexTypes);
         comboBoxVertexType.setBounds(101, 89, 80, 20);
         comboBoxVertexType.addActionListener(new ActionListener() {

@@ -3,10 +3,12 @@ package pl.edu.agh.gratex.parser;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.model.PropertyModel;
-import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
+import pl.edu.agh.gratex.parser.elements.StaticParseElement;
+import pl.edu.agh.gratex.parser.elements.vertex.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -14,53 +16,44 @@ import java.util.regex.Pattern;
  *
  */
 public class VertexParser extends GraphElementParser {
-    @Override
-    public String parse(GraphElement graphElement) {
-        Vertex vertex = (Vertex) graphElement;
-        String line = "\\node (" + vertex.getNumber() + ") ";
-        if (vertex.getShape() == 1) {
-            line += "[circle"; //ksztalt
-        } else {
-            line += "[regular polygon, regular polygon sides=" + (vertex.getShape() + 1);
-        }
-        line += ", minimum size=" + (1.25 * vertex.getRadius()) + "pt"; //wielkosc
-        if (vertex.getVertexColor() != null)
-            line += ", fill=" + PropertyModel.COLORS.get(vertex.getVertexColor());
-        line += ", line width=" + 0.625 * vertex.getLineWidth() + "pt";
-        if (vertex.getLineType() != LineType.NONE) {
-            line += ", draw";
-            if (vertex.getLineColor() != null)
-                line += "=" + PropertyModel.COLORS.get(vertex.getLineColor());
-            if (vertex.getLineType() == LineType.DASHED)
-                line += ", dashed";
-            else if (vertex.getLineType() == LineType.DOTTED)
-                line += ", dotted";
-            else if (vertex.getLineType() == LineType.DOUBLE)
-                line += ", double";
-        }
-        line += "] at (" + 0.625 * vertex.getPosX() + "pt, " + 0.625 * (-vertex.getPosY()) + "pt) ";
-        if (vertex.isLabelInside()) {
-            if (vertex.getFontColor() != null)
-                line += "{\\textcolor{" + PropertyModel.COLORS.get(vertex.getFontColor()) + "}{" + vertex.getNumber() + "}};\n";
-            else
-                line += "{" + vertex.getNumber() + "}";
-        } else
-            line += " {};\n";
-        return line;
+    private final Pattern pattern;
+    private List<ParseElement> parseList = new ArrayList<>();
+
+    public VertexParser(ColorMapper colorMapper) {
+        parseList.add(new StaticParseElement("\\node ", false));
+        parseList.add(new NumberVertexParser());
+        parseList.add(new StaticParseElement(" [", false));
+        parseList.add(new ShapeVertexParser());
+        parseList.add(new SizeVertexParser());
+        parseList.add(new ColorVertexParser(colorMapper));
+        parseList.add(new StaticParseElement(", ", false));
+        parseList.add(new LineWidthVertexParser());
+        parseList.add(new LineColorTypeVertexParser(colorMapper));
+        parseList.add(new StaticParseElement("] at ", false));
+        parseList.add(new PositionVertexParser());
+        parseList.add(new TextColorVertexParser(colorMapper));
+        parseList.add(new StaticParseElement(";", false));
+        //parseList.add(new CommentedParametersVertexParser());
+        pattern = evaluatePattern();
     }
 
     @Override
-    public Pattern getPattern() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public String parseToLatex(GraphElement graphElement) {
+        return super.parseToLatexUsingParseList(graphElement);
     }
 
     @Override
+    public GraphElement parseToGraph(String code, Graph graph) throws ParserException {
+        Vertex result = new Vertex(graph);
+        parseToGraphUsingParseList(code, result);
+        return result;
+    }
+
     public List<ParseElement> getParseList() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return parseList;
     }
 
-    @Override
-    public GraphElement unparse(String code, Graph graph) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Pattern getPattern() {
+        return pattern;
     }
 }

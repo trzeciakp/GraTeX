@@ -1,7 +1,9 @@
-package pl.edu.agh.gratex.parser.elements;
+package pl.edu.agh.gratex.parser.elements.vertex;
 
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.parser.elements.ColorMapper;
+import pl.edu.agh.gratex.parser.elements.ParseElement;
 
 import java.awt.*;
 import java.util.regex.Matcher;

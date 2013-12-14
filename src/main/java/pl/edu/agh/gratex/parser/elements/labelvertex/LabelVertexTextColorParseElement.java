@@ -3,9 +3,7 @@ package pl.edu.agh.gratex.parser.elements.labelvertex;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
-import pl.edu.agh.gratex.parser.elements.TextColorParseElement;
-
-import java.util.regex.Matcher;
+import pl.edu.agh.gratex.parser.elements.vertex.TextColorParseElement;
 
 /**
  *

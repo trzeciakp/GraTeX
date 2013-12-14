@@ -13,12 +13,12 @@ import java.util.regex.Pattern;
  */
 public abstract class GraphElementParser {
 
-    public abstract String parse(GraphElement graphElement);
-    public abstract GraphElement unparse(String code, Graph graph) throws ParserException;
+    public abstract String parseToLatex(GraphElement graphElement);
+    public abstract GraphElement parseToGraph(String code, Graph graph) throws ParserException;
     public abstract Pattern getPattern();
     public abstract List<ParseElement> getParseList();
 
-    protected void unparseUsingParseList(String code, GraphElement graphElement) throws ParserException {
+    protected void parseToGraphUsingParseList(String code, GraphElement graphElement) throws ParserException {
         Matcher matcher = getPattern().matcher(code);
         int group = 1;
         if(matcher.matches()) {
@@ -32,7 +32,7 @@ public abstract class GraphElementParser {
         }
     }
 
-    protected String parseUsingParseList(GraphElement graphElement) {
+    protected String parseToLatexUsingParseList(GraphElement graphElement) {
         StringBuilder sb = new StringBuilder();
         for (ParseElement parseElement : getParseList()) {
             sb.append(parseElement.getProperty(graphElement));

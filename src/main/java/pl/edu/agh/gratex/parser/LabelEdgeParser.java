@@ -3,7 +3,6 @@ package pl.edu.agh.gratex.parser;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 import pl.edu.agh.gratex.parser.elements.StaticParseElement;
@@ -11,8 +10,6 @@ import pl.edu.agh.gratex.parser.elements.labeledge.CommentedParamatersLabelEdgeP
 import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgePositionParser;
 import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgeRotationParser;
 import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgeTextColorParseElement;
-import pl.edu.agh.gratex.parser.elements.labelvertex.LabelVertexPositionParseElement;
-import pl.edu.agh.gratex.parser.elements.labelvertex.LabelVertexTextColorParseElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +33,8 @@ public class LabelEdgeParser extends GraphElementParser {
     }
 
     @Override
-    public String parse(GraphElement graphElement) {
-        return super.parseUsingParseList(graphElement);
+    public String parseToLatex(GraphElement graphElement) {
+        return super.parseToLatexUsingParseList(graphElement);
         /*LabelE labelEdge = (LabelE) graphElement;
         String line = "\\node at (" + 0.625 * labelEdge.getPosX() + "pt, " + 0.625 * (-labelEdge.getPosY()) + "pt) ";
         if (labelEdge.getAngle() > 0)
@@ -50,9 +47,9 @@ public class LabelEdgeParser extends GraphElementParser {
     }
 
     @Override
-    public GraphElement unparse(String code, Graph graph) throws ParserException {
+    public GraphElement parseToGraph(String code, Graph graph) throws ParserException {
         LabelE labelE = new LabelE(null, graph);
-        unparseUsingParseList(code, labelE);
+        parseToGraphUsingParseList(code, labelE);
         return labelE;
     }
 

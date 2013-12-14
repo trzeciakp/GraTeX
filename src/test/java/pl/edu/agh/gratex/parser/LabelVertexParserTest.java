@@ -45,7 +45,7 @@ public class LabelVertexParserTest {
     public void testUnparse() throws Exception {
         LabelVertexParser testObject = new LabelVertexParser(COLOR_MAPPER);
 
-        LabelV result = (LabelV) testObject.unparse(TEST_STRING, MOCKED_GRAPH);
+        LabelV result = (LabelV) testObject.parseToGraph(TEST_STRING, MOCKED_GRAPH);
 
         assertEquals(EXPECTED_POS_X, result.getPosX());
         assertEquals(EXPECTED_POS_Y, result.getPosY());
@@ -69,7 +69,7 @@ public class LabelVertexParserTest {
         Mockito.when(labelV.getSpacing()).thenReturn(EXPECTED_SPACING);
         Mockito.when(labelV.getLabelPosition()).thenReturn(EXPECTED_POSITION);
 
-        String result = testObject.parse(labelV);
+        String result = testObject.parseToLatex(labelV);
 
         assertEquals(TEST_STRING, result);
 

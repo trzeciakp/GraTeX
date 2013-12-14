@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
@@ -48,7 +47,7 @@ public class EdgeParserTest {
     public void testSimpleParse() throws Exception {
         EdgeParser testObject = new EdgeParser(COLOR_MAPPER);
 
-        Edge result = (Edge) testObject.unparse(TEST_STRING_SIMPLE, MOCKED_GRAPH);
+        Edge result = (Edge) testObject.parseToGraph(TEST_STRING_SIMPLE, MOCKED_GRAPH);
 
         assertEquals(EXPECTED_COLOR, result.getLineColor());
         assertEquals(EXPECTED_VERTEX_A, result.getVertexA());
@@ -69,7 +68,7 @@ public class EdgeParserTest {
         Mockito.when(edge.getLineWidth()).thenReturn(EXPECTED_LINE_WIDTH);
         Mockito.when(edge.getLineType()).thenReturn(EXPECTED_DEFAULT_LINE_TYPE);
 
-        String result = testObject.parse(edge);
+        String result = testObject.parseToLatex(edge);
 
         assertEquals(TEST_STRING_SIMPLE, result);
     }

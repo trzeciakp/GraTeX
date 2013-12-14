@@ -118,7 +118,7 @@ public class EdgeUtils {
         int[] p1 = new int[]{ax - dy, ay + dx};
         int[] p2 = new int[]{ax + dy, ay - dx};
 
-        if (edge.getArrowType() == ArrowType.FILLED.getValue()) {
+        if (edge.getArrowTypeENUM() == ArrowType.FILLED) {
 
             p1 = new int[]{ax - dy / 2, ay + dx / 2};
             p2 = new int[]{ax + dy / 2, ay - dx / 2};
@@ -371,7 +371,7 @@ public class EdgeUtils {
         }
 
         if (edge.isDirected()) {
-            if (edge.getArrowType() == ArrowType.BASIC.getValue()) {
+            if (edge.getArrowTypeENUM() == ArrowType.BASIC) {
                 if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
