@@ -13,20 +13,20 @@ import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 import java.util.LinkedList;
 
 
-public class OperationList {
+public class OldOperationList {
     private GeneralController generalController;
 
     public static final int MAX_OPERATIONS = 256;
-    private LinkedList<Operation> operations;
+    private LinkedList<OldOperation> operations;
     private int iterator;
 
-    public OperationList(GeneralController generalController) {
+    public OldOperationList(GeneralController generalController) {
         this.generalController = generalController;
-        operations = new LinkedList<Operation>();
+        operations = new LinkedList<OldOperation>();
         iterator = 0;
     }
 
-    public void addNewOperation(Operation operation) {
+    public void addNewOperation(OldOperation operation) {
         while (iterator < operations.size()) {
             operations.removeLast();
         }

@@ -15,7 +15,7 @@ import pl.edu.agh.gratex.model.vertex.VertexUtils;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RemoveOperation extends Operation {
+public class RemoveOperation extends OldOperation {
     private GeneralController generalController;
 
     private LinkedList<GraphElement> elements;

@@ -13,7 +13,7 @@ import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 import java.util.LinkedList;
 
 
-public class TemplateChangeOperation extends Operation {
+public class TemplateChangeOperation extends OldOperation {
     private GeneralController generalController;
 
     private boolean applyToAll;

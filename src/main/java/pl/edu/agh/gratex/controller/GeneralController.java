@@ -20,8 +20,6 @@ public interface GeneralController {
 
     public void updateMenuBarAndActions();
 
-    public void giveFocusToLabelTextfield();
-
     public void newGraphFile();
 
     public void openGraphFile();

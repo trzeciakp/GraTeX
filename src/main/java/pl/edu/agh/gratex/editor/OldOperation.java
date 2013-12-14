@@ -1,6 +1,6 @@
 package pl.edu.agh.gratex.editor;
 
-public abstract class Operation {
+public abstract class OldOperation {
     public abstract String doOperation();
     public abstract String undoOperation();
 }

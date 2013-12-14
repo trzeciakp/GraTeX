@@ -43,7 +43,7 @@ public class StringLiterals {
     public final static String MESSAGE_ERROR_CRITICAL = "The application has encountered a critical error and will now terminate:\n";
 
     // SaveFileDialog
-    public final static String MESSAGE_ERROR_SAVE_GRAPH = "Saving graph failed. Make sure you have write permissions in the target location.";
+    public final static String MESSAGE_ERROR_SAVE_GRAPH = "Saving graph failed.\nMake sure you have write permissions in the target location.";
 
     // OpenFileDialog
     public final static String MESSAGE_ERROR_OPEN_GRAPH = "Loading graph failed.\nThe chosen file has either improper format or is damaged.";
@@ -137,7 +137,7 @@ public class StringLiterals {
     public final static String INFO_LABEL_V_MOVE = "label (vertex) moved";
     public final static String INFO_LABEL_E_MOVE = "label (edge) moved";
 
-    // OperationList
+    // OldOperationList
     public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
     public final static String INFO_NOTHING_TO_REDO = "nothing to redo";
 

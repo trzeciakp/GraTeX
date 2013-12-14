@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class PropertyChangeOperation extends Operation {
+public class PropertyChangeOperation extends OldOperation {
     private LinkedList<GraphElement> elements;
     public LinkedList<PropertyModel> initialModels;
     public PropertyModel initialModel;

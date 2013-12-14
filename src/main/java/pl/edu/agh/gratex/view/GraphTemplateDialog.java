@@ -31,7 +31,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 @SuppressWarnings("serial")
-public class GraphsTemplateDialog extends JDialog implements ModeListener {
+public class GraphTemplateDialog extends JDialog implements ModeListener {
     private GeneralController generalController;
 
     // This dialog needs its own ModeController, so that it does not change mode globally
@@ -77,7 +77,7 @@ public class GraphsTemplateDialog extends JDialog implements ModeListener {
         return rootPane;
     }
 
-    public GraphsTemplateDialog(MainWindow parent, GeneralController generalController) {
+    public GraphTemplateDialog(MainWindow parent, GeneralController generalController) {
         super(parent, StringLiterals.TITLE_GRAPH_TEMPLATE_EDITOR, true);
 
         this.generalController = generalController;
@@ -277,7 +277,7 @@ public class GraphsTemplateDialog extends JDialog implements ModeListener {
         panel_preview = new PanelPreview(graph);
         panel_preview.setBounds(222, 42, 520, 343);
 
-        panel_propertyEditor = new PanelPropertyEditor(generalController, modeController) {
+        panel_propertyEditor = new PanelPropertyEditor(generalController, modeController, null) {
             public void valueChanged(PropertyModel model) {
                 updateModel(model);
                 panel_preview.repaint();

@@ -4,11 +4,10 @@ import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
-import pl.edu.agh.gratex.editor.OperationList;
+import pl.edu.agh.gratex.editor.OldOperationList;
 import pl.edu.agh.gratex.editor.RemoveOperation;
 import pl.edu.agh.gratex.editor.TemplateChangeOperation;
 import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.graph.GraphNumeration;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.parser.Parser;
 import pl.edu.agh.gratex.utils.FileManager;
@@ -28,9 +27,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     private Graph graph;
     private File currentFile;
-
-    private ModeType mode = ModeType.VERTEX;
-    private ToolType tool = ToolType.ADD;
 
     public GeneralControllerImpl(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
@@ -52,7 +48,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     // Listeners implementation
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
-        mode = currentMode;
         resetWorkspace();
     }
 
@@ -63,7 +58,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void toolChanged(ToolType previousTool, ToolType currentTool) {
-        tool = currentTool;
         resetWorkspace();
     }
 
@@ -110,7 +104,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         if (checkForUnsavedProgress()) {
             currentFile = null;
             graph = new Graph(this);
-            ControlManager.operations = new OperationList(this);
+            ControlManager.operations = new OldOperationList(this);
             resetWorkspace();
             editGraphTemplate();
         }
@@ -133,7 +127,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     currentFile = file;
                     GraphUtils.deleteUnusedLabels(newGraph);
                     graph = newGraph;
-                    ControlManager.operations = new OperationList(this);
+                    ControlManager.operations = new OldOperationList(this);
                     resetWorkspace();
                     publishInfo(StringLiterals.INFO_GRAPH_OPEN_OK);
                 } else {
@@ -172,9 +166,22 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         return false;
     }
 
+    public void resetWorkspace() {
+        selectionController.clearSelection();
+        ControlManager.updatePropertyChangeOperationStatus(false);
+        mouseController.finishMovingElement();
+        mouseController.cancelCurrentOperation();
+        operationController.reportGenericOperation(null);
+    }
+
+    @Override
+    public void updateMenuBarAndActions() {
+        mainWindow.updateMenuBarAndActions();
+    }
+
     @Override
     public void editGraphTemplate() {
-        GraphsTemplateDialog gdd = new GraphsTemplateDialog(mainWindow, this);
+        GraphTemplateDialog gdd = new GraphTemplateDialog(mainWindow, this);
         Graph templateGraph = gdd.displayDialog();
 
         if (templateGraph != null) {
@@ -246,23 +253,16 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     }
 
     @Override
+    public void showAboutDialog() {
+        new AboutDialog(mainWindow);
+    }
+
+    @Override
     public void selectAll() {
         toolController.setTool(ToolType.SELECT);
         selectionController.selectAll();
         ControlManager.updatePropertyChangeOperationStatus(true);
-        operationController.reportGenericOperation(StringLiterals.INFO_GENERIC_SELECT_ALL(mode));
-    }
-
-    @Override
-    public void exitApplication() {
-        if (checkForUnsavedProgress()) {
-            System.exit(0);
-        }
-    }
-
-    @Override
-    public void showAboutDialog() {
-        new AboutDialog(mainWindow);
+        operationController.reportGenericOperation(StringLiterals.INFO_GENERIC_SELECT_ALL(modeController.getMode()));
     }
 
     @Override
@@ -287,6 +287,19 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         JOptionPane.showMessageDialog(mainWindow, fullMessage, StringLiterals.TITLE_ERROR_DIALOG, JOptionPane.ERROR_MESSAGE);
     }
 
+    @Override
+    public void criticalError(String message, Exception e) {
+        reportError(StringLiterals.MESSAGE_ERROR_CRITICAL + message, e);
+        System.exit(1);
+    }
+
+    @Override
+    public void exitApplication() {
+        if (checkForUnsavedProgress()) {
+            System.exit(0);
+        }
+    }
+
     //===========================================
     // Internal functions
 
@@ -309,29 +322,5 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         } else {
             return true;
         }
-    }
-
-    public void resetWorkspace() {
-        selectionController.clearSelection();
-        ControlManager.updatePropertyChangeOperationStatus(false);
-        mouseController.finishMovingElement();
-        mouseController.cancelCurrentOperation();
-        operationController.reportGenericOperation(null);
-    }
-
-    @Override
-    public void updateMenuBarAndActions() {
-        mainWindow.updateMenuBarAndActions();
-    }
-
-    @Override
-    public void giveFocusToLabelTextfield() {
-        mainWindow.giveFocusToLabelTextfield();
-    }
-
-    @Override
-    public void criticalError(String message, Exception e) {
-        reportError(StringLiterals.MESSAGE_ERROR_CRITICAL + message, e);
-        System.exit(1);
     }
 }

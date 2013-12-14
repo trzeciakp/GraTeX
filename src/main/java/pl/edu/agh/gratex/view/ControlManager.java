@@ -14,7 +14,7 @@ public class ControlManager {
     public static MainWindow mainWindow;
 
     public static int selectionID = 0;
-    public static OperationList operations = null;
+    public static OldOperationList operations = null;
     public static PropertyChangeOperation currentPropertyChangeOperation = null;
 
 
