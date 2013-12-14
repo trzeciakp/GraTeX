@@ -18,7 +18,6 @@ import java.util.EnumMap;
 
 @SuppressWarnings("serial")
 public class PanelWorkspace extends JPanel implements MouseListener, MouseMotionListener, OperationListener, ToolListener {
-    public static int WIELKIE_DUPSKOOO = 0;
 
     private GeneralController generalController;
     private MouseController mouseController;
@@ -34,15 +33,17 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
     public PanelWorkspace(JScrollPane parent, GeneralController generalController) {
         super();
+        this.parent = parent;
         this.generalController = generalController;
         this.mouseController = generalController.getMouseController();
-        this.parent = parent;
-        addMouseListener(this);
-        addMouseMotionListener(this);
+
         generalController.getOperationController().addOperationListener(this);
         generalController.getToolController().addToolListener(this);
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        addMouseListener(this);
+        addMouseMotionListener(this);
+
         try {
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
             for (CursorType cursorType : CursorType.values()) {
                 URL url = this.getClass().getClassLoader().getResource(cursorType.getImageName());
                 Image image = ImageIO.read(url);
@@ -196,22 +197,20 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
     // ===================================
     // OperationListener implementation
-
     @Override
-    public void operationStarted(String info) {
+    public void startOperationEvent(String info) {
         repaint();
     }
 
     @Override
-    public void operationInProgress(String info) {
+    public void genericOperationEvent(String info) {
         repaint();
     }
 
     @Override
-    public void operationFinished(String info) {
+    public void finishOperationEvent(Operation operation) {
         repaint();
     }
-
 
     // ===================================
     // ToolListener implementation

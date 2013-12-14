@@ -1,20 +1,21 @@
-package pl.edu.agh.gratex.editor2;
+package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.controller.Operation;
 
 import java.util.LinkedList;
 
-public class OperationList2 {
-    private LinkedList<Operation2> operations;
+public class OperationList {
+    private LinkedList<Operation> operations;
     private int iterator;
 
-    public OperationList2() {
+    public OperationList() {
         operations = new LinkedList<>();
         iterator = 0;
     }
 
-    public void addNewOperation(Operation2 operation) {
+    public void addNewOperation(Operation operation) {
         while (iterator < operations.size()) {
             operations.removeLast();
         }

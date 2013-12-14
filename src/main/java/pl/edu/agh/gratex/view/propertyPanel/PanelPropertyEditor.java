@@ -1,16 +1,15 @@
 package pl.edu.agh.gratex.view.propertyPanel;
 
 import pl.edu.agh.gratex.constants.ModeType;
-import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.ModeController;
-import pl.edu.agh.gratex.controller.ModeListener;
+import pl.edu.agh.gratex.constants.OperationType;
+import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import javax.swing.*;
 import java.util.EnumMap;
 
 @SuppressWarnings("serial")
-public class PanelPropertyEditor extends JPanel implements ModeListener {
+public class PanelPropertyEditor extends JPanel implements ModeListener, OperationListener {
     GeneralController generalController;
 
     //private int mode = 1;
@@ -18,10 +17,15 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
     private JLabel label_title;
     private EnumMap<ModeType, AbstractPropertyPanel> panelsMap = new EnumMap<>(ModeType.class);
 
-    public PanelPropertyEditor(GeneralController generalController, ModeController modeController) {
+    public PanelPropertyEditor(GeneralController generalController, ModeController modeController, OperationController operationController) {
         this.generalController = generalController;
-
         modeController.addModeListener(this);
+
+        // TODO To jest potrzebne, bo z GraphTemplateEditora tworzymy anonimowy PanelPropertyEditor i wtedy nie chcemy, zeby byl on listenerem
+        if (operationController != null) {
+            operationController.addOperationListener(this);
+        }
+
         initialize();
         setEnabled(false);
     }
@@ -54,7 +58,7 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
         label_title.setBounds(10, 11, 180, 14);
         add(label_title);
 
-        for(ModeType modeType : ModeType.values()) {
+        for (ModeType modeType : ModeType.values()) {
             AbstractPropertyPanel propertyPanel = createPropertyPanel(modeType);
             panelsMap.put(modeType, propertyPanel);
             propertyPanel.setVisible(false);
@@ -77,17 +81,12 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
 
     public void setMode(int m) {
         panelsMap.get(mode).setVisible(false);
-        mode = ModeType.values()[m-1];
+        mode = ModeType.values()[m - 1];
         panelsMap.get(mode).setVisible(true);
     }
 
     public PropertyModel getModel() {
         return panelsMap.get(mode).getModel();
-    }
-
-    public void giveFocusToLabelTextfield() {
-        panelsMap.get(mode).components.get(0).requestFocus();
-        ((JTextField) panelsMap.get(mode).components.get(0)).selectAll();
     }
 
     public void disableLabelEdition() {
@@ -100,6 +99,8 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
         panelsMap.get(type).components.get(0).setFocusable(false);
     }
 
+    // ===================================
+    // ModeListener implementation
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
         panelsMap.get(previousMode).setVisible(false);
@@ -110,5 +111,24 @@ public class PanelPropertyEditor extends JPanel implements ModeListener {
     @Override
     public int modeUpdatePriority() {
         return 0;
+    }
+
+    // ===================================
+    // OperationListener implementation
+    @Override
+    public void startOperationEvent(String info) {
+    }
+
+    @Override
+    public void finishOperationEvent(Operation operation) {
+        if (operation.getOperationType() == OperationType.ADD_LABEL_EDGE || operation.getOperationType() == OperationType.ADD_LABEL_VERTEX) {
+            // TODO Na razie to nie dziala, bo zaraz po tym jest robiony updatePropertyChangeOperation i sie nadpisuje. Ale bedzie dzialac.
+            panelsMap.get(mode).components.get(0).requestFocus();
+            ((JTextField) panelsMap.get(mode).components.get(0)).selectAll();
+        }
+    }
+
+    @Override
+    public void genericOperationEvent(String info) {
     }
 }

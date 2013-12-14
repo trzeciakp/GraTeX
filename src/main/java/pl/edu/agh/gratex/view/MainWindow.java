@@ -66,11 +66,6 @@ public class MainWindow extends JFrame {
         panel_buttonContainer.updateFunctions();
     }
 
-    // TODO property editor moglby byc sluchaczem operacji i wykrywac, jak dodano labelka i automatycznie dawac focus
-    public void giveFocusToLabelTextfield() {
-        panel_propertyEditor.giveFocusToLabelTextfield();
-    }
-
     // TODO Trzeba zmienic layout Mainwindow na jakis typu border (on akurat chyba sie nada idealnie) i to pojdzie do piachu
     public void adjustSize() {
         int width = getContentPane().getWidth();
@@ -121,7 +116,11 @@ public class MainWindow extends JFrame {
         scrollPane_workspace.setBounds(110, 85, 472, 344);
         getContentPane().add(scrollPane_workspace);
 
-        panel_propertyEditor = new PanelPropertyEditor(generalController, generalController.getModeController());
+        infoDisplay = new InfoDisplay(generalController);
+        infoDisplay.setBounds(10, 430, 774, 36);
+        getContentPane().add(infoDisplay);
+
+        panel_propertyEditor = new PanelPropertyEditor(generalController, generalController.getModeController(), generalController.getOperationController());
         panel_propertyEditor.setBounds(592, 85, 200, 380);
         panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
         getContentPane().add(panel_propertyEditor);
@@ -131,10 +130,6 @@ public class MainWindow extends JFrame {
         panel_buttonContainer.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 
         getContentPane().add(panel_buttonContainer);
-
-        infoDisplay = new InfoDisplay(generalController);
-        infoDisplay.setBounds(10, 430, 774, 36);
-        getContentPane().add(infoDisplay);
 
         panel_toolbox = new PanelToolbox(generalController.getToolController(), generalController.getModeController());
         panel_toolbox.setBounds(10, 85, 90, 344);

@@ -9,7 +9,7 @@ import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
-public class AddOperation extends Operation {
+public class AddOperation extends OldOperation {
     private GeneralController generalController;
 
     private GraphElement element;

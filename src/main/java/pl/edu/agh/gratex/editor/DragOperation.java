@@ -7,7 +7,7 @@ import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 
-public class DragOperation extends Operation {
+public class DragOperation extends OldOperation {
     private int startPosX;
     private int startPosY;
     private int endPosX;

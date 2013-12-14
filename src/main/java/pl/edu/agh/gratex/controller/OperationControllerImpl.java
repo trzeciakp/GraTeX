@@ -1,12 +1,10 @@
 package pl.edu.agh.gratex.controller;
 
-import pl.edu.agh.gratex.editor2.Operation2;
-
 import java.util.ArrayList;
 
 public class OperationControllerImpl implements OperationController {
     private GeneralController generalController;
-    private Operation2 currentOperation2;
+    private Operation currentOperation;
     private ArrayList<OperationListener> listeners = new ArrayList<>();
 
     public OperationControllerImpl(GeneralController generalController) {
@@ -19,11 +17,20 @@ public class OperationControllerImpl implements OperationController {
     }
 
     @Override
-    public void initOperation(Operation2 operation2, String info) {
-        currentOperation2 = operation2;
+    public void startOperation(Operation operation, String startInfo) {
+        currentOperation = operation;
         for (OperationListener listener : listeners)
         {
-            listener.operationStarted(info);
+            System.out.println("listener = [" + listener + "], startInfo = [" + startInfo + "]");
+            listener.startOperationEvent(startInfo);
+        }
+    }
+
+    @Override
+    public void finishOperation() {
+        for (OperationListener listener : listeners)
+        {
+            listener.finishOperationEvent(currentOperation);
         }
     }
 
@@ -31,21 +38,13 @@ public class OperationControllerImpl implements OperationController {
     public void reportGenericOperation(String info) {
         for (OperationListener listener : listeners)
         {
-            listener.operationInProgress(info);
+            listener.genericOperationEvent(info);
         }
     }
 
     @Override
-    public void finishOperation(String info) {
-        for (OperationListener listener : listeners)
-        {
-            listener.operationFinished(info);
-        }
-    }
-
-    @Override
-    public Operation2 getCurrentOperation() {
-        return currentOperation2;
+    public Operation getCurrentOperation() {
+        return currentOperation;
     }
 
     @Override

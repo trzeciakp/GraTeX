@@ -3,10 +3,7 @@ package pl.edu.agh.gratex.view;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
-import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.ModeListener;
-import pl.edu.agh.gratex.controller.OperationListener;
-import pl.edu.agh.gratex.controller.ToolListener;
+import pl.edu.agh.gratex.controller.*;
 
 import javax.swing.*;
 
@@ -21,13 +18,6 @@ public class InfoDisplay extends JLabel implements ModeListener, ToolListener, O
         generalController.getToolController().addToolListener(this);
         generalController.getOperationController().addOperationListener(this);
     }
-
-    private void maybeSetInfo(String info) {
-        if (info != null) {
-            setText(info);
-        }
-    }
-
 
     // ===================================
     // ModeListener implementation
@@ -60,17 +50,26 @@ public class InfoDisplay extends JLabel implements ModeListener, ToolListener, O
     // ===================================
     // OperationListener implementation
     @Override
-    public void operationStarted(String info) {
-        maybeSetInfo(info);
+    public void startOperationEvent(String info) {
+        maybeDisplayInfo(info);
     }
 
     @Override
-    public void operationInProgress(String info) {
-        maybeSetInfo(info);
+    public void finishOperationEvent(Operation operation) {
+        maybeDisplayInfo(operation.getInfo());
     }
 
     @Override
-    public void operationFinished(String info) {
-        maybeSetInfo(info);
+    public void genericOperationEvent(String info) {
+        maybeDisplayInfo(info);
+    }
+
+
+    // ===================================
+    // Internal functions
+    private void maybeDisplayInfo(String info) {
+        if (info != null) {
+            setText(info);
+        }
     }
 }

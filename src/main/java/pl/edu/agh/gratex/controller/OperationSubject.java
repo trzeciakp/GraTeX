@@ -1,4 +1,4 @@
-package pl.edu.agh.gratex.editor2;
+package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
 

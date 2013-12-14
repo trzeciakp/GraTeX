@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CopyPasteOperation extends Operation {
+public class CopyPasteOperation extends OldOperation {
     private GeneralController generalController;
 
     public LinkedList<Vertex> vertices;

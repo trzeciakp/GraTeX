@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.editor.AddOperation;
@@ -334,9 +335,13 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                             LabelV labelV = new LabelV(temp, generalController.getGraph());
                             labelV.setModel(generalController.getGraph().getLabelVDefaultModel());
                             ControlManager.operations.addNewOperation(new AddOperation(generalController, labelV));
-                            generalController.publishInfo(ControlManager.operations.redo());
+
+                            // TODO Zmienic jak bedzie nowy mechanizm operacji
+                            // TODO Po wywaleniu updatePropertyChangeOperation zacznie dzialac auto zaznacznia nazwy labela
+                            ControlManager.operations.redo();
                             generalController.getSelectionController().addToSelection(labelV, false);
-                            createdLabel = true;
+                            operationController.startOperation(new Operation(OperationType.ADD_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_ADD), null);
+                            operationController.finishOperation();
                         } else {
                             generalController.publishInfo(StringLiterals.INFO_CANNOT_CREATE_LABEL_V_EXISTS);
                         }
@@ -365,9 +370,13 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                             labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
                             labelE.setHorizontalPlacement(e.isShiftDown());
                             ControlManager.operations.addNewOperation(new AddOperation(generalController, labelE));
-                            generalController.publishInfo(ControlManager.operations.redo());
+
+                            // TODO Zmienic jak bedzie nowy mechanizm operacji
+                            // TODO Po wywaleniu updatePropertyChangeOperation zacznie dzialac auto zaznacznia nazwy labela
+                            ControlManager.operations.redo();
                             generalController.getSelectionController().addToSelection(labelE, false);
-                            createdLabel = true;
+                            operationController.startOperation(new Operation(OperationType.ADD_LABEL_EDGE, StringLiterals.INFO_LABEL_E_ADD), null);
+                            operationController.finishOperation();
                         } else {
                             generalController.publishInfo(StringLiterals.INFO_CANNOT_CREATE_LABEL_E_EXISTS);
                         }
@@ -389,9 +398,6 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                 }
             }
             ControlManager.updatePropertyChangeOperationStatus(true);
-            if (createdLabel) {
-                generalController.giveFocusToLabelTextfield();
-            }
         }
 
         operationController.reportGenericOperation(null);
