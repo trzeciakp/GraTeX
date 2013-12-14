@@ -23,7 +23,8 @@ public abstract class GraphElementParser {
         int group = 1;
         if(matcher.matches()) {
             for (ParseElement parseElement : getParseList()) {
-                parseElement.setProperty(matcher.group(group), graphElement);
+                String foundGroup = matcher.group(group);
+                parseElement.setProperty(foundGroup, graphElement);
                 group += parseElement.groups();
             }
         } else {

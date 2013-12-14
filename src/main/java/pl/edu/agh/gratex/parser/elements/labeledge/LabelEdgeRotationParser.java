@@ -33,6 +33,9 @@ public class LabelEdgeRotationParser extends ParseElement {
 
     @Override
     public void setProperty(String match, GraphElement element) {
+        if(match == null) {
+            return;
+        }
         Matcher matcher = PATTERN.matcher(match);
         if(!matcher.matches()) {
             //TODO

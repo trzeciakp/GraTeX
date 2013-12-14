@@ -14,6 +14,9 @@ public abstract class TextColorParseElement extends ParseElement {
 
     protected static final String REGEX = "(\\{\\\\textcolor\\{([^}]+)\\})?\\{([^}]+)\\}\\}?";
     protected static final Pattern PATTERN = Pattern.compile(REGEX);
+    public static final int GROUPS = 3;
+    public static final int COLOR_GROUP = 2;
+    public static final int TEXT_GROUP = 3;
     private ColorMapper colorMapper;
 
     public TextColorParseElement(ColorMapper colorMapper) {
@@ -21,7 +24,7 @@ public abstract class TextColorParseElement extends ParseElement {
     }
 
     public int groups() {
-        return 4;
+        return super.groups() + GROUPS;
     }
 
     @Override
@@ -35,7 +38,7 @@ public abstract class TextColorParseElement extends ParseElement {
     }
 
     protected Color getFontColor(String match) {
-        String color = getGroup(match, 2);
+        String color = getGroup(match, COLOR_GROUP);
         if(color != null) {
             return colorMapper.getColor(color);
         } else {
@@ -50,7 +53,7 @@ public abstract class TextColorParseElement extends ParseElement {
     }
 
     protected String getText(String match) {
-        return getGroup(match, 3);
+        return getGroup(match, TEXT_GROUP);
     }
     protected String getProperty(Color color, String text) {
         if (color != null) {

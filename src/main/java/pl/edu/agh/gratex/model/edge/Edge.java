@@ -1,13 +1,10 @@
 package pl.edu.agh.gratex.model.edge;
 
 
-import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.utils.DrawingTools;
-import pl.edu.agh.gratex.utils.Geometry;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.ArrowType;
@@ -15,8 +12,6 @@ import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
 import java.awt.geom.Arc2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -53,6 +48,11 @@ public class Edge extends GraphElement implements Serializable {
     public Edge(Graph graph) {
         this.graph = graph;
     }
+
+    public boolean isLoop() {
+        return (vertexA != null && vertexA == vertexB);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -211,6 +211,14 @@ public class Edge extends GraphElement implements Serializable {
 
     public void setArrowType(int arrowType) {
         this.arrowType = arrowType;
+    }
+
+    public void setArrowType(ArrowType arrowType) {
+        this.arrowType = arrowType.getValue();
+    }
+
+    public ArrowType getArrowTypeENUM() {
+        return ArrowType.values()[this.arrowType+1];
     }
 
     public Color getLineColor() {
