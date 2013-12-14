@@ -43,7 +43,7 @@ public class VertexParser extends GraphElementParser {
     }
 
     @Override
-    public GraphElement parseToGraph(String code, Graph graph) throws ParserException {
+    public Vertex parseToGraph(String code, Graph graph) throws ParserException {
         Vertex result = new Vertex(graph);
         parseToGraphUsingParseList(code, result);
         return result;

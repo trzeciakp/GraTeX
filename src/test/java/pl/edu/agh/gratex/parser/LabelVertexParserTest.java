@@ -45,7 +45,7 @@ public class LabelVertexParserTest {
     public void testUnparse() throws Exception {
         LabelVertexParser testObject = new LabelVertexParser(COLOR_MAPPER);
 
-        LabelV result = (LabelV) testObject.parseToGraph(TEST_STRING, MOCKED_GRAPH);
+        LabelV result = testObject.parseToGraph(TEST_STRING, MOCKED_GRAPH);
 
         assertEquals(EXPECTED_POS_X, result.getPosX());
         assertEquals(EXPECTED_POS_Y, result.getPosY());

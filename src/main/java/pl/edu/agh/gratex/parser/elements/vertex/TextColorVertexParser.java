@@ -52,6 +52,7 @@ public class TextColorVertexParser extends ParseElement {
         if(textNumber != null) {
             //TODO
             vertex.setNumber(Integer.parseInt(textNumber));
+            vertex.setLabelInside(true);
         }
         else {
             vertex.setLabelInside(false);

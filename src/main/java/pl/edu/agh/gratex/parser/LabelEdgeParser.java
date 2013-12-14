@@ -47,7 +47,7 @@ public class LabelEdgeParser extends GraphElementParser {
     }
 
     @Override
-    public GraphElement parseToGraph(String code, Graph graph) throws ParserException {
+    public LabelE parseToGraph(String code, Graph graph) throws ParserException {
         LabelE labelE = new LabelE(null, graph);
         parseToGraphUsingParseList(code, labelE);
         return labelE;

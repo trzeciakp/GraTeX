@@ -29,8 +29,8 @@ public abstract class ParseElement {
         return result;
     }
 
-    protected double getDoublePt(int x) {
-        return x*COEFFICIENT;
+    protected String getDoublePt(int x) {
+        return x*COEFFICIENT+"pt";
     }
 
     protected Pattern getPattern() {

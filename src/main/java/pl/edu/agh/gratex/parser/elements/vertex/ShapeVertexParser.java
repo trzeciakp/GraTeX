@@ -53,6 +53,6 @@ public class ShapeVertexParser extends ParseElement {
     public String getProperty(GraphElement element) {
         Vertex vertex = (Vertex) element;
         ShapeType shape = vertex.getShapeENUM();
-        return (shape == ShapeType.CIRCLE?"circle":"regular polygon, regular polygon sides= "+shape.getSides());
+        return (shape == ShapeType.CIRCLE?"circle":"regular polygon, regular polygon sides="+shape.getSides());
     }
 }

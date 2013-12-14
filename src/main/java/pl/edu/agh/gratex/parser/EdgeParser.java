@@ -40,7 +40,7 @@ public class EdgeParser extends GraphElementParser {
     }
 
     @Override
-    public GraphElement parseToGraph(String code, Graph graph) throws ParserException {
+    public Edge parseToGraph(String code, Graph graph) throws ParserException {
         Edge result = new Edge(graph);
         parseToGraphUsingParseList(code, result);
         return result;

@@ -1,4 +1,4 @@
-package pl.edu.agh.gratex.parser.elements.vertex;
+package pl.edu.agh.gratex.parser.elements;
 
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;

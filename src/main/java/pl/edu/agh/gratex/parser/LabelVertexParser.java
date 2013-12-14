@@ -37,7 +37,7 @@ public class LabelVertexParser extends GraphElementParser {
     }
 
     @Override
-    public GraphElement parseToGraph(String code, Graph graph) throws ParserException {
+    public LabelV parseToGraph(String code, Graph graph) throws ParserException {
         LabelV result = new LabelV(null, graph);
         parseToGraphUsingParseList(code, result);
         return result;
