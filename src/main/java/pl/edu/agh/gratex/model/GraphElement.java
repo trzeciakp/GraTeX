@@ -33,16 +33,14 @@ public abstract class GraphElement implements Serializable {
         getGraph().getElements(getType()).remove(this);
     }
 
-    /*@Override
+    @Override
     public boolean equals(Object obj) {
-        System.out.println("obj = [" + obj + "]");
         if (!(obj instanceof GraphElement))
         {
             return false;
         }
         else
         {
-            System.out.println("obj = [" + ((GraphElement) obj).getLatexCode() + "] " + getLatexCode());
             return ((GraphElement) obj).getLatexCode().equals(getLatexCode());
         }
     }
@@ -51,5 +49,5 @@ public abstract class GraphElement implements Serializable {
     public int hashCode()
     {
         return getLatexCode().hashCode();
-    }*/
+    }
 }

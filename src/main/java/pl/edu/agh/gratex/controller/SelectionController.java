@@ -8,7 +8,7 @@ import java.util.List;
 public interface SelectionController {
     public List<GraphElement> getSelection();
     public int selectionSize();
-    public boolean selectionContains(Object o);
+    public boolean selectionContains(GraphElement element);
     public void clearSelection();
     public void selectAll();
     public void addToSelection(Collection<? extends GraphElement> elements, boolean controlDown);

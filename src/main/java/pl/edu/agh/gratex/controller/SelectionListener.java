@@ -8,6 +8,5 @@ import java.util.List;
  *
  */
 public interface SelectionListener {
-
-    public void fireSelectionChanged(List<? extends GraphElement> collection);
+    public void selectionChanged(List<? extends GraphElement> collection);
 }

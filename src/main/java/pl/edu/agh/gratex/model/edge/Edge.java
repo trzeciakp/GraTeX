@@ -162,7 +162,7 @@ public class Edge extends GraphElement implements Serializable {
 
     @Override
     public GraphElementType getType() {
-        return GraphElementType.VERTEX;
+        return GraphElementType.EDGE;
     }
 
     @Override

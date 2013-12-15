@@ -62,8 +62,8 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     }
 
     @Override
-    public boolean selectionContains(Object o) {
-        return selection.contains(o);
+    public boolean selectionContains(GraphElement element) {
+        return selection.contains(element);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
 
     private void informListeners() {
         for (SelectionListener listener : listeners) {
-            listener.fireSelectionChanged(selection);
+            listener.selectionChanged(selection);
         }
     }
 }

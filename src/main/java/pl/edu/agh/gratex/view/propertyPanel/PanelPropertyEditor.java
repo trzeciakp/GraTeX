@@ -144,7 +144,7 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     }
 
     @Override
-    public void fireSelectionChanged(List<? extends GraphElement> collection) {
+    public void selectionChanged(List<? extends GraphElement> collection) {
         selection = collection;
         if(collection.size() == 0) {
             setEnabled(false);

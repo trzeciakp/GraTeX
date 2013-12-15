@@ -23,6 +23,7 @@ public class OperationControllerImpl implements OperationController {
         return generalController;
     }
 
+    // TODO To tutaj jest do testow
     @Override
     public OperationList getOperationList() {
         return operationList;

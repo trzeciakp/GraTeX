@@ -15,7 +15,7 @@ public class LabelEUtils {
     public static void draw(LabelE labelE, Graphics2D g2d, boolean dummy) {
         Graphics2D g = (Graphics2D) g2d.create();
 
-        updatePosition(labelE, g);
+        updatePosition(labelE);
 
         if (labelE.getGraph().getGeneralController().getSelectionController().selectionContains(labelE)) {
             g.setColor(Const.SELECTION_COLOR);
@@ -38,9 +38,8 @@ public class LabelEUtils {
         g.dispose();
     }
 
-    public static void updatePosition(LabelE labelE, Graphics2D g) {
-        g.setFont(labelE.getFont());
-        FontMetrics fm = g.getFontMetrics();
+    public static void updatePosition(LabelE labelE) {
+        FontMetrics fm = new Canvas().getFontMetrics(labelE.getFont());
         int width = fm.stringWidth(labelE.getText());
         int height = fm.getAscent();
         int descent = fm.getDescent();
