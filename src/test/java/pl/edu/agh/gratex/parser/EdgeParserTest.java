@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 public class EdgeParserTest {
     private static final double COEFFICIENT = 0.625;
     private static final String TEST_STRING_SIMPLE = "\\draw [line width=0.625pt, color=black] (1) to (2);";
+    private static final String TEST_STRING_IN_OUT = "\\draw [line width=0.625pt, color=black] (1) to [in=286, out=346] (2);%300";
     private static final ColorMapper COLOR_MAPPER = Mockito.mock(ColorMapper.class);
     private static final String EXPECTED_COLOR_TEXT = "black";
     private static final Color EXPECTED_COLOR = Mockito.mock(Color.class);
@@ -30,6 +31,7 @@ public class EdgeParserTest {
     private static final double EXPECTED_LINE_WIDTH_TEXT = 0.625;
     public static final int EXPECTED_LINE_WIDTH = (int) (EXPECTED_LINE_WIDTH_TEXT/COEFFICIENT);
     private static final int EXPECTED_ANGLE = 0;
+    private static final int EXPECTED_ANGLE_IN_OUT = 300;
     public static final LineType EXPECTED_DEFAULT_LINE_TYPE = LineType.SOLID;
 
 
@@ -44,7 +46,7 @@ public class EdgeParserTest {
     }
 
     @Test
-    public void testSimpleParse() throws Exception {
+    public void testParseToGraphSimple() throws Exception {
         EdgeParser testObject = new EdgeParser(COLOR_MAPPER);
 
         Edge result = (Edge) testObject.parseToGraph(TEST_STRING_SIMPLE, MOCKED_GRAPH);
@@ -57,7 +59,38 @@ public class EdgeParserTest {
     }
 
     @Test
-    public void testUnparseSimple() throws Exception {
+    public void testParseToLatexSimple() throws Exception {
+        EdgeParser testObject = new EdgeParser(COLOR_MAPPER);
+        Edge edge = Mockito.mock(Edge.class);
+        Mockito.when(edge.getLineColor()).thenReturn(EXPECTED_COLOR);
+        Mockito.when(edge.getRelativeEdgeAngle()).thenReturn(EXPECTED_ANGLE);
+        Mockito.when(edge.getVertexA()).thenReturn(EXPECTED_VERTEX_A);
+        Mockito.when(edge.getVertexB()).thenReturn(EXPECTED_VERTEX_B);
+        Mockito.when(edge.getGraph()).thenReturn(MOCKED_GRAPH);
+        Mockito.when(edge.getLineWidth()).thenReturn(EXPECTED_LINE_WIDTH);
+        Mockito.when(edge.getLineType()).thenReturn(EXPECTED_DEFAULT_LINE_TYPE);
+
+        String result = testObject.parseToLatex(edge);
+
+        assertEquals(TEST_STRING_SIMPLE, result);
+    }
+
+
+    @Test
+    public void testParseToGraphInOut() throws Exception {
+        EdgeParser testObject = new EdgeParser(COLOR_MAPPER);
+
+        Edge result = (Edge) testObject.parseToGraph(TEST_STRING_IN_OUT, MOCKED_GRAPH);
+
+        assertEquals(EXPECTED_COLOR, result.getLineColor());
+        assertEquals(EXPECTED_VERTEX_A, result.getVertexA());
+        assertEquals(EXPECTED_VERTEX_B, result.getVertexB());
+        assertEquals(EXPECTED_LINE_WIDTH, result.getLineWidth());
+        assertEquals(EXPECTED_ANGLE_IN_OUT, result.getRelativeEdgeAngle());
+    }
+
+    @Test
+    public void testParseToLatexInOut() throws Exception {
         EdgeParser testObject = new EdgeParser(COLOR_MAPPER);
         Edge edge = Mockito.mock(Edge.class);
         Mockito.when(edge.getLineColor()).thenReturn(EXPECTED_COLOR);

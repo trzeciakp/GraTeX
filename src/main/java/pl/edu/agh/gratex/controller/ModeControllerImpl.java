@@ -33,7 +33,7 @@ public class ModeControllerImpl implements ModeController, Serializable {
         ModeType previousMode = mode;
         mode = newMode;
         for (ModeListener modeListener : listeners) {
-            modeListener.modeChanged(previousMode, newMode);
+            modeListener.modeChanged(previousMode       , newMode);
         }
     }
 

@@ -94,8 +94,9 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
     @Override
     public void copyToClipboard() {
         currentCopyPasteOperation = new CopyPasteOperation(generalController, generalController.getSelectionController().getSelection());
-        generalController.updateMenuBarAndActions();
+        //generalController.updateMenuBarAndActions();
         generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_COPY);
+        generalController.getClipboardController().setPastingEnabled(true);
     }
 
     @Override
@@ -245,7 +246,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     generalController.getSelectionController().addToSelection(currentCopyPasteOperation.vertices, false);
                     //ControlManager.updatePropertyChangeOperationStatus(true);
                     currentCopyPasteOperation = currentCopyPasteOperation.getCopy();
-                    generalController.updateMenuBarAndActions();
+                    //generalController.updateMenuBarAndActions();
                 } else {
                     generalController.publishInfo(StringLiterals.INFO_CANNOT_PASTE_SUBGRAPH);
                 }

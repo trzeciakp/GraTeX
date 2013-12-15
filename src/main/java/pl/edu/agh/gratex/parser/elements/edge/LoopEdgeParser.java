@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class LoopEdgeParser extends ParseElement {
 
-    public static final int DIRECTION_GROUP = 2;
+    public static final int DIRECTION_GROUP = 1;
     private final static String REGEX = ", loop (right|above|left|below)";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
     public static final int GROUPS = 1;

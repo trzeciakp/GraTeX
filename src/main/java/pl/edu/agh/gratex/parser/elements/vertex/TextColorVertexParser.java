@@ -48,6 +48,9 @@ public class TextColorVertexParser extends ParseElement {
         String textNumber = matcher.group(NUMBER_GROUP);
         if(textColor != null) {
             vertex.setFontColor(colorMapper.getColor(textColor));
+        } else {
+            //TODO
+            vertex.setFontColor(Color.black);
         }
         if(textNumber != null) {
             //TODO

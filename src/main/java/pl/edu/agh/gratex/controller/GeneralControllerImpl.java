@@ -180,17 +180,13 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         return false;
     }
 
+    //TODO it should be changed
     public void resetWorkspace() {
         selectionController.clearSelection();
         //ControlManager.updatePropertyChangeOperationStatus(false);
         mouseController.finishMovingElement();
         mouseController.cancelCurrentOperation();
         operationController.reportGenericOperation(null);
-    }
-
-    @Override
-    public void updateMenuBarAndActions() {
-        mainWindow.updateMenuBarAndActions();
     }
 
     @Override

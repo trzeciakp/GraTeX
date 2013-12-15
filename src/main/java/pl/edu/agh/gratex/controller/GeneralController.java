@@ -22,8 +22,6 @@ public interface GeneralController {
 
     public void resetWorkspace();
 
-    public void updateMenuBarAndActions();
-
     public void newGraphFile();
 
     public void openGraphFile();

@@ -126,9 +126,9 @@ public class Vertex extends GraphElement implements Serializable {
         result.lineWidth = getLineWidth();
         result.lineType = getLineType();
         result.lineColor = new Color(getLineColor().getRGB());
-        result.fontColor = new Color(getFontColor().getRGB());
         result.labelInside = 0;
         if (isLabelInside()) {
+            result.fontColor = new Color(getFontColor().getRGB());
             result.labelInside = 1;
         }
 
