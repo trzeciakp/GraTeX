@@ -1,6 +1,9 @@
 package pl.edu.agh.gratex.view;
 
-import pl.edu.agh.gratex.constants.*;
+import pl.edu.agh.gratex.constants.MenuBarItem;
+import pl.edu.agh.gratex.constants.MenuBarSubmenu;
+import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
 
 import javax.swing.*;
@@ -9,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.EnumMap;
 
 @SuppressWarnings("serial")
-public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
+public class MenuBar extends JMenuBar implements ModeListener, ToolListener, ClipboardListener {
 
     private GeneralController generalController;
     private ModeController modeController;
@@ -17,7 +20,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
     private MouseController mouseController;
     private EnumMap<MenuBarItem, JMenuItem> menuItems;
 
-    public MenuBar(GeneralController generalController, MouseController mouseController, ModeController modeController, ToolController toolController) {
+    public MenuBar(GeneralController generalController, MouseController mouseController, ModeController modeController, ToolController toolController, ClipboardController clipboardController) {
         super();
         this.generalController = generalController;
         this.modeController = modeController;
@@ -25,6 +28,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
         this.mouseController = mouseController;
         modeController.addModeListener(this);
         toolController.addToolListener(this);
+        clipboardController.addListener(this);
 
         EnumMap<MenuBarSubmenu, JMenu> menus = new EnumMap<>(MenuBarSubmenu.class);
         EnumMap<MenuBarSubmenu, ButtonGroup> groups = new EnumMap<>(MenuBarSubmenu.class);
@@ -67,6 +71,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
         }
     }
 
+    //TODO is it unsused? should be
     public void updateFunctions() {
         menuItems.get(MenuBarItem.COPY).setEnabled(false);
         menuItems.get(MenuBarItem.PASTE).setEnabled(false);
@@ -287,5 +292,15 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener {
             default:
                 throw new RuntimeException("A menu bar item is missing ActionListener");
         }
+    }
+
+    @Override
+    public void setCopyingEnabled(boolean copyingEnabled) {
+        menuItems.get(MenuBarItem.COPY).setEnabled(copyingEnabled);
+    }
+
+    @Override
+    public void setPastingEnabled(boolean pastingEnabled) {
+        menuItems.get(MenuBarItem.PASTE).setEnabled(pastingEnabled);
     }
 }

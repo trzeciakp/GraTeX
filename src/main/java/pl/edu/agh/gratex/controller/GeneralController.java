@@ -4,6 +4,8 @@ import pl.edu.agh.gratex.model.graph.Graph;
 
 public interface GeneralController {
 
+    public ClipboardController getClipboardController();
+
     public ModeController getModeController();
 
     public ToolController getToolController();

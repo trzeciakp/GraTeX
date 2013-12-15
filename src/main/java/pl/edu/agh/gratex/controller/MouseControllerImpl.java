@@ -1,12 +1,8 @@
 package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.ModeType;
-import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
-import pl.edu.agh.gratex.controller.operation.AlterationOperation;
-import pl.edu.agh.gratex.controller.operation.CreationOperation;
-import pl.edu.agh.gratex.controller.operation.Operation;
 import pl.edu.agh.gratex.editor.AddOperation;
 import pl.edu.agh.gratex.editor.CopyPasteOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
@@ -16,7 +12,6 @@ import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
-import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 import pl.edu.agh.gratex.view.ControlManager;
@@ -222,7 +217,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                 }
             }
 
-            ControlManager.updatePropertyChangeOperationStatus(true);
+            //ControlManager.updatePropertyChangeOperationStatus(true);
         }
     }
 
@@ -233,8 +228,8 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
         int y = e.getY();
 
         if (tool != ToolType.SELECT) {
-            generalController.getSelectionController().clearSelection();
-            ControlManager.updatePropertyChangeOperationStatus(false);
+            //generalController.getSelectionController().clearSelection();
+            //ControlManager.updatePropertyChangeOperationStatus(false);
         }
 
         boolean consumed = false;
@@ -245,7 +240,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     ControlManager.operations.addNewOperation(currentCopyPasteOperation);
                     generalController.publishInfo(ControlManager.operations.redo());
                     generalController.getSelectionController().addToSelection(currentCopyPasteOperation.vertices, false);
-                    ControlManager.updatePropertyChangeOperationStatus(true);
+                    //ControlManager.updatePropertyChangeOperationStatus(true);
                     currentCopyPasteOperation = currentCopyPasteOperation.getCopy();
                     generalController.updateMenuBarAndActions();
                 } else {
@@ -401,7 +396,7 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     }
                 }
             }
-            ControlManager.updatePropertyChangeOperationStatus(true);
+            //ControlManager.updatePropertyChangeOperationStatus(true);
         }
 
         operationController.reportGenericOperation(null);

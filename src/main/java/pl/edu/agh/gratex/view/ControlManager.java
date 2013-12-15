@@ -46,7 +46,7 @@ public class ControlManager {
             }
         }
     }
-
+/*
     public static void updateSelectedItemsModel(PropertyModel pm) {
         if (currentPropertyChangeOperation != null) {
             if (!operations.mergePropertyChangeOperations(pm, selectionID)) {
@@ -57,5 +57,5 @@ public class ControlManager {
             mainWindow.getGeneralController().getOperationController().reportGenericOperation(null);
             updatePropertyChangeOperationStatus(false);
         }
-    }
+    }*/
 }

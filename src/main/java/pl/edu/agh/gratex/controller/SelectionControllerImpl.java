@@ -3,9 +3,9 @@ package pl.edu.agh.gratex.controller;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.model.GraphElement;
-import pl.edu.agh.gratex.view.ControlManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +13,8 @@ import java.util.List;
 public class SelectionControllerImpl implements SelectionController, ToolListener, ModeListener, Serializable {
     private GeneralController generalController;
 
-    private LinkedList<GraphElement> selection = new LinkedList<>();
+    private List<GraphElement> selection = new LinkedList<>();
+    private List<SelectionListener> listeners = new ArrayList<>();
     private ModeType mode = ModeType.VERTEX;
     private ToolType tool = ToolType.ADD;
 
@@ -66,19 +67,6 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     }
 
     @Override
-    public void clearSelection() {
-        selection.clear();
-    }
-
-    @Override
-    public void selectAll() {
-        if (tool == ToolType.SELECT) {
-            selection.clear();
-            selection.addAll(generalController.getGraph().getElements(mode.getRelatedElementType()));
-        }
-    }
-
-    @Override
     public void addToSelection(Collection<? extends GraphElement> elements, boolean controlDown) {
         if (controlDown) {
             for (GraphElement temp : elements) {
@@ -92,27 +80,57 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
             selection.clear();
             selection.addAll(elements);
         }
-        ControlManager.updatePropertyChangeOperationStatus(true);
+        //TODO not sure if it should not be somewhere else
+        ClipboardController clipboardController = generalController.getClipboardController();
+        clipboardController.setCopyingEnabled(mode == ModeType.VERTEX && selectionSize() > 0);
+        informListeners();
+        //ControlManager.updatePropertyChangeOperationStatus(true);
+    }
+
+    @Override
+    public void clearSelection() {
+        addToSelection(new ArrayList<GraphElement>(), false);
+        //selection.clear();
+    }
+
+    @Override
+    public void selectAll() {
+        //TODO why is it checked?
+        if (tool == ToolType.SELECT) {
+            addToSelection(generalController.getGraph().getElements(mode.getRelatedElementType()), false);
+            //selection.clear();
+            //selection.addAll(generalController.getGraph().getElements(mode.getRelatedElementType()));
+        }
     }
 
     @Override
     public void addToSelection(GraphElement element, boolean controlDown) {
         if (element != null) {
-            if (controlDown) {
-                if (selection.contains(element)) {
-                    selection.remove(element);
-                } else {
-                    selection.add(element);
-                }
-            } else {
-                selection.clear();
-                selection.add(element);
-            }
+            List<GraphElement> list = new ArrayList<>();
+            list.add(element);
+            addToSelection(list, controlDown);
         } else {
+            //TODO why?
             if (!controlDown) {
-                selection.clear();
+                clearSelection();
             }
         }
-        ControlManager.updatePropertyChangeOperationStatus(true);
+    }
+
+    @Override
+    public void addListener(SelectionListener listener) {
+        listeners.add(listener);
+
+    }
+
+    @Override
+    public void removeListener(SelectionListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void informListeners() {
+        for (SelectionListener listener : listeners) {
+            listener.fireSelectionChanged(selection);
+        }
     }
 }

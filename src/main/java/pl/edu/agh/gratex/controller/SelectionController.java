@@ -13,4 +13,6 @@ public interface SelectionController {
     public void selectAll();
     public void addToSelection(Collection<? extends GraphElement> elements, boolean controlDown);
     public void addToSelection(GraphElement element, boolean controlDown);
+    public void addListener(SelectionListener listener);
+    public void removeListener(SelectionListener listener);
 }

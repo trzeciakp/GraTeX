@@ -3,26 +3,27 @@ package pl.edu.agh.gratex.view.propertyPanel;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.controller.*;
-import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.Operation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class PanelPropertyEditor extends JPanel implements ModeListener, OperationListener {
+public class PanelPropertyEditor extends JPanel implements ModeListener, OperationListener, SelectionListener {
     GeneralController generalController;
 
     //private int mode = 1;
     private ModeType mode = ModeType.VERTEX;
     private JLabel label_title;
     private EnumMap<ModeType, AbstractPropertyPanel> panelsMap = new EnumMap<>(ModeType.class);
+    private List<? extends GraphElement> selection;
 
-    public PanelPropertyEditor(GeneralController generalController, ModeController modeController, OperationController operationController) {
+    public PanelPropertyEditor(GeneralController generalController, ModeController modeController, OperationController operationController, SelectionController selectionController) {
         this.generalController = generalController;
         modeController.addModeListener(this);
 
@@ -31,13 +32,22 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
             operationController.addOperationListener(this);
         }
 
+        if (selectionController != null) {
+            selectionController.addListener(this);
+        }
+
         initialize();
         setEnabled(false);
     }
 
     public void valueChanged(PropertyModel model) {
         // TODO to bedzie jakies wywolanie general controllera albo innego wariata
-        pl.edu.agh.gratex.view.ControlManager.updateSelectedItemsModel(model);
+        //pl.edu.agh.gratex.view.ControlManager.updateSelectedItemsModel(model);
+        for (GraphElement graphElement : selection) {
+            graphElement.setModel(model);
+        }
+        generalController.getOperationController().reportGenericOperation("cos sie zmienilo w PropertyEditor");
+
     }
 
     //TODO maybe move from here
@@ -82,12 +92,6 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
         if (flag) {
             panelsMap.get(mode).components.get(0).requestFocus();
         }
-    }
-
-    public void setMode(int m) {
-        panelsMap.get(mode).setVisible(false);
-        mode = ModeType.values()[m - 1];
-        panelsMap.get(mode).setVisible(true);
     }
 
     public PropertyModel getModel() {
@@ -137,5 +141,17 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
 
     @Override
     public void genericOperationEvent(String info) {
+    }
+
+    @Override
+    public void fireSelectionChanged(List<? extends GraphElement> collection) {
+        selection = collection;
+        if(collection.size() == 0) {
+            setEnabled(false);
+            setModel(PropertyModel.andOpertarorList(mode.getRelatedElementType(), new ArrayList<GraphElement>()));
+        } else {
+            setEnabled(true);
+            setModel(PropertyModel.andOpertarorList(mode.getRelatedElementType(), collection));
+        }
     }
 }

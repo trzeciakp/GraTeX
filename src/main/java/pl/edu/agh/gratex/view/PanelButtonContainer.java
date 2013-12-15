@@ -2,6 +2,8 @@ package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.ActionButtonType;
 import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.controller.ClipboardController;
+import pl.edu.agh.gratex.controller.ClipboardListener;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.MouseController;
 
@@ -10,19 +12,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EnumMap;
 
-public class PanelButtonContainer extends JPanel {
+public class PanelButtonContainer extends JPanel implements ClipboardListener {
     private static final long serialVersionUID = 4702408962784933450L;
 
     private GeneralController generalController;
     private MouseController mouseController;
     private EnumMap<ActionButtonType, ActionButton> buttons = new EnumMap<>(ActionButtonType.class);
 
-    public PanelButtonContainer(GeneralController generalController, MouseController mouseController) {
+    public PanelButtonContainer(GeneralController generalController, MouseController mouseController, ClipboardController clipboardController) {
         super();
         setLayout(null);
         setFocusTraversalKeysEnabled(false);
         this.generalController = generalController;
         this.mouseController = mouseController;
+        clipboardController.addListener(this);
 
         int x = 10;
         for (ActionButtonType actionButtonType : ActionButtonType.values()) {
@@ -38,6 +41,7 @@ public class PanelButtonContainer extends JPanel {
         buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(false);
     }
 
+    //TODO is it unused? should be
     public void updateFunctions() {
         buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(false);
         buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(false);
@@ -131,5 +135,16 @@ public class PanelButtonContainer extends JPanel {
             default:
                 throw new RuntimeException("An action button is missing ActionListener");
         }
+    }
+
+    @Override
+    public void setCopyingEnabled(boolean copyingEnabled) {
+        buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(copyingEnabled);
+    }
+
+    @Override
+    public void setPastingEnabled(boolean pastingEnabled) {
+        buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(pastingEnabled);
+
     }
 }

@@ -1,7 +1,10 @@
 package pl.edu.agh.gratex.model;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
+
 import java.awt.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -77,4 +80,17 @@ public abstract class PropertyModel implements Serializable {
     }
 
     public abstract void andOperator(PropertyModel pm);
+
+    public static PropertyModel andOpertarorList(GraphElementType type, List<? extends GraphElement> elements) {
+        //TODO
+        PropertyModelFactory propertyModelFactory = new PropertyModelFactory();
+        if(elements.size() == 0) {
+            return propertyModelFactory.create(type);
+        }
+        PropertyModel result = propertyModelFactory.createCopyModel(elements.get(0));
+        for (GraphElement element : elements) {
+            result.andOperator(element.getModel());
+        }
+        return result;
+    }
 }

@@ -25,6 +25,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     private MouseController mouseController;
     private SelectionController selectionController;
     private ParseController parseController;
+    private ClipboardController clipboardController;
 
     private Graph graph;
     private File currentFile;
@@ -37,6 +38,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         mouseController = new MouseControllerImpl(this, operationController, modeController, toolController);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
         parseController = new ParseControllerImpl(this);
+        clipboardController = new ClipboardControllerImpl();
 
         modeController.addModeListener(this);
         toolController.addToolListener(this);
@@ -70,6 +72,11 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     //===========================================
     // GeneralController interface implementation
+
+    @Override
+    public ClipboardController getClipboardController() {
+        return clipboardController;
+    }
 
     @Override
     public ModeController getModeController() {
@@ -175,7 +182,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     public void resetWorkspace() {
         selectionController.clearSelection();
-        ControlManager.updatePropertyChangeOperationStatus(false);
+        //ControlManager.updatePropertyChangeOperationStatus(false);
         mouseController.finishMovingElement();
         mouseController.cancelCurrentOperation();
         operationController.reportGenericOperation(null);
@@ -242,7 +249,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void setNumeration() {
         selectionController.clearSelection();
-        ControlManager.updatePropertyChangeOperationStatus(false);
+        //ControlManager.updatePropertyChangeOperationStatus(false);
         NumerationDialog nd = new NumerationDialog(mainWindow, graph.getGraphNumeration().isNumerationDigital(),
                 graph.getGraphNumeration().getStartingNumber(), Const.MAX_VERTEX_NUMBER);
         int[] result = nd.showDialog();
@@ -268,7 +275,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     public void selectAll() {
         toolController.setTool(ToolType.SELECT);
         selectionController.selectAll();
-        ControlManager.updatePropertyChangeOperationStatus(true);
+        //ControlManager.updatePropertyChangeOperationStatus(true);
         operationController.reportGenericOperation(StringLiterals.INFO_GENERIC_SELECT_ALL(modeController.getMode()));
     }
 
@@ -280,7 +287,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             operationController.reportGenericOperation(null);
         }
         selectionController.clearSelection();
-        ControlManager.updatePropertyChangeOperationStatus(false);
+        //ControlManager.updatePropertyChangeOperationStatus(false);
     }
 
     @Override

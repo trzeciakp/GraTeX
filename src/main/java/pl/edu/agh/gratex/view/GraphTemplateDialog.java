@@ -3,10 +3,7 @@ package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.ModeController;
-import pl.edu.agh.gratex.controller.ModeControllerImpl;
-import pl.edu.agh.gratex.controller.ModeListener;
+import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
@@ -277,7 +274,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         panel_preview = new PanelPreview(graph);
         panel_preview.setBounds(222, 42, 520, 343);
 
-        panel_propertyEditor = new PanelPropertyEditor(generalController, modeController, null) {
+        panel_propertyEditor = new PanelPropertyEditor(generalController, modeController, null, null) {
             public void valueChanged(PropertyModel model) {
                 updateModel(model);
                 panel_preview.repaint();
