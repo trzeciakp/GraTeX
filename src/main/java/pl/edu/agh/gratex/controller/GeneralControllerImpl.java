@@ -24,6 +24,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     private ToolController toolController;
     private MouseController mouseController;
     private SelectionController selectionController;
+    private ParseController parseController;
 
     private Graph graph;
     private File currentFile;
@@ -35,6 +36,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         toolController = new ToolControllerImpl(this);
         mouseController = new MouseControllerImpl(this, operationController, modeController, toolController);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
+        parseController = new ParseControllerImpl(this);
 
         modeController.addModeListener(this);
         toolController.addToolListener(this);
@@ -92,6 +94,11 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public OperationController getOperationController() {
         return operationController;
+    }
+
+    @Override
+    public ParseController getParseController() {
+        return parseController;
     }
 
     @Override
@@ -202,17 +209,17 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void undo() {
-        publishInfo(ControlManager.operations.undo());
-        selectionController.clearSelection();
-        ControlManager.updatePropertyChangeOperationStatus(false);
-        operationController.reportGenericOperation(null);
+//        publishInfo(ControlManager.operations.undo());
+//        selectionController.clearSelection();
+//        ControlManager.updatePropertyChangeOperationStatus(false);
+//        operationController.reportGenericOperation(null);
     }
 
     @Override
     public void redo() {
-        publishInfo(ControlManager.operations.redo());
-        selectionController.clearSelection();
-        operationController.reportGenericOperation(null);
+//        publishInfo(ControlManager.operations.redo());
+//        selectionController.clearSelection();
+//        operationController.reportGenericOperation(null);
     }
 
     @Override
@@ -307,7 +314,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         // TODO this nie bedzie potrzebne, czytaj FileManager
         if (FileManager.contentChanged(this, graph, currentFile)) {
             Object[] options = {"Save", "Don't save", "Cancel"};
-            System.out.println(" " + mainWindow);
             int option = JOptionPane.showOptionDialog(mainWindow, "There have been changes since last save.\n"
                     + "Would you like to save your graph now?", "Unsaved progress", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
                     null, options, options[0]);

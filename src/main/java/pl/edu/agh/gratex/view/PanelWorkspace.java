@@ -5,6 +5,9 @@ import pl.edu.agh.gratex.constants.CursorType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.operation.AlterationOperation;
+import pl.edu.agh.gratex.controller.operation.Operation;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 import javax.imageio.ImageIO;
@@ -14,7 +17,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.net.URL;
-import java.util.EnumMap;
+import java.util.*;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class PanelWorkspace extends JPanel implements MouseListener, MouseMotionListener, OperationListener, ToolListener {
@@ -197,18 +201,19 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
     // ===================================
     // OperationListener implementation
-    @Override
-    public void startOperationEvent(String info) {
-        repaint();
-    }
 
     @Override
-    public void genericOperationEvent(String info) {
+    public void initOperationEvent(HashMap<GraphElement, String> subjectStates, String info) {
         repaint();
     }
 
     @Override
     public void finishOperationEvent(Operation operation) {
+        repaint();
+    }
+
+    @Override
+    public void genericOperationEvent(String info) {
         repaint();
     }
 

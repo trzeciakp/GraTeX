@@ -4,6 +4,9 @@ import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.controller.operation.AlterationOperation;
+import pl.edu.agh.gratex.controller.operation.CreationOperation;
+import pl.edu.agh.gratex.controller.operation.Operation;
 import pl.edu.agh.gratex.editor.AddOperation;
 import pl.edu.agh.gratex.editor.CopyPasteOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
@@ -13,6 +16,7 @@ import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 import pl.edu.agh.gratex.view.ControlManager;
@@ -225,8 +229,6 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
 
     @Override
     public void processMouseClicking(MouseEvent e) {
-        boolean createdLabel = false;
-
         int x = e.getX();
         int y = e.getY();
 
@@ -264,7 +266,6 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                     }
 
                     if (VertexUtils.fitsIntoPage(vertex)) {
-
                         if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex)) {
                             VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
                             ControlManager.operations.addNewOperation(new AddOperation(generalController, vertex));
@@ -334,14 +335,18 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                         if (temp.getLabel() == null) {
                             LabelV labelV = new LabelV(temp, generalController.getGraph());
                             labelV.setModel(generalController.getGraph().getLabelVDefaultModel());
+                            //LabelVUtils.updatePosition(labelV);
+                            //labelV.setLatexCode(generalController.getParseController().getLabelVertexParser().parseToLatex(labelV));
                             ControlManager.operations.addNewOperation(new AddOperation(generalController, labelV));
 
                             // TODO Zmienic jak bedzie nowy mechanizm operacji
                             // TODO Po wywaleniu updatePropertyChangeOperation zacznie dzialac auto zaznacznia nazwy labela
                             ControlManager.operations.redo();
-                            generalController.getSelectionController().addToSelection(labelV, false);
-                            operationController.startOperation(new Operation(OperationType.ADD_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_ADD), null);
-                            operationController.finishOperation();
+                            //generalController.getSelectionController().addToSelection(labelV, false);
+                            //new CreationOperation(generalController, labelV, OperationType.ADD_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_ADD);
+
+                            // TODO TEST
+                            //System.out.println("e = [" + operationController.getOperationList().undo() + "]");;
                         } else {
                             generalController.publishInfo(StringLiterals.INFO_CANNOT_CREATE_LABEL_V_EXISTS);
                         }
@@ -374,9 +379,8 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
                             // TODO Zmienic jak bedzie nowy mechanizm operacji
                             // TODO Po wywaleniu updatePropertyChangeOperation zacznie dzialac auto zaznacznia nazwy labela
                             ControlManager.operations.redo();
-                            generalController.getSelectionController().addToSelection(labelE, false);
-                            operationController.startOperation(new Operation(OperationType.ADD_LABEL_EDGE, StringLiterals.INFO_LABEL_E_ADD), null);
-                            operationController.finishOperation();
+                            //generalController.getSelectionController().addToSelection(labelE, false);
+                            //new CreationOperation(generalController, labelE, OperationType.ADD_LABEL_EDGE, StringLiterals.INFO_LABEL_E_ADD);
                         } else {
                             generalController.publishInfo(StringLiterals.INFO_CANNOT_CREATE_LABEL_E_EXISTS);
                         }

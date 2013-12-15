@@ -1,11 +1,18 @@
 package pl.edu.agh.gratex.controller;
 
+import pl.edu.agh.gratex.controller.operation.Operation;
+import pl.edu.agh.gratex.model.GraphElement;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class OperationControllerImpl implements OperationController {
     private GeneralController generalController;
-    private Operation currentOperation;
+    private HashMap<GraphElement, String> initialStates;
     private ArrayList<OperationListener> listeners = new ArrayList<>();
+
+    OperationList operationList = new OperationList();
 
     public OperationControllerImpl(GeneralController generalController) {
         this.generalController = generalController;
@@ -17,34 +24,41 @@ public class OperationControllerImpl implements OperationController {
     }
 
     @Override
-    public void startOperation(Operation operation, String startInfo) {
-        currentOperation = operation;
-        for (OperationListener listener : listeners)
-        {
-            System.out.println("listener = [" + listener + "], startInfo = [" + startInfo + "]");
-            listener.startOperationEvent(startInfo);
+    public OperationList getOperationList() {
+        return operationList;
+    }
+
+    @Override
+    public void initOperation(List<GraphElement> subjects, String initInfo) {
+        initialStates = new HashMap<>();
+        for (GraphElement subject : subjects) {
+            initialStates.put(subject, generalController.getParseController().getParserByElementType(subject.getType()).parseToLatex(subject));
+        }
+
+        for (OperationListener listener : listeners) {
+            listener.initOperationEvent(initialStates, initInfo);
         }
     }
 
     @Override
-    public void finishOperation() {
-        for (OperationListener listener : listeners)
-        {
-            listener.finishOperationEvent(currentOperation);
+    public void finishOperation(Operation operation) {
+        operationList.addNewOperation(operation);
+        operationList.redo();
+        for (OperationListener listener : listeners) {
+            listener.finishOperationEvent(operation);
         }
     }
 
     @Override
     public void reportGenericOperation(String info) {
-        for (OperationListener listener : listeners)
-        {
+        for (OperationListener listener : listeners) {
             listener.genericOperationEvent(info);
         }
     }
 
     @Override
-    public Operation getCurrentOperation() {
-        return currentOperation;
+    public HashMap<GraphElement, String> getOperationInitialStates() {
+        return initialStates;
     }
 
     @Override

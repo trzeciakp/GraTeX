@@ -11,9 +11,8 @@ public class LabelVUtils {
         return labelV.getOutline().contains(x, y);
     }
 
-    public static void updatePosition(LabelV labelV, Graphics2D g) {
-        g.setFont(labelV.getFont());
-        FontMetrics fm = g.getFontMetrics();
+    public static void updatePosition(LabelV labelV) {
+        FontMetrics fm = new Canvas().getFontMetrics(labelV.getFont());
         int width = fm.stringWidth(labelV.getText());
         int height = fm.getAscent();
         int descent = fm.getDescent();
@@ -77,7 +76,7 @@ public class LabelVUtils {
     public static void draw(LabelV labelV, Graphics2D g2d, boolean dummy) {
         Graphics2D g = (Graphics2D) g2d.create();
 
-        updatePosition(labelV, g);
+        updatePosition(labelV);
 
         if (labelV.getGraph().getGeneralController().getSelectionController().selectionContains(labelV)) {
             g.setColor(Const.SELECTION_COLOR);

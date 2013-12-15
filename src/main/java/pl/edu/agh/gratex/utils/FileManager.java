@@ -39,7 +39,6 @@ public class FileManager {
                 return !Arrays.equals(currentBytes, fileBytes);
             }
         } catch (Exception e) {
-            System.out.println(e.toString() + e.getMessage());
             return true;
         }
     }

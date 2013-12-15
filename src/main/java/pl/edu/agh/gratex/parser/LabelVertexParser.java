@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.parser;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.labelvertex.CommentedParamatersLabelVertexParser;
 import pl.edu.agh.gratex.parser.elements.labelvertex.LabelVertexPositionParseElement;
@@ -40,6 +41,7 @@ public class LabelVertexParser extends GraphElementParser {
     public LabelV parseToGraph(String code, Graph graph) throws ParserException {
         LabelV result = new LabelV(null, graph);
         parseToGraphUsingParseList(code, result);
+        result.setLatexCode(code);
         return result;
     }
 

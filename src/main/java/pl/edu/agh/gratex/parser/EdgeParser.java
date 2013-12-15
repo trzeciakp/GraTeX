@@ -43,6 +43,7 @@ public class EdgeParser extends GraphElementParser {
     public Edge parseToGraph(String code, Graph graph) throws ParserException {
         Edge result = new Edge(graph);
         parseToGraphUsingParseList(code, result);
+        result.setLatexCode(code);
         return result;
     }
 

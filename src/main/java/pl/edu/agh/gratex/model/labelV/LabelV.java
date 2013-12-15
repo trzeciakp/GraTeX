@@ -34,6 +34,24 @@ public class LabelV extends GraphElement implements Serializable {
     private Rectangle outline;
     private Graph graph;
 
+    @Override
+    public String toString() {
+        return "LabelV{" +
+                "text='" + text + '\'' +
+                ", font=" + font +
+                ", fontColor=" + fontColor +
+                ", position=" + position +
+                ", spacing=" + spacing +
+                ", posX=" + posX +
+                ", posY=" + posY +
+                ", owner=" + owner +
+                ", drawX=" + drawX +
+                ", drawY=" + drawY +
+                ", outline=" + outline +
+                ", graph=" + graph +
+                '}';
+    }
+
     public LabelV(Vertex element, Graph graph) {
         this.graph = graph;
         setOwner(element);

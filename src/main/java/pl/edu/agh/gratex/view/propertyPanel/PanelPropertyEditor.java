@@ -3,10 +3,15 @@ package pl.edu.agh.gratex.view.propertyPanel;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.operation.AlterationOperation;
+import pl.edu.agh.gratex.controller.operation.Operation;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import javax.swing.*;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class PanelPropertyEditor extends JPanel implements ModeListener, OperationListener {
@@ -115,8 +120,10 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
 
     // ===================================
     // OperationListener implementation
+
+
     @Override
-    public void startOperationEvent(String info) {
+    public void initOperationEvent(HashMap<GraphElement, String> subjectStates, String info) {
     }
 
     @Override

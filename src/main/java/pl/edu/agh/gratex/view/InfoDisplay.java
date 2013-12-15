@@ -4,8 +4,13 @@ import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.operation.AlterationOperation;
+import pl.edu.agh.gratex.controller.operation.Operation;
+import pl.edu.agh.gratex.model.GraphElement;
 
 import javax.swing.*;
+import java.util.HashMap;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class InfoDisplay extends JLabel implements ModeListener, ToolListener, OperationListener {
@@ -49,8 +54,10 @@ public class InfoDisplay extends JLabel implements ModeListener, ToolListener, O
 
     // ===================================
     // OperationListener implementation
+
+
     @Override
-    public void startOperationEvent(String info) {
+    public void initOperationEvent(HashMap<GraphElement, String> subjectStates, String info) {
         maybeDisplayInfo(info);
     }
 

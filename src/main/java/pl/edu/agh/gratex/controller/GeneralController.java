@@ -14,6 +14,8 @@ public interface GeneralController {
 
     public OperationController getOperationController();
 
+    public ParseController getParseController();
+
     public Graph getGraph();
 
     public void resetWorkspace();

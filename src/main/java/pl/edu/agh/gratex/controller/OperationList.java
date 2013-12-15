@@ -2,7 +2,8 @@ package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.controller.Operation;
+import pl.edu.agh.gratex.controller.operation.AlterationOperation;
+import pl.edu.agh.gratex.controller.operation.Operation;
 
 import java.util.LinkedList;
 
