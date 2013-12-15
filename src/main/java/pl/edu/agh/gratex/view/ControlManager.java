@@ -23,7 +23,7 @@ public class ControlManager {
     }
 
     public static void updatePropertyChangeOperationStatus(boolean newSelection) {
-        mainWindow.updateMenuBarAndActions();
+        //mainWindow.updateMenuBarAndActions();
 
         if (mainWindow.getGeneralController().getSelectionController().selectionSize() > 0) {
             if (newSelection) {

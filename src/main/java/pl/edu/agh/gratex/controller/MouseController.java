@@ -19,8 +19,7 @@ public interface MouseController {
     public void paintCopiedSubgraph(Graphics2D g);
 
     public void copyToClipboard();
-    public void  pasteFromClipboard();
-    public boolean clipboardNotEmpty();
+    public void pasteFromClipboard();
 
     public void finishMovingElement();
 

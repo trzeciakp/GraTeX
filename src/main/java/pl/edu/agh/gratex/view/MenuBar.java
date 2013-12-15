@@ -72,7 +72,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Cli
     }
 
     //TODO is it unsused? should be
-    public void updateFunctions() {
+/*    public void updateFunctions() {
         menuItems.get(MenuBarItem.COPY).setEnabled(false);
         menuItems.get(MenuBarItem.PASTE).setEnabled(false);
         if (modeController.getMode() == ModeType.VERTEX && generalController.getSelectionController().selectionSize() > 0) {
@@ -81,7 +81,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Cli
         if (mouseController.clipboardNotEmpty()) {
             menuItems.get(MenuBarItem.PASTE).setEnabled(true);
         }
-    }
+    }*/
 
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {

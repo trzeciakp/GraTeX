@@ -108,11 +108,11 @@ public class MouseControllerImpl implements MouseController, ModeListener, ToolL
             generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_WHERE_TO_PASTE);
         }
     }
-
+/*
     @Override
     public boolean clipboardNotEmpty() {
         return currentCopyPasteOperation != null;
-    }
+    }*/
 
     @Override
     public void paintCopiedSubgraph(Graphics2D g) {

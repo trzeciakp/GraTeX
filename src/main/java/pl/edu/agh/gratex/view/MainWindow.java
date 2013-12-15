@@ -61,10 +61,10 @@ public class MainWindow extends JFrame {
     }
 
     // TODO zastanowic sie jak mozna za pomoca sluchania operacji to zrobic, ale to kiedys
-    public void updateMenuBarAndActions() {
+    /*public void updateMenuBarAndActions() {
         menuBar.updateFunctions();
         panel_buttonContainer.updateFunctions();
-    }
+    }*/
 
     // TODO Trzeba zmienic layout Mainwindow na jakis typu border (on akurat chyba sie nada idealnie) i to pojdzie do piachu
     public void adjustSize() {

@@ -42,7 +42,7 @@ public class PanelButtonContainer extends JPanel implements ClipboardListener {
     }
 
     //TODO is it unused? should be
-    public void updateFunctions() {
+    /*public void updateFunctions() {
         buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(false);
         buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(false);
         if (generalController.getModeController().getMode() == ModeType.VERTEX && generalController.getSelectionController().selectionSize() > 0) {
@@ -51,7 +51,7 @@ public class PanelButtonContainer extends JPanel implements ClipboardListener {
         if (mouseController.clipboardNotEmpty()) {
             buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(true);
         }
-    }
+    }*/
 
     private ActionListener getActionListener(ActionButtonType ActionButtonType) {
         switch (ActionButtonType) {

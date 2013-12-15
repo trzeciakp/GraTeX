@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.controller.mouse.MouseControllerTmpImpl;
 import pl.edu.agh.gratex.editor.OldOperationList;
 import pl.edu.agh.gratex.editor.RemoveOperation;
 import pl.edu.agh.gratex.editor.TemplateChangeOperation;
@@ -35,13 +36,17 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         operationController = new OperationControllerImpl(this);
         modeController = new ModeControllerImpl(this);
         toolController = new ToolControllerImpl(this);
-        mouseController = new MouseControllerImpl(this, operationController, modeController, toolController);
+        //mouseController = new MouseControllerImpl(this, operationController, modeController, toolController);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
+        mouseController = new MouseControllerTmpImpl(this, modeController, toolController, selectionController, operationController);
         parseController = new ParseControllerImpl(this);
         clipboardController = new ClipboardControllerImpl();
 
         modeController.addModeListener(this);
         toolController.addToolListener(this);
+
+        modeController.setMode(ModeType.VERTEX);
+        toolController.setTool(ToolType.ADD);
 
         graph = new Graph(this);
         currentFile = null;
@@ -184,8 +189,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     public void resetWorkspace() {
         selectionController.clearSelection();
         //ControlManager.updatePropertyChangeOperationStatus(false);
-        mouseController.finishMovingElement();
-        mouseController.cancelCurrentOperation();
+        //mouseController.finishMovingElement();
+        //mouseController.cancelCurrentOperation();
         operationController.reportGenericOperation(null);
     }
 
