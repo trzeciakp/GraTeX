@@ -137,6 +137,8 @@ public class MouseControllerTmpImpl implements MouseController, ToolListener, Mo
 
     @Override
     public void processMouseMoving(MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
         controllers.get(mode).processMouseMoving(tool, e);
 
         operationController.reportGenericOperation(null);
@@ -146,6 +148,7 @@ public class MouseControllerTmpImpl implements MouseController, ToolListener, Mo
     public void processMouseDragging(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
+        controllers.get(mode).processMouseDragging(tool, e);
         if(isElementMoving) {
             controllers.get(mode).moveSelection(e);
         }

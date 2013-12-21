@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.graph.GraphNumeration;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -257,5 +258,14 @@ public class Vertex extends GraphElement implements Serializable {
 
     public void setNumber(int number) {
         this.number = number;
+        this.text = GraphNumeration.digitalToAlphabetical(number);
+    }
+
+    public String getLabelInside() {
+        if(getGraph().getGraphNumeration().isNumerationDigital()) {
+            return String.valueOf(number);
+        } else {
+            return text;
+        }
     }
 }

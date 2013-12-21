@@ -153,7 +153,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void moveSelection(MouseEvent e) {
-        if(currentlyMovedElement != null) {
+        if(currentlyMovedElement == null) {
             currentlyMovedElement = getElementFromPosition(e);
             currentDragOperation = new DragOperation(currentlyMovedElement);
             currentDragOperation.setLabelEStartState(currentlyMovedElement);

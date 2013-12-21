@@ -14,11 +14,12 @@ import java.awt.geom.Area;
 public class VertexUtils {
     public static void updateNumber(Vertex vertex, int number) {
         vertex.setNumber(number);
-        if (vertex.getGraph().getGraphNumeration().isNumerationDigital()) {
+        //vertex.setText(GraphNumeration.digitalToAlphabetical(number));
+        /*if (vertex.getGraph().getGraphNumeration().isNumerationDigital()) {
             vertex.setText(Integer.toString(number));
         } else {
             vertex.setText(GraphNumeration.digitalToAlphabetical(number));
-        }
+        } */
     }
 
     public static void setPartOfNumeration(Vertex vertex, boolean flag) {
@@ -145,10 +146,10 @@ public class VertexUtils {
                 g.setColor(DrawingTools.getDummyColor(vertex.getFontColor()));
             }
             updateNumber(vertex, vertex.getNumber());
-            if (vertex.getText() != null) {
+            if (vertex.getLabelInside() != null) {
                 g.setFont(vertex.getFont());
                 FontMetrics fm = g.getFontMetrics();
-                g.drawString(vertex.getText(), posX - fm.stringWidth(vertex.getText()) / 2, posY + (fm.getAscent() - fm.getDescent()) / 2);
+                g.drawString(vertex.getLabelInside(), posX - fm.stringWidth(vertex.getLabelInside()) / 2, posY + (fm.getAscent() - fm.getDescent()) / 2);
             }
         }
 

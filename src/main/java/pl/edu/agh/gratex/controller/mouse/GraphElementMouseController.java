@@ -29,6 +29,12 @@ public abstract class GraphElementMouseController {
         mouseY = e.getY();
     }
 
+    //to fix dummy vertex while moving after vertex added
+    public void processMouseDragging(ToolType toolType, MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }
+
 
     public abstract void processShiftPressing(boolean flag);
 
