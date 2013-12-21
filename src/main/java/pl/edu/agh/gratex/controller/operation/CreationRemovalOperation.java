@@ -6,6 +6,8 @@ import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.edge.EdgeUtils;
+import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
@@ -111,6 +113,7 @@ public class CreationRemovalOperation extends Operation {
                 Edge edge = (Edge) generalController.getParseController().getParserByElementType(GraphElementType.EDGE).
                         parseToGraph(latexCode, generalController.getGraph());
                 generalController.getGraph().getEdges().add(edge);
+                EdgeUtils.updatePosition(edge);
                 if (generalController.getModeController().getMode() == ModeType.EDGE) {
                     generalController.getSelectionController().addToSelection(edge, true);
                 }
@@ -144,21 +147,33 @@ public class CreationRemovalOperation extends Operation {
     }
 
     private void removeElements() {
+        System.out.println(vertices.size() + " " + edges.size() + " " + labelVs.size() + " " + labelEs.size() + " ");
         for (String latexCode : vertices) {
             Vertex vertex = generalController.getGraph().getVertexByLatexCode(latexCode);
             generalController.getGraph().getVertices().remove(vertex);
             VertexUtils.setPartOfNumeration(vertex, false);
+
+            LabelV labelV;
+            if ((labelV = vertex.getLabel()) != null) {
+                if (!labelVs.contains(labelV.getLatexCode())) {
+                    labelVs.add(labelV.getLatexCode());
+                }
+            }
+
+            for (Edge edge : GraphUtils.getAdjacentEdges(generalController.getGraph(), vertex)) {
+                if (!edges.contains(edge.getLatexCode())) {
+                    edges.add(edge.getLatexCode());
+                }
+            }
         }
 
         for (String latexCode : edges) {
             Edge edge = generalController.getGraph().getEdgeByLatexCode(latexCode);
             generalController.getGraph().getEdges().remove(edge);
             LabelE labelE;
-            if ((labelE = edge.getLabel()) != null)
-            {
-                if (!labelEs.contains(labelE.getLatexCode())){
+            if ((labelE = edge.getLabel()) != null) {
+                if (!labelEs.contains(labelE.getLatexCode())) {
                     labelEs.add(labelE.getLatexCode());
-                    generalController.getGraph().getLabelsE().remove(labelE);
                 }
             }
         }
