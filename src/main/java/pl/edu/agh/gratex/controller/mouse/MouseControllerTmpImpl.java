@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.editor.CopyPasteOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;

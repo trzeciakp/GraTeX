@@ -1,6 +1,7 @@
-package pl.edu.agh.gratex.controller;
+package pl.edu.agh.gratex.controller.operation;
 
-import pl.edu.agh.gratex.controller.operation.Operation;
+import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.GraphElement;
 
 import java.util.ArrayList;
@@ -60,6 +61,16 @@ public class OperationControllerImpl implements OperationController {
     @Override
     public HashMap<GraphElement, String> getOperationInitialStates() {
         return initialStates;
+    }
+
+    @Override
+    public void undo() {
+        reportGenericOperation(operationList.undo());
+    }
+
+    @Override
+    public void redo() {
+        reportGenericOperation(operationList.redo());
     }
 
     @Override

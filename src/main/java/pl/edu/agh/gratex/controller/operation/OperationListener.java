@@ -1,4 +1,4 @@
-package pl.edu.agh.gratex.controller;
+package pl.edu.agh.gratex.controller.operation;
 
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.Operation;

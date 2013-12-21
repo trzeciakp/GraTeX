@@ -2,14 +2,10 @@ package pl.edu.agh.gratex.controller.mouse;
 
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.operation.CreationOperation;
+import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
-import pl.edu.agh.gratex.editor.RemoveOperation;
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
-import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -85,7 +81,7 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
                 labelV.setModel(generalController.getGraph().getLabelVDefaultModel());
                 LabelVUtils.updatePosition(labelV);
                 // TODO Tutaj proba zastapienia dodawania tym nowym
-                new CreationOperation(generalController, labelV, OperationType.ADD_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_ADD);
+                new CreationRemovalOperation(generalController, labelV, OperationType.ADD_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_ADD, true);
                 //ControlManager.operations.addNewOperation(new AddOperation(generalController, labelV));
                 //ControlManager.operations.redo();
                 //generalController.getSelectionController().addToSelection(labelV, false);
@@ -100,7 +96,7 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
 
     @Override
     public void moveSelection(MouseEvent e) {
-        if(currentlyMovedElement == null) {
+        if (currentlyMovedElement == null) {
             startMoving(e);
         } else {
             continueMoving(e);
@@ -132,7 +128,7 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
 
     @Override
     public void finishMovingElement() {
-        if(currentlyMovedElement != null) {
+        if (currentlyMovedElement != null) {
             currentDragOperation.setEndAngle(((LabelV) currentlyMovedElement).getPosition());
             if (currentDragOperation.changeMade()) {
                 ControlManager.operations.addNewOperation(currentDragOperation);

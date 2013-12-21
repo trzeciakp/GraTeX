@@ -1,5 +1,7 @@
 package pl.edu.agh.gratex.controller;
 
+import pl.edu.agh.gratex.controller.mouse.MouseController;
+import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 public interface GeneralController {

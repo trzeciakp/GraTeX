@@ -42,24 +42,6 @@ public class Graph implements Serializable {
     public int gridResolutionY = 20;
     public boolean gridOn;
 
-    //TODO
-    public Vertex getVertexById(int id) {
-        for (Vertex vertex : getVertices()) {
-            if(vertex.getNumber() == id) {
-                return vertex;
-            }
-        }
-        return null;
-    }
-
-    public Edge getEdgeById(int id) {
-        for (Edge edge : getEdges()) {
-            if(edge.getNumber() == id) {
-                return edge;
-            }
-        }
-        return null;
-    }
     // TODO przeniesc to gdzie indziej, do jakiegos kontrolera?
     private GraphNumeration graphNumeration;
 
@@ -103,6 +85,88 @@ public class Graph implements Serializable {
         }
     }
 
+    public List<Vertex> getVertices() {
+        return (List<Vertex>) elements.get(GraphElementType.VERTEX);
+    }
+
+    public Vertex getVertexById(int id) {
+        for (Vertex vertex : getVertices()) {
+            if(vertex.getNumber() == id) {
+                return vertex;
+            }
+        }
+        return null;
+    }
+
+    public Vertex getVertexByLatexCode(String code){
+        for (Vertex vertex : getVertices()) {
+            if(vertex.getLatexCode().equals(code)) {
+                return vertex;
+            }
+        }
+        return null;
+    }
+
+    public List<Edge> getEdges() {
+        return (List<Edge>) elements.get(GraphElementType.EDGE);
+    }
+
+    public Edge getEdgeById(int id) {
+        for (Edge edge : getEdges()) {
+            if(edge.getNumber() == id) {
+                return edge;
+            }
+        }
+        return null;
+    }
+
+    public Edge getEdgeByLatexCode(String code){
+        for (Edge edge : getEdges()) {
+            if(edge.getLatexCode().equals(code)) {
+                return edge;
+            }
+        }
+        return null;
+    }
+
+    public List<LabelV> getLabelsV() {
+        return (List<LabelV>) elements.get(GraphElementType.LABEL_VERTEX);
+    }
+
+    public LabelV getLabelVByLatexCode(String code){
+        for (LabelV labelV : getLabelsV()) {
+            if(labelV.getLatexCode().equals(code)) {
+                return labelV;
+            }
+        }
+        return null;
+    }
+
+    public List<LabelE> getLabelsE() {
+        return (List<LabelE>) elements.get(GraphElementType.LABEL_EDGE);
+    }
+
+    public LabelE getLabelEByLatexCode(String code){
+        for (LabelE labelE : getLabelsE()) {
+            if(labelE.getLatexCode().equals(code)) {
+                return labelE;
+            }
+        }
+        return null;
+    }
+
+    public List<? extends GraphElement> getElements(GraphElementType type) {
+        return elements.get(type);
+    }
+
+    public List<? extends GraphElement> getAllElements() {
+        List<GraphElement> result = new LinkedList<>();
+        for(GraphElementType type : GraphElementType.values()) {
+            result.addAll(elements.get(type));
+        }
+        return result;
+    }
+
     public void initDefaultModels() {
         //TODO
         setVertexDefaultModel(new VertexPropertyModel());
@@ -136,61 +200,6 @@ public class Graph implements Serializable {
         getLabelEDefaultModel().spacing = 5;
         getLabelEDefaultModel().topPlacement = 1;
         getLabelEDefaultModel().horizontalPlacement = 0;
-    }
-
-    public List<Vertex> getVertices() {
-        return (List<Vertex>) elements.get(GraphElementType.VERTEX);
-        //return vertices;
-    }
-
-    public void setVertices(List<Vertex> vertices) {
-        this.elements.put(GraphElementType.VERTEX, vertices);
-        //this.vertices = vertices;
-    }
-
-    public List<Edge> getEdges() {
-        return (List<Edge>) elements.get(GraphElementType.EDGE);
-    }
-
-    public void setEdges(List<Edge> edges) {
-        this.elements.put(GraphElementType.EDGE, edges);
-        //this.edges = edges;
-    }
-
-    public List<LabelV> getLabelsV() {
-        return (List<LabelV>) elements.get(GraphElementType.LABEL_VERTEX);
-        //return labelsV;
-    }
-
-    public void setLabelsV(LinkedList<LabelV> labelsV) {
-        this.elements.put(GraphElementType.LABEL_VERTEX, labelsV);
-        //this.labelsV = labelsV;
-    }
-
-    public List<LabelE> getLabelsE() {
-        return (List<LabelE>) elements.get(GraphElementType.LABEL_EDGE);
-        //return labelsE;
-    }
-
-    public void setLabelsE(LinkedList<LabelE> labelsE) {
-        this.elements.put(GraphElementType.LABEL_EDGE, labelsE);
-        //this.labelsE = labelsE;
-    }
-
-    public List<? extends GraphElement> getElements(GraphElementType type) {
-        return elements.get(type);
-    }
-
-    public List<? extends GraphElement> getAllElements() {
-        List<GraphElement> result = new LinkedList<>();
-        for(GraphElementType type : GraphElementType.values()) {
-            result.addAll(elements.get(type));
-        }
-        return result;
-    }
-
-    public Map<GraphElementType, List<? extends GraphElement>> getElementsMap() {
-        return elements;
     }
 
     public VertexPropertyModel getVertexDefaultModel() {

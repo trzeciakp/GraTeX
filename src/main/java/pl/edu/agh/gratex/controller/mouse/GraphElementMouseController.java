@@ -1,8 +1,11 @@
 package pl.edu.agh.gratex.controller.mouse;
 
+import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.editor.RemoveOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
@@ -49,10 +52,11 @@ public abstract class GraphElementMouseController {
     public void removeElement(MouseEvent e) {
         GraphElement temp = getElementFromPosition(e);
         if (temp != null) {
-            ControlManager.operations.addNewOperation(new RemoveOperation(generalController, temp));
-            generalController.publishInfo(ControlManager.operations.redo());
+            ModeType mode = generalController.getModeController().getMode();
+            new CreationRemovalOperation(generalController, temp, OperationType.REMOVE_OPERATION(mode),
+                    StringLiterals.INFO_REMOVE_ELEMENT(mode, 1), false);
         } else {
-            generalController.publishInfo(StringLiterals.INFO_NOTHING_TO_REMOVE);
+            generalController.getOperationController().reportGenericOperation(StringLiterals.INFO_NOTHING_TO_REMOVE);
         }
     }
 

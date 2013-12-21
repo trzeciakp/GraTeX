@@ -4,6 +4,8 @@ import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.operation.Operation;
+import pl.edu.agh.gratex.controller.operation.OperationController;
+import pl.edu.agh.gratex.controller.operation.OperationListener;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 

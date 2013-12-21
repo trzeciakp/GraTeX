@@ -14,5 +14,22 @@ public enum OperationType {
     REMOVE_VERTEX,
     REMOVE_EDGE,
     REMOVE_LABEL_VERTEX,
-    REMOVE_LABEL_EDGE
+    REMOVE_LABEL_EDGE;
+
+    public static OperationType REMOVE_OPERATION(ModeType mode)
+    {
+        switch (mode)
+        {
+            case VERTEX:
+                return REMOVE_VERTEX;
+            case EDGE:
+                return REMOVE_EDGE;
+            case LABEL_VERTEX:
+                return REMOVE_LABEL_VERTEX;
+            case LABEL_EDGE:
+                return REMOVE_LABEL_EDGE;
+            default:
+                return null;
+        }
+    }
 }

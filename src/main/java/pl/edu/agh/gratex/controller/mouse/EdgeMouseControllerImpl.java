@@ -4,9 +4,8 @@ import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.operation.CreationOperation;
+import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -122,7 +121,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             } else {
                 currentlyAddedEdge.setVertexB(temp);
                 currentlyAddedEdge.setDirected(e.isShiftDown());
-                new CreationOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD);
+                new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
                 currentlyAddedEdge = null;
                 // TODO Tutaj proba zastapienia dodawania tym nowym
                 //ControlManager.operations.addNewOperation(new AddOperation(generalController, currentlyAddedEdge));

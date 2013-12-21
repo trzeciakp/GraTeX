@@ -1,4 +1,4 @@
-package pl.edu.agh.gratex.controller;
+package pl.edu.agh.gratex.controller.mouse;
 
 import pl.edu.agh.gratex.model.edge.Edge;
 

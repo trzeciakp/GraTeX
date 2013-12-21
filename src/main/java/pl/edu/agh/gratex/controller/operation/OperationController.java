@@ -1,11 +1,10 @@
-package pl.edu.agh.gratex.controller;
+package pl.edu.agh.gratex.controller.operation;
 
-import pl.edu.agh.gratex.controller.operation.Operation;
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.GraphElement;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public interface OperationController {
@@ -25,6 +24,10 @@ public interface OperationController {
 
     // This method is used to report any operation, so as to refresh workspace and / or display info
     public void reportGenericOperation(String info);
+
+    public void undo();
+
+    public void redo();
 
     public void addOperationListener(OperationListener operationListener);
 

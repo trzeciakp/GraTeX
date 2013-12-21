@@ -2,9 +2,8 @@ package pl.edu.agh.gratex.controller.mouse;
 
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.operation.CreationOperation;
+import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
@@ -139,7 +138,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
                 labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
                 labelE.setHorizontalPlacement(e.isShiftDown());
                 // TODO Tutaj proba zastapienia dodawania tym nowym
-                new CreationOperation(generalController, labelE, OperationType.ADD_LABEL_EDGE, StringLiterals.INFO_LABEL_E_ADD);
+                new CreationRemovalOperation(generalController, labelE, OperationType.ADD_LABEL_EDGE, StringLiterals.INFO_LABEL_E_ADD, true);
                 //ControlManager.operations.addNewOperation(new AddOperation(generalController, labelE));
                 //ControlManager.operations.redo();
                 //generalController.getSelectionController().addToSelection(labelE, false);

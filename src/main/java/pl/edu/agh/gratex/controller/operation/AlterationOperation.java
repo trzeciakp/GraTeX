@@ -22,8 +22,8 @@ public class AlterationOperation extends Operation {
     private GraphElementType subjectType;
 
     private List<? extends GraphElement> subjects;
-    private HashMap<OperationSubject, OperationSubject> initialStateToEndState;
-    private HashMap<OperationSubject, OperationSubject> endStateToInitialState;
+    //private HashMap<OperationSubject, OperationSubject> initialStateToEndState;
+    //private HashMap<OperationSubject, OperationSubject> endStateToInitialState;
 
     // TODO To jeszcze nie jest potrzebne, ale mniej wiecej bedzie tak wygladac
     public AlterationOperation(GeneralController generalController, String info, GraphElementType subjectType, List<? extends GraphElement> subjects) {
@@ -31,7 +31,7 @@ public class AlterationOperation extends Operation {
         this.info = info;
         this.subjectType = subjectType;
         this.subjects = subjects;
-    }
+}
 
     public void finish(OperationType operationType, List<? extends GraphElement> endSubjects) {
         this.operationType = operationType;
@@ -39,7 +39,7 @@ public class AlterationOperation extends Operation {
         if (subjects == null) {
             //finishCreateOperation(endSubjects);
         } else if (endSubjects == null) {
-            finishRemoveOperation();
+            //finishRemoveOperation();
         } else {
             //finishChangeOperation(endSubjects);
         }
@@ -54,24 +54,24 @@ public class AlterationOperation extends Operation {
     }
 
     public String doOperation() {
-        for (OperationSubject initialState : initialStateToEndState.keySet()) {
-            initialState.removeFromGraph();
-            initialStateToEndState.get(initialState).addToGraph();
-        }
+//        for (OperationSubject initialState : initialStateToEndState.keySet()) {
+//            initialState.removeFromGraph();
+//            initialStateToEndState.get(initialState).addToGraph();
+//        }
 
         return info;
     }
 
     public String undoOperation() {
-        for (OperationSubject endState : endStateToInitialState.keySet()) {
-            endState.removeFromGraph();
-            endStateToInitialState.get(endState).addToGraph();
-        }
+//        for (OperationSubject endState : endStateToInitialState.keySet()) {
+//            endState.removeFromGraph();
+//            endStateToInitialState.get(endState).addToGraph();
+//        }
 
         return StringLiterals.INFO_UNDO(info);
     }
 
-    private void finishCreateOperation(List<GraphElement> endSubjects) {
+    /*private void finishCreateOperation(List<GraphElement> endSubjects) {
         this.initialStateToEndState = new HashMap<>();
         this.endStateToInitialState = new HashMap<>();
 
@@ -90,5 +90,5 @@ public class AlterationOperation extends Operation {
     }
 
     private void finishChangeOperation(List<GraphElement> endSubjects) {
-    }
+    }*/
 }

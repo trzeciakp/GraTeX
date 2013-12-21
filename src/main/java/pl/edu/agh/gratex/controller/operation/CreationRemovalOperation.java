@@ -16,36 +16,57 @@ import pl.edu.agh.gratex.model.vertex.VertexUtils;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CreationOperation extends Operation {
+public class CreationRemovalOperation extends Operation {
     GeneralController generalController;
     private List<String> vertices;
     private List<String> edges;
     private List<String> labelVs;
     private List<String> labelEs;
 
-    public CreationOperation(GeneralController generalController,
-                             List<? extends GraphElement> createdElements,
-                             OperationType operationType,
-                             String info) {
+    private boolean creation;
 
+    public CreationRemovalOperation(GeneralController generalController,
+                                    List<? extends GraphElement> createdElements,
+                                    OperationType operationType,
+                                    String info, boolean creation) {
         this.generalController = generalController;
+        this.creation = creation;
         setOperationType(operationType);
         setInfo(info);
-
         init(createdElements);
     }
 
-    public CreationOperation(GeneralController generalController,
-                             GraphElement createdElement,
-                             OperationType operationType,
-                             String info) {
+    public CreationRemovalOperation(GeneralController generalController,
+                                    GraphElement createdElement,
+                                    OperationType operationType,
+                                    String info, boolean creation) {
         this.generalController = generalController;
+        this.creation = creation;
         setOperationType(operationType);
         setInfo(info);
-
         List<GraphElement> createdElements = new LinkedList<>();
         createdElements.add(createdElement);
         init(createdElements);
+    }
+
+    @Override
+    public String doOperation() {
+        if (creation) {
+            createElements();
+        } else {
+            removeElements();
+        }
+        return getInfo();
+    }
+
+    @Override
+    public String undoOperation() {
+        if (creation) {
+            removeElements();
+        } else {
+            createElements();
+        }
+        return getInfo();
     }
 
     private void init(List<? extends GraphElement> createdElements) {
@@ -73,8 +94,7 @@ public class CreationOperation extends Operation {
         generalController.getOperationController().finishOperation(this);
     }
 
-    @Override
-    public String doOperation() {
+    private void createElements() {
         generalController.getSelectionController().clearSelection();
         try {
             for (String latexCode : vertices) {
@@ -88,7 +108,6 @@ public class CreationOperation extends Operation {
             }
 
             for (String latexCode : edges) {
-                System.out.println("Czemu tu sie wywala? "+ latexCode);
                 Edge edge = (Edge) generalController.getParseController().getParserByElementType(GraphElementType.EDGE).
                         parseToGraph(latexCode, generalController.getGraph());
                 generalController.getGraph().getEdges().add(edge);
@@ -122,16 +141,37 @@ public class CreationOperation extends Operation {
             e.printStackTrace();
             generalController.criticalError("Parser error", e);
         }
-
-        return getInfo();
     }
 
-    @Override
-    public String undoOperation() {
-        //System.out.println("subject " + subjects.get(0));
-        System.out.println("graph " + generalController.getGraph().getLabelsV().get(0).getLatexCode());
-        // TODO TAM NIE MA STIRNGOW IDIOTO< TYLKO LABELE!
-        //System.out.println(generalController.getGraph().getLabelsV().contains(subjects.get(0)));
-        return null;
+    private void removeElements() {
+        for (String latexCode : vertices) {
+            Vertex vertex = generalController.getGraph().getVertexByLatexCode(latexCode);
+            generalController.getGraph().getVertices().remove(vertex);
+            VertexUtils.setPartOfNumeration(vertex, false);
+        }
+
+        for (String latexCode : edges) {
+            Edge edge = generalController.getGraph().getEdgeByLatexCode(latexCode);
+            generalController.getGraph().getEdges().remove(edge);
+            LabelE labelE;
+            if ((labelE = edge.getLabel()) != null)
+            {
+                if (!labelEs.contains(labelE.getLatexCode())){
+                    labelEs.add(labelE.getLatexCode());
+                }
+            }
+        }
+
+        for (String latexCode : labelVs) {
+            LabelV labelV = generalController.getGraph().getLabelVByLatexCode(latexCode);
+            labelV.getOwner().setLabel(null);
+            generalController.getGraph().getLabelsV().remove(labelV);
+        }
+
+        for (String latexCode : labelEs) {
+            LabelE labelE = generalController.getGraph().getLabelEByLatexCode(latexCode);
+            labelE.getOwner().setLabel(null);
+            generalController.getGraph().getLabelsE().remove(labelE);
+        }
     }
 }

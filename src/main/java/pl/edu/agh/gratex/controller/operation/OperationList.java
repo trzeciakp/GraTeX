@@ -1,4 +1,4 @@
-package pl.edu.agh.gratex.controller;
+package pl.edu.agh.gratex.controller.operation;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.StringLiterals;
@@ -30,7 +30,7 @@ public class OperationList {
         if (iterator < 1) {
             return StringLiterals.INFO_NOTHING_TO_UNDO;
         } else {
-            return operations.get(--iterator).undoOperation();
+            return StringLiterals.INFO_UNDO(operations.get(--iterator).undoOperation());
         }
     }
 
@@ -38,7 +38,7 @@ public class OperationList {
         if (iterator == operations.size()) {
             return StringLiterals.INFO_NOTHING_TO_REDO;
         } else {
-            return operations.get(iterator++).doOperation();
+            return StringLiterals.INFO_REDO(operations.get(iterator++).doOperation());
         }
 
     }

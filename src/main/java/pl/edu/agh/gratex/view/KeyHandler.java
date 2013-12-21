@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.MouseController;
+import pl.edu.agh.gratex.controller.mouse.MouseController;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

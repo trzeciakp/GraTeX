@@ -2,12 +2,9 @@ package pl.edu.agh.gratex.controller.mouse;
 
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.operation.CreationOperation;
+import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
-import pl.edu.agh.gratex.editor.RemoveOperation;
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
@@ -72,7 +69,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
         if (VertexUtils.fitsIntoPage(vertex)) {
             if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex)) {
                 VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
-                new CreationOperation(generalController, vertex, OperationType.ADD_VERTEX, StringLiterals.INFO_VERTEX_ADD);
+                new CreationRemovalOperation(generalController, vertex, OperationType.ADD_VERTEX, StringLiterals.INFO_VERTEX_ADD, true);
                 // TODO Tutaj proba zastapienia dodawania tym nowym
                 //ControlManager.operations.addNewOperation(new AddOperation(generalController, vertex));
                 //generalController.publishInfo(ControlManager.operations.redo());

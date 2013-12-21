@@ -1,11 +1,10 @@
 package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.ActionButtonType;
-import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.controller.ClipboardController;
 import pl.edu.agh.gratex.controller.ClipboardListener;
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.MouseController;
+import pl.edu.agh.gratex.controller.mouse.MouseController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

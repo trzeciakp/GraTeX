@@ -122,6 +122,13 @@ public class StringLiterals {
         return UNDO_PREFIX + literal;
     }
 
+    // This should go before message when redoing changes
+    private final static String REDO_PREFIX = "[REDONE] ";
+
+    public static String INFO_REDO(String literal) {
+        return REDO_PREFIX + literal;
+    }
+
     // AddOperation
     public final static String INFO_VERTEX_ADD = "vertex added";
     public final static String INFO_EDGE_ADD = "edge added";

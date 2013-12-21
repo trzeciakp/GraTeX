@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.constants.MenuBarSubmenu;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.mouse.MouseController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
