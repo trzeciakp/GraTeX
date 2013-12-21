@@ -158,19 +158,18 @@ public class CreationRemovalOperation extends Operation {
             {
                 if (!labelEs.contains(labelE.getLatexCode())){
                     labelEs.add(labelE.getLatexCode());
+                    generalController.getGraph().getLabelsE().remove(labelE);
                 }
             }
         }
 
         for (String latexCode : labelVs) {
             LabelV labelV = generalController.getGraph().getLabelVByLatexCode(latexCode);
-            labelV.getOwner().setLabel(null);
             generalController.getGraph().getLabelsV().remove(labelV);
         }
 
         for (String latexCode : labelEs) {
             LabelE labelE = generalController.getGraph().getLabelEByLatexCode(latexCode);
-            labelE.getOwner().setLabel(null);
             generalController.getGraph().getLabelsE().remove(labelE);
         }
     }
