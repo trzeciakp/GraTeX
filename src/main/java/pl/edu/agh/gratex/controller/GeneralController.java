@@ -6,8 +6,6 @@ import pl.edu.agh.gratex.model.graph.Graph;
 
 public interface GeneralController {
 
-    public ClipboardController getClipboardController();
-
     public ModeController getModeController();
 
     public ToolController getToolController();
@@ -32,9 +30,7 @@ public interface GeneralController {
 
     public void editGraphTemplate();
 
-    public void copyToClipboard();
-
-    public void pasteFromClipboard();
+    public void duplicateSubgraph();
 
     public void undo();
 

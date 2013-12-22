@@ -203,20 +203,16 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     // To be removed
 
     @Override
-    public void copyToClipboard() {
-        currentCopyPasteOperation = new CopyPasteOperation(generalController, generalController.getSelectionController().getSelection());
-        //generalController.updateMenuBarAndActions();
-        generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_COPY);
-        generalController.getClipboardController().setPastingEnabled(true);
-    }
-
-    @Override
-    public void pasteFromClipboard() {
-        if (!currentCopyPasteOperation.pasting) {
-            generalController.getModeController().setMode(ModeType.VERTEX);
-            generalController.getToolController().setTool(ToolType.SELECT);
-            currentCopyPasteOperation.startPasting();
-            generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_WHERE_TO_PASTE);
-        }
+    public void duplicateSubgraph() {
+        System.out.println("Jeszcze nie zaimplementowane");
+        // TODO Nie kasowac, musze wiedziec co tu było
+//        currentCopyPasteOperation = new CopyPasteOperation(generalController, generalController.getSelectionController().getSelection());
+//        generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_COPY);
+//        if (!currentCopyPasteOperation.pasting) {
+//            generalController.getModeController().setMode(ModeType.VERTEX);
+//            generalController.getToolController().setTool(ToolType.SELECT);
+//            currentCopyPasteOperation.startPasting();
+//            generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_WHERE_TO_PASTE);
+//        }
     }
 }

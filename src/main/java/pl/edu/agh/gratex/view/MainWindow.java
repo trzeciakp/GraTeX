@@ -126,7 +126,7 @@ public class MainWindow extends JFrame {
         panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
         getContentPane().add(panel_propertyEditor);
 
-        panel_buttonContainer = new PanelButtonContainer(generalController, generalController.getMouseController(), generalController.getClipboardController());
+        panel_buttonContainer = new PanelButtonContainer(generalController, generalController.getSelectionController());
         panel_buttonContainer.setBounds(-5, 25, 802, 50);
         panel_buttonContainer.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 
@@ -136,7 +136,7 @@ public class MainWindow extends JFrame {
         panel_toolbox.setBounds(10, 85, 90, 344);
         getContentPane().add(panel_toolbox);
 
-        menuBar = new MenuBar(generalController, generalController.getMouseController(), generalController.getModeController(), generalController.getToolController(), generalController.getClipboardController());
+        menuBar = new MenuBar(generalController, generalController.getModeController(), generalController.getToolController(), generalController.getSelectionController());
         menuBar.setBounds(0, 0, 0, 25);
         getContentPane().add(menuBar);
     }

@@ -23,14 +23,14 @@ public class ClipboardControllerImpl implements ClipboardController {
     @Override
     public void setCopyingEnabled(boolean enabled) {
         for (ClipboardListener listener : listeners) {
-            listener.setCopyingEnabled(enabled);
+            //listener.setCopyingEnabled(enabled);
         }
     }
 
     @Override
     public void setPastingEnabled(boolean enabled) {
         for (ClipboardListener listener : listeners) {
-            listener.setPastingEnabled(enabled);
+            //listener.setPastingEnabled(enabled);
         }
     }
 

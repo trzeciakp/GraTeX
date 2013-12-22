@@ -18,8 +18,7 @@ public interface MouseController {
     public void paintCurrentlyAddedElement(Graphics2D g);
     public void paintCopiedSubgraph(Graphics2D g);
 
-    public void copyToClipboard();
-    public void pasteFromClipboard();
+    public void duplicateSubgraph();
 
     public boolean isEdgeCurrentlyAdded(Edge edge);
 

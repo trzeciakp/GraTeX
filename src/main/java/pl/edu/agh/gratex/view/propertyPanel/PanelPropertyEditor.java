@@ -2,11 +2,9 @@ package pl.edu.agh.gratex.view.propertyPanel;
 
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.OperationType;
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.*;
-import pl.edu.agh.gratex.controller.operation.GenericOperation;
-import pl.edu.agh.gratex.controller.operation.Operation;
-import pl.edu.agh.gratex.controller.operation.OperationController;
-import pl.edu.agh.gratex.controller.operation.OperationListener;
+import pl.edu.agh.gratex.controller.operation.*;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
@@ -43,13 +41,11 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     }
 
     public void valueChanged(PropertyModel model) {
-        // TODO to bedzie jakies wywolanie general controllera albo innego wariata
-        //pl.edu.agh.gratex.view.ControlManager.updateSelectedItemsModel(model);
+        AlterationOperation operation = new AlterationOperation(generalController, selection, OperationType.PROPERTY_CHANGE, StringLiterals.INFO_PROPERTY_CHANGE);
         for (GraphElement graphElement : selection) {
             graphElement.setModel(model);
         }
-        generalController.getOperationController().reportOperationEvent(new GenericOperation("cos sie zmienilo w PropertyEditor"));
-
+        operation.finish();
     }
 
     //TODO maybe move from here

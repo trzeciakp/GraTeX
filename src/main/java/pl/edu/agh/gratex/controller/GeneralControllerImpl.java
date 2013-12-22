@@ -25,7 +25,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     private MouseController mouseController;
     private SelectionController selectionController;
     private ParseController parseController;
-    private ClipboardController clipboardController;
 
     private Graph graph;
     private File currentFile;
@@ -38,7 +37,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
         mouseController = new MouseControllerImpl(this, modeController, toolController, selectionController, operationController);
         parseController = new ParseControllerImpl(this);
-        clipboardController = new ClipboardControllerImpl();
 
         modeController.addModeListener(this);
         toolController.addToolListener(this);
@@ -75,11 +73,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     //===========================================
     // GeneralController interface implementation
-
-    @Override
-    public ClipboardController getClipboardController() {
-        return clipboardController;
-    }
 
     @Override
     public ModeController getModeController() {
@@ -205,13 +198,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     }
 
     @Override
-    public void copyToClipboard() {
-        mouseController.copyToClipboard();
-    }
-
-    @Override
-    public void pasteFromClipboard() {
-        mouseController.pasteFromClipboard();
+    public void duplicateSubgraph() {
+        mouseController.duplicateSubgraph();
     }
 
     @Override

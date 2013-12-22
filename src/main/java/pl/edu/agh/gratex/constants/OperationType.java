@@ -16,7 +16,9 @@ public enum OperationType {
     REMOVE_VERTEX,
     REMOVE_EDGE,
     REMOVE_LABEL_VERTEX,
-    REMOVE_LABEL_EDGE;
+    REMOVE_LABEL_EDGE,
+
+    PROPERTY_CHANGE;
 
     public static OperationType REMOVE_OPERATION(ModeType mode)
     {

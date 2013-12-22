@@ -93,14 +93,12 @@ public class MouseControllerSTARY implements MouseController, ModeListener, Tool
     }
 
     @Override
-    public void copyToClipboard() {
+    public void duplicateSubgraph() {
         currentCopyPasteOperation = new CopyPasteOperation(generalController, generalController.getSelectionController().getSelection());
         //generalController.updateMenuBarAndActions();
         generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_COPY);
-        generalController.getClipboardController().setPastingEnabled(true);
     }
 
-    @Override
     public void pasteFromClipboard() {
         if (!currentCopyPasteOperation.pasting) {
             generalController.getModeController().setMode(ModeType.VERTEX);

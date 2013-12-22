@@ -12,7 +12,6 @@ import java.util.List;
 public class AlterationOperation extends Operation {
     GeneralController generalController;
 
-    private List<String> subjects = new LinkedList<>();
     private HashMap<String, String> initialToEndStates = new HashMap<>();
     private HashMap<String, String> endToInitialStates = new HashMap<>();
 
@@ -38,19 +37,21 @@ public class AlterationOperation extends Operation {
 
     private void init(List<? extends GraphElement> elements) {
         for (GraphElement element : elements) {
-            subjects.add(generalController.getParseController().getParserByElementType(element.getType()).parseToLatex(element));
+            initialToEndStates.put(generalController.getParseController().getParserByElementType(element.getType()).parseToLatex(element), null);
         }
     }
 
     public void finish() {
         int numberOfChanges = 0;
-        for (String initialState : subjects) {
+        for (String initialState : new LinkedList<>(initialToEndStates.keySet())) {
             GraphElement element = generalController.getGraph().getElementByLatexCode(initialState);
             String endState = generalController.getParseController().getParserByElementType(element.getType()).parseToLatex(element);
             if (!initialState.equals(endState)) {
                 initialToEndStates.put(initialState, endState);
                 endToInitialStates.put(endState, initialState);
                 numberOfChanges++;
+            } else {
+                initialToEndStates.remove(initialState);
             }
         }
 

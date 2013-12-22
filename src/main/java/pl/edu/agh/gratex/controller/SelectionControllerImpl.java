@@ -77,6 +77,22 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     }
 
     @Override
+    public void addToSelection(GraphElement element, boolean controlDown) {
+        if (element != null) {
+            List<GraphElement> list = new ArrayList<>();
+            list.add(element);
+            addToSelection(list, controlDown);
+        } else {
+            // TODO why?
+            // TODO Bo jak element jest null to kliknelismy w puste miejsce. Jeśli jest control, to nie czyścimy zaznaczenia, ale jeśli nie ma, to tak
+            if (!controlDown) {
+                clearSelection();
+            }
+        }
+        generalController.getOperationController().reportOperationEvent(null);
+    }
+
+    @Override
     public void addToSelection(Collection<? extends GraphElement> elements, boolean controlDown) {
         if (controlDown) {
             for (GraphElement temp : elements) {
@@ -92,27 +108,6 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
         }
         generalController.getOperationController().reportOperationEvent(null);
         informListeners();
-
-
-        //TODO not sure if it should not be somewhere else
-        ClipboardController clipboardController = generalController.getClipboardController();
-        clipboardController.setCopyingEnabled(mode == ModeType.VERTEX && selectionSize() > 0);
-    }
-
-    @Override
-    public void addToSelection(GraphElement element, boolean controlDown) {
-        if (element != null) {
-            List<GraphElement> list = new ArrayList<>();
-            list.add(element);
-            addToSelection(list, controlDown);
-        } else {
-            // TODO why?
-            // TODO Bo jak element jest null to kliknelismy w puste miejsce. Jeśli jest control, to nie czyścimy zaznaczenia, ale jeśli nie ma, to tak
-            if (!controlDown) {
-                clearSelection();
-            }
-        }
-        generalController.getOperationController().reportOperationEvent(null);
     }
 
     @Override

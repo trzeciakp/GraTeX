@@ -5,31 +5,30 @@ import pl.edu.agh.gratex.constants.MenuBarSubmenu;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
-import pl.edu.agh.gratex.controller.mouse.MouseController;
+import pl.edu.agh.gratex.model.GraphElement;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EnumMap;
+import java.util.List;
 
 @SuppressWarnings("serial")
-public class MenuBar extends JMenuBar implements ModeListener, ToolListener, ClipboardListener {
+public class MenuBar extends JMenuBar implements ModeListener, ToolListener, SelectionListener {
 
     private GeneralController generalController;
     private ModeController modeController;
     private ToolController toolController;
-    private MouseController mouseController;
     private EnumMap<MenuBarItem, JMenuItem> menuItems;
 
-    public MenuBar(GeneralController generalController, MouseController mouseController, ModeController modeController, ToolController toolController, ClipboardController clipboardController) {
+    public MenuBar(GeneralController generalController, ModeController modeController, ToolController toolController, SelectionController selectionController) {
         super();
         this.generalController = generalController;
         this.modeController = modeController;
         this.toolController = toolController;
-        this.mouseController = mouseController;
         modeController.addModeListener(this);
         toolController.addToolListener(this);
-        clipboardController.addListener(this);
+        selectionController.addListener(this);
 
         EnumMap<MenuBarSubmenu, JMenu> menus = new EnumMap<>(MenuBarSubmenu.class);
         EnumMap<MenuBarSubmenu, ButtonGroup> groups = new EnumMap<>(MenuBarSubmenu.class);
@@ -71,18 +70,6 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Cli
             }
         }
     }
-
-    //TODO is it unsused? should be
-/*    public void updateFunctions() {
-        menuItems.get(MenuBarItem.COPY).setEnabled(false);
-        menuItems.get(MenuBarItem.PASTE).setEnabled(false);
-        if (modeController.getMode() == ModeType.VERTEX && generalController.getSelectionController().selectionSize() > 0) {
-            menuItems.get(MenuBarItem.COPY).setEnabled(true);
-        }
-        if (mouseController.clipboardNotEmpty()) {
-            menuItems.get(MenuBarItem.PASTE).setEnabled(true);
-        }
-    }*/
 
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
@@ -199,18 +186,11 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Cli
                         generalController.selectAll();
                     }
                 };
-            case COPY:
+            case DUPLICATE:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        generalController.copyToClipboard();
-                    }
-                };
-            case PASTE:
-                return new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        generalController.pasteFromClipboard();
+                        generalController.duplicateSubgraph();
                     }
                 };
             case DELETE:
@@ -296,12 +276,8 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Cli
     }
 
     @Override
-    public void setCopyingEnabled(boolean copyingEnabled) {
-        menuItems.get(MenuBarItem.COPY).setEnabled(copyingEnabled);
-    }
-
-    @Override
-    public void setPastingEnabled(boolean pastingEnabled) {
-        menuItems.get(MenuBarItem.PASTE).setEnabled(pastingEnabled);
+    public void selectionChanged(List<? extends GraphElement> collection) {
+        boolean duplicationEnabled = collection.size() > 0 && modeController.getMode() == ModeType.VERTEX;
+        menuItems.get(MenuBarItem.DUPLICATE).setEnabled(duplicationEnabled);
     }
 }

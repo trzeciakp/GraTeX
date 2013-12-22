@@ -1,30 +1,30 @@
 package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.ActionButtonType;
-import pl.edu.agh.gratex.controller.ClipboardController;
-import pl.edu.agh.gratex.controller.ClipboardListener;
-import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
+import pl.edu.agh.gratex.model.GraphElement;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EnumMap;
+import java.util.List;
 
-public class PanelButtonContainer extends JPanel implements ClipboardListener {
-    private static final long serialVersionUID = 4702408962784933450L;
+@SuppressWarnings("serial")
+public class PanelButtonContainer extends JPanel implements SelectionListener {
 
     private GeneralController generalController;
-    private MouseController mouseController;
     private EnumMap<ActionButtonType, ActionButton> buttons = new EnumMap<>(ActionButtonType.class);
 
-    public PanelButtonContainer(GeneralController generalController, MouseController mouseController, ClipboardController clipboardController) {
+    public PanelButtonContainer(GeneralController generalController, SelectionController selectionController) {
         super();
+        this.generalController = generalController;
+        selectionController.addListener(this);
+
         setLayout(null);
         setFocusTraversalKeysEnabled(false);
-        this.generalController = generalController;
-        this.mouseController = mouseController;
-        clipboardController.addListener(this);
 
         int x = 10;
         for (ActionButtonType actionButtonType : ActionButtonType.values()) {
@@ -36,8 +36,7 @@ public class PanelButtonContainer extends JPanel implements ClipboardListener {
             buttons.put(actionButtonType, actionButton);
             x += 45;
         }
-        buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(false);
-        buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(false);
+        buttons.get(ActionButtonType.DUPLICATE_SUBGRAPH).setEnabled(false);
     }
 
     //TODO is it unused? should be
@@ -82,18 +81,11 @@ public class PanelButtonContainer extends JPanel implements ClipboardListener {
                         PanelButtonContainer.this.generalController.editGraphTemplate();
                     }
                 };
-            case COPY_SUBGRAPH:
+            case DUPLICATE_SUBGRAPH:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        PanelButtonContainer.this.generalController.copyToClipboard();
-                    }
-                };
-            case PASTE_SUBGRAPH:
-                return new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        PanelButtonContainer.this.generalController.pasteFromClipboard();
+                        PanelButtonContainer.this.generalController.duplicateSubgraph();
                     }
                 };
             case UNDO:
@@ -137,13 +129,8 @@ public class PanelButtonContainer extends JPanel implements ClipboardListener {
     }
 
     @Override
-    public void setCopyingEnabled(boolean copyingEnabled) {
-        buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(copyingEnabled);
-    }
-
-    @Override
-    public void setPastingEnabled(boolean pastingEnabled) {
-        buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(pastingEnabled);
-
+    public void selectionChanged(List<? extends GraphElement> collection) {
+        boolean duplicationEnabled = collection.size() > 0 && generalController.getModeController().getMode() == ModeType.VERTEX;
+        buttons.get(ActionButtonType.DUPLICATE_SUBGRAPH).setEnabled(duplicationEnabled);
     }
 }
