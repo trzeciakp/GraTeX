@@ -1,6 +1,6 @@
 package pl.edu.agh.gratex.model.properties;
 
-public enum LineType implements Emptyable{
+public enum LineType implements Emptible {
     EMPTY {
         public String toString() {
             return " ";

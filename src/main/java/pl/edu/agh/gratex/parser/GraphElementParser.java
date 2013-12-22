@@ -51,4 +51,9 @@ public abstract class GraphElementParser {
         }
         return Pattern.compile(regex.toString());
     }
+
+    public void updateElementWithCode(GraphElement graphElement, String code) throws ParserException {
+        parseToGraphUsingParseList(code, graphElement);
+        graphElement.setLatexCode(code);
+    }
 }

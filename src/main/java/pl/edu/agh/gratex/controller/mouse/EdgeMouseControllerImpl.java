@@ -4,9 +4,9 @@ import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
-import pl.edu.agh.gratex.editor.DragOperation;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -19,12 +19,13 @@ import java.awt.event.MouseEvent;
  *
  */
 public class EdgeMouseControllerImpl extends GraphElementMouseController {
-    private Edge currentlyAddedEdge;
-    private Edge currentlyMovedEdge;
-    private DragOperation currentDragOperation;
     private GeneralController generalController;
+
+    private Edge currentlyAddedEdge;
+    private Edge currentlyDraggedEdge;
+    private AlterationOperation currentDragOperation;
     private boolean changingEdgeAngle;
-    private Vertex edgeDragDummy;
+    private Vertex edgeDragDummy = new Vertex(null);
 
     public EdgeMouseControllerImpl(GeneralController generalController) {
         super(generalController);
@@ -41,19 +42,18 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         if (currentlyAddedEdge != null) {
             currentlyAddedEdge.setDirected(shiftDown);
         }
-        if (currentlyMovedEdge != null) {
-            currentlyMovedEdge.setDirected(shiftDown);
+        if (currentlyDraggedEdge != null) {
+            currentlyDraggedEdge.setDirected(shiftDown);
         }
     }
 
     @Override
     public void reset() {
         finishMovingElement();
-        currentlyMovedEdge = null;
+        currentlyDraggedEdge = null;
         currentDragOperation = null;
         currentlyAddedEdge = null;
         changingEdgeAngle = false;
-        edgeDragDummy = null;
     }
 
     @Override
@@ -128,9 +128,9 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void moveSelection(MouseEvent e) {
-        if(currentlyMovedEdge == null) {
+        if (currentlyDraggedEdge == null) {
             startMoving(e);
-           } else {
+        } else {
             continueMoving(e);
         }
     }
@@ -139,28 +139,22 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         int x = e.getX();
         int y = e.getY();
         Edge edge = getElementFromPosition(e);
+        currentlyDraggedEdge = edge;
         generalController.getSelectionController().addToSelection(edge, false);
 
-
-
-        currentlyMovedEdge = edge;
-        currentDragOperation = new DragOperation(currentlyMovedEdge);
+        currentDragOperation = new AlterationOperation(generalController, currentlyDraggedEdge, OperationType.MOVE_EDGE, StringLiterals.INFO_EDGE_MOVE);
         if (edge.getVertexA() == edge.getVertexB()) {
             Point c = new Point(x, y);
             Point v = new Point(edge.getVertexA().getPosX(), edge.getVertexA().getPosY());
             if (c.distance(v) > (edge.getVertexA().getRadius() + edge.getVertexA().getLineWidth() / 2) * 1.5) {
                 changingEdgeAngle = true;
-                currentDragOperation.setEdgeStartState(edge, true);
             } else {
-                edgeDragDummy = new Vertex(generalController.getGraph());
                 edgeDragDummy.setPosX(x);
                 edgeDragDummy.setPosY(y);
                 edgeDragDummy.setRadius(2);
                 if (c.distance(edge.getInPoint()) < c.distance(edge.getOutPoint())) {
-                    currentDragOperation.setEdgeStartState(edge, false);
                     edge.setVertexB(edgeDragDummy);
                 } else {
-                    currentDragOperation.setEdgeStartState(edge, true);
                     edge.setVertexA(edgeDragDummy);
                 }
 
@@ -171,17 +165,13 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             Point vb = new Point(edge.getVertexB().getPosX(), edge.getVertexB().getPosY());
             if (c.distance(va) / c.distance(vb) < 2 && c.distance(va) / c.distance(vb) > 0.5) {
                 changingEdgeAngle = true;
-                currentDragOperation.setEdgeStartState(edge, true);
             } else {
-                edgeDragDummy = new Vertex(generalController.getGraph());
                 edgeDragDummy.setPosX(x);
                 edgeDragDummy.setPosY(y);
                 edgeDragDummy.setRadius(2);
                 if (c.distance(va) < c.distance(vb)) {
-                    currentDragOperation.setEdgeStartState(edge, true);
                     edge.setVertexA(edgeDragDummy);
                 } else {
-                    currentDragOperation.setEdgeStartState(edge, false);
                     edge.setVertexB(edgeDragDummy);
                 }
             }
@@ -192,7 +182,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         int x = e.getX();
         int y = e.getY();
         if (changingEdgeAngle) {
-            Edge edge = currentlyMovedEdge;
+            Edge edge = currentlyDraggedEdge;
             if (edge.getVertexA() == edge.getVertexB()) {
                 double angle = (Math.toDegrees(Math.atan2(x - edge.getVertexB().getPosX(), y - edge.getVertexB().getPosY())) + 270) % 360;
                 edge.setRelativeEdgeAngle(((int) Math.floor((angle + 45) / 90) % 4) * 90);
@@ -222,8 +212,8 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         } else {
             Vertex vertex;
             if ((vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y)) != null) {
-                Edge edge = currentlyMovedEdge;
-                if (currentDragOperation.draggingA()) {
+                Edge edge = currentlyDraggedEdge;
+                if (currentlyDraggedEdge.getVertexA() == edgeDragDummy) {
                     edge.setVertexA(vertex);
                 } else {
                     edge.setVertexB(vertex);
@@ -260,52 +250,28 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             } else {
                 edgeDragDummy.setPosX(x);
                 edgeDragDummy.setPosY(y);
-               currentlyMovedEdge.setRelativeEdgeAngle(0);
-                if (currentDragOperation.draggingA()) {
-                    currentlyMovedEdge.setVertexA(edgeDragDummy);
-                } else {
-                    currentlyMovedEdge.setVertexB(edgeDragDummy);
-                }
+                currentlyDraggedEdge.setRelativeEdgeAngle(0);
             }
         }
     }
 
     @Override
     public void finishMovingElement() {
-        if(currentlyMovedEdge != null) {
-            Edge edge = currentlyMovedEdge;
-            if (changingEdgeAngle) {
-                currentDragOperation.setEdgeEndState(edge);
-                if (currentDragOperation.changeMade()) {
-                    ControlManager.operations.addNewOperation(currentDragOperation);
-                    generalController.publishInfo(ControlManager.operations.redo());
-                }
-                changingEdgeAngle = false;
+        if (currentlyDraggedEdge != null) {
+            if (currentlyDraggedEdge.getVertexA() != edgeDragDummy && currentlyDraggedEdge.getVertexB() != edgeDragDummy) {
+                currentDragOperation.finish();
             } else {
-                if (currentDragOperation.draggingA()) {
-                    if (edge.getVertexA() != currentDragOperation.getDisjointedVertex()) {
-                        if (edge.getVertexA() != edgeDragDummy) {
-                            currentDragOperation.setEdgeEndState(edge);
-                            ControlManager.operations.addNewOperation(currentDragOperation);
-                            generalController.publishInfo(ControlManager.operations.redo());
-                        } else {
-                            currentDragOperation.restoreEdgeStartState();
-                        }
-                    }
-                } else {
-                    if (edge.getVertexB() != currentDragOperation.getDisjointedVertex()) {
-                        if (edge.getVertexB() != edgeDragDummy) {
-                            currentDragOperation.setEdgeEndState(edge);
-                            ControlManager.operations.addNewOperation(currentDragOperation);
-                            generalController.publishInfo(ControlManager.operations.redo());
-                        } else {
-                            currentDragOperation.restoreEdgeStartState();
-                        }
-                    }
+                // Restore original edge state (it was dropped in mid air)
+                try {
+                    generalController.getParseController().getEdgeParser().updateElementWithCode(currentlyDraggedEdge, currentlyDraggedEdge.getLatexCode());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    generalController.criticalError("Parser error", e);
                 }
             }
+            changingEdgeAngle = false;
+            currentlyDraggedEdge = null;
         }
-        currentlyMovedEdge = null;
     }
 
     public Edge getCurrentlyAddedEdge() {

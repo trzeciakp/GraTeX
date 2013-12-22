@@ -3,13 +3,12 @@ package pl.edu.agh.gratex.controller.mouse;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
-import pl.edu.agh.gratex.editor.DragOperation;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
-import pl.edu.agh.gratex.view.ControlManager;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -17,8 +16,8 @@ import java.awt.event.MouseEvent;
 public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     private GeneralController generalController;
-    private Vertex currentlyMovedVertex;
-    private DragOperation currentDragOperation;
+    private Vertex currentlyDraggedVertex;
+    private AlterationOperation currentDragOperation;
 
     public VertexMouseControllerImpl(GeneralController generalController) {
         super(generalController);
@@ -32,7 +31,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void reset() {
         finishMovingElement();
-        currentlyMovedVertex = null;
+        currentlyDraggedVertex = null;
         currentDragOperation = null;
     }
 
@@ -77,14 +76,13 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void moveSelection(MouseEvent e) {
-        if(currentlyMovedVertex == null) {
-            currentlyMovedVertex = getElementFromPosition(e);
-            generalController.getSelectionController().addToSelection(currentlyMovedVertex, false);
+        if(currentlyDraggedVertex == null) {
+            currentlyDraggedVertex = getElementFromPosition(e);
+            generalController.getSelectionController().addToSelection(currentlyDraggedVertex, false);
 
-            currentDragOperation = new DragOperation(currentlyMovedVertex);
-            currentDragOperation.setStartPos(currentlyMovedVertex.getPosX(), currentlyMovedVertex.getPosY());
+            currentDragOperation = new AlterationOperation(generalController, currentlyDraggedVertex, OperationType.MOVE_VERTEX, StringLiterals.INFO_VERTEX_MOVE);
         } else {
-            Vertex vertex = currentlyMovedVertex;
+            Vertex vertex = currentlyDraggedVertex;
             generalController.getGraph().getVertices().remove(vertex);
             int oldPosX = vertex.getPosX();
             int oldPosY = vertex.getPosY();
@@ -106,13 +104,9 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void finishMovingElement() {
-        if(currentlyMovedVertex != null) {
-            currentDragOperation.setEndPos(currentlyMovedVertex.getPosX(), currentlyMovedVertex.getPosY());
-            if (currentDragOperation.changeMade()) {
-                ControlManager.operations.addNewOperation(currentDragOperation);
-                generalController.publishInfo(ControlManager.operations.redo());
-            }
-            currentlyMovedVertex = null;
+        if(currentlyDraggedVertex != null) {
+            currentDragOperation.finish();
+            currentlyDraggedVertex = null;
         }
     }
 }

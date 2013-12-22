@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.parser;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
+import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 import pl.edu.agh.gratex.parser.elements.StaticParseElement;
@@ -50,7 +51,9 @@ public class LabelEdgeParser extends GraphElementParser {
     public LabelE parseToGraph(String code, Graph graph) throws ParserException {
         LabelE labelE = new LabelE(null, graph);
         parseToGraphUsingParseList(code, labelE);
-        labelE.setLatexCode(code);
+        labelE.getOwner().setLabel(labelE);
+        LabelEUtils.updatePosition(labelE);
+        labelE.setLatexCode(parseToLatex(labelE));
         return labelE;
     }
 

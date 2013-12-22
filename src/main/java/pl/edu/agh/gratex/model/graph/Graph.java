@@ -159,12 +159,15 @@ public class Graph implements Serializable {
         return elements.get(type);
     }
 
-    public List<? extends GraphElement> getAllElements() {
-        List<GraphElement> result = new LinkedList<>();
+    public GraphElement getElementByLatexCode(String code) {
         for(GraphElementType type : GraphElementType.values()) {
-            result.addAll(elements.get(type));
+           for (GraphElement element : elements.get(type)){
+               if (element.getLatexCode().equals(code)){
+                   return element;
+               }
+           }
         }
-        return result;
+        return null;
     }
 
     public void initDefaultModels() {

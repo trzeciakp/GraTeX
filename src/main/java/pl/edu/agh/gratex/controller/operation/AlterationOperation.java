@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.controller.operation;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.GraphElement;
@@ -10,14 +11,10 @@ import java.util.List;
 
 public class AlterationOperation extends Operation {
     GeneralController generalController;
-    private HashMap<String, String> verticesInitialToEnd = new HashMap<>();
-    private HashMap<String, String> verticesEndToInitial = new HashMap<>();
-    private HashMap<String, String> edgeesInitialToEnd = new HashMap<>();
-    private HashMap<String, String> edgesEndToInitial = new HashMap<>();
-    private HashMap<String, String> labelsEInitialToEnd = new HashMap<>();
-    private HashMap<String, String> labelsEEndToInitial = new HashMap<>();
-    private HashMap<String, String> labelsVInitialToEnd = new HashMap<>();
-    private HashMap<String, String> labelsVEndToInitial = new HashMap<>();
+
+    private List<String> subjects = new LinkedList<>();
+    private HashMap<String, String> initialToEndStates = new HashMap<>();
+    private HashMap<String, String> endToInitialStates = new HashMap<>();
 
     public AlterationOperation(GeneralController generalController,
                                List<? extends GraphElement> subjects,
@@ -39,16 +36,50 @@ public class AlterationOperation extends Operation {
         init(subjects);
     }
 
-    private void init(List<?extends GraphElement> elements)
-    {
+    private void init(List<? extends GraphElement> elements) {
+        for (GraphElement element : elements) {
+            subjects.add(generalController.getParseController().getParserByElementType(element.getType()).parseToLatex(element));
+        }
+    }
+
+    public void finish() {
+        int numberOfChanges = 0;
+        for (String initialState : subjects) {
+            GraphElement element = generalController.getGraph().getElementByLatexCode(initialState);
+            String endState = generalController.getParseController().getParserByElementType(element.getType()).parseToLatex(element);
+            if (!initialState.equals(endState)) {
+                initialToEndStates.put(initialState, endState);
+                endToInitialStates.put(endState, initialState);
+                numberOfChanges++;
+            }
+        }
+
+        if (numberOfChanges > 0) {
+            generalController.getOperationController().registerOperation(this);
+        }
     }
 
     @Override
     public void doOperation() {
+        morphElements(initialToEndStates);
     }
 
     @Override
     public void undoOperation() {
+        morphElements(endToInitialStates);
+    }
+
+    private void morphElements(HashMap<String, String> mapping) {
+        try {
+            for (String key : mapping.keySet()) {
+                GraphElement element = generalController.getGraph().getElementByLatexCode(key);
+                generalController.getParseController().getParserByElementType(element.getType()).
+                        updateElementWithCode(element, mapping.get(key));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            generalController.criticalError("Parser error", e);
+        }
     }
 }
 

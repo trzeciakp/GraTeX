@@ -1,7 +1,9 @@
 package pl.edu.agh.gratex.parser;
 
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;

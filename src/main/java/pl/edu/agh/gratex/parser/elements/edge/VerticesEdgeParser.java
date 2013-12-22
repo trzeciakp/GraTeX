@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public class VertexesEdgeParser extends ParseElement {
+public class VerticesEdgeParser extends ParseElement {
     private static final String VERTEX_REGEX = "\\((\\d+)\\)";
     private static final String REGEX = VERTEX_REGEX + " to (\\[[^]]+\\] )?" + VERTEX_REGEX;
     public static final Pattern PATTERN = Pattern.compile(REGEX);

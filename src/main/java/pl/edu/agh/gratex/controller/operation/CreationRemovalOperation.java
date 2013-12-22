@@ -105,7 +105,6 @@ public class CreationRemovalOperation extends Operation {
                 Edge edge = (Edge) generalController.getParseController().getParserByElementType(GraphElementType.EDGE).
                         parseToGraph(latexCode, generalController.getGraph());
                 generalController.getGraph().getEdges().add(edge);
-                EdgeUtils.updatePosition(edge);
                 if (generalController.getModeController().getMode() == ModeType.EDGE) {
                     generalController.getSelectionController().addToSelection(edge, true);
                 }
@@ -114,8 +113,6 @@ public class CreationRemovalOperation extends Operation {
             for (String latexCode : labelVs) {
                 LabelV labelV = (LabelV) generalController.getParseController().getParserByElementType(GraphElementType.LABEL_VERTEX).
                         parseToGraph(latexCode, generalController.getGraph());
-                labelV.getOwner().setLabel(labelV);
-                LabelVUtils.updatePosition(labelV);
                 generalController.getGraph().getLabelsV().add(labelV);
                 if (generalController.getModeController().getMode() == ModeType.LABEL_VERTEX) {
                     generalController.getSelectionController().addToSelection(labelV, true);
@@ -125,8 +122,6 @@ public class CreationRemovalOperation extends Operation {
             for (String latexCode : labelEs) {
                 LabelE labelE = (LabelE) generalController.getParseController().getParserByElementType(GraphElementType.LABEL_EDGE).
                         parseToGraph(latexCode, generalController.getGraph());
-                labelE.getOwner().setLabel(labelE);
-                LabelEUtils.updatePosition(labelE);
                 generalController.getGraph().getLabelsE().add(labelE);
                 if (generalController.getModeController().getMode() == ModeType.LABEL_EDGE) {
                     generalController.getSelectionController().addToSelection(labelE, true);
@@ -172,11 +167,13 @@ public class CreationRemovalOperation extends Operation {
         for (String latexCode : labelVs) {
             LabelV labelV = generalController.getGraph().getLabelVByLatexCode(latexCode);
             generalController.getGraph().getLabelsV().remove(labelV);
+            labelV.getOwner().setLabel(null);
         }
 
         for (String latexCode : labelEs) {
             LabelE labelE = generalController.getGraph().getLabelEByLatexCode(latexCode);
             generalController.getGraph().getLabelsE().remove(labelE);
+            labelE.getOwner().setLabel(null);
         }
     }
 }

@@ -15,16 +15,8 @@ public abstract class Operation {
         return info;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
     public OperationType getOperationType() {
         return operationType;
-    }
-
-    public void setOperationType(OperationType operationType) {
-        this.operationType = operationType;
     }
 
     public abstract void doOperation();

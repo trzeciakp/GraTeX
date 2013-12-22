@@ -39,10 +39,12 @@ public class LabelVertexParser extends GraphElementParser {
 
     @Override
     public LabelV parseToGraph(String code, Graph graph) throws ParserException {
-        LabelV result = new LabelV(null, graph);
-        parseToGraphUsingParseList(code, result);
-        result.setLatexCode(code);
-        return result;
+        LabelV labelV = new LabelV(null, graph);
+        parseToGraphUsingParseList(code, labelV);
+        labelV.getOwner().setLabel(labelV);
+        LabelVUtils.updatePosition(labelV);
+        labelV.setLatexCode(parseToLatex(labelV));
+        return labelV;
     }
 
     public List<ParseElement> getParseList() {

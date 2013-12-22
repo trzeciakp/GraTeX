@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.controller.mouse;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
@@ -20,10 +21,10 @@ import java.awt.geom.Point2D;
  *
  */
 public class LabelVertexMouseControllerImpl extends GraphElementMouseController {
+    private GeneralController generalController;
 
     private LabelV currentlyMovedLabel;
-    private DragOperation currentDragOperation;
-    private GeneralController generalController;
+    private AlterationOperation currentDragOperation;
 
     public LabelVertexMouseControllerImpl(GeneralController generalController) {
         super(generalController);
@@ -101,14 +102,14 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
 
     private void startMoving(MouseEvent e) {
         currentlyMovedLabel = getElementFromPosition(e);
-        currentDragOperation = new DragOperation(currentlyMovedLabel);
-        currentDragOperation.setStartAngle((currentlyMovedLabel).getPosition());
+        generalController.getSelectionController().addToSelection(currentlyMovedLabel, false);
+        currentDragOperation = new AlterationOperation(generalController, currentlyMovedLabel, OperationType.MOVE_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_MOVE);
     }
 
     private void continueMoving(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        Vertex vertex = ((LabelV) currentlyMovedLabel).getOwner();
+        Vertex vertex = currentlyMovedLabel.getOwner();
         Point2D p1 = new Point(vertex.getPosX(), vertex.getPosY());
         Point2D p2 = new Point(x, y);
         double angle = Math.toDegrees(Math.asin((x - vertex.getPosX()) / p1.distance(p2)));
@@ -119,18 +120,14 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
         } else {
             angle = 180 - angle;
         }
-        ((LabelV) currentlyMovedLabel).setPosition(((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8);
+        currentlyMovedLabel.setPosition(((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8);
     }
 
     @Override
     public void finishMovingElement() {
         if (currentlyMovedLabel != null) {
-            currentDragOperation.setEndAngle(currentlyMovedLabel.getPosition());
-            if (currentDragOperation.changeMade()) {
-                ControlManager.operations.addNewOperation(currentDragOperation);
-                generalController.publishInfo(ControlManager.operations.redo());
-            }
+            currentDragOperation.finish();
+            currentlyMovedLabel = null;
         }
-        currentlyMovedLabel = null;
     }
 }

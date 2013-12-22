@@ -3,13 +3,13 @@ package pl.edu.agh.gratex.controller.mouse;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
-import pl.edu.agh.gratex.editor.DragOperation;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.view.ControlManager;
+import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -19,27 +19,28 @@ import java.awt.geom.Line2D;
  *
  */
 public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
-    private LabelE currentlyMovedLabel;
-    private DragOperation currentDragOperation;
+    private GeneralController generalController;
+
+    private LabelE currentlyDraggedLabel;
+    private AlterationOperation currentDragOperation;
 
     public LabelEdgeMouseControllerImpl(GeneralController generalController) {
         super(generalController);
         this.generalController = generalController;
     }
 
-    private GeneralController generalController;
 
     @Override
     public void shiftDownChanged(){
-        if (currentlyMovedLabel != null){
-            currentlyMovedLabel.setHorizontalPlacement(shiftDown);
+        if (currentlyDraggedLabel != null){
+            currentlyDraggedLabel.setHorizontalPlacement(shiftDown);
         }
     }
 
     @Override
     public void reset() {
         finishMovingElement();
-        currentlyMovedLabel = null;
+        currentlyDraggedLabel = null;
         currentDragOperation = null;
         shiftDown = false;
     }
@@ -145,10 +146,10 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void moveSelection(MouseEvent e) {
-        if(currentlyMovedLabel == null) {
-            currentlyMovedLabel = getElementFromPosition(e);
-            currentDragOperation = new DragOperation(currentlyMovedLabel);
-            currentDragOperation.setLabelEStartState(currentlyMovedLabel);
+        if(currentlyDraggedLabel == null) {
+            currentlyDraggedLabel = getElementFromPosition(e);
+            generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);
+            currentDragOperation = new AlterationOperation(generalController, currentlyDraggedLabel, OperationType.MOVE_LABEL_EDGE, StringLiterals.INFO_LABEL_E_MOVE);
         } else {
            continueMoving(e);
         }
@@ -158,8 +159,8 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
         int x = e.getX();
         int y = e.getY();
         int bias;
-        Edge edge = currentlyMovedLabel.getOwner();
-        LabelE labelE = currentlyMovedLabel;
+        Edge edge = currentlyDraggedLabel.getOwner();
+        LabelE labelE = currentlyDraggedLabel;
         if (edge.getVertexA() == edge.getVertexB()) {
             double angle = -Math.toDegrees(Math.atan2(x - edge.getArcMiddle().x, y - edge.getArcMiddle().y)) + 270 + edge.getRelativeEdgeAngle();
             labelE.setPosition((int) Math.round((angle % 360) / 3.6));
@@ -217,13 +218,10 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void finishMovingElement() {
-        if(currentlyMovedLabel != null) {
-            currentDragOperation.setLabelEEndState(currentlyMovedLabel);
-            if (currentDragOperation.changeMade()) {
-                ControlManager.operations.addNewOperation(currentDragOperation);
-                generalController.publishInfo(ControlManager.operations.redo());
-            }
+        if(currentlyDraggedLabel != null) {
+            LabelEUtils.updatePosition(currentlyDraggedLabel);
+            currentDragOperation.finish();
+            currentlyDraggedLabel = null;
         }
-        currentlyMovedLabel = null;
     }
 }

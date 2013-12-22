@@ -77,6 +77,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     public void processMouseClicking(MouseEvent e) {
         switch (tool) {
             case ADD:
+                selectionController.clearSelection();
                 controllers.get(mode).addNewElement(e);
                 break;
             case REMOVE:
@@ -101,8 +102,6 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
             controllers.get(mode).moveSelection(e);
             isElementMoving = true;
         }
-
-        //operationController.reportOperationEvent(null);
     }
 
     @Override

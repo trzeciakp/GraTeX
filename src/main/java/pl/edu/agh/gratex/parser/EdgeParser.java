@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.parser;
 
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
@@ -28,7 +29,7 @@ public class EdgeParser extends GraphElementParser {
         parseList.add(new LineColorEdgeParser(colorMapper));
         parseList.add(new LoopEdgeParser());
         parseList.add(new StaticParseElement("] ", false));
-        parseList.add(new VertexesEdgeParser());
+        parseList.add(new VerticesEdgeParser());
         parseList.add(new StaticParseElement(";", false));
         parseList.add(new CommentedParametersEdgeParser());
         pattern = evaluatePattern();
@@ -41,10 +42,11 @@ public class EdgeParser extends GraphElementParser {
 
     @Override
     public Edge parseToGraph(String code, Graph graph) throws ParserException {
-        Edge result = new Edge(graph);
-        parseToGraphUsingParseList(code, result);
-        result.setLatexCode(code);
-        return result;
+        Edge edge = new Edge(graph);
+        parseToGraphUsingParseList(code, edge);
+        EdgeUtils.updatePosition(edge);
+        edge.setLatexCode(parseToLatex(edge));
+        return edge;
     }
 
     public List<ParseElement> getParseList() {
