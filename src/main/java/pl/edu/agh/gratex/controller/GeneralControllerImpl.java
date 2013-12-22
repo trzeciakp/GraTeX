@@ -7,7 +7,7 @@ import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
 import pl.edu.agh.gratex.controller.mouse.MouseControllerTmpImpl;
 import pl.edu.agh.gratex.controller.operation.OperationController;
-import pl.edu.agh.gratex.controller.operation.OperationControllerImpl;
+import pl.edu.agh.gratex.controller.operation.*;
 import pl.edu.agh.gratex.editor.OldOperationList;
 import pl.edu.agh.gratex.editor.RemoveOperation;
 import pl.edu.agh.gratex.editor.TemplateChangeOperation;
@@ -40,7 +40,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         toolController = new ToolControllerImpl(this);
         operationController = new OperationControllerImpl(this);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
-        //mouseController = new MouseControllerImpl(this, operationController, modeController, toolController);
         mouseController = new MouseControllerTmpImpl(this, modeController, toolController, selectionController, operationController);
         parseController = new ParseControllerImpl(this);
         clipboardController = new ClipboardControllerImpl();
