@@ -135,6 +135,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
                 LabelE labelE = new LabelE(temp, generalController.getGraph());
                 labelE.setHorizontalPlacement(shiftDown);
                 labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
+                LabelEUtils.updatePosition(labelE);
                 new CreationRemovalOperation(generalController, labelE, OperationType.ADD_LABEL_EDGE, StringLiterals.INFO_LABEL_E_ADD, true);
             } else {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_LABEL_E_EXISTS));

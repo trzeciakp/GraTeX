@@ -123,7 +123,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             graph = new Graph(this);
             ControlManager.operations = new OldOperationList(this);
             resetWorkspace();
-            editGraphTemplate();
+            // TODO wykomentowalem bo wkurwialo
+            // editGraphTemplate();
         }
     }
 
