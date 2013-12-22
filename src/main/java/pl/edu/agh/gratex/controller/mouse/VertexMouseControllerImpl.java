@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
+import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -13,13 +14,10 @@ import pl.edu.agh.gratex.view.ControlManager;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-/**
- *
- */
 public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     private GeneralController generalController;
-    private Vertex currentlyMovedElement;
+    private Vertex currentlyMovedVertex;
     private DragOperation currentDragOperation;
 
     public VertexMouseControllerImpl(GeneralController generalController) {
@@ -28,14 +26,13 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public void processShiftPressing(boolean flag) {
-
+    public void shiftDownChanged() {
     }
 
     @Override
-    public void clear() {
+    public void reset() {
         finishMovingElement();
-        currentlyMovedElement = null;
+        currentlyMovedVertex = null;
         currentDragOperation = null;
     }
 
@@ -70,26 +67,24 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
             if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex)) {
                 VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
                 new CreationRemovalOperation(generalController, vertex, OperationType.ADD_VERTEX, StringLiterals.INFO_VERTEX_ADD, true);
-                // TODO Tutaj proba zastapienia dodawania tym nowym
-                //ControlManager.operations.addNewOperation(new AddOperation(generalController, vertex));
-                //generalController.publishInfo(ControlManager.operations.redo());
-                //generalController.getSelectionController().addToSelection(vertex, false);
             } else {
-                generalController.publishInfo(StringLiterals.INFO_CANNOT_CREATE_VERTEX_COLLISION);
+                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_VERTEX_COLLISION));
             }
         } else {
-            generalController.publishInfo(StringLiterals.INFO_CANNOT_CREATE_VERTEX_BOUNDARY);
+            generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_VERTEX_BOUNDARY));
         }
     }
 
     @Override
     public void moveSelection(MouseEvent e) {
-        if(currentlyMovedElement == null) {
-            currentlyMovedElement = getElementFromPosition(e);
-            currentDragOperation = new DragOperation(currentlyMovedElement);
-            currentDragOperation.setStartPos(((Vertex) currentlyMovedElement).getPosX(), ((Vertex) currentlyMovedElement).getPosY());
+        if(currentlyMovedVertex == null) {
+            currentlyMovedVertex = getElementFromPosition(e);
+            generalController.getSelectionController().addToSelection(currentlyMovedVertex, false);
+
+            currentDragOperation = new DragOperation(currentlyMovedVertex);
+            currentDragOperation.setStartPos(currentlyMovedVertex.getPosX(), currentlyMovedVertex.getPosY());
         } else {
-            Vertex vertex = (Vertex) currentlyMovedElement;
+            Vertex vertex = currentlyMovedVertex;
             generalController.getGraph().getVertices().remove(vertex);
             int oldPosX = vertex.getPosX();
             int oldPosY = vertex.getPosY();
@@ -111,13 +106,13 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void finishMovingElement() {
-        if(currentlyMovedElement != null) {
-            currentDragOperation.setEndPos(((Vertex) currentlyMovedElement).getPosX(), ((Vertex) currentlyMovedElement).getPosY());
+        if(currentlyMovedVertex != null) {
+            currentDragOperation.setEndPos(currentlyMovedVertex.getPosX(), currentlyMovedVertex.getPosY());
             if (currentDragOperation.changeMade()) {
                 ControlManager.operations.addNewOperation(currentDragOperation);
                 generalController.publishInfo(ControlManager.operations.redo());
             }
-            currentlyMovedElement = null;
+            currentlyMovedVertex = null;
         }
     }
 }

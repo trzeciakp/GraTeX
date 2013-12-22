@@ -21,8 +21,6 @@ public interface MouseController {
     public void copyToClipboard();
     public void pasteFromClipboard();
 
-    public void finishMovingElement();
-
     public boolean isEdgeCurrentlyAdded(Edge edge);
 
     public void cancelCurrentOperation();

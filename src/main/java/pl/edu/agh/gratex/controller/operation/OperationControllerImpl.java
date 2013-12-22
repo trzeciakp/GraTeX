@@ -1,16 +1,11 @@
 package pl.edu.agh.gratex.controller.operation;
 
-import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.model.GraphElement;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class OperationControllerImpl implements OperationController {
     private GeneralController generalController;
-    private HashMap<GraphElement, String> initialStates;
     private ArrayList<OperationListener> listeners = new ArrayList<>();
 
     OperationList operationList = new OperationList();
@@ -24,53 +19,30 @@ public class OperationControllerImpl implements OperationController {
         return generalController;
     }
 
-    // TODO To tutaj jest do testow
     @Override
-    public OperationList getOperationList() {
-        return operationList;
-    }
-
-    @Override
-    public void initOperation(List<GraphElement> subjects, String initInfo) {
-        initialStates = new HashMap<>();
-        for (GraphElement subject : subjects) {
-            initialStates.put(subject, generalController.getParseController().getParserByElementType(subject.getType()).parseToLatex(subject));
-        }
-
-        for (OperationListener listener : listeners) {
-            listener.initOperationEvent(initialStates, initInfo);
-        }
-    }
-
-    @Override
-    public void finishOperation(Operation operation) {
+    public void registerOperation(Operation operation) {
         operationList.addNewOperation(operation);
         operationList.redo();
         for (OperationListener listener : listeners) {
-            listener.finishOperationEvent(operation);
+            listener.operationEvent(operation);
         }
     }
 
     @Override
-    public void reportGenericOperation(String info) {
+    public void reportOperationEvent(Operation operation) {
         for (OperationListener listener : listeners) {
-            listener.genericOperationEvent(info);
+            listener.operationEvent(operation);
         }
-    }
-
-    @Override
-    public HashMap<GraphElement, String> getOperationInitialStates() {
-        return initialStates;
     }
 
     @Override
     public void undo() {
-        reportGenericOperation(operationList.undo());
+        reportOperationEvent(operationList.undo());
     }
 
     @Override
     public void redo() {
-        reportGenericOperation(operationList.redo());
+        reportOperationEvent(operationList.redo());
     }
 
     @Override

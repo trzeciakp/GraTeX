@@ -1,15 +1,11 @@
 package pl.edu.agh.gratex.controller;
 
-import pl.edu.agh.gratex.constants.Const;
-import pl.edu.agh.gratex.constants.ModeType;
-import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.constants.*;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
-import pl.edu.agh.gratex.controller.mouse.MouseControllerTmpImpl;
+import pl.edu.agh.gratex.controller.mouse.MouseControllerImpl;
 import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.controller.operation.*;
 import pl.edu.agh.gratex.editor.OldOperationList;
-import pl.edu.agh.gratex.editor.RemoveOperation;
 import pl.edu.agh.gratex.editor.TemplateChangeOperation;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
@@ -40,7 +36,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         toolController = new ToolControllerImpl(this);
         operationController = new OperationControllerImpl(this);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
-        mouseController = new MouseControllerTmpImpl(this, modeController, toolController, selectionController, operationController);
+        mouseController = new MouseControllerImpl(this, modeController, toolController, selectionController, operationController);
         parseController = new ParseControllerImpl(this);
         clipboardController = new ClipboardControllerImpl();
 
@@ -193,7 +189,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         //ControlManager.updatePropertyChangeOperationStatus(false);
         //mouseController.finishMovingElement();
         //mouseController.cancelCurrentOperation();
-        operationController.reportGenericOperation(null);
+        operationController.reportOperationEvent(null);
     }
 
     @Override
@@ -219,19 +215,12 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void undo() {
-//        publishInfo(ControlManager.operations.undo());
-//        selectionController.clearSelection();
-//        ControlManager.updatePropertyChangeOperationStatus(false);
-//        operationController.reportGenericOperation(null);
         selectionController.clearSelection();
         operationController.undo();
     }
 
     @Override
     public void redo() {
-//        publishInfo(ControlManager.operations.redo());
-//        selectionController.clearSelection();
-//        operationController.reportGenericOperation(null);
         selectionController.clearSelection();
         operationController.redo();
     }
@@ -250,7 +239,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                 GraphUtils.adjustVerticesToGrid(graph);
             }
         }
-        operationController.reportGenericOperation(StringLiterals.INFO_GENERIC_GRID(graph.gridOn, graph.gridResolutionX, graph.gridResolutionY));
+        operationController.reportOperationEvent(new GenericOperation(
+                StringLiterals.INFO_GENERIC_GRID(graph.gridOn, graph.gridResolutionX, graph.gridResolutionY)));
     }
 
     @Override
@@ -264,7 +254,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         if (result != null) {
             graph.getGraphNumeration().setNumerationDigital(result[0] == 0);
             graph.getGraphNumeration().setStartingNumber(result[1]);
-            operationController.reportGenericOperation(StringLiterals.INFO_GENERIC_NUMERATION(result[0] == 0, result[1]));
+            operationController.reportOperationEvent(new GenericOperation(
+                    StringLiterals.INFO_GENERIC_NUMERATION(result[0] == 0, result[1])));
         }
     }
 
@@ -282,19 +273,17 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     public void selectAll() {
         toolController.setTool(ToolType.SELECT);
         selectionController.selectAll();
-        //ControlManager.updatePropertyChangeOperationStatus(true);
-        operationController.reportGenericOperation(StringLiterals.INFO_GENERIC_SELECT_ALL(modeController.getMode()));
+        operationController.reportOperationEvent(new GenericOperation(
+                StringLiterals.INFO_GENERIC_SELECT_ALL(modeController.getMode())));
     }
 
     @Override
     public void deleteSelection() {
         if (selectionController.selectionSize() > 0) {
-            ControlManager.operations.addNewOperation(new RemoveOperation(this, selectionController.getSelection()));
-            publishInfo(ControlManager.operations.redo());
-            operationController.reportGenericOperation(null);
+            new CreationRemovalOperation(this, selectionController.getSelection(), OperationType.REMOVE_OPERATION(modeController.getMode()),
+                    StringLiterals.INFO_REMOVE_ELEMENT(modeController.getMode(), selectionController.selectionSize()), false);
         }
         selectionController.clearSelection();
-        //ControlManager.updatePropertyChangeOperationStatus(false);
     }
 
     @Override

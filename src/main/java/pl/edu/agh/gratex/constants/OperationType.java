@@ -1,6 +1,8 @@
 package pl.edu.agh.gratex.constants;
 
 public enum OperationType {
+    GENERIC,
+
     ADD_VERTEX,
     ADD_EDGE,
     ADD_LABEL_VERTEX,

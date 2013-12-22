@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
+import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
@@ -19,7 +20,7 @@ import java.awt.event.MouseEvent;
  */
 public class EdgeMouseControllerImpl extends GraphElementMouseController {
     private Edge currentlyAddedEdge;
-    private Edge currentlyMovedElement;
+    private Edge currentlyMovedEdge;
     private DragOperation currentDragOperation;
     private GeneralController generalController;
     private boolean changingEdgeAngle;
@@ -33,24 +34,22 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void processMouseMoving(ToolType toolType, MouseEvent e) {
         super.processMouseMoving(toolType, e);
-        //TODO z shiftem
     }
 
     @Override
-    public void processShiftPressing(boolean flag) {
-        //shiftDown = flag;
+    public void shiftDownChanged() {
         if (currentlyAddedEdge != null) {
-            currentlyAddedEdge.setDirected(flag);
+            currentlyAddedEdge.setDirected(shiftDown);
         }
-        if (currentlyMovedElement != null) {
-            currentlyMovedElement.setDirected(flag);
+        if (currentlyMovedEdge != null) {
+            currentlyMovedEdge.setDirected(shiftDown);
         }
     }
 
     @Override
-    public void clear() {
+    public void reset() {
         finishMovingElement();
-        currentlyMovedElement = null;
+        currentlyMovedEdge = null;
         currentDragOperation = null;
         currentlyAddedEdge = null;
         changingEdgeAngle = false;
@@ -107,33 +106,29 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), e.getX(), e.getY());
         if (temp == null) {
             if (currentlyAddedEdge == null) {
-                generalController.publishInfo(StringLiterals.INFO_CHOOSE_EDGE_START);
+                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_START));
             } else {
                 currentlyAddedEdge = null;
-                generalController.publishInfo(StringLiterals.INFO_EDGE_ADDING_CANCELLED);
+                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_EDGE_ADDING_CANCELLED));
             }
         } else {
             if (currentlyAddedEdge == null) {
                 currentlyAddedEdge = new Edge(generalController.getGraph());
                 currentlyAddedEdge.setModel(generalController.getGraph().getEdgeDefaultModel());
                 currentlyAddedEdge.setVertexA(temp);
-                generalController.publishInfo(StringLiterals.INFO_CHOOSE_EDGE_END);
+                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_END));
             } else {
                 currentlyAddedEdge.setVertexB(temp);
-                currentlyAddedEdge.setDirected(e.isShiftDown());
+                currentlyAddedEdge.setDirected(shiftDown);
                 new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
                 currentlyAddedEdge = null;
-                // TODO Tutaj proba zastapienia dodawania tym nowym
-                //ControlManager.operations.addNewOperation(new AddOperation(generalController, currentlyAddedEdge));
-                //generalController.publishInfo(ControlManager.operations.redo());
-                //generalController.getSelectionController().addToSelection(currentlyAddedEdge, false);
             }
         }
     }
 
     @Override
     public void moveSelection(MouseEvent e) {
-        if(currentlyMovedElement == null) {
+        if(currentlyMovedEdge == null) {
             startMoving(e);
            } else {
             continueMoving(e);
@@ -144,8 +139,12 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         int x = e.getX();
         int y = e.getY();
         Edge edge = getElementFromPosition(e);
-        currentlyMovedElement = edge;
-        currentDragOperation = new DragOperation(currentlyMovedElement);
+        generalController.getSelectionController().addToSelection(edge, false);
+
+
+
+        currentlyMovedEdge = edge;
+        currentDragOperation = new DragOperation(currentlyMovedEdge);
         if (edge.getVertexA() == edge.getVertexB()) {
             Point c = new Point(x, y);
             Point v = new Point(edge.getVertexA().getPosX(), edge.getVertexA().getPosY());
@@ -193,7 +192,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         int x = e.getX();
         int y = e.getY();
         if (changingEdgeAngle) {
-            Edge edge = (Edge) currentlyMovedElement;
+            Edge edge = currentlyMovedEdge;
             if (edge.getVertexA() == edge.getVertexB()) {
                 double angle = (Math.toDegrees(Math.atan2(x - edge.getVertexB().getPosX(), y - edge.getVertexB().getPosY())) + 270) % 360;
                 edge.setRelativeEdgeAngle(((int) Math.floor((angle + 45) / 90) % 4) * 90);
@@ -223,7 +222,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         } else {
             Vertex vertex;
             if ((vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), x, y)) != null) {
-                Edge edge = (Edge) currentlyMovedElement;
+                Edge edge = currentlyMovedEdge;
                 if (currentDragOperation.draggingA()) {
                     edge.setVertexA(vertex);
                 } else {
@@ -261,11 +260,11 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             } else {
                 edgeDragDummy.setPosX(x);
                 edgeDragDummy.setPosY(y);
-                ((Edge) currentlyMovedElement).setRelativeEdgeAngle(0);
+               currentlyMovedEdge.setRelativeEdgeAngle(0);
                 if (currentDragOperation.draggingA()) {
-                    ((Edge) currentlyMovedElement).setVertexA(edgeDragDummy);
+                    currentlyMovedEdge.setVertexA(edgeDragDummy);
                 } else {
-                    ((Edge) currentlyMovedElement).setVertexB(edgeDragDummy);
+                    currentlyMovedEdge.setVertexB(edgeDragDummy);
                 }
             }
         }
@@ -273,8 +272,8 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void finishMovingElement() {
-        if(currentlyMovedElement != null) {
-            Edge edge = (Edge) currentlyMovedElement;
+        if(currentlyMovedEdge != null) {
+            Edge edge = currentlyMovedEdge;
             if (changingEdgeAngle) {
                 currentDragOperation.setEdgeEndState(edge);
                 if (currentDragOperation.changeMade()) {
@@ -306,7 +305,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 }
             }
         }
-        currentlyMovedElement = null;
+        currentlyMovedEdge = null;
     }
 
     public Edge getCurrentlyAddedEdge() {

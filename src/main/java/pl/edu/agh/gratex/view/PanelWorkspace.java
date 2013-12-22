@@ -202,18 +202,9 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     // ===================================
     // OperationListener implementation
 
-    @Override
-    public void initOperationEvent(HashMap<GraphElement, String> subjectStates, String info) {
-        repaint();
-    }
 
     @Override
-    public void finishOperationEvent(Operation operation) {
-        repaint();
-    }
-
-    @Override
-    public void genericOperationEvent(String info) {
+    public void operationEvent(Operation operation) {
         repaint();
     }
 

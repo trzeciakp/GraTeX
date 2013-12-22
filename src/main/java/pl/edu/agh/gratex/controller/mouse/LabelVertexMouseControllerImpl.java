@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
+import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.editor.DragOperation;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
@@ -20,7 +21,7 @@ import java.awt.geom.Point2D;
  */
 public class LabelVertexMouseControllerImpl extends GraphElementMouseController {
 
-    private LabelV currentlyMovedElement;
+    private LabelV currentlyMovedLabel;
     private DragOperation currentDragOperation;
     private GeneralController generalController;
 
@@ -30,14 +31,13 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     }
 
     @Override
-    public void processShiftPressing(boolean flag) {
-
+    public void shiftDownChanged() {
     }
 
     @Override
-    public void clear() {
+    public void reset() {
         finishMovingElement();
-        currentlyMovedElement = null;
+        currentlyMovedLabel = null;
         currentDragOperation = null;
     }
 
@@ -82,21 +82,17 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
                 LabelVUtils.updatePosition(labelV);
                 // TODO Tutaj proba zastapienia dodawania tym nowym
                 new CreationRemovalOperation(generalController, labelV, OperationType.ADD_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_ADD, true);
-                //ControlManager.operations.addNewOperation(new AddOperation(generalController, labelV));
-                //ControlManager.operations.redo();
-                //generalController.getSelectionController().addToSelection(labelV, false);
-
             } else {
-                generalController.publishInfo(StringLiterals.INFO_CANNOT_CREATE_LABEL_V_EXISTS);
+                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_LABEL_V_EXISTS));
             }
         } else {
-            generalController.publishInfo(StringLiterals.INFO_CHOOSE_VERTEX_FOR_LABEL);
+            generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_VERTEX_FOR_LABEL));
         }
     }
 
     @Override
     public void moveSelection(MouseEvent e) {
-        if (currentlyMovedElement == null) {
+        if (currentlyMovedLabel == null) {
             startMoving(e);
         } else {
             continueMoving(e);
@@ -104,15 +100,15 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     }
 
     private void startMoving(MouseEvent e) {
-        currentlyMovedElement = getElementFromPosition(e);
-        currentDragOperation = new DragOperation(currentlyMovedElement);
-        currentDragOperation.setStartAngle((currentlyMovedElement).getPosition());
+        currentlyMovedLabel = getElementFromPosition(e);
+        currentDragOperation = new DragOperation(currentlyMovedLabel);
+        currentDragOperation.setStartAngle((currentlyMovedLabel).getPosition());
     }
 
     private void continueMoving(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        Vertex vertex = ((LabelV) currentlyMovedElement).getOwner();
+        Vertex vertex = ((LabelV) currentlyMovedLabel).getOwner();
         Point2D p1 = new Point(vertex.getPosX(), vertex.getPosY());
         Point2D p2 = new Point(x, y);
         double angle = Math.toDegrees(Math.asin((x - vertex.getPosX()) / p1.distance(p2)));
@@ -123,18 +119,18 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
         } else {
             angle = 180 - angle;
         }
-        ((LabelV) currentlyMovedElement).setPosition(((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8);
+        ((LabelV) currentlyMovedLabel).setPosition(((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8);
     }
 
     @Override
     public void finishMovingElement() {
-        if (currentlyMovedElement != null) {
-            currentDragOperation.setEndAngle(((LabelV) currentlyMovedElement).getPosition());
+        if (currentlyMovedLabel != null) {
+            currentDragOperation.setEndAngle(currentlyMovedLabel.getPosition());
             if (currentDragOperation.changeMade()) {
                 ControlManager.operations.addNewOperation(currentDragOperation);
                 generalController.publishInfo(ControlManager.operations.redo());
             }
         }
-        currentlyMovedElement = null;
+        currentlyMovedLabel = null;
     }
 }

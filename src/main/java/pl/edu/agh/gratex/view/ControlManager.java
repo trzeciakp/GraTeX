@@ -54,7 +54,6 @@ public class ControlManager {
                 operations.addNewOperation(currentPropertyChangeOperation);
                 mainWindow.getGeneralController().publishInfo(operations.redo());
             }
-            mainWindow.getGeneralController().getOperationController().reportGenericOperation(null);
             updatePropertyChangeOperationStatus(false);
         }
     }*/

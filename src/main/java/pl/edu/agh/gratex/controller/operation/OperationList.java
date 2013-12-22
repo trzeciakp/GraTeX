@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.controller.operation;
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
+import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.controller.operation.Operation;
 
 import java.util.LinkedList;
@@ -26,19 +27,23 @@ public class OperationList {
         operations.add(operation);
     }
 
-    public String undo() {
+    public Operation undo() {
         if (iterator < 1) {
-            return StringLiterals.INFO_NOTHING_TO_UNDO;
+            return new GenericOperation(StringLiterals.INFO_NOTHING_TO_UNDO);
         } else {
-            return StringLiterals.INFO_UNDO(operations.get(--iterator).undoOperation());
+            Operation operation = operations.get(--iterator);
+            operation.undoOperation();
+            return new GenericOperation(StringLiterals.INFO_UNDO(operation.getInfo()));
         }
     }
 
-    public String redo() {
+    public Operation redo() {
         if (iterator == operations.size()) {
-            return StringLiterals.INFO_NOTHING_TO_REDO;
+            return new GenericOperation(StringLiterals.INFO_NOTHING_TO_REDO);
         } else {
-            return StringLiterals.INFO_REDO(operations.get(iterator++).doOperation());
+            Operation operation = operations.get(iterator++);
+            operation.doOperation();
+            return new GenericOperation(StringLiterals.INFO_REDO(operation.getInfo()));
         }
 
     }

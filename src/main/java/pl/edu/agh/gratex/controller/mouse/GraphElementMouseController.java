@@ -6,11 +6,8 @@ import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
-import pl.edu.agh.gratex.editor.RemoveOperation;
+import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElement;
-import pl.edu.agh.gratex.model.graph.GraphUtils;
-import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.view.ControlManager;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -21,6 +18,7 @@ import java.awt.event.MouseEvent;
 public abstract class GraphElementMouseController {
     protected int mouseX;
     protected int mouseY;
+    protected boolean shiftDown;
     private GeneralController generalController;
 
     protected GraphElementMouseController(GeneralController generalController) {
@@ -38,10 +36,14 @@ public abstract class GraphElementMouseController {
         mouseY = e.getY();
     }
 
+    public void processShiftPressing(boolean flag) {
+        shiftDown = flag;
+        shiftDownChanged();
+    }
 
-    public abstract void processShiftPressing(boolean flag);
+    public abstract void shiftDownChanged();
 
-    public abstract void clear();
+    public abstract void reset();
 
     public abstract void paintCurrentlyAddedElement(Graphics2D g);
 
@@ -56,7 +58,7 @@ public abstract class GraphElementMouseController {
             new CreationRemovalOperation(generalController, temp, OperationType.REMOVE_OPERATION(mode),
                     StringLiterals.INFO_REMOVE_ELEMENT(mode, 1), false);
         } else {
-            generalController.getOperationController().reportGenericOperation(StringLiterals.INFO_NOTHING_TO_REMOVE);
+            generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_NOTHING_TO_REMOVE));
         }
     }
 

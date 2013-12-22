@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.view.propertyPanel;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.controller.operation.Operation;
 import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.controller.operation.OperationListener;
@@ -12,7 +13,6 @@ import pl.edu.agh.gratex.model.PropertyModel;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -48,7 +48,7 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
         for (GraphElement graphElement : selection) {
             graphElement.setModel(model);
         }
-        generalController.getOperationController().reportGenericOperation("cos sie zmienilo w PropertyEditor");
+        generalController.getOperationController().reportOperationEvent(new GenericOperation("cos sie zmienilo w PropertyEditor"));
 
     }
 
@@ -129,26 +129,20 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
 
 
     @Override
-    public void initOperationEvent(HashMap<GraphElement, String> subjectStates, String info) {
-    }
-
-    @Override
-    public void finishOperationEvent(Operation operation) {
-        if (operation.getOperationType() == OperationType.ADD_LABEL_EDGE || operation.getOperationType() == OperationType.ADD_LABEL_VERTEX) {
-            // TODO Na razie to nie dziala, bo zaraz po tym jest robiony updatePropertyChangeOperation i sie nadpisuje. Ale bedzie dzialac.
-            panelsMap.get(mode).components.get(0).requestFocus();
-            ((JTextField) panelsMap.get(mode).components.get(0)).selectAll();
+    public void operationEvent(Operation operation) {
+        if (operation != null) {
+            if (operation.getOperationType() == OperationType.ADD_LABEL_EDGE || operation.getOperationType() == OperationType.ADD_LABEL_VERTEX) {
+                // TODO Na razie to nie dziala, bo zaraz po tym jest robiony updatePropertyChangeOperation i sie nadpisuje. Ale bedzie dzialac.
+                panelsMap.get(mode).components.get(0).requestFocus();
+                ((JTextField) panelsMap.get(mode).components.get(0)).selectAll();
+            }
         }
-    }
-
-    @Override
-    public void genericOperationEvent(String info) {
     }
 
     @Override
     public void selectionChanged(List<? extends GraphElement> collection) {
         selection = collection;
-        if(collection.size() == 0) {
+        if (collection.size() == 0) {
             setEnabled(false);
             setModel(PropertyModel.andOpertarorList(mode.getRelatedElementType(), new ArrayList<GraphElement>()));
         } else {

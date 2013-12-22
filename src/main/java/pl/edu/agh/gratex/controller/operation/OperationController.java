@@ -10,20 +10,12 @@ import java.util.List;
 public interface OperationController {
     public GeneralController getGeneralController();
 
-    // TODO to  chyba nie powinno byc na zewwnatrz, ale do  testow
-    public OperationList getOperationList();
-
-    // This method will initialize an undo-redo operation
-    public void initOperation(List<GraphElement> subjects, String initInfo);
-
-    public HashMap<GraphElement, String> getOperationInitialStates();
-
-    // This method will finalize an undo-redo operation
+    // This method will register an undo-redo operation
     // Should be called internally from Operation extending class
-    public void finishOperation(Operation operation);
+    public void registerOperation(Operation operation);
 
     // This method is used to report any operation, so as to refresh workspace and / or display info
-    public void reportGenericOperation(String info);
+    public void reportOperationEvent(Operation operation);
 
     public void undo();
 

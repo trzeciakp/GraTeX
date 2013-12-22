@@ -20,63 +20,55 @@ import java.util.List;
 
 public class CreationRemovalOperation extends Operation {
     GeneralController generalController;
-    private List<String> vertices;
-    private List<String> edges;
-    private List<String> labelVs;
-    private List<String> labelEs;
+    private List<String> vertices = new LinkedList<>();
+    private List<String> edges = new LinkedList<>();
+    private List<String> labelVs = new LinkedList<>();
+    private List<String> labelEs = new LinkedList<>();
 
     private boolean creation;
 
     public CreationRemovalOperation(GeneralController generalController,
-                                    List<? extends GraphElement> createdElements,
+                                    List<? extends GraphElement> subjects,
                                     OperationType operationType,
                                     String info, boolean creation) {
+        super(info, operationType);
         this.generalController = generalController;
         this.creation = creation;
-        setOperationType(operationType);
-        setInfo(info);
-        init(createdElements);
+        init(subjects);
     }
 
     public CreationRemovalOperation(GeneralController generalController,
-                                    GraphElement createdElement,
+                                    GraphElement subject,
                                     OperationType operationType,
                                     String info, boolean creation) {
+        super(info, operationType);
         this.generalController = generalController;
         this.creation = creation;
-        setOperationType(operationType);
-        setInfo(info);
-        List<GraphElement> createdElements = new LinkedList<>();
-        createdElements.add(createdElement);
-        init(createdElements);
+        List<GraphElement> subjects = new LinkedList<>();
+        subjects.add(subject);
+        init(subjects);
     }
 
     @Override
-    public String doOperation() {
+    public void doOperation() {
         if (creation) {
             createElements();
         } else {
             removeElements();
         }
-        return getInfo();
     }
 
     @Override
-    public String undoOperation() {
+    public void undoOperation() {
         if (creation) {
             removeElements();
         } else {
             createElements();
         }
-        return getInfo();
     }
 
-    private void init(List<? extends GraphElement> createdElements) {
-        this.vertices = new LinkedList<>();
-        this.edges = new LinkedList<>();
-        this.labelVs = new LinkedList<>();
-        this.labelEs = new LinkedList<>();
-        for (GraphElement element : createdElements) {
+    private void init(List<? extends GraphElement> elements) {
+        for (GraphElement element : elements) {
             String latexCode = generalController.getParseController().getParserByElementType(element.getType()).parseToLatex(element);
             switch (element.getType()) {
                 case VERTEX:
@@ -93,7 +85,7 @@ public class CreationRemovalOperation extends Operation {
                     break;
             }
         }
-        generalController.getOperationController().finishOperation(this);
+        generalController.getOperationController().registerOperation(this);
     }
 
     private void createElements() {
@@ -147,7 +139,6 @@ public class CreationRemovalOperation extends Operation {
     }
 
     private void removeElements() {
-        System.out.println(vertices.size() + " " + edges.size() + " " + labelVs.size() + " " + labelEs.size() + " ");
         for (String latexCode : vertices) {
             Vertex vertex = generalController.getGraph().getVertexByLatexCode(latexCode);
             generalController.getGraph().getVertices().remove(vertex);

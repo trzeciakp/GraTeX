@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.GeneralControllerImpl;
+import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.view.propertyPanel.PanelPropertyEditor;
 
 import javax.imageio.ImageIO;
@@ -57,7 +58,7 @@ public class MainWindow extends JFrame {
     // TODO to wyleci jak wszystkie info beda szly po OperationControllerze
     // TODO jestem w trakcie przerobek
     public void publishInfo(String entry) {
-        generalController.getOperationController().reportGenericOperation(entry);
+        generalController.getOperationController().reportOperationEvent(new GenericOperation(entry));
     }
 
     // TODO zastanowic sie jak mozna za pomoca sluchania operacji to zrobic, ale to kiedys

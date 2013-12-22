@@ -54,28 +54,10 @@ public class InfoDisplay extends JLabel implements ModeListener, ToolListener, O
     // ===================================
     // OperationListener implementation
 
-
     @Override
-    public void initOperationEvent(HashMap<GraphElement, String> subjectStates, String info) {
-        maybeDisplayInfo(info);
-    }
-
-    @Override
-    public void finishOperationEvent(Operation operation) {
-        maybeDisplayInfo(operation.getInfo());
-    }
-
-    @Override
-    public void genericOperationEvent(String info) {
-        maybeDisplayInfo(info);
-    }
-
-
-    // ===================================
-    // Internal functions
-    private void maybeDisplayInfo(String info) {
-        if (info != null) {
-            setText(info);
+    public void operationEvent(Operation operation) {
+        if (operation != null) {
+            setText(operation.getInfo());
         }
     }
 }

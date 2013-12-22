@@ -67,6 +67,16 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     }
 
     @Override
+    public void clearSelection() {
+        addToSelection(new ArrayList<GraphElement>(), false);
+    }
+
+    @Override
+    public void selectAll() {
+        addToSelection(generalController.getGraph().getElements(mode.getRelatedElementType()), false);
+    }
+
+    @Override
     public void addToSelection(Collection<? extends GraphElement> elements, boolean controlDown) {
         if (controlDown) {
             for (GraphElement temp : elements) {
@@ -80,27 +90,13 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
             selection.clear();
             selection.addAll(elements);
         }
+        generalController.getOperationController().reportOperationEvent(null);
+        informListeners();
+
+
         //TODO not sure if it should not be somewhere else
         ClipboardController clipboardController = generalController.getClipboardController();
         clipboardController.setCopyingEnabled(mode == ModeType.VERTEX && selectionSize() > 0);
-        informListeners();
-        //ControlManager.updatePropertyChangeOperationStatus(true);
-    }
-
-    @Override
-    public void clearSelection() {
-        addToSelection(new ArrayList<GraphElement>(), false);
-        //selection.clear();
-    }
-
-    @Override
-    public void selectAll() {
-        //TODO why is it checked?
-        if (tool == ToolType.SELECT) {
-            addToSelection(generalController.getGraph().getElements(mode.getRelatedElementType()), false);
-            //selection.clear();
-            //selection.addAll(generalController.getGraph().getElements(mode.getRelatedElementType()));
-        }
     }
 
     @Override
@@ -110,17 +106,18 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
             list.add(element);
             addToSelection(list, controlDown);
         } else {
-            //TODO why?
+            // TODO why?
+            // TODO Bo jak element jest null to kliknelismy w puste miejsce. Jeśli jest control, to nie czyścimy zaznaczenia, ale jeśli nie ma, to tak
             if (!controlDown) {
                 clearSelection();
             }
         }
+        generalController.getOperationController().reportOperationEvent(null);
     }
 
     @Override
     public void addListener(SelectionListener listener) {
         listeners.add(listener);
-
     }
 
     @Override
