@@ -51,9 +51,6 @@ public class LabelEdgeParser extends GraphElementParser {
     public LabelE parseToGraph(String code, Graph graph) throws ParserException {
         LabelE labelE = new LabelE(null, graph);
         parseToGraphUsingParseList(code, labelE);
-        labelE.getOwner().setLabel(labelE);
-        LabelEUtils.updatePosition(labelE);
-        labelE.setLatexCode(parseToLatex(labelE));
         return labelE;
     }
 

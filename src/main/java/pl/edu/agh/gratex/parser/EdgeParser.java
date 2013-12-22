@@ -44,8 +44,6 @@ public class EdgeParser extends GraphElementParser {
     public Edge parseToGraph(String code, Graph graph) throws ParserException {
         Edge edge = new Edge(graph);
         parseToGraphUsingParseList(code, edge);
-        EdgeUtils.updatePosition(edge);
-        edge.setLatexCode(parseToLatex(edge));
         return edge;
     }
 

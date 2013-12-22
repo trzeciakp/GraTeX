@@ -3,9 +3,11 @@ package pl.edu.agh.gratex.model.vertex;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.GraphNumeration;
+import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -13,6 +15,8 @@ import pl.edu.agh.gratex.model.properties.ShapeType;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.*;
+import java.util.List;
 
 
 @SuppressWarnings("serial")
@@ -63,6 +67,31 @@ public class Vertex extends GraphElement implements Serializable {
     @Override
     public GraphElementType getType() {
         return GraphElementType.VERTEX;
+    }
+
+    @Override
+    public void addToGraph() {
+        graph.getVertices().add(this);
+        VertexUtils.setPartOfNumeration(this, true);
+        setLatexCode(graph.getGeneralController().getParseController().getVertexParser().parseToLatex(this));
+    }
+
+    @Override
+    public void removeFromGraph() {
+        graph.getVertices().remove(this);
+        VertexUtils.setPartOfNumeration(this, false);
+    }
+
+    @Override
+    public List<? extends GraphElement> getConnectedElements() {
+        List<GraphElement> result = new LinkedList<>();
+        if (label != null) {
+            result.add(label);
+        }
+        for (Edge edge : GraphUtils.getAdjacentEdges(graph, this)) {
+            result.add(edge);
+        }
+        return result;
     }
 
     public void draw(Graphics2D g2d, boolean dummy) {
@@ -202,10 +231,6 @@ public class Vertex extends GraphElement implements Serializable {
 
     public Font getFont() {
         return font;
-    }
-
-    public void setFont(Font font) {
-        this.font = font;
     }
 
     public Color getFontColor() {

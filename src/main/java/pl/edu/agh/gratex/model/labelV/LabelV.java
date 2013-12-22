@@ -11,6 +11,8 @@ import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.*;
+import java.util.List;
 
 
 public class LabelV extends GraphElement implements Serializable {
@@ -33,6 +35,25 @@ public class LabelV extends GraphElement implements Serializable {
     private int drawY;
     private Rectangle outline;
     private Graph graph;
+
+    @Override
+    public void addToGraph() {
+        graph.getLabelsV().add(this);
+        getOwner().setLabel(this);
+        LabelVUtils.updatePosition(this);
+        setLatexCode(graph.getGeneralController().getParseController().getLabelVertexParser().parseToLatex(this));
+    }
+
+    @Override
+    public void removeFromGraph() {
+        graph.getLabelsV().remove(this);
+        getOwner().setLabel(null);
+    }
+
+    @Override
+    public List<? extends GraphElement> getConnectedElements() {
+        return new LinkedList<>();
+    }
 
     @Override
     public String toString() {

@@ -12,6 +12,8 @@ import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.*;
+import java.util.List;
 
 
 public class LabelE extends GraphElement implements Serializable {
@@ -42,6 +44,25 @@ public class LabelE extends GraphElement implements Serializable {
         setOwner(element);
         setText("Label");
         this.graph = graph;
+    }
+
+    @Override
+    public void addToGraph() {
+        graph.getLabelsE().add(this);
+        getOwner().setLabel(this);
+        LabelEUtils.updatePosition(this);
+        setLatexCode(graph.getGeneralController().getParseController().getLabelEdgeParser().parseToLatex(this));
+    }
+
+    @Override
+    public void removeFromGraph() {
+        graph.getLabelsE().remove(this);
+        getOwner().setLabel(null);
+    }
+
+    @Override
+    public List<? extends GraphElement> getConnectedElements() {
+        return new LinkedList<>();
     }
 
     public LabelE getCopy(Edge owner) {

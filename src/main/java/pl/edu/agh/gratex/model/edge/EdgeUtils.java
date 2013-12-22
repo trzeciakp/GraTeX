@@ -1,6 +1,8 @@
 package pl.edu.agh.gratex.model.edge;
 
+import com.sun.deploy.xml.GeneralEntity;
 import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -311,7 +313,6 @@ public class EdgeUtils {
     }
 
 
-
     public static void draw(Edge edge, Graphics2D g2d, boolean dummy) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
@@ -350,8 +351,9 @@ public class EdgeUtils {
                 g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
                 g.drawLine(vertexA.getPosX(), vertexA.getPosY(), vertexB.getPosX(), vertexB.getPosY());
             }
-            if ((edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge) ||
-                    edge.getGraph().getGeneralController().getMouseController().isEdgeCurrentlyAdded(edge)) && edge.getRelativeEdgeAngle() != 0) {
+            GeneralController generalController = edge.getGraph().getGeneralController();
+            if (((generalController.getSelectionController().selectionContains(edge) && generalController.getSelectionController().selectionSize() == 1) ||
+                    generalController.getMouseController().isEdgeCurrentlyAdded(edge)) && edge.getRelativeEdgeAngle() != 0) {
                 drawAngleVisualisation(edge, g);
             }
         } else {

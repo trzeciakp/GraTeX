@@ -48,7 +48,6 @@ public class VertexParser extends GraphElementParser {
     public Vertex parseToGraph(String code, Graph graph) throws ParserException {
         Vertex result = new Vertex(graph);
         parseToGraphUsingParseList(code, result);
-        result.setLatexCode(code);
         return result;
     }
 

@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.model.graph.Graph;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.List;
 
 
 @SuppressWarnings("serial")
@@ -29,25 +30,24 @@ public abstract class GraphElement implements Serializable {
 
     public abstract Graph getGraph();
 
-    public void remove() {
-        getGraph().getElements(getType()).remove(this);
-    }
+    public abstract void addToGraph();
+
+    public abstract void removeFromGraph();
+
+    public abstract List<? extends GraphElement> getConnectedElements();
 
     @Override
+
     public boolean equals(Object obj) {
-        if (!(obj instanceof GraphElement))
-        {
+        if (!(obj instanceof GraphElement)) {
             return false;
-        }
-        else
-        {
+        } else {
             return ((GraphElement) obj).getLatexCode().equals(getLatexCode());
         }
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return getLatexCode().hashCode();
     }
 }

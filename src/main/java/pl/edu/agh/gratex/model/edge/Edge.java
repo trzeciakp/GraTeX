@@ -13,8 +13,8 @@ import pl.edu.agh.gratex.model.properties.LineType;
 import java.awt.*;
 import java.awt.geom.Arc2D;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
+import java.util.List;
 
 
 public class Edge extends GraphElement implements Serializable {
@@ -86,7 +86,7 @@ public class Edge extends GraphElement implements Serializable {
         Vertex _vertexA = null;
         Vertex _vertexB = null;
         Iterator<Vertex> itv = vertices.listIterator();
-        Vertex tempV = null;
+        Vertex tempV;
         while (itv.hasNext()) {
             tempV = itv.next();
             if (tempV.getPosX() == getVertexA().getPosX() && tempV.getPosY() == getVertexA().getPosY()) {
@@ -177,9 +177,31 @@ public class Edge extends GraphElement implements Serializable {
     }
 
     @Override
+    public void addToGraph() {
+        graph.getEdges().add(this);
+        EdgeUtils.updatePosition(this);
+        setLatexCode(graph.getGeneralController().getParseController().getEdgeParser().parseToLatex(this));
+    }
+
+    @Override
+    public void removeFromGraph() {
+        getGraph().getEdges().remove(this);
+    }
+
+    @Override
+    public List<? extends GraphElement> getConnectedElements() {
+        List<GraphElement> result = new LinkedList<>();
+        if (label != null) {
+            result.add(label);
+        }
+        return result;
+    }
+
+    @Override
     public void draw(Graphics2D g, boolean dummy) {
         EdgeUtils.draw(this, g, dummy);
     }
+
 
     public int getLineWidth() {
         return lineWidth;
@@ -218,7 +240,7 @@ public class Edge extends GraphElement implements Serializable {
     }
 
     public ArrowType getArrowTypeENUM() {
-        return ArrowType.values()[this.arrowType+1];
+        return ArrowType.values()[this.arrowType + 1];
     }
 
     public Color getLineColor() {

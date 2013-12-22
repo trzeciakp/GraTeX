@@ -223,7 +223,7 @@ public class StringLiterals {
                 break;
             }
             case REMOVE: {
-                tipPart3 = "Left-click to remove " + tipPart4b + "Click and drag to remove all items in the area.";
+                tipPart3 = "Left-click to removeFromGraph " + tipPart4b + "Click and drag to removeFromGraph all items in the area.";
                 break;
             }
             case SELECT: {
