@@ -38,12 +38,11 @@ public class LabelE extends GraphElement implements Serializable {
     private Polygon outline;
     private int drawX;
     private int drawY;
-    private Graph graph;
 
     public LabelE(Edge element, Graph graph) {
+        super(graph);
         setOwner(element);
         setText("Label");
-        this.graph = graph;
     }
 
     @Override
@@ -63,13 +62,6 @@ public class LabelE extends GraphElement implements Serializable {
     @Override
     public List<? extends GraphElement> getConnectedElements() {
         return new LinkedList<>();
-    }
-
-    public LabelE getCopy(Edge owner) {
-        LabelE result = new LabelE(owner, graph);
-        result.setModel(getModel());
-
-        return result;
     }
 
     public void setModel(PropertyModel pm) {

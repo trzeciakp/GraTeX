@@ -1,13 +1,16 @@
 package pl.edu.agh.gratex.controller.mouse;
 
 import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.editor.CopyPasteOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.graph.DummySubgraph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 
 import java.awt.*;
@@ -27,7 +30,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
 
     private boolean mousePressed;
     private boolean isElementMoving;
-    private CopyPasteOperation currentCopyPasteOperation;
+    private DummySubgraph dummySubgraph;
     private GeneralController generalController;
     private int mousePressX;
     private int mousePressY;
@@ -84,7 +87,13 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
                 controllers.get(mode).removeElement(e);
                 break;
             case SELECT:
-                if (!mousePressed) {
+                if (dummySubgraph != null) {
+                    if (dummySubgraph.fitsIntoPosition()){
+                        new CreationRemovalOperation(generalController, dummySubgraph.getElements(), OperationType.DUPLICATION,
+                                StringLiterals.INFO_SUBGRAPH_DUPLICATE, true);
+                        dummySubgraph = null;
+                    }
+                } else if (!mousePressed) {
                     selectionController.addToSelection(controllers.get(mode).getElementFromPosition(e), e.isControlDown());
                 }
                 break;
@@ -179,7 +188,12 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
 
     @Override
     public void paintCopiedSubgraph(Graphics2D g) {
-
+        if (dummySubgraph != null) {
+            dummySubgraph.calculatePositions(mouseX, mouseY);
+            if (dummySubgraph.fitsIntoPosition()) {
+                dummySubgraph.drawAll(g);
+            }
+        }
     }
 
     @Override
@@ -193,26 +207,13 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
         controllers.get(mode).reset();
         isElementMoving = false;
         mousePressed = false;
-        if (currentCopyPasteOperation != null) {
-            currentCopyPasteOperation = currentCopyPasteOperation.getCopy();
+        if (dummySubgraph != null) {
+            dummySubgraph = null;
         }
     }
 
-
-    //===========================================
-    // To be removed
-
     @Override
     public void duplicateSubgraph() {
-        System.out.println("Jeszcze nie zaimplementowane");
-        // TODO Nie kasowac, musze wiedziec co tu było
-//        currentCopyPasteOperation = new CopyPasteOperation(generalController, generalController.getSelectionController().getSelection());
-//        generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_COPY);
-//        if (!currentCopyPasteOperation.pasting) {
-//            generalController.getModeController().setMode(ModeType.VERTEX);
-//            generalController.getToolController().setTool(ToolType.SELECT);
-//            currentCopyPasteOperation.startPasting();
-//            generalController.publishInfo(StringLiterals.INFO_SUBGRAPH_WHERE_TO_PASTE);
-//        }
+        dummySubgraph = new DummySubgraph(generalController, generalController.getGraph(), selectionController.getSelection());
     }
 }

@@ -34,7 +34,6 @@ public class LabelV extends GraphElement implements Serializable {
     private int drawX;
     private int drawY;
     private Rectangle outline;
-    private Graph graph;
 
     @Override
     public void addToGraph() {
@@ -74,16 +73,9 @@ public class LabelV extends GraphElement implements Serializable {
     }
 
     public LabelV(Vertex element, Graph graph) {
-        this.graph = graph;
+        super(graph);
         setOwner(element);
         setText("Label");
-    }
-
-    public LabelV getCopy(Vertex owner) {
-        LabelV result = new LabelV(owner, graph);
-        result.setModel(getModel());
-
-        return result;
     }
 
     public void setModel(PropertyModel pm) {

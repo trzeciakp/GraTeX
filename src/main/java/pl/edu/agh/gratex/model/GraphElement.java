@@ -10,7 +10,12 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 public abstract class GraphElement implements Serializable {
-    private String latexCode = "";
+    protected String latexCode = "";
+    protected Graph graph;
+
+    protected GraphElement(Graph graph) {
+        this.graph = graph;
+    }
 
     public String getLatexCode() {
         return latexCode;
@@ -18,6 +23,17 @@ public abstract class GraphElement implements Serializable {
 
     public void setLatexCode(String latexCode) {
         this.latexCode = latexCode;
+    }
+
+    public GraphElement getCopy() {
+        try {
+            String code = graph.getGeneralController().getParseController().getParserByElementType(getType()).parseToLatex(this);
+            return graph.getGeneralController().getParseController().getParserByElementType(getType()).parseToGraph(code, graph);
+        } catch (Exception e) {
+            e.printStackTrace();
+            graph.getGeneralController().criticalError("Parser error", e);
+            return null;
+        }
     }
 
     public abstract void draw(Graphics2D g, boolean dummy);
@@ -37,7 +53,6 @@ public abstract class GraphElement implements Serializable {
     public abstract List<? extends GraphElement> getConnectedElements();
 
     @Override
-
     public boolean equals(Object obj) {
         if (!(obj instanceof GraphElement)) {
             return false;

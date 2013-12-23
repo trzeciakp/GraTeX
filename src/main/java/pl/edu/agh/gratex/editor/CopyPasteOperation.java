@@ -47,7 +47,7 @@ public class CopyPasteOperation extends OldOperation {
         Vertex tempV = null;
         while (it.hasNext()) {
             tempV = (Vertex) it.next();
-            vertices.add(tempV.getCopy());
+            //vertices.add(tempV.getCopy());
             if (vertices.getLast().getLabel() != null) {
                 labelsV.add(vertices.getLast().getLabel());
             }
@@ -65,22 +65,22 @@ public class CopyPasteOperation extends OldOperation {
         Edge tempE = null;
         while (ite.hasNext()) {
             tempE = ite.next();
-            Edge edge = tempE.getCopy(vertices);
-            if (edge != null) {
-                edges.add(edge);
-                LabelE label = edges.getLast().getLabel();
-                if (label != null) {
-                    labelsE.add(label);
-                }
-            }
+//            //Edge edge = tempE.getCopy(vertices);
+//            if (edge != null) {
+//                edges.add(edge);
+//                LabelE label = edges.getLast().getLabel();
+//                if (label != null) {
+//                    labelsE.add(label);
+//                }
+//            }
         }
     }
 
-    public void startPasting() {
+    /*public void startPasting() {
         pasting = true;
         biasX = 0;
         biasY = 0;
-    }
+    }*/
 
     public void calculatePosition() {
         Iterator<Vertex> itv = vertices.listIterator();
@@ -170,7 +170,7 @@ public class CopyPasteOperation extends OldOperation {
             }
         }
 
-        return StringLiterals.INFO_SUBGRAPH_PASTE;
+        return StringLiterals.INFO_SUBGRAPH_DUPLICATE;
     }
 
     public String undoOperation() {
@@ -184,6 +184,6 @@ public class CopyPasteOperation extends OldOperation {
             VertexUtils.setPartOfNumeration(itv.next(), false);
         }
 
-        return StringLiterals.INFO_UNDO(StringLiterals.INFO_SUBGRAPH_PASTE);
+        return StringLiterals.INFO_UNDO(StringLiterals.BUTTON_GENERAL_CANCEL);
     }
 }

@@ -277,7 +277,7 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Sel
 
     @Override
     public void selectionChanged(List<? extends GraphElement> collection) {
-        boolean duplicationEnabled = collection.size() > 0 && modeController.getMode() == ModeType.VERTEX;
+        boolean duplicationEnabled = collection.size() > 0 && modeController.getMode() == ModeType.VERTEX && toolController.getTool() == ToolType.SELECT;
         menuItems.get(MenuBarItem.DUPLICATE).setEnabled(duplicationEnabled);
     }
 }

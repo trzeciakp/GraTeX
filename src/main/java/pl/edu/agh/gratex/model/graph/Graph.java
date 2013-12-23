@@ -25,7 +25,6 @@ import java.util.Map;
 
 
 public class Graph implements Serializable {
-    private static final long serialVersionUID = 6647099578243878702L;
 
     // TODO Odznaczyc to jak graph nie bedzie serializowany
     //private GeneralController generalController;

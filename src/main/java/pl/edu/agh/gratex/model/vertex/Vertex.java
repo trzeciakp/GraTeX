@@ -40,24 +40,8 @@ public class Vertex extends GraphElement implements Serializable {
     private LabelV label = null;
     private String text;
 
-    // Pozostałe
-    private Graph graph;
-
     public Vertex(Graph graph) {
-        this.graph = graph;
-    }
-
-    public Vertex getCopy() {
-        Vertex result = new Vertex(graph);
-        result.setModel(getModel());
-        result.setLabelInside(false);
-        result.setPosX(getPosX());
-        result.setPosY(getPosY());
-        if (getLabel() != null) {
-            result.setLabel(getLabel().getCopy(result));
-        }
-
-        return result;
+        super(graph);
     }
 
     public int getNumber() {

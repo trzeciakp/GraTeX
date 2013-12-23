@@ -1,6 +1,5 @@
 package pl.edu.agh.gratex.model.edge;
 
-import com.sun.deploy.xml.GeneralEntity;
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.properties.ArrowType;

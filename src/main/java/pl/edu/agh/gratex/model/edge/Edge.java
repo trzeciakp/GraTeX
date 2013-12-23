@@ -43,10 +43,9 @@ public class Edge extends GraphElement implements Serializable {
     private Arc2D.Double arc;
     private int[] arrowLine1 = null;
     private int[] arrowLine2 = null;
-    private Graph graph;
 
     public Edge(Graph graph) {
-        this.graph = graph;
+        super(graph);
     }
 
     public boolean isLoop() {
@@ -82,35 +81,35 @@ public class Edge extends GraphElement implements Serializable {
         return hashCode();
     }
 
-    public Edge getCopy(LinkedList<Vertex> vertices) {
-        Vertex _vertexA = null;
-        Vertex _vertexB = null;
-        Iterator<Vertex> itv = vertices.listIterator();
-        Vertex tempV;
-        while (itv.hasNext()) {
-            tempV = itv.next();
-            if (tempV.getPosX() == getVertexA().getPosX() && tempV.getPosY() == getVertexA().getPosY()) {
-                _vertexA = tempV;
-            }
-            if (tempV.getPosX() == getVertexB().getPosX() && tempV.getPosY() == getVertexB().getPosY()) {
-                _vertexB = tempV;
-            }
-        }
-
-        Edge result = new Edge(this.graph);
-        result.setModel(getModel());
-        if (_vertexA == null || _vertexB == null) {
-            return null;
-        }
-        result.setVertexA(_vertexA);
-        result.setVertexB(_vertexB);
-
-        if (getLabel() != null) {
-            result.setLabel(getLabel().getCopy(result));
-        }
-
-        return result;
-    }
+//    public Edge getCopy(LinkedList<Vertex> vertices) {
+//        Vertex _vertexA = null;
+//        Vertex _vertexB = null;
+//        Iterator<Vertex> itv = vertices.listIterator();
+//        Vertex tempV;
+//        while (itv.hasNext()) {
+//            tempV = itv.next();
+//            if (tempV.getPosX() == getVertexA().getPosX() && tempV.getPosY() == getVertexA().getPosY()) {
+//                _vertexA = tempV;
+//            }
+//            if (tempV.getPosX() == getVertexB().getPosX() && tempV.getPosY() == getVertexB().getPosY()) {
+//                _vertexB = tempV;
+//            }
+//        }
+//
+//        Edge result = new Edge(this.graph);
+//        result.setModel(getModel());
+//        if (_vertexA == null || _vertexB == null) {
+//            return null;
+//        }
+//        result.setVertexA(_vertexA);
+//        result.setVertexB(_vertexB);
+//
+//        if (getLabel() != null) {
+//            result.setLabel(getLabel().getCopy(result));
+//        }
+//
+//        return result;
+//    }
 
     public void setModel(PropertyModel pm) {
         EdgePropertyModel model = (EdgePropertyModel) pm;

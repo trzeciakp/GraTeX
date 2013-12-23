@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GraphUtils {
     public static LinkedList<GraphElement> getIntersectingElements(Graph graph, ModeType mode, Rectangle selectionArea) {
@@ -119,6 +120,17 @@ public class GraphUtils {
         return result;
     }
 
+    public static LinkedList<Edge> getCommonEdges(Graph graph, List<Vertex> vertices) {
+        LinkedList<Edge> result = new LinkedList<>();
+
+        for (Edge edge : graph.getEdges()){
+            if (vertices.contains(edge.getVertexA()) && vertices.contains(edge.getVertexB())){
+                result.add(edge);
+            }
+        }
+
+        return result;
+    }
 
     public static void adjustVerticesToGrid(Graph graph) {
         for (Vertex vertex : graph.getVertices()) {

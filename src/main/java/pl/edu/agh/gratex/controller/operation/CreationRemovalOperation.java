@@ -94,7 +94,9 @@ public class CreationRemovalOperation extends Operation {
         for (GraphElementType type : GraphElementType.values()) {
             for (String latexCode : elements.get(type)) {
                 GraphElement element = generalController.getGraph().getElementByLatexCode(latexCode);
+                System.out.print(latexCode);
                 element.removeFromGraph();
+                System.out.println("      OK");
                 for (GraphElement connectedElement : element.getConnectedElements()) {
                     if (!elements.get(connectedElement.getType()).contains(connectedElement.getLatexCode())) {
                         elements.get(connectedElement.getType()).add(connectedElement.getLatexCode());

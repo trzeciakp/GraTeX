@@ -135,8 +135,6 @@ public class StringLiterals {
     public final static String INFO_LABEL_V_ADD = "label added to a vertex";
     public final static String INFO_LABEL_E_ADD = "label added to an edge";
 
-    // CopyPasteOperation
-    public final static String INFO_SUBGRAPH_COPY = "Supgraph copied to the clipboard";
 
     // DragOperation
     public final static String INFO_VERTEX_MOVE = "vertex moved";
@@ -163,9 +161,9 @@ public class StringLiterals {
     public final static String INFO_TEMPLATE_CHANGE = "template changed";
 
     // ControlManager
+    public final static String INFO_SUBGRAPH_DUPLICATE = "supgraph duplicated";
     public final static String INFO_SUBGRAPH_WHERE_TO_PASTE = "choose location for the copy of subgraph";
-    public final static String INFO_SUBGRAPH_PASTE = "subgraph pasted";
-    public final static String INFO_CANNOT_PASTE_SUBGRAPH = "cannot paste this subgraph here - vertices collide with existing ones";
+    public final static String INFO_CANNOT_PASTE_SUBGRAPH = "cannot insert this subgraph here - vertices collide with existing ones or are out of bounds";
     public final static String INFO_CANNOT_CREATE_VERTEX_BOUNDARY = "cannot create a vertex here - too close to page edge";
     public final static String INFO_CANNOT_CREATE_VERTEX_COLLISION = "cannot create a vertex here - too close to another vertex";
     public final static String INFO_CHOOSE_EDGE_START = "Choose a starting vertex for the edge (click)";

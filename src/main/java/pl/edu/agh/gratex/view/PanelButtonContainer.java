@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.ActionButtonType;
 import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
 import pl.edu.agh.gratex.model.GraphElement;
@@ -38,18 +39,6 @@ public class PanelButtonContainer extends JPanel implements SelectionListener {
         }
         buttons.get(ActionButtonType.DUPLICATE_SUBGRAPH).setEnabled(false);
     }
-
-    //TODO is it unused? should be
-    /*public void updateFunctions() {
-        buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(false);
-        buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(false);
-        if (generalController.getModeController().getMode() == ModeType.VERTEX && generalController.getSelectionController().selectionSize() > 0) {
-            buttons.get(ActionButtonType.COPY_SUBGRAPH).setEnabled(true);
-        }
-        if (mouseController.clipboardNotEmpty()) {
-            buttons.get(ActionButtonType.PASTE_SUBGRAPH).setEnabled(true);
-        }
-    }*/
 
     private ActionListener getActionListener(ActionButtonType ActionButtonType) {
         switch (ActionButtonType) {
@@ -130,7 +119,8 @@ public class PanelButtonContainer extends JPanel implements SelectionListener {
 
     @Override
     public void selectionChanged(List<? extends GraphElement> collection) {
-        boolean duplicationEnabled = collection.size() > 0 && generalController.getModeController().getMode() == ModeType.VERTEX;
+        boolean duplicationEnabled = collection.size() > 0 && generalController.getModeController().getMode() == ModeType.VERTEX
+                && generalController.getToolController().getTool() == ToolType.SELECT;
         buttons.get(ActionButtonType.DUPLICATE_SUBGRAPH).setEnabled(duplicationEnabled);
     }
 }
