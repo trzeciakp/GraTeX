@@ -214,6 +214,6 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
 
     @Override
     public void duplicateSubgraph() {
-        dummySubgraph = new DummySubgraph(generalController, generalController.getGraph(), selectionController.getSelection());
+        dummySubgraph = new DummySubgraph(generalController.getGraph(), selectionController.getSelection());
     }
 }

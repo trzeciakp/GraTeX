@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.List;
 
 public class DummySubgraph {
-    private GeneralController generalController;
     private Graph graph;
 
     public LinkedList<Vertex> vertices = new LinkedList<>();
@@ -29,8 +28,7 @@ public class DummySubgraph {
     public int biasX = 0;
     public int biasY = 0;
 
-    public DummySubgraph(GeneralController generalController, Graph graph, List<? extends GraphElement> subjects) {
-        this.generalController = generalController;
+    public DummySubgraph(Graph graph, List<? extends GraphElement> subjects) {
         this.graph = graph;
 
         Collections.sort(subjects, new Comparator<GraphElement>() {
