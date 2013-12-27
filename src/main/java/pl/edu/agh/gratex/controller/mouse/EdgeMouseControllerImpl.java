@@ -10,7 +10,6 @@ import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.view.ControlManager;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

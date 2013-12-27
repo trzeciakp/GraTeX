@@ -14,20 +14,18 @@ import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
-import pl.edu.agh.gratex.view.ControlManager;
 
 import java.awt.*;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 
 public class Graph implements Serializable {
-
-    // TODO Odznaczyc to jak graph nie bedzie serializowany
-    //private GeneralController generalController;
+    // TODO To jest statyczne, bo sie graf nie serializował (wymagał serializowalności GeneralControllera i całego wszechświata przez to)
+    // TODO Jak zmienimy sposób zapisu, należy usunąć słowo static
+    private static GeneralController generalController;
 
     private VertexPropertyModel vertexDefaultModel;
     private EdgePropertyModel edgeDefaultModel;
@@ -45,9 +43,7 @@ public class Graph implements Serializable {
     private GraphNumeration graphNumeration;
 
     public Graph(GeneralController generalController) {
-
-        // TODO Odznaczyc to jak graph nie bedzie serializowany
-        //this.generalController = generalController;
+        this.generalController = generalController;
 
         elements = new EnumMap<>(GraphElementType.class);
         for(GraphElementType type : GraphElementType.values()) {
@@ -60,9 +56,7 @@ public class Graph implements Serializable {
     }
 
     public GeneralController getGeneralController() {
-        // TODO Odznaczyc to jak graph nie bedzie serializowany
-        // return generalController;
-        return ControlManager.mainWindow.getGeneralController();
+        return generalController;
     }
 
     public GraphNumeration getGraphNumeration() {

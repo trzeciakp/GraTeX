@@ -44,8 +44,6 @@ public class MainWindow extends JFrame {
             generalController.criticalError(StringLiterals.MESSAGE_ERROR_GET_RESOURCE, e);
         }
 
-        ControlManager.passWindowHandle(this);
-
         initializeFrame();
         initializeEvents();
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler(generalController));
@@ -60,12 +58,6 @@ public class MainWindow extends JFrame {
     public void publishInfo(String entry) {
         generalController.getOperationController().reportOperationEvent(new GenericOperation(entry));
     }
-
-    // TODO zastanowic sie jak mozna za pomoca sluchania operacji to zrobic, ale to kiedys
-    /*public void updateMenuBarAndActions() {
-        menuBar.updateFunctions();
-        panel_buttonContainer.updateFunctions();
-    }*/
 
     // TODO Trzeba zmienic layout Mainwindow na jakis typu border (on akurat chyba sie nada idealnie) i to pojdzie do piachu
     public void adjustSize() {
@@ -139,15 +131,5 @@ public class MainWindow extends JFrame {
         menuBar = new MenuBar(generalController, generalController.getModeController(), generalController.getToolController(), generalController.getSelectionController());
         menuBar.setBounds(0, 0, 0, 25);
         getContentPane().add(menuBar);
-    }
-
-
-    // TODO to jest tutaj tymczasowo, az wyleci ControlManager
-    public PanelPropertyEditor getPanelPropertyEditor() {
-        return panel_propertyEditor;
-    }
-    // TODO wywalic jak nie bedzie controlmaangera
-    public GeneralController getGeneralController() {
-        return generalController;
     }
 }

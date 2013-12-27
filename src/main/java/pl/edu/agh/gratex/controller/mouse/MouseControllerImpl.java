@@ -7,7 +7,6 @@ import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.OperationController;
-import pl.edu.agh.gratex.editor.CopyPasteOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.DummySubgraph;
@@ -17,9 +16,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.EnumMap;
 
-/**
- *
- */
 public class MouseControllerImpl implements MouseController, ToolListener, ModeListener {
 
     private EnumMap<ModeType, GraphElementMouseController> controllers = new EnumMap<>(ModeType.class);

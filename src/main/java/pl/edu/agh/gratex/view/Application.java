@@ -16,21 +16,11 @@ public class Application {
                             break;
                         }
                     }
-                } catch (ClassNotFoundException ex) {
-                    java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-                    java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                }
-
-                try {
                     new MainWindow();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, StringLiterals.MESSAGE_ERROR_GENERAL + e.toString(), StringLiterals.TITLE_ERROR_DIALOG, JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, StringLiterals.MESSAGE_ERROR_GENERAL + e.toString(),
+                            StringLiterals.TITLE_ERROR_DIALOG, JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

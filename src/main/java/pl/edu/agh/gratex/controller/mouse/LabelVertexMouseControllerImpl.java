@@ -6,12 +6,10 @@ import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
-import pl.edu.agh.gratex.editor.DragOperation;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.view.ControlManager;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

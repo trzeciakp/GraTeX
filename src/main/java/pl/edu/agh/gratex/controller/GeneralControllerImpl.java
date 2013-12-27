@@ -3,10 +3,7 @@ package pl.edu.agh.gratex.controller;
 import pl.edu.agh.gratex.constants.*;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
 import pl.edu.agh.gratex.controller.mouse.MouseControllerImpl;
-import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.controller.operation.*;
-import pl.edu.agh.gratex.editor.OldOperationList;
-import pl.edu.agh.gratex.editor.TemplateChangeOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
@@ -17,7 +14,6 @@ import pl.edu.agh.gratex.view.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener, Serializable {
@@ -117,7 +113,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         if (checkForUnsavedProgress()) {
             currentFile = null;
             graph = new Graph(this);
-            ControlManager.operations = new OldOperationList(this);
             resetWorkspace();
             // TODO wykomentowalem bo wkurwialo
             // editGraphTemplate();
@@ -141,7 +136,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     currentFile = file;
                     GraphUtils.deleteUnusedLabels(newGraph);
                     graph = newGraph;
-                    ControlManager.operations = new OldOperationList(this);
                     resetWorkspace();
                     publishInfo(StringLiterals.INFO_GRAPH_OPEN_OK);
                 } else {
@@ -334,7 +328,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         // TODO this nie bedzie potrzebne, czytaj FileManager
         if (FileManager.contentChanged(this, graph, currentFile)) {
             Object[] options = {"Save", "Don't save", "Cancel"};
-            int option = JOptionPane.showOptionDialog(mainWindow, "There have been changes since last save.\n"
+            System.out.println(mainWindow);
+            int option = JOptionPane.showOptionDialog(null, "There have been changes since last save.\n"
                     + "Would you like to save your graph now?", "Unsaved progress", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
                     null, options, options[0]);
 
