@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.view.Application;
 
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -86,7 +87,7 @@ public class CreationRemovalOperation extends Operation {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            generalController.criticalError("Parser error", e);
+            Application.criticalError("Parser error", e);
         }
     }
 

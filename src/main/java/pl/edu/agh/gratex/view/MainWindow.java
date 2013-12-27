@@ -22,6 +22,7 @@ import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.GeneralControllerImpl;
 import pl.edu.agh.gratex.view.propertyPanel.PanelPropertyEditor;
+
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 
@@ -44,53 +45,20 @@ public class MainWindow extends JFrame {
 
         generalController = new GeneralControllerImpl(this);
 
-        try {
-            URL url = this.getClass().getClassLoader().getResource("images/icon.png");
-            setIconImage(ImageIO.read(url));
-        } catch (Exception e) {
-            generalController.criticalError(StringLiterals.MESSAGE_ERROR_GET_RESOURCE, e);
-        }
+        setIconImage(Application.loadImage("icon.png"));
 
         initializeFrame();
-        initializeEvents();
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyHandler(generalController));
-
-        generalController.getModeController().setMode(ModeType.VERTEX);
-        generalController.getToolController().setTool(ToolType.ADD);
-        generalController.newGraphFile();
-    }
-
-    // TODO Trzeba zmienic layout Mainwindow na jakis typu border (on akurat chyba sie nada idealnie) i to pojdzie do piachu
-    public void adjustSize() {
-        int width = getContentPane().getWidth();
-        int height = getContentPane().getHeight();
-
-        panel_propertyEditor.setLocation(width - 208, 87);
-
-        scrollPane_workspace.setSize(width - 328, height - 122);
-        scrollPane_workspace.setViewportView(panel_workspace);
-
-        panel_buttonContainer.setSize(width + 10, 50);
-
-        label_infoDisplay.setBounds(10, height - 36, width - 20, 36);
-
-        menuBar.setSize(width, 25);
-    }
-
-    private void initializeEvents() {
-//        addComponentListener(new ComponentAdapter() {
-//            @Override
-//            public void componentResized(ComponentEvent arg0) {
-//                adjustSize();
-//            }
-//        });
-
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent arg0) {
                 generalController.exitApplication();
             }
         });
+
+        generalController.getModeController().setMode(ModeType.VERTEX);
+        generalController.getToolController().setTool(ToolType.ADD);
+        generalController.newGraphFile();
     }
 
     private void initializeFrame() {
@@ -110,7 +78,7 @@ public class MainWindow extends JFrame {
         getContentPane().add(scrollPane_workspace, BorderLayout.CENTER);
 
         label_infoDisplay = new InfoDisplay(generalController);
-        label_infoDisplay.setPreferredSize(new Dimension(0, 36));
+        label_infoDisplay.setPreferredSize(new Dimension(0, 30));
         label_infoDisplay.setBorder(new EmptyBorder(0, 10, 0, 10));
         getContentPane().add(label_infoDisplay, BorderLayout.SOUTH);
 

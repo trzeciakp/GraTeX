@@ -1,9 +1,9 @@
 package pl.edu.agh.gratex.constants;
 
 public enum CursorType {
-    ADD(ToolType.ADD, "images/addtoolcursor.png", "add"),
-    REMOVE(ToolType.REMOVE, "images/removetoolcursor.png", "remove"),
-    SELECT(ToolType.SELECT, "images/selecttoolcursor.png", "select");
+    ADD(ToolType.ADD, "addtoolcursor.png", "add"),
+    REMOVE(ToolType.REMOVE, "removetoolcursor.png", "remove"),
+    SELECT(ToolType.SELECT, "selecttoolcursor.png", "select");
 
     private ToolType toolType;
     private String imageName;

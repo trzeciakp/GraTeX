@@ -10,6 +10,7 @@ import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
+import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -265,7 +266,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                     generalController.getParseController().getEdgeParser().updateElementWithCode(currentlyDraggedEdge, currentlyDraggedEdge.getLatexCode());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    generalController.criticalError("Parser error", e);
+                    Application.criticalError("Parser error", e);
                 }
             }
             changingEdgeAngle = false;

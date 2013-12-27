@@ -24,14 +24,9 @@ public class ToolButton extends JButton implements ToolListener {
         this.toolController = toolController;
         toolController.addToolListener(this);
         this.toolType = toolType;
-        try {
-            URL url = this.getClass().getClassLoader().getResource("images/" + imageActiveName);
-            imageActive = ImageIO.read(url);
-            url = this.getClass().getClassLoader().getResource("images/" + imagePassiveName);
-            imagePassive = ImageIO.read(url);
-        } catch (Exception e) {
-            toolController.getGeneralController().criticalError(StringLiterals.MESSAGE_ERROR_GET_RESOURCE, e);
-        }
+        imageActive = Application.loadImage(imageActiveName);
+        imagePassive = Application.loadImage(imagePassiveName);
+
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {

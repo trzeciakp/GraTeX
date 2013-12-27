@@ -37,11 +37,7 @@ public class AboutDialog extends JDialog {
         JTextArea aboutTextArea = new JTextArea() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                try {
-                    URL url = this.getClass().getClassLoader().getResource("images/icon.png");
-                    g.drawImage(ImageIO.read(url), 250, 42, null);
-                } catch (Exception e) {
-                }
+                g.drawImage(Application.loadImage("icon.png"), 250, 42, null);
             }
         };
         aboutTextArea.setText(StringLiterals.MESSAGE_ABOUT_DIALOG);

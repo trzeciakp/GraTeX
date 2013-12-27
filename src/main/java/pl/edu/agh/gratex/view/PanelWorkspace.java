@@ -27,13 +27,13 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     private MouseController mouseController;
 
     private JScrollPane parent;
+
     private int mouseDragX = -1;
     private int mouseDragY = -1;
+    private boolean mouseInWorkspace;
 
     private EnumMap<ToolType, Cursor> cursors = new EnumMap<>(ToolType.class);
     private ToolType tool;
-
-    private boolean mouseInWorkspace;
 
     public PanelWorkspace(JScrollPane parent, GeneralController generalController) {
         super();
@@ -46,16 +46,11 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        try {
-            Toolkit toolkit = Toolkit.getDefaultToolkit();
-            for (CursorType cursorType : CursorType.values()) {
-                URL url = this.getClass().getClassLoader().getResource(cursorType.getImageName());
-                Image image = ImageIO.read(url);
-                Cursor cursor = toolkit.createCustomCursor(image, new Point(0, 0), cursorType.getDescription());
-                cursors.put(cursorType.getToolType(), cursor);
-            }
-        } catch (Exception e) {
-            generalController.criticalError(StringLiterals.MESSAGE_ERROR_GET_RESOURCE, e);
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        for (CursorType cursorType : CursorType.values()) {
+            Image image = Application.loadImage(cursorType.getImageName());
+            Cursor cursor = toolkit.createCustomCursor(image, new Point(0, 0), cursorType.getDescription());
+            cursors.put(cursorType.getToolType(), cursor);
         }
 
         setPreferredSize(new Dimension(Const.PAGE_WIDTH, Const.PAGE_HEIGHT));

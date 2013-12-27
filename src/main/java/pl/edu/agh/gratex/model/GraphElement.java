@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.model;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public abstract class GraphElement implements Serializable {
             return graph.getGeneralController().getParseController().getParserByElementType(getType()).parseToGraph(code, graph);
         } catch (Exception e) {
             e.printStackTrace();
-            graph.getGeneralController().criticalError("Parser error", e);
+            Application.criticalError("Parser error", e);
             return null;
         }
     }

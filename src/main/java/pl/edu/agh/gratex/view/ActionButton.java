@@ -15,12 +15,7 @@ public class ActionButton extends JButton {
     private Image image;
 
     public ActionButton(GeneralController generalController, String imageName, String tooltip, ActionListener actionListener) {
-        try {
-            URL url = this.getClass().getClassLoader().getResource("images/" + imageName);
-            image = ImageIO.read(url);
-        } catch (Exception e) {
-            generalController.criticalError(StringLiterals.MESSAGE_ERROR_GET_RESOURCE, e);
-        }
+        image = Application.loadImage(imageName);
         setToolTipText(tooltip);
         addActionListener(actionListener);
     }

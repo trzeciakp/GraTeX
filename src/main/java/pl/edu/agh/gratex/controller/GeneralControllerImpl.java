@@ -140,7 +140,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_OK));
                 } else {
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_FAIL));
-                    reportError(StringLiterals.MESSAGE_ERROR_OPEN_GRAPH, null);
+                    Application.reportError(StringLiterals.MESSAGE_ERROR_OPEN_GRAPH, null);
                 }
             }
         }
@@ -167,7 +167,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                 return true;
             } else {
                 operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_SAVE_FAIL));
-                reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH, null);
+                Application.reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH, null);
             }
         }
 
@@ -295,18 +295,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     StringLiterals.INFO_REMOVE_ELEMENT(modeController.getMode(), selectionController.selectionSize()), false);
         }
         selectionController.clearSelection();
-    }
-
-    @Override
-    public void reportError(String message, Exception e) {
-        String fullMessage = message + (e == null ? "" : "\n\n" + e.toString());
-        JOptionPane.showMessageDialog(mainWindow, fullMessage, StringLiterals.TITLE_ERROR_DIALOG, JOptionPane.ERROR_MESSAGE);
-    }
-
-    @Override
-    public void criticalError(String message, Exception e) {
-        reportError(StringLiterals.MESSAGE_ERROR_CRITICAL + message, e);
-        System.exit(1);
     }
 
     @Override
