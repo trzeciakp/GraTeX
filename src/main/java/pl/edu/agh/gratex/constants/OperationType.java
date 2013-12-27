@@ -19,7 +19,8 @@ public enum OperationType {
     REMOVE_LABEL_EDGE,
 
     DUPLICATION,
-    PROPERTY_CHANGE;
+    PROPERTY_CHANGE,
+    TEMPLATE_GLOBAL_APPLY;
 
     public static OperationType REMOVE_OPERATION(ModeType mode)
     {

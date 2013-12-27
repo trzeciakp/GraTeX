@@ -157,7 +157,7 @@ public class StringLiterals {
     }
 
     // TemplateChangeOperation
-    public final static String INFO_TEMPLATE_CHANGE_AND_GLOBAL_APPLY = "template changed and applied globally";
+    public final static String INFO_TEMPLATE_APPLIED_GLOBALLY = "template applied globally";
     public final static String INFO_TEMPLATE_CHANGE = "template changed";
 
     // ControlManager

@@ -120,8 +120,6 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
             graph.setLabelEDefaultModel((LabelEdgePropertyModel) labelE1.getModel());
             graph.getLabelEDefaultModel().text = null;
         }
-
-        //refreshModels();
     }
 
     private void initializeEvents() {
@@ -136,6 +134,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
 
         button_restoreDefaultSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                System.out.println("e = [erm]");
                 graph.initDefaultModels();
                 graph.getEdgeDefaultModel().isLoop = -1;
                 graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
@@ -151,8 +150,8 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
                 labelV1.setModel(graph.getLabelVDefaultModel());
                 labelE1.setModel(graph.getLabelEDefaultModel());
                 labelE2.setModel(graph.getLabelEDefaultModel());
-
                 panel_preview.repaint();
+                modeController.setMode(ModeType.values()[tabbedPane.getSelectedIndex()]);
             }
         });
 
@@ -168,8 +167,6 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
                     graph.gridOn = true;
 
                 }
-                // TODO Nie rozumiem, czemu to tu bylo??
-                //refreshModels();
                 result = graph;
                 setVisible(false);
                 dispose();

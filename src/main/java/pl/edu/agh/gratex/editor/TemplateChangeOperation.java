@@ -81,7 +81,7 @@ public class TemplateChangeOperation extends OldOperation {
         }
 
         if (applyToAll) {
-            return StringLiterals.INFO_TEMPLATE_CHANGE_AND_GLOBAL_APPLY;
+            return StringLiterals.INFO_TEMPLATE_APPLIED_GLOBALLY;
         } else {
             return StringLiterals.INFO_TEMPLATE_CHANGE;
         }
@@ -109,7 +109,7 @@ public class TemplateChangeOperation extends OldOperation {
         }
 
         if (applyToAll) {
-            return StringLiterals.INFO_UNDO(StringLiterals.INFO_TEMPLATE_CHANGE_AND_GLOBAL_APPLY);
+            return StringLiterals.INFO_UNDO(StringLiterals.INFO_TEMPLATE_APPLIED_GLOBALLY);
         } else {
             return StringLiterals.INFO_UNDO(StringLiterals.INFO_TEMPLATE_CHANGE);
         }

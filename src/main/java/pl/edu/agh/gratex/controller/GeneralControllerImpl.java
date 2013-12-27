@@ -194,27 +194,35 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         Graph templateGraph = gdd.displayDialog();
 
         if (templateGraph != null) {
-            List<GraphElement> elements = graph.getAllElements();
-            AlterationOperation operation = new AlterationOperation(this, elements, OperationType.PROPERTY_CHANGE, StringLiterals.INFO_PROPERTY_CHANGE);
+            graph.setVertexDefaultModel(templateGraph.getVertexDefaultModel());
+            graph.setEdgeDefaultModel(templateGraph.getEdgeDefaultModel());
+            graph.setLabelVDefaultModel(templateGraph.getLabelVDefaultModel());
+            graph.setLabelEDefaultModel(templateGraph.getLabelEDefaultModel());
 
-            // TODO Na razie robie tak żeby działało, może kiedyś uda się to ładniej napisać
-            for (GraphElement graphElement : elements) {
-                switch(graphElement.getType()){
-                    case VERTEX:
-                        graphElement.setModel(templateGraph.getVertexDefaultModel());
-                        break;
-                    case EDGE:
-                        graphElement.setModel(templateGraph.getEdgeDefaultModel());
-                        break;
-                    case LABEL_VERTEX:
-                        graphElement.setModel(templateGraph.getLabelVDefaultModel());
-                        break;
-                    case LABEL_EDGE:
-                        graphElement.setModel(templateGraph.getLabelEDefaultModel());
-                        break;
+            if (templateGraph.gridOn) {
+                List<GraphElement> elements = graph.getAllElements();
+                AlterationOperation operation = new AlterationOperation(this, elements, OperationType.TEMPLATE_GLOBAL_APPLY, StringLiterals.INFO_TEMPLATE_APPLIED_GLOBALLY);
+                // TODO Na razie robie tak żeby działało, może kiedyś uda się to ładniej napisać
+                for (GraphElement graphElement : elements) {
+                    switch (graphElement.getType()) {
+                        case VERTEX:
+                            graphElement.setModel(templateGraph.getVertexDefaultModel());
+                            break;
+                        case EDGE:
+                            graphElement.setModel(templateGraph.getEdgeDefaultModel());
+                            break;
+                        case LABEL_VERTEX:
+                            graphElement.setModel(templateGraph.getLabelVDefaultModel());
+                            break;
+                        case LABEL_EDGE:
+                            graphElement.setModel(templateGraph.getLabelEDefaultModel());
+                            break;
+                    }
                 }
+                operation.finish();
+            } else {
+                operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_TEMPLATE_CHANGE));
             }
-            operation.finish();
         }
     }
 
