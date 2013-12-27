@@ -5,7 +5,7 @@ import java.awt.*;
 public class Const {
     // MainWindow size constraints
     public final static int MAIN_WINDOW_MIN_WIDTH = 800;
-    public final static int MAIN_WINDOW_MIN_HEIGHT = 500;
+    public final static int MAIN_WINDOW_MIN_HEIGHT = 600;
     public final static int MAIN_WINDOW_DEFAULT_WIDTH = 1038;
     public final static int MAIN_WINDOW_DEFAULT_HEIGHT = 768;
 
