@@ -118,8 +118,8 @@ public class PanelButtonContainer extends JPanel implements SelectionListener {
     }
 
     @Override
-    public void selectionChanged(List<? extends GraphElement> collection) {
-        boolean duplicationEnabled = collection.size() > 0 && generalController.getModeController().getMode() == ModeType.VERTEX
+    public void selectionChanged(List<? extends GraphElement> selectedElements) {
+        boolean duplicationEnabled = selectedElements.size() > 0 && generalController.getModeController().getMode() == ModeType.VERTEX
                 && generalController.getToolController().getTool() == ToolType.SELECT;
         buttons.get(ActionButtonType.DUPLICATE_SUBGRAPH).setEnabled(duplicationEnabled);
     }

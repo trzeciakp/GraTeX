@@ -137,9 +137,9 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     GraphUtils.deleteUnusedLabels(newGraph);
                     graph = newGraph;
                     resetWorkspace();
-                    publishInfo(StringLiterals.INFO_GRAPH_OPEN_OK);
+                    operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_OK));
                 } else {
-                    publishInfo(StringLiterals.INFO_GRAPH_OPEN_FAIL);
+                    operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_FAIL));
                     reportError(StringLiterals.MESSAGE_ERROR_OPEN_GRAPH, null);
                 }
             }
@@ -162,11 +162,11 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
         if (file != null) {
             if (FileManager.saveFile(graph, file)) {
-                publishInfo(StringLiterals.INFO_GRAPH_SAVE_OK);
+                operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_SAVE_OK));
                 currentFile = file;
                 return true;
             } else {
-                publishInfo(StringLiterals.INFO_GRAPH_SAVE_FAIL);
+                operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_SAVE_FAIL));
                 reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH, null);
             }
         }
@@ -295,11 +295,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     StringLiterals.INFO_REMOVE_ELEMENT(modeController.getMode(), selectionController.selectionSize()), false);
         }
         selectionController.clearSelection();
-    }
-
-    @Override
-    public void publishInfo(String entry) {
-        mainWindow.publishInfo(entry);
     }
 
     @Override

@@ -3,6 +3,11 @@ package pl.edu.agh.gratex.constants;
 import java.awt.*;
 
 public class Const {
+    // MainWindow size constraints
+    public final static int MAIN_WINDOW_MIN_WIDTH = 800;
+    public final static int MAIN_WINDOW_MIN_HEIGHT = 500;
+    public final static int MAIN_WINDOW_DEFAULT_WIDTH = 1038;
+    public final static int MAIN_WINDOW_DEFAULT_HEIGHT = 768;
 
     // Extension of GraTeX graph files
     public final static String GRAPH_FILES_EXTENSION = ".gph";
@@ -32,7 +37,7 @@ public class Const {
     // Limit of operations to keep in memory. When exceeded, oldest operations will be deleted
     public static final int MAX_REMEMBERED_OPERATIONS = 1024;
 
-    // Maximum number tht a vertex can have. Alphabetical "ZZ" corresponds to digital 703.
+    // Maximum number tht a vertex can have. Alphabetical "ZZ" corresponds to digital 703
     public final static int MAX_VERTEX_NUMBER = 703;
 
     // Default font for drawing graph elements

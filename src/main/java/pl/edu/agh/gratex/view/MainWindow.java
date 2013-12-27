@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.view;
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
@@ -18,8 +19,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
 
+@SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-    private static final long serialVersionUID = -7320722131326919230L;
 
     private PanelToolbox panel_toolbox;
     private JScrollPane scrollPane_workspace;
@@ -51,12 +52,6 @@ public class MainWindow extends JFrame {
         generalController.getModeController().setMode(ModeType.VERTEX);
         generalController.getToolController().setTool(ToolType.ADD);
         generalController.newGraphFile();
-    }
-
-    // TODO to wyleci jak wszystkie info beda szly po OperationControllerze
-    // TODO jestem w trakcie przerobek
-    public void publishInfo(String entry) {
-        generalController.getOperationController().reportOperationEvent(new GenericOperation(entry));
     }
 
     // TODO Trzeba zmienic layout Mainwindow na jakis typu border (on akurat chyba sie nada idealnie) i to pojdzie do piachu
@@ -93,12 +88,11 @@ public class MainWindow extends JFrame {
     }
 
     private void initializeFrame() {
-        setMinimumSize(new Dimension(800, 500));
-        setSize(1038, 768);
+        setMinimumSize(new Dimension(Const.MAIN_WINDOW_MIN_WIDTH, Const.MAIN_WINDOW_MIN_HEIGHT));
+        setSize(Const.MAIN_WINDOW_DEFAULT_WIDTH, Const.MAIN_WINDOW_DEFAULT_HEIGHT);
         setLocationRelativeTo(null);
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setVisible(true);
         getContentPane().setLayout(null);
 
         scrollPane_workspace = new JScrollPane();

@@ -48,8 +48,6 @@ public interface GeneralController {
 
     public void deleteSelection();
 
-    public void publishInfo(String entry);
-
     public void reportError(String message, Exception e);
 
     public void criticalError(String message, Exception e);

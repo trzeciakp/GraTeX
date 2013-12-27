@@ -16,7 +16,7 @@ public class Application {
                             break;
                         }
                     }
-                    new MainWindow();
+                    new MainWindow().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null, StringLiterals.MESSAGE_ERROR_GENERAL + e.toString(),
