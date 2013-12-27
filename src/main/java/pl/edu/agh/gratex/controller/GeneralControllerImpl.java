@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.controller.operation.*;
 import pl.edu.agh.gratex.editor.OldOperationList;
 import pl.edu.agh.gratex.editor.TemplateChangeOperation;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.parser.Parser;
@@ -16,6 +17,8 @@ import pl.edu.agh.gratex.view.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener, Serializable {
     private MainWindow mainWindow;
@@ -180,7 +183,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     //TODO it should be changed
     public void resetWorkspace() {
         selectionController.clearSelection();
-        //ControlManager.updatePropertyChangeOperationStatus(false);
         //mouseController.finishMovingElement();
         //mouseController.cancelCurrentOperation();
         operationController.reportOperationEvent(null);
@@ -192,8 +194,27 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         Graph templateGraph = gdd.displayDialog();
 
         if (templateGraph != null) {
-            ControlManager.operations.addNewOperation(new TemplateChangeOperation(this, graph, templateGraph));
-            publishInfo(ControlManager.operations.redo());
+            List<GraphElement> elements = graph.getAllElements();
+            AlterationOperation operation = new AlterationOperation(this, elements, OperationType.PROPERTY_CHANGE, StringLiterals.INFO_PROPERTY_CHANGE);
+
+            // TODO Na razie robie tak żeby działało, może kiedyś uda się to ładniej napisać
+            for (GraphElement graphElement : elements) {
+                switch(graphElement.getType()){
+                    case VERTEX:
+                        graphElement.setModel(templateGraph.getVertexDefaultModel());
+                        break;
+                    case EDGE:
+                        graphElement.setModel(templateGraph.getEdgeDefaultModel());
+                        break;
+                    case LABEL_VERTEX:
+                        graphElement.setModel(templateGraph.getLabelVDefaultModel());
+                        break;
+                    case LABEL_EDGE:
+                        graphElement.setModel(templateGraph.getLabelEDefaultModel());
+                        break;
+                }
+            }
+            operation.finish();
         }
     }
 
@@ -235,7 +256,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void setNumeration() {
         selectionController.clearSelection();
-        //ControlManager.updatePropertyChangeOperationStatus(false);
         NumerationDialog nd = new NumerationDialog(mainWindow, graph.getGraphNumeration().isNumerationDigital(),
                 graph.getGraphNumeration().getStartingNumber(), Const.MAX_VERTEX_NUMBER);
         int[] result = nd.showDialog();

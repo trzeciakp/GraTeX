@@ -1,6 +1,5 @@
 package pl.edu.agh.gratex.controller.operation;
 
-import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.GraphElement;

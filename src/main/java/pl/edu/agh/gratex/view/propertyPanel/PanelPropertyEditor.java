@@ -128,7 +128,6 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     public void operationEvent(Operation operation) {
         if (operation != null) {
             if (operation.getOperationType() == OperationType.ADD_LABEL_EDGE || operation.getOperationType() == OperationType.ADD_LABEL_VERTEX) {
-                // TODO Na razie to nie dziala, bo zaraz po tym jest robiony updatePropertyChangeOperation i sie nadpisuje. Ale bedzie dzialac.
                 panelsMap.get(mode).components.get(0).requestFocus();
                 ((JTextField) panelsMap.get(mode).components.get(0)).selectAll();
             }
