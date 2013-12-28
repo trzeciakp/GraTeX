@@ -135,6 +135,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     public void openGraphFile() {
         if (checkForUnsavedProgress()) {
             OpenFileDialog chooser;
+            File currentFile = fileManager.getCurrentFile();
             if (currentFile != null) {
                 chooser = new OpenFileDialog(currentFile);
             } else {
@@ -145,7 +146,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             if (file != null) {
                 Graph newGraph;
                 if ((newGraph = fileManager.openFile(file)) != null) {
-                    currentFile = file;
                     GraphUtils.deleteUnusedLabels(newGraph);
                     graph = newGraph;
                     resetWorkspace();
@@ -160,12 +160,12 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public boolean saveGraphFile(boolean saveAs) {
-        File file = currentFile;
+        File file = fileManager.getCurrentFile();
 
-        if (saveAs || currentFile == null) {
+        if (saveAs || file == null) {
             SaveFileDialog chooser;
-            if (currentFile != null) {
-                chooser = new SaveFileDialog(currentFile);
+            if (file != null) {
+                chooser = new SaveFileDialog(file);
             } else {
                 chooser = new SaveFileDialog();
             }
@@ -173,16 +173,14 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         }
 
         if (file != null) {
-            if (FileManager.saveFile(graph, file)) {
+            if (fileManager.saveFile(file, graph)) {
                 operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_SAVE_OK));
-                currentFile = file;
                 return true;
             } else {
                 operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_SAVE_FAIL));
                 Application.reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH, null);
             }
         }
-
         return false;
     }
 
@@ -322,7 +320,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     private boolean checkForUnsavedProgress() {
         // TODO this nie bedzie potrzebne, czytaj FileManager
         if(fileManager.hasContentChanged(graph)) {
-            System.out.println(mainWindow);
             Object[] options = {"Save", "Don't save", "Cancel"};
             int option = JOptionPane.showOptionDialog(null, "There have been changes since last save.\n"
                     + "Would you like to save your graph now?", "Unsaved progress", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,

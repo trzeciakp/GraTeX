@@ -58,9 +58,36 @@ public class ParseControllerImpl implements ParseController {
     @Override
     public Graph parseLatexCodeToGraph(List<String> codeLines) {
         Graph result = new Graph();
+        int t = 0;
         for (String codeLine : codeLines) {
-
+            try {
+                t = incrementThroughTypesAndParse(codeLine, result,  t);
+            } catch (ParserException e) {
+                //TODO
+                //TODO
+                //TODO
+                //TODO
+                e.printStackTrace();
+            }
         }
         return result;
+    }
+
+    private int incrementThroughTypesAndParse(String codeLine, Graph graph, int t) throws ParserException {
+        GraphElementType[] types = GraphElementType.values();
+        while(t < types.length) {
+            try {
+                GraphElement ge = tryToParse(codeLine, graph, types[t]);
+                ge.addToGraph(codeLine);
+                return t;
+            } catch (ParserException e) {
+                t++;
+            }
+        }
+        throw new ParserException();
+    }
+
+    private GraphElement tryToParse(String code, Graph graph, GraphElementType type) throws ParserException {
+        return parsers.get(type).parseToGraph(code, graph);
     }
 }

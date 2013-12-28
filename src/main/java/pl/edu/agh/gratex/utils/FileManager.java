@@ -54,7 +54,7 @@ public class FileManager {
         if(currentFile == null) {
             return true;
         }
-        return content.equals(savedContent);
+        return !content.equals(savedContent);
     }
 
     public Graph openFile(File fileToOpen) {
@@ -135,5 +135,9 @@ public class FileManager {
             }
         }
         return result;
+    }
+
+    public File getCurrentFile() {
+        return currentFile;
     }
 }
