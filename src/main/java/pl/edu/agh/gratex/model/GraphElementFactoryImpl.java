@@ -41,4 +41,9 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
         }
         return result;
     }
+
+    @Override
+    public DrawableFactory getDrawableFactory() {
+        return drawableFactory;
+    }
 }

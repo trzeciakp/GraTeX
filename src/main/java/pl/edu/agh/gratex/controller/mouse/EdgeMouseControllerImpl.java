@@ -66,7 +66,14 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             }
             currentlyAddedEdge.setVertexB(vertex);
             if (GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY) != null) {
-                currentlyAddedEdge.setRelativeEdgeAngle(EdgeUtils.getEdgeAngleFromCursorLocation(currentlyAddedEdge, mouseX, mouseY));
+                int angle = EdgeUtils.getEdgeAngleFromCursorLocation(currentlyAddedEdge, mouseX, mouseY);
+                currentlyAddedEdge.setRelativeEdgeAngle(angle);
+
+            }
+            if(currentlyAddedEdge.getRelativeEdgeAngle() != 0) {
+                currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDummyEdgeDrawable());
+            } else {
+                currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
             }
             currentlyAddedEdge.draw(g, true);
         }
@@ -96,8 +103,12 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             } else {
                 currentlyAddedEdge.setVertexB(temp);
                 currentlyAddedEdge.setDirected(shiftDown);
+                currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
                 new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
                 currentlyAddedEdge = null;
+
+
+
             }
         }
     }
