@@ -47,7 +47,7 @@ public class Edge extends GraphElement implements Serializable {
 
     public Edge(Graph graph) {
         super(graph);
-        setDrawable(new EdgeDrawable());
+        //setDrawable(new EdgeDrawable());
     }
 
     public boolean isLoop() {
@@ -178,10 +178,10 @@ public class Edge extends GraphElement implements Serializable {
     }
 
     @Override
-    public void addToGraph() {
+    public void addToGraph(String code) {
         graph.getEdges().add(this);
         EdgeUtils.updatePosition(this);
-        setLatexCode(graph.getGeneralController().getParseController().getEdgeParser().parseToLatex(this));
+        setLatexCode(code);
     }
 
     @Override

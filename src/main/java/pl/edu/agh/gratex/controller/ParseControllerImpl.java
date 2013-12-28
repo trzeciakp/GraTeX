@@ -57,7 +57,7 @@ public class ParseControllerImpl implements ParseController {
 
     @Override
     public Graph parseLatexCodeToGraph(List<String> codeLines) {
-        Graph result = new Graph(null);
+        Graph result = new Graph();
         for (String codeLine : codeLines) {
 
         }

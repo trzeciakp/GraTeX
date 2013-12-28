@@ -1,15 +1,14 @@
 package pl.edu.agh.gratex.model.graph;
 
-import pl.edu.agh.gratex.constants.OperationType;
-import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
+import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
+import pl.edu.agh.gratex.parser.GraphElementParser;
+import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
 import java.util.*;
@@ -17,6 +16,7 @@ import java.util.List;
 
 public class DummySubgraph {
     private Graph graph;
+    private ParseController parseController;
 
     public LinkedList<Vertex> vertices = new LinkedList<>();
     public LinkedList<Edge> edges = new LinkedList<>();
@@ -28,8 +28,9 @@ public class DummySubgraph {
     public int biasX = 0;
     public int biasY = 0;
 
-    public DummySubgraph(Graph graph, List<? extends GraphElement> subjects) {
+    public DummySubgraph(Graph graph, List<? extends GraphElement> subjects, ParseController parseController) {
         this.graph = graph;
+        this.parseController = parseController;
 
         Collections.sort(subjects, new Comparator<GraphElement>() {
             @Override
@@ -46,14 +47,14 @@ public class DummySubgraph {
             Vertex originalVertex = (Vertex) vertex;
             originalVertices.add(originalVertex);
 
-            Vertex duplicatedVertex = (Vertex) vertex.getCopy();
+            Vertex duplicatedVertex = (Vertex) getCopy(vertex);
             duplicatedVertex.setNumber(graph.getGraphNumeration().getNextFreeNumber());
             VertexUtils.setPartOfNumeration(duplicatedVertex, true);
             originalToDuplicate.put(originalVertex, duplicatedVertex);
             vertices.add(duplicatedVertex);
 
             if (originalVertex.getLabel() != null) {
-                LabelV labelCopy = (LabelV) originalVertex.getLabel().getCopy();
+                LabelV labelCopy = (LabelV) getCopy(originalVertex.getLabel());
                 labelCopy.setOwner(duplicatedVertex);
                 duplicatedVertex.setLabel(labelCopy);
                 labelsV.add(labelCopy);
@@ -70,13 +71,13 @@ public class DummySubgraph {
         }
 
         for (Edge edge : GraphUtils.getCommonEdges(graph, originalVertices)) {
-            Edge edgeCopy = (Edge) edge.getCopy();
+            Edge edgeCopy = (Edge) getCopy(edge);
             edgeCopy.setVertexA(originalToDuplicate.get(edge.getVertexA()));
             edgeCopy.setVertexB(originalToDuplicate.get(edge.getVertexB()));
             edges.add(edgeCopy);
 
             if (edge.getLabel() != null) {
-                LabelE labelCopy = (LabelE) edge.getLabel().getCopy();
+                LabelE labelCopy = (LabelE) getCopy(edge.getLabel());
                 labelCopy.setOwner(edgeCopy);
                 edgeCopy.setLabel(labelCopy);
                 labelsE.add(labelCopy);
@@ -129,5 +130,18 @@ public class DummySubgraph {
             }
         }
         return true;
+    }
+
+
+    private GraphElement getCopy(GraphElement graphElement) {
+        try {
+            GraphElementParser parser = parseController.getParserByElementType(graphElement.getType());
+            String code = parser.parseToLatex(graphElement);
+            return parser.parseToGraph(code, graph);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Application.criticalError("Parser error", e);
+            return null;
+        }
     }
 }

@@ -37,11 +37,11 @@ public class LabelV extends GraphElement implements Serializable {
     private Rectangle outline;
 
     @Override
-    public void addToGraph() {
+    public void addToGraph(String code) {
         graph.getLabelsV().add(this);
         getOwner().setLabel(this);
         LabelVUtils.updatePosition(this);
-        setLatexCode(graph.getGeneralController().getParseController().getLabelVertexParser().parseToLatex(this));
+        setLatexCode(code);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class LabelV extends GraphElement implements Serializable {
         super(graph);
         setOwner(element);
         setText("Label");
-        setDrawable(new LabelVertexDrawable());
+        //setDrawable(new LabelVertexDrawable());
     }
 
     public void setModel(PropertyModel pm) {

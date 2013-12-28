@@ -11,6 +11,7 @@ public class LabelEUtils {
     public static boolean intersects(LabelE labelE, int x, int y) {
         return labelE.getOutline().contains(x, y);
     }
+/*
 
     public static void draw(LabelE labelE, Graphics2D g2d, boolean dummy) {
         Graphics2D g = (Graphics2D) g2d.create();
@@ -37,6 +38,7 @@ public class LabelEUtils {
 
         g.dispose();
     }
+*/
 
     public static void updatePosition(LabelE labelE) {
         FontMetrics fm = new Canvas().getFontMetrics(labelE.getFont());

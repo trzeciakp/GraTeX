@@ -44,15 +44,15 @@ public class LabelE extends GraphElement implements Serializable {
         super(graph);
         setOwner(element);
         setText("Label");
-        setDrawable(new LabelEdgeDrawable());
+        //setDrawable(new LabelEdgeDrawable());
     }
 
     @Override
-    public void addToGraph() {
+    public void addToGraph(String code) {
         graph.getLabelsE().add(this);
         getOwner().setLabel(this);
         LabelEUtils.updatePosition(this);
-        setLatexCode(graph.getGeneralController().getParseController().getLabelEdgeParser().parseToLatex(this));
+        setLatexCode(code);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.draw;
 
 import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelE.LabelEUtils;
@@ -12,6 +13,13 @@ import java.awt.*;
  *
  */
 public class LabelEdgeDrawable implements Drawable {
+
+    private SelectionController selectionController;
+
+    public LabelEdgeDrawable(SelectionController selectionController) {
+        this.selectionController = selectionController;
+    }
+
     @Override
     public void draw(GraphElement graphElement, Graphics g2d, boolean dummy) {
         LabelE labelE = (LabelE) graphElement;
@@ -19,7 +27,7 @@ public class LabelEdgeDrawable implements Drawable {
 
         LabelEUtils.updatePosition(labelE);
 
-        if (labelE.getGraph().getGeneralController().getSelectionController().selectionContains(labelE)) {
+        if (selectionController.selectionContains(labelE)) {
             g.setColor(Const.SELECTION_COLOR);
             g.fillPolygon(labelE.getOutline());
         }

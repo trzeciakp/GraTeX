@@ -1,9 +1,6 @@
 package pl.edu.agh.gratex.controller.mouse;
 
-import pl.edu.agh.gratex.constants.ModeType;
-import pl.edu.agh.gratex.constants.OperationType;
-import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.constants.*;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.OperationController;
@@ -33,16 +30,16 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     private int mouseY;
     private int mouseX;
 
-    public MouseControllerImpl(GeneralController generalController, ModeController modeController, ToolController toolController, SelectionController selectionController, OperationController operationController) {
+    public MouseControllerImpl(GeneralController generalController, ModeController modeController, ToolController toolController,
+                               SelectionController selectionController, OperationController operationController, GraphElementControllersFactory factory) {
         this.generalController = generalController;
         this.selectionController = selectionController;
         this.operationController = operationController;
         modeController.addModeListener(this);
         toolController.addToolListener(this);
-        controllers.put(ModeType.VERTEX, new VertexMouseControllerImpl(generalController));
-        controllers.put(ModeType.EDGE, new EdgeMouseControllerImpl(generalController));
-        controllers.put(ModeType.LABEL_VERTEX, new LabelVertexMouseControllerImpl(generalController));
-        controllers.put(ModeType.LABEL_EDGE, new LabelEdgeMouseControllerImpl(generalController));
+        for (ModeType modeType : ModeType.values()) {
+            controllers.put(modeType, factory.createGraphElementMouseController(modeType));
+        }
     }
 
     @Override
@@ -210,6 +207,6 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
 
     @Override
     public void duplicateSubgraph() {
-        dummySubgraph = new DummySubgraph(generalController.getGraph(), selectionController.getSelection());
+        dummySubgraph = new DummySubgraph(generalController.getGraph(), selectionController.getSelection(), generalController.getParseController());
     }
 }

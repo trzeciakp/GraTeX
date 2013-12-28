@@ -1,5 +1,7 @@
 package pl.edu.agh.gratex.parser;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.EdgeUtils;
@@ -17,11 +19,18 @@ import java.util.regex.Pattern;
  *
  */
 public class EdgeParser extends GraphElementParser {
-    private static final String BEGINING = "\\draw ";
-    private final Pattern pattern;
-    private List<ParseElement> parseList = new ArrayList<>();
 
-    public EdgeParser(ColorMapper colorMapper) {
+    private ColorMapper colorMapper;
+
+    public EdgeParser(ColorMapper colorMapper, GraphElementFactory graphElementFactory) {
+        super(graphElementFactory);
+        this.colorMapper = colorMapper;
+        init();
+    }
+
+    @Override
+    public List<ParseElement> createParseList() {
+        List<ParseElement> parseList = new ArrayList<ParseElement>();
         parseList.add(new StaticParseElement("\\draw [", false));
         parseList.add(new LineWidthEdgeParser());
         parseList.add(new DirectionEdgeParser());
@@ -32,26 +41,11 @@ public class EdgeParser extends GraphElementParser {
         parseList.add(new VerticesEdgeParser());
         parseList.add(new StaticParseElement(";", false));
         parseList.add(new CommentedParametersEdgeParser());
-        pattern = evaluatePattern();
-    }
-
-    @Override
-    public String parseToLatex(GraphElement graphElement) {
-        return super.parseToLatexUsingParseList(graphElement);
-    }
-
-    @Override
-    public Edge parseToGraph(String code, Graph graph) throws ParserException {
-        Edge edge = new Edge(graph);
-        parseToGraphUsingParseList(code, edge);
-        return edge;
-    }
-
-    public List<ParseElement> getParseList() {
         return parseList;
     }
 
-    public Pattern getPattern() {
-        return pattern;
+    @Override
+    public GraphElementType getType() {
+        return GraphElementType.EDGE;
     }
 }

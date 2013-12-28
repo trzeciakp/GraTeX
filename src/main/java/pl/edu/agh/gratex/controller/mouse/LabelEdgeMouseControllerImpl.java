@@ -1,11 +1,13 @@
 package pl.edu.agh.gratex.controller.mouse;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
+import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelE.LabelE;
@@ -24,8 +26,8 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     private LabelE currentlyDraggedLabel;
     private AlterationOperation currentDragOperation;
 
-    public LabelEdgeMouseControllerImpl(GeneralController generalController) {
-        super(generalController);
+    public LabelEdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
+        super(generalController, graphElementFactory);
         this.generalController = generalController;
     }
 
@@ -50,7 +52,8 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
         Edge temp = GraphUtils.getEdgeFromPosition(generalController.getGraph(), mouseX, mouseY);
         if (temp != null) {
             if (temp.getLabel() == null) {
-                LabelE labelE = new LabelE(temp, generalController.getGraph());
+                LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());
+                labelE.setOwner(temp);
                 labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
 
                 int bias;
@@ -132,7 +135,8 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
         Edge temp = GraphUtils.getEdgeFromPosition(generalController.getGraph(), e.getX(), e.getY());
         if (temp != null) {
             if (temp.getLabel() == null) {
-                LabelE labelE = new LabelE(temp, generalController.getGraph());
+                LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());
+                labelE.setOwner(temp);
                 labelE.setHorizontalPlacement(shiftDown);
                 labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
                 LabelEUtils.updatePosition(labelE);

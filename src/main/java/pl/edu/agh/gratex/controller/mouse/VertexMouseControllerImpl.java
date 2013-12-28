@@ -1,11 +1,13 @@
 package pl.edu.agh.gratex.controller.mouse;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
+import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
@@ -19,8 +21,8 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     private Vertex currentlyDraggedVertex;
     private AlterationOperation currentDragOperation;
 
-    public VertexMouseControllerImpl(GeneralController generalController) {
-        super(generalController);
+    public VertexMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
+        super(generalController, graphElementFactory);
         this.generalController = generalController;
     }
 
@@ -37,7 +39,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void paintCurrentlyAddedElement(Graphics2D g) {
-        Vertex vertex = new Vertex(generalController.getGraph());
+        Vertex vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
         vertex.setModel(generalController.getGraph().getVertexDefaultModel());
         VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
         vertex.setPosX(mouseX);
@@ -54,7 +56,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void addNewElement(MouseEvent e) {
-        Vertex vertex = new Vertex(generalController.getGraph());
+        Vertex vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
         vertex.setModel(generalController.getGraph().getVertexDefaultModel());
         vertex.setPosX(e.getX());
         vertex.setPosY(e.getY());

@@ -72,6 +72,7 @@ public class LabelVUtils {
         labelV.setDrawY((int) (drawPosY - descent + height / 2));
         labelV.setOutline(new Rectangle(labelV.getPosX() - width / 2, labelV.getPosY() - height / 2, width, height));
     }
+/*
 
     public static void draw(LabelV labelV, Graphics2D g2d, boolean dummy) {
         Graphics2D g = (Graphics2D) g2d.create();
@@ -93,4 +94,5 @@ public class LabelVUtils {
         g.dispose();
     }
 
+*/
 }

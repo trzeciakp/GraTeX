@@ -311,7 +311,7 @@ public class EdgeUtils {
         g.draw(new Arc2D.Double(vertexB.getPosX() - (d / 3), vertexB.getPosY() - (d / 3), d / 1.5, d / 1.5, edge.getInAngle(), arcAngle, Arc2D.OPEN));
     }
 
-
+/*
     public static void draw(Edge edge, Graphics2D g2d, boolean dummy) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
@@ -408,5 +408,5 @@ public class EdgeUtils {
         }
 
         g.dispose();
-    }
+    }*/
 }

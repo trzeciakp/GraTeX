@@ -42,9 +42,7 @@ public class Graph implements Serializable {
     // TODO przeniesc to gdzie indziej, do jakiegos kontrolera?
     private GraphNumeration graphNumeration;
 
-    public Graph(GeneralController generalController) {
-        this.generalController = generalController;
-
+    public Graph() {
         elements = new EnumMap<>(GraphElementType.class);
         for(GraphElementType type : GraphElementType.values()) {
             elements.put(type, new LinkedList<GraphElement>());
@@ -53,10 +51,6 @@ public class Graph implements Serializable {
         initDefaultModels();
 
         graphNumeration = new GraphNumeration();
-    }
-
-    public GeneralController getGeneralController() {
-        return generalController;
     }
 
     public GraphNumeration getGraphNumeration() {

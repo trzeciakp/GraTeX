@@ -34,17 +34,6 @@ public abstract class GraphElement implements Serializable {
         this.latexCode = latexCode;
     }
 
-    public GraphElement getCopy() {
-        try {
-            String code = graph.getGeneralController().getParseController().getParserByElementType(getType()).parseToLatex(this);
-            return graph.getGeneralController().getParseController().getParserByElementType(getType()).parseToGraph(code, graph);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Application.criticalError("Parser error", e);
-            return null;
-        }
-    }
-
     public void draw(Graphics2D g, boolean dummy) {
         drawable.draw(this, g, dummy);
     }
@@ -57,7 +46,7 @@ public abstract class GraphElement implements Serializable {
 
     public abstract Graph getGraph();
 
-    public abstract void addToGraph();
+    public abstract void addToGraph(String code);
 
     public abstract void removeFromGraph();
 

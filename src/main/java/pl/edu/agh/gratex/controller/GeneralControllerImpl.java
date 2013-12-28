@@ -4,11 +4,14 @@ import pl.edu.agh.gratex.constants.*;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
 import pl.edu.agh.gratex.controller.mouse.MouseControllerImpl;
 import pl.edu.agh.gratex.controller.operation.*;
+import pl.edu.agh.gratex.draw.DrawableFactory;
+import pl.edu.agh.gratex.draw.DrawableFactoryImpl;
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.GraphElementFactory;
+import pl.edu.agh.gratex.model.GraphElementFactoryImpl;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.parser.Parser;
-import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ColorMapperTmpImpl;
 import pl.edu.agh.gratex.utils.FileManager;
 import pl.edu.agh.gratex.view.*;
@@ -29,6 +32,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     private Graph graph;
     private File currentFile;
+    private GraphElementFactory graphElementFactory;
+    private final FileManager fileManager;
 
     public GeneralControllerImpl(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
@@ -36,10 +41,13 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         toolController = new ToolControllerImpl(this);
         operationController = new OperationControllerImpl(this);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
-        mouseController = new MouseControllerImpl(this, modeController, toolController, selectionController, operationController);
-        //TODO
-        GraphElementControllersFactory factory = new GraphElementControllersFactoryImpl(this, new ColorMapperTmpImpl());
-        parseController = new ParseControllerImpl(factory);
+        DrawableFactory drawableFactory = new DrawableFactoryImpl(selectionController);
+        graphElementFactory = new GraphElementFactoryImpl(drawableFactory);
+
+        GraphElementControllersFactory elementControllersFactory = new GraphElementControllersFactoryImpl(this, new ColorMapperTmpImpl(), graphElementFactory);
+        parseController = new ParseControllerImpl(elementControllersFactory);
+        fileManager = new FileManager(parseController);
+        mouseController = new MouseControllerImpl(this, modeController, toolController, selectionController, operationController, elementControllersFactory);
 
         modeController.addModeListener(this);
         toolController.addToolListener(this);
@@ -47,7 +55,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         modeController.setMode(ModeType.VERTEX);
         toolController.setTool(ToolType.ADD);
 
-        graph = new Graph(this);
+        graph = new Graph();
         currentFile = null;
     }
 
@@ -116,7 +124,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     public void newGraphFile() {
         if (checkForUnsavedProgress()) {
             currentFile = null;
-            graph = new Graph(this);
+            graph = new Graph();
             resetWorkspace();
             // TODO wykomentowalem bo wkurwialo
             // editGraphTemplate();
@@ -136,7 +144,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
             if (file != null) {
                 Graph newGraph;
-                if ((newGraph = FileManager.openFile(file)) != null) {
+                if ((newGraph = fileManager.openFile(file)) != null) {
                     currentFile = file;
                     GraphUtils.deleteUnusedLabels(newGraph);
                     graph = newGraph;
@@ -188,7 +196,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void editGraphTemplate() {
-        GraphTemplateDialog gdd = new GraphTemplateDialog(mainWindow, this);
+        GraphTemplateDialog gdd = new GraphTemplateDialog(mainWindow, this, graphElementFactory);
         Graph templateGraph = gdd.displayDialog();
 
         if (templateGraph != null) {
@@ -313,9 +321,9 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     private boolean checkForUnsavedProgress() {
         // TODO this nie bedzie potrzebne, czytaj FileManager
-        if (FileManager.contentChanged(this, graph, currentFile)) {
-            Object[] options = {"Save", "Don't save", "Cancel"};
+        if(fileManager.hasContentChanged(graph)) {
             System.out.println(mainWindow);
+            Object[] options = {"Save", "Don't save", "Cancel"};
             int option = JOptionPane.showOptionDialog(null, "There have been changes since last save.\n"
                     + "Would you like to save your graph now?", "Unsaved progress", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
                     null, options, options[0]);

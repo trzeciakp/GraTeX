@@ -3,7 +3,12 @@ package pl.edu.agh.gratex.parser;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.model.GraphElementFactory;
+import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.labelE.LabelE;
+import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -39,12 +44,17 @@ public class VertexParserTest {
     public static final int EXPECTED_SIZE_FULL = (int) (EXPECTED_SIZE_IN_PT_FULL/COEFFICIENT);
     private static final int EXPECTED_NUMBER_FULL = 1;
     private static final LineType EXPECTED_LINE_TYPE_FULL = LineType.DASHED;
+    private static final GraphElementFactory FACTORY = Mockito.mock(GraphElementFactory.class);
 
 
     @BeforeClass
     public static void prepareColorMapper() {
         Mockito.when(COLOR_MAPPER.getColor(EXPECTED_COLOR_TEXT)).thenReturn(EXPECTED_COLOR);
         Mockito.when(COLOR_MAPPER.getColorText(EXPECTED_COLOR)).thenReturn(EXPECTED_COLOR_TEXT);
+        Mockito.when(FACTORY.create(GraphElementType.EDGE, MOCKED_GRAPH)).thenReturn(new Edge(MOCKED_GRAPH));
+        Mockito.when(FACTORY.create(GraphElementType.LABEL_EDGE, MOCKED_GRAPH)).thenReturn(new LabelE(null, MOCKED_GRAPH));
+        Mockito.when(FACTORY.create(GraphElementType.VERTEX, MOCKED_GRAPH)).thenReturn(new Vertex(MOCKED_GRAPH));
+        Mockito.when(FACTORY.create(GraphElementType.LABEL_VERTEX, MOCKED_GRAPH)).thenReturn(new LabelV(null, MOCKED_GRAPH));
     }
 
     @Test
@@ -61,7 +71,7 @@ public class VertexParserTest {
         Mockito.when(MOCKED_VERTEX.getFontColor()).thenReturn(EXPECTED_COLOR);
         Mockito.when(MOCKED_VERTEX.isLabelInside()).thenReturn(true);
 
-        VertexParser testObject = new VertexParser(COLOR_MAPPER);
+        VertexParser testObject = new VertexParser(COLOR_MAPPER, FACTORY);
 
         String result = testObject.parseToLatex(MOCKED_VERTEX);
 
@@ -70,9 +80,9 @@ public class VertexParserTest {
 
     @Test
     public void testUnparse() throws Exception {
-        VertexParser testObject = new VertexParser(COLOR_MAPPER);
+        VertexParser testObject = new VertexParser(COLOR_MAPPER, FACTORY);
 
-        Vertex vertex = testObject.parseToGraph(TEST_STRING_FULL, MOCKED_GRAPH);
+        Vertex vertex = (Vertex) testObject.parseToGraph(TEST_STRING_FULL, MOCKED_GRAPH);
 
         assertEquals(EXPECTED_NUMBER_FULL, vertex.getNumber());
         assertEquals(EXPECTED_SHAPE_TYPE_FULL, vertex.getShapeENUM());

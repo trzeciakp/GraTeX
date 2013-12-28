@@ -3,11 +3,15 @@ package pl.edu.agh.gratex.parser;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
+import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
+import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 
 import java.awt.*;
@@ -34,6 +38,7 @@ public class LabelEdgeParserTest {
     private static final int EXPECTED_SPACING = 10;
     private static final LabelTopPlacement EXPECTED_TOP_PLACEMENT = LabelTopPlacement.BELOW;
     public static final int EXPECTED_POSITION = 50;
+    private static final GraphElementFactory FACTORY = Mockito.mock(GraphElementFactory.class);
 
     @BeforeClass
     public static void prepareColorMapper() {
@@ -41,11 +46,15 @@ public class LabelEdgeParserTest {
         Mockito.when(COLOR_MAPPER.getColorText(EXPECTED_COLOR)).thenReturn(EXPECTED_COLOR_TEXT);
         Mockito.when(MOCKED_GRAPH.getEdgeById(1)).thenReturn(EXPECTED_EDGE);
         Mockito.when(EXPECTED_EDGE.getNumber()).thenReturn(1);
+        Mockito.when(FACTORY.create(GraphElementType.EDGE, MOCKED_GRAPH)).thenReturn(new Edge(MOCKED_GRAPH));
+        Mockito.when(FACTORY.create(GraphElementType.LABEL_EDGE, MOCKED_GRAPH)).thenReturn(new LabelE(null, MOCKED_GRAPH));
+        Mockito.when(FACTORY.create(GraphElementType.VERTEX, MOCKED_GRAPH)).thenReturn(new Vertex(MOCKED_GRAPH));
+        Mockito.when(FACTORY.create(GraphElementType.LABEL_VERTEX, MOCKED_GRAPH)).thenReturn(new LabelV(null, MOCKED_GRAPH));
     }
 
     @Test
     public void testParse() throws Exception {
-        LabelEdgeParser testObject = new LabelEdgeParser(COLOR_MAPPER);
+        LabelEdgeParser testObject = new LabelEdgeParser(COLOR_MAPPER, FACTORY);
 
         LabelE result = (LabelE) testObject.parseToGraph(TEST_STRING, MOCKED_GRAPH);
 
@@ -62,7 +71,7 @@ public class LabelEdgeParserTest {
 
     @Test
     public void testUnparse() throws Exception {
-        LabelEdgeParser testObject = new LabelEdgeParser(COLOR_MAPPER);
+        LabelEdgeParser testObject = new LabelEdgeParser(COLOR_MAPPER, FACTORY);
         LabelE labelE = Mockito.mock(LabelE.class);
         Mockito.when(labelE.getText()).thenReturn(EXPECTED_TEXT);
         Mockito.when(labelE.getFontColor()).thenReturn(EXPECTED_COLOR);

@@ -48,7 +48,7 @@ public class VertexUtils {
         return !((vertex.getPosX() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosX() + vertex.getRadius() + vertex.getLineWidth() / 2 > Const.PAGE_WIDTH)
                 || (vertex.getPosY() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) || (vertex.getPosY() + vertex.getRadius() + vertex.getLineWidth() / 2 > Const.PAGE_HEIGHT));
     }
-
+/*
     public static void drawVertex(Vertex vertex, Graphics2D graphics, boolean dummy) {
         Graphics2D g = (Graphics2D) graphics.create();
         Graph graph = vertex.getGraph();
@@ -159,5 +159,5 @@ public class VertexUtils {
         }
 
         g.dispose();
-    }
+    }*/
 }

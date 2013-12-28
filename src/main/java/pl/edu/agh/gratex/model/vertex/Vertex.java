@@ -43,7 +43,7 @@ public class Vertex extends GraphElement implements Serializable {
 
     public Vertex(Graph graph) {
         super(graph);
-        setDrawable(new VertexDrawable());
+        //setDrawable(new VertexDrawable());
     }
 
     public int getNumber() {
@@ -56,10 +56,10 @@ public class Vertex extends GraphElement implements Serializable {
     }
 
     @Override
-    public void addToGraph() {
+    public void addToGraph(String code) {
         graph.getVertices().add(this);
         VertexUtils.setPartOfNumeration(this, true);
-        setLatexCode(graph.getGeneralController().getParseController().getVertexParser().parseToLatex(this));
+        setLatexCode(code);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package pl.edu.agh.gratex.draw;
 
 import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -16,6 +18,13 @@ import java.awt.*;
  *
  */
 public class VertexDrawable implements Drawable {
+
+    private SelectionController selectionController;
+
+    public VertexDrawable(SelectionController selectionController) {
+        this.selectionController = selectionController;
+    }
+
     @Override
     public void draw(GraphElement element, Graphics graphics, boolean dummy) {
         Vertex vertex = (Vertex) element;
@@ -39,7 +48,7 @@ public class VertexDrawable implements Drawable {
             VertexUtils.adjustToGrid(vertex);
         }
 
-        if (graph.getGeneralController().getSelectionController().selectionContains(vertex)) {
+        if (selectionController.selectionContains(vertex)) {
             g.setColor(Const.SELECTION_COLOR);
             g.fill(Geometry.getVertexShape(shape + 1, radius + lineWidth / 2 + radius / 4, posX, posY));
         }

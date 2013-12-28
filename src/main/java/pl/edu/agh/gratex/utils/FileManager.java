@@ -8,22 +8,32 @@ import sun.plugin2.gluegen.runtime.BufferFactory;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class FileManager {
     private File currentFile;
     private List<String> savedContent;
+    private ParseController parseController;
 
-    public boolean saveFile(File fileToSave, Graph graph, ParseController controller) {
+    public FileManager(ParseController parseController) {
+        this.parseController = parseController;
+        currentFile = null;
+        savedContent = new ArrayList<>();
+    }
+
+    public boolean saveFile(File fileToSave, Graph graph) {
         boolean result = true;
         PrintWriter printWriter = null;
         try {
             printWriter = new PrintWriter(fileToSave);
-            List<String> content = controller.parseGraphToLatexCode(graph);
+            List<String> content = parseController.parseGraphToLatexCode(graph);
             for (String line : content) {
                 printWriter.println(line);
             }
+            currentFile = fileToSave;
+            savedContent = content;
         } catch (IOException e) {
             //TODO
             result = false;
@@ -31,6 +41,45 @@ public class FileManager {
         } finally {
             if(printWriter != null) {
                 printWriter.close();
+            }
+        }
+        return result;
+    }
+
+    public boolean hasContentChanged(Graph graph) {
+        List<String> content = parseController.parseGraphToLatexCode(graph);
+        if(content == null || content.size() == 0) {
+            return false;
+        }
+        if(currentFile == null) {
+            return true;
+        }
+        return content.equals(savedContent);
+    }
+
+    public Graph openFile(File fileToOpen) {
+        BufferedReader bufferedReader = null;
+        Graph result = null;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(fileToOpen));
+            String line;
+            List<String> content = new ArrayList<>();
+            while((line = bufferedReader.readLine()) != null) {
+                content.add(line);
+            }
+            result = parseController.parseLatexCodeToGraph(content);
+            currentFile = fileToOpen;
+            savedContent = content;
+        } catch (IOException e) {
+            //TODO
+            e.printStackTrace();
+        } finally {
+            if(bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return result;
@@ -47,7 +96,7 @@ public class FileManager {
 
                 bOut = new ByteArrayOutputStream();
                 out = new ObjectOutputStream(bOut);
-                out.writeObject(new Graph(gc));
+                out.writeObject(new Graph());
                 out.close();
                 byte[] newGraphBytes = bOut.toByteArray();
 
@@ -82,24 +131,6 @@ public class FileManager {
         } finally {
             try {
                 output.close();
-            } catch (Exception e) {
-            }
-        }
-        return result;
-    }
-
-    public static Graph openFile(File source) {
-        Graph result = null;
-        ObjectInputStream input = null;
-
-        try {
-            input = new ObjectInputStream(new FileInputStream(source));
-            result = (Graph) input.readObject();
-        } catch (Exception e) {
-            result = null;
-        } finally {
-            try {
-                input.close();
             } catch (Exception e) {
             }
         }

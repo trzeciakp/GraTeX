@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.GraphElementFactory;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -20,9 +21,15 @@ public abstract class GraphElementMouseController {
     protected int mouseY;
     protected boolean shiftDown;
     private GeneralController generalController;
+    private GraphElementFactory graphElementFactory;
 
-    protected GraphElementMouseController(GeneralController generalController) {
+    protected GraphElementMouseController(GeneralController generalController, GraphElementFactory graphElementFactory) {
         this.generalController = generalController;
+        this.graphElementFactory = graphElementFactory;
+    }
+
+    public GraphElementFactory getGraphElementFactory() {
+        return graphElementFactory;
     }
 
     public void processMouseMoving(ToolType toolType, MouseEvent e) {

@@ -1,6 +1,8 @@
 package pl.edu.agh.gratex.parser;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelV.LabelVUtils;
@@ -18,10 +20,17 @@ import java.util.regex.Pattern;
  *
  */
 public class VertexParser extends GraphElementParser {
-    private final Pattern pattern;
-    private List<ParseElement> parseList = new ArrayList<>();
+    private ColorMapper colorMapper;
 
-    public VertexParser(ColorMapper colorMapper) {
+    public VertexParser(ColorMapper colorMapper, GraphElementFactory graphElementFactory) {
+        super(graphElementFactory);
+        this.colorMapper = colorMapper;
+        init();
+    }
+
+    @Override
+    public List<ParseElement> createParseList() {
+        List<ParseElement> parseList = new ArrayList<>();
         parseList.add(new StaticParseElement("\\node ", false));
         parseList.add(new NumberVertexParser());
         parseList.add(new StaticParseElement(" [", false));
@@ -36,26 +45,11 @@ public class VertexParser extends GraphElementParser {
         parseList.add(new TextColorVertexParser(colorMapper));
         parseList.add(new StaticParseElement(";", false));
         //parseList.add(new CommentedParametersVertexParser());
-        pattern = evaluatePattern();
-    }
-
-    @Override
-    public String parseToLatex(GraphElement graphElement) {
-        return super.parseToLatexUsingParseList(graphElement);
-    }
-
-    @Override
-    public Vertex parseToGraph(String code, Graph graph) throws ParserException {
-        Vertex result = new Vertex(graph);
-        parseToGraphUsingParseList(code, result);
-        return result;
-    }
-
-    public List<ParseElement> getParseList() {
         return parseList;
     }
 
-    public Pattern getPattern() {
-        return pattern;
+    @Override
+    public GraphElementType getType() {
+        return GraphElementType.VERTEX;
     }
 }

@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.controller.mouse;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
@@ -7,6 +8,7 @@ import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
+import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -25,11 +27,12 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     private Edge currentlyDraggedEdge;
     private AlterationOperation currentDragOperation;
     private boolean changingEdgeAngle;
-    private Vertex edgeDragDummy = new Vertex(null);
+    private Vertex edgeDragDummy;
 
-    public EdgeMouseControllerImpl(GeneralController generalController) {
-        super(generalController);
+    public EdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
+        super(generalController, graphElementFactory);
         this.generalController = generalController;
+        edgeDragDummy = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, null);
     }
 
     @Override
@@ -61,7 +64,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         if (currentlyAddedEdge != null) {
             Vertex vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
             if (vertex == null) {
-                vertex = new Vertex(generalController.getGraph());
+                vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
                 vertex.setPosX(mouseX);
                 vertex.setPosY(mouseY);
                 vertex.setRadius(2);
@@ -113,7 +116,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             }
         } else {
             if (currentlyAddedEdge == null) {
-                currentlyAddedEdge = new Edge(generalController.getGraph());
+                currentlyAddedEdge = (Edge) getGraphElementFactory().create(GraphElementType.EDGE,generalController.getGraph());
                 currentlyAddedEdge.setModel(generalController.getGraph().getEdgeDefaultModel());
                 currentlyAddedEdge.setVertexA(temp);
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_END));

@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.draw;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.edge.EdgeUtils;
@@ -17,6 +18,13 @@ import java.awt.geom.Arc2D;
  *
  */
 public class EdgeDrawable implements Drawable {
+
+    private SelectionController selectionController;
+
+    public EdgeDrawable(SelectionController selectionController) {
+        this.selectionController = selectionController;
+    }
+
     @Override
     public void draw(GraphElement graphElement, Graphics g2d, boolean dummy) {
         Edge edge = (Edge) graphElement;
@@ -29,7 +37,7 @@ public class EdgeDrawable implements Drawable {
 
         if (vertexA != vertexB) {
             if (edge.getRelativeEdgeAngle() != 0) {
-                if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
+                if (selectionController.selectionContains(edge)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
@@ -43,7 +51,7 @@ public class EdgeDrawable implements Drawable {
                 g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
                 g.draw(edge.getArc());
             } else {
-                if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
+                if (selectionController.selectionContains(edge)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
@@ -57,13 +65,11 @@ public class EdgeDrawable implements Drawable {
                 g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
                 g.drawLine(vertexA.getPosX(), vertexA.getPosY(), vertexB.getPosX(), vertexB.getPosY());
             }
-            GeneralController generalController = edge.getGraph().getGeneralController();
-            if (((generalController.getSelectionController().selectionContains(edge) && generalController.getSelectionController().selectionSize() == 1) ||
-                    generalController.getMouseController().isEdgeCurrentlyAdded(edge)) && edge.getRelativeEdgeAngle() != 0) {
+            if (shouldVisualizeAngle(edge)) {
                 drawAngleVisualisation(edge, g);
             }
         } else {
-            if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
+            if (selectionController.selectionContains(edge)) {
                 g.setColor(Const.SELECTION_COLOR);
                 Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
                 g.setStroke(drawingStroke);
@@ -80,7 +86,7 @@ public class EdgeDrawable implements Drawable {
 
         if (edge.isDirected()) {
             if (edge.getArrowTypeENUM() == ArrowType.BASIC) {
-                if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
+                if (selectionController.selectionContains(edge)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
@@ -96,7 +102,7 @@ public class EdgeDrawable implements Drawable {
                 g.drawLine(edge.getArrowLine1()[0], edge.getArrowLine1()[1], edge.getArrowLine1()[2], edge.getArrowLine1()[3]);
                 g.drawLine(edge.getArrowLine2()[0], edge.getArrowLine2()[1], edge.getArrowLine2()[2], edge.getArrowLine2()[3]);
             } else {
-                if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
+                if (selectionController.selectionContains(edge)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
@@ -117,8 +123,12 @@ public class EdgeDrawable implements Drawable {
         g.dispose();
     }
 
+    private boolean shouldVisualizeAngle(Edge edge) {
+        return (selectionController.selectionContains(edge) && selectionController.selectionSize() == 1) && edge.getRelativeEdgeAngle() != 0;
+    }
 
-    private static void drawAngleVisualisation(Edge edge, Graphics2D g) {
+
+    private void drawAngleVisualisation(Edge edge, Graphics2D g) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
 

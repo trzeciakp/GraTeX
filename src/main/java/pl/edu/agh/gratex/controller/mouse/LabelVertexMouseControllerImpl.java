@@ -1,12 +1,15 @@
 package pl.edu.agh.gratex.controller.mouse;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
+import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
+import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -24,8 +27,8 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     private LabelV currentlyMovedLabel;
     private AlterationOperation currentDragOperation;
 
-    public LabelVertexMouseControllerImpl(GeneralController generalController) {
-        super(generalController);
+    public LabelVertexMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
+        super(generalController, graphElementFactory);
         this.generalController = generalController;
     }
 
@@ -45,7 +48,8 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
         Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
         if (temp != null) {
             if (temp.getLabel() == null) {
-                LabelV labelV = new LabelV(temp, generalController.getGraph());
+                LabelV labelV = (LabelV) getGraphElementFactory().create(GraphElementType.LABEL_VERTEX, generalController.getGraph());
+                labelV.setOwner(temp);
                 labelV.setModel(generalController.getGraph().getLabelVDefaultModel());
 
                 Point2D p1 = new Point(temp.getPosX(), temp.getPosY());
@@ -76,7 +80,8 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
         Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), e.getX(), e.getY());
         if (temp != null) {
             if (temp.getLabel() == null) {
-                LabelV labelV = new LabelV(temp, generalController.getGraph());
+                LabelV labelV = (LabelV) getGraphElementFactory().create(GraphElementType.LABEL_VERTEX, generalController.getGraph());
+                labelV.setOwner(temp);
                 labelV.setModel(generalController.getGraph().getLabelVDefaultModel());
                 LabelVUtils.updatePosition(labelV);
                 new CreationRemovalOperation(generalController, labelV, OperationType.ADD_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_ADD, true);

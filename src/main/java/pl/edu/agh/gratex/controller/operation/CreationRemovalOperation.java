@@ -79,7 +79,7 @@ public class CreationRemovalOperation extends Operation {
                 for (String latexCode : elements.get(type)) {
                     GraphElement element = generalController.getParseController().getParserByElementType(type).
                             parseToGraph(latexCode, generalController.getGraph());
-                    element.addToGraph();
+                    element.addToGraph(latexCode);
                     if (generalController.getModeController().getMode().getRelatedElementType() == element.getType()) {
                         generalController.getSelectionController().addToSelection(element, true);
                     }
