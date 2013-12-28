@@ -2,13 +2,39 @@ package pl.edu.agh.gratex.utils;
 
 
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.model.graph.Graph;
+import sun.plugin2.gluegen.runtime.BufferFactory;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.List;
 
 public class FileManager {
+    private File currentFile;
+    private List<String> savedContent;
+
+    public boolean saveFile(File fileToSave, Graph graph, ParseController controller) {
+        boolean result = true;
+        PrintWriter printWriter = null;
+        try {
+            printWriter = new PrintWriter(fileToSave);
+            List<String> content = controller.parseGraphToLatexCode(graph);
+            for (String line : content) {
+                printWriter.println(line);
+            }
+        } catch (IOException e) {
+            //TODO
+            result = false;
+            e.printStackTrace();
+        } finally {
+            if(printWriter != null) {
+                printWriter.close();
+            }
+        }
+        return result;
+    }
     // TODO GeneralControler nie bedzie juz potrzebny jak bedzie implementacja parsera wstecznego, wtedy wywalic
     public static boolean contentChanged(GeneralController gc, Graph content, File currentFile) {
         try {

@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.draw.LabelEdgeDrawable;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
@@ -43,6 +44,7 @@ public class LabelE extends GraphElement implements Serializable {
         super(graph);
         setOwner(element);
         setText("Label");
+        setDrawable(new LabelEdgeDrawable());
     }
 
     @Override
@@ -124,10 +126,10 @@ public class LabelE extends GraphElement implements Serializable {
     public Graph getGraph() {
         return graph;
     }
-
+/*
     public void draw(Graphics2D g2d, boolean dummy) {
         LabelEUtils.draw(this, g2d, dummy);
-    }
+    }*/
 
     public String getText() {
         return text;

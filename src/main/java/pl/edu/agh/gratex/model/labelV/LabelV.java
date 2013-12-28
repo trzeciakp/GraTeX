@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model.labelV;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.draw.LabelVertexDrawable;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
@@ -76,6 +77,7 @@ public class LabelV extends GraphElement implements Serializable {
         super(graph);
         setOwner(element);
         setText("Label");
+        setDrawable(new LabelVertexDrawable());
     }
 
     public void setModel(PropertyModel pm) {
@@ -118,11 +120,11 @@ public class LabelV extends GraphElement implements Serializable {
     public Graph getGraph() {
         return graph;
     }
-
+/*
     @Override
     public void draw(Graphics2D g, boolean dummy) {
         LabelVUtils.draw(this, g, dummy);
-    }
+    }*/
 
     public String getText() {
         return text;

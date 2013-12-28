@@ -1,61 +1,66 @@
 package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.parser.*;
-import pl.edu.agh.gratex.parser.elements.ColorMapper;
-import pl.edu.agh.gratex.parser.elements.ColorMapperTmpImpl;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 
 public class ParseControllerImpl implements ParseController {
-    GeneralController generalController;
-    ColorMapper colorMapper = new ColorMapperTmpImpl();
-    VertexParser vertexParser = new VertexParser(colorMapper);
-    EdgeParser edgeParser = new EdgeParser(colorMapper);
-    LabelVertexParser labelVertexParser = new LabelVertexParser(colorMapper);
-    LabelEdgeParser labelEdgeParser = new LabelEdgeParser(colorMapper);
+    private EnumMap<GraphElementType, GraphElementParser> parsers = new EnumMap<GraphElementType, GraphElementParser>(GraphElementType.class);
 
-    public ParseControllerImpl(GeneralController generalController) {
-        this.generalController = generalController;
-    }
-
-    @Override
-    public GeneralController getGeneralController() {
-        return generalController;
-    }
-
-    @Override
-    public GraphElementParser getParserByElementType(GraphElementType graphElementType) {
-        switch (graphElementType)
-        {
-            case VERTEX:
-                return vertexParser;
-            case EDGE:
-                return edgeParser;
-            case LABEL_VERTEX:
-                return labelVertexParser;
-            case LABEL_EDGE:
-                return labelEdgeParser;
-            default:
-                return null;
+    public ParseControllerImpl(GraphElementControllersFactory factory) {
+        for (GraphElementType type : GraphElementType.values()) {
+            parsers.put(type, factory.createGraphElementParser(type));
         }
     }
 
     @Override
+    public GraphElementParser getParserByElementType(GraphElementType graphElementType) {
+        return parsers.get(graphElementType);
+    }
+
+    @Override
     public VertexParser getVertexParser() {
-        return vertexParser;
+        return (VertexParser) parsers.get(GraphElementType.VERTEX);
     }
 
     @Override
     public EdgeParser getEdgeParser() {
-        return edgeParser;
+        return (EdgeParser) parsers.get(GraphElementType.EDGE);
     }
 
     @Override
     public LabelVertexParser getLabelVertexParser() {
-        return labelVertexParser;
+        return (LabelVertexParser) parsers.get(GraphElementType.LABEL_VERTEX);
     }
 
     @Override
     public LabelEdgeParser getLabelEdgeParser() {
-        return labelEdgeParser;
+        return (LabelEdgeParser) parsers.get(GraphElementType.LABEL_EDGE);
+    }
+
+    @Override
+    public List<String> parseGraphToLatexCode(Graph graph) {
+        List<String> result = new ArrayList<>();
+        for (GraphElementType graphElementType : GraphElementType.values()) {
+            GraphElementParser parser = parsers.get(graphElementType);
+            for (GraphElement graphElement : graph.getElements(graphElementType)) {
+                result.add(parser.parseToLatex(graphElement));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Graph parseLatexCodeToGraph(List<String> codeLines) {
+        Graph result = new Graph(null);
+        for (String codeLine : codeLines) {
+
+        }
+        return result;
     }
 }

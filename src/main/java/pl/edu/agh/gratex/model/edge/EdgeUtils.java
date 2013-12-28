@@ -353,7 +353,7 @@ public class EdgeUtils {
             GeneralController generalController = edge.getGraph().getGeneralController();
             if (((generalController.getSelectionController().selectionContains(edge) && generalController.getSelectionController().selectionSize() == 1) ||
                     generalController.getMouseController().isEdgeCurrentlyAdded(edge)) && edge.getRelativeEdgeAngle() != 0) {
-                drawAngleVisualisation(edge, g);
+               drawAngleVisualisation(edge, g);
             }
         } else {
             if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {

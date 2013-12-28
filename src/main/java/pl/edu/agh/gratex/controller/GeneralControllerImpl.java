@@ -8,6 +8,8 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.parser.Parser;
+import pl.edu.agh.gratex.parser.elements.ColorMapper;
+import pl.edu.agh.gratex.parser.elements.ColorMapperTmpImpl;
 import pl.edu.agh.gratex.utils.FileManager;
 import pl.edu.agh.gratex.view.*;
 
@@ -35,7 +37,9 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         operationController = new OperationControllerImpl(this);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
         mouseController = new MouseControllerImpl(this, modeController, toolController, selectionController, operationController);
-        parseController = new ParseControllerImpl(this);
+        //TODO
+        GraphElementControllersFactory factory = new GraphElementControllersFactoryImpl(this, new ColorMapperTmpImpl());
+        parseController = new ParseControllerImpl(factory);
 
         modeController.addModeListener(this);
         toolController.addToolListener(this);

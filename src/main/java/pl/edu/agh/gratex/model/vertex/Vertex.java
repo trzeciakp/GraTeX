@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model.vertex;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.draw.VertexDrawable;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
@@ -42,6 +43,7 @@ public class Vertex extends GraphElement implements Serializable {
 
     public Vertex(Graph graph) {
         super(graph);
+        setDrawable(new VertexDrawable());
     }
 
     public int getNumber() {
@@ -77,10 +79,10 @@ public class Vertex extends GraphElement implements Serializable {
         }
         return result;
     }
-
+/*
     public void draw(Graphics2D g2d, boolean dummy) {
         VertexUtils.drawVertex(this, g2d, dummy);
-    }
+    }*/
 
     public void drawLabel(Graphics2D g, boolean dummy) {
         if (getLabel() != null) {

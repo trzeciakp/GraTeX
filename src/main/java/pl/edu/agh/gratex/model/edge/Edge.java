@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.model.edge;
 
 
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.draw.EdgeDrawable;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
@@ -46,6 +47,7 @@ public class Edge extends GraphElement implements Serializable {
 
     public Edge(Graph graph) {
         super(graph);
+        setDrawable(new EdgeDrawable());
     }
 
     public boolean isLoop() {
@@ -195,11 +197,11 @@ public class Edge extends GraphElement implements Serializable {
         }
         return result;
     }
-
+/*
     @Override
     public void draw(Graphics2D g, boolean dummy) {
         EdgeUtils.draw(this, g, dummy);
-    }
+    }*/
 
 
     public int getLineWidth() {
