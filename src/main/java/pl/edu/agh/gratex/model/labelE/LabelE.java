@@ -4,6 +4,7 @@ package pl.edu.agh.gratex.model.labelE;
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
@@ -47,17 +48,21 @@ public class LabelE extends GraphElement implements Serializable {
     }
 
     @Override
-    public void addToGraph(String code) {
+    public void addToGraph() {
         graph.getLabelsE().add(this);
         getOwner().setLabel(this);
-        LabelEUtils.updateLocation(this);
-        setLatexCode(code);
+        updateLocation();
     }
 
     @Override
     public void removeFromGraph() {
         graph.getLabelsE().remove(this);
         getOwner().setLabel(null);
+    }
+
+    @Override
+    public void updateLocation() {
+        LabelEUtils.updateLocation(this);
     }
 
     @Override

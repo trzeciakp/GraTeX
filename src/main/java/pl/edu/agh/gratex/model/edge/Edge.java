@@ -53,6 +53,10 @@ public class Edge extends GraphElement implements Serializable {
         return (vertexA != null && vertexA == vertexB);
     }
 
+    @Override
+    public void updateLocation() {
+        EdgeUtils.updateLocation(this);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -69,17 +73,12 @@ public class Edge extends GraphElement implements Serializable {
         return true;
     }
 
-    @Override
-    public int hashCode() {
+    public int getNumber() {
         int result = vertexA != null ? vertexA.getNumber() : 0;
         result = 31 * result + (vertexB != null ? vertexB.getNumber() : 0);
         result = 31 * result + inAngle;
         result = 31 * result + outAngle;
         return result;
-    }
-
-    public int getNumber() {
-        return hashCode();
     }
 
 //    public Edge getCopy(LinkedList<Vertex> vertices) {
@@ -177,10 +176,9 @@ public class Edge extends GraphElement implements Serializable {
     }
 
     @Override
-    public void addToGraph(String code) {
+    public void addToGraph() {
         graph.getEdges().add(this);
-        EdgeUtils.updateLocation(this);
-        setLatexCode(code);
+        updateLocation();
     }
 
     @Override

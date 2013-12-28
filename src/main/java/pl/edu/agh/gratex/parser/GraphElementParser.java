@@ -34,6 +34,7 @@ public abstract class GraphElementParser {
     public abstract GraphElementType getType();
 
     public String parseToLatex(GraphElement graphElement) {
+        graphElement.updateLocation();
         return parseToLatexUsingParseList(graphElement);
     }
 
@@ -95,6 +96,6 @@ public abstract class GraphElementParser {
 
     public void updateElementWithCode(GraphElement graphElement, String code) throws ParserException {
         parseToGraphUsingParseList(code, graphElement);
-        graphElement.setLatexCode(code);
+        graphElement.updateLocation();
     }
 }

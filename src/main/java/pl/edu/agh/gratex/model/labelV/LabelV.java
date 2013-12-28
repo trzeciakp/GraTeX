@@ -6,6 +6,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 
@@ -36,17 +37,21 @@ public class LabelV extends GraphElement implements Serializable {
     private Rectangle outline;
 
     @Override
-    public void addToGraph(String code) {
+    public void addToGraph() {
         graph.getLabelsV().add(this);
         getOwner().setLabel(this);
-        LabelVUtils.updateLocation(this);
-        setLatexCode(code);
+        updateLocation();
     }
 
     @Override
     public void removeFromGraph() {
         graph.getLabelsV().remove(this);
         getOwner().setLabel(null);
+    }
+
+    @Override
+    public void updateLocation() {
+        LabelVUtils.updateLocation(this);
     }
 
     @Override

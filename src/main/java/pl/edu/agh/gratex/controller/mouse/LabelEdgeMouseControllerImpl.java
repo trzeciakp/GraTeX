@@ -86,7 +86,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
                 int position = LabelEUtils.getPositionFromCursorLocation(owner, mouseX, mouseY);
                 labelE.setPosition(Math.abs(position));
                 labelE.setTopPlacement(position >= 0);
-                LabelEUtils.updateLocation(labelE);
+                labelE.updateLocation();
                 new CreationRemovalOperation(generalController, labelE, OperationType.ADD_LABEL_EDGE, StringLiterals.INFO_LABEL_E_ADD, true);
             } else {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_LABEL_E_EXISTS));
@@ -117,7 +117,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void finishMoving() {
         if (currentlyDraggedLabel != null) {
-            LabelEUtils.updateLocation(currentlyDraggedLabel);
+            //currentlyDraggedLabel.updateLocation();
             currentDragOperation.finish();
             currentlyDraggedLabel = null;
         }

@@ -56,10 +56,9 @@ public class Vertex extends GraphElement implements Serializable {
     }
 
     @Override
-    public void addToGraph(String code) {
+    public void addToGraph() {
         graph.getVertices().add(this);
         VertexUtils.setPartOfNumeration(this, true);
-        setLatexCode(code);
     }
 
     @Override

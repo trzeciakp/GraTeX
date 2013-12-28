@@ -31,7 +31,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     private ParseController parseController;
 
     private Graph graph;
-    private File currentFile;
     private GraphElementFactory graphElementFactory;
     private final FileManager fileManager;
 
@@ -56,7 +55,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         toolController.setTool(ToolType.ADD);
 
         graph = new Graph();
-        currentFile = null;
     }
 
 
@@ -123,7 +121,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void newGraphFile() {
         if (checkForUnsavedProgress()) {
-            currentFile = null;
             graph = new Graph();
             resetWorkspace();
             // TODO wykomentowalem bo wkurwialo

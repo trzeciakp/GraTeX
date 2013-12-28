@@ -15,6 +15,8 @@ public class AlterationOperation extends Operation {
     private HashMap<String, String> initialToEndStates = new HashMap<>();
     private HashMap<String, String> endToInitialStates = new HashMap<>();
 
+    private HashMap<GraphElement, String> initialStates = new HashMap<>();
+
     public AlterationOperation(GeneralController generalController,
                                List<? extends GraphElement> subjects,
                                OperationType operationType,
@@ -35,27 +37,30 @@ public class AlterationOperation extends Operation {
         init(subjects);
     }
 
-    private void init(List<? extends GraphElement> elements) {
-        for (GraphElement element : elements) {
-            initialToEndStates.put(generalController.getParseController().getParserByElementType(element.getType()).parseToLatex(element), null);
+    private void init(List<? extends GraphElement> subjects) {
+        for (GraphElement element : subjects) {
+            initialStates.put(element, getLatexCode(element, generalController.getParseController()));
         }
     }
 
     public void finish() {
-        int numberOfChanges = 0;
-        for (String initialState : new LinkedList<>(initialToEndStates.keySet())) {
-            GraphElement element = generalController.getGraph().getElementByLatexCode(initialState);
-            String endState = generalController.getParseController().getParserByElementType(element.getType()).parseToLatex(element);
+        for (GraphElement element : initialStates.keySet()) {
+            String initialState = initialStates.get(element);
+            String endState = getLatexCode(element, generalController.getParseController());
             if (!initialState.equals(endState)) {
                 initialToEndStates.put(initialState, endState);
                 endToInitialStates.put(endState, initialState);
-                numberOfChanges++;
-            } else {
-                initialToEndStates.remove(initialState);
+                try {
+                    generalController.getParseController().getParserByElementType(element.getType()).
+                            updateElementWithCode(element, initialState);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Application.criticalError("Parser error", e);
+                }
             }
         }
 
-        if (numberOfChanges > 0) {
+        if (initialToEndStates.keySet().size() > 0) {
             generalController.getOperationController().registerOperation(this);
         }
     }
@@ -73,7 +78,7 @@ public class AlterationOperation extends Operation {
     private void morphElements(HashMap<String, String> mapping) {
         try {
             for (String key : mapping.keySet()) {
-                GraphElement element = generalController.getGraph().getElementByLatexCode(key);
+                GraphElement element = getElementByLatexCode(key, generalController.getGraph(), generalController.getParseController());
                 generalController.getParseController().getParserByElementType(element.getType()).
                         updateElementWithCode(element, mapping.get(key));
             }

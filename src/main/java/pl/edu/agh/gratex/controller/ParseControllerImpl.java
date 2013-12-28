@@ -78,7 +78,7 @@ public class ParseControllerImpl implements ParseController {
         while(t < types.length) {
             try {
                 GraphElement ge = tryToParse(codeLine, graph, types[t]);
-                ge.addToGraph(codeLine);
+                ge.addToGraph();
                 return t;
             } catch (ParserException e) {
                 t++;

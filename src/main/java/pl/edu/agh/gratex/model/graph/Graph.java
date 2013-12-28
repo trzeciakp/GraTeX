@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model.graph;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.edge.Edge;
@@ -85,15 +86,6 @@ public class Graph implements Serializable {
         return null;
     }
 
-    public Vertex getVertexByLatexCode(String code){
-        for (Vertex vertex : getVertices()) {
-            if(vertex.getLatexCode().equals(code)) {
-                return vertex;
-            }
-        }
-        return null;
-    }
-
     public List<Edge> getEdges() {
         return (List<Edge>) elements.get(GraphElementType.EDGE);
     }
@@ -107,39 +99,12 @@ public class Graph implements Serializable {
         return null;
     }
 
-    public Edge getEdgeByLatexCode(String code){
-        for (Edge edge : getEdges()) {
-            if(edge.getLatexCode().equals(code)) {
-                return edge;
-            }
-        }
-        return null;
-    }
-
     public List<LabelV> getLabelsV() {
         return (List<LabelV>) elements.get(GraphElementType.LABEL_VERTEX);
     }
 
-    public LabelV getLabelVByLatexCode(String code){
-        for (LabelV labelV : getLabelsV()) {
-            if(labelV.getLatexCode().equals(code)) {
-                return labelV;
-            }
-        }
-        return null;
-    }
-
     public List<LabelE> getLabelsE() {
         return (List<LabelE>) elements.get(GraphElementType.LABEL_EDGE);
-    }
-
-    public LabelE getLabelEByLatexCode(String code){
-        for (LabelE labelE : getLabelsE()) {
-            if(labelE.getLatexCode().equals(code)) {
-                return labelE;
-            }
-        }
-        return null;
     }
 
     public List<? extends GraphElement> getElements(GraphElementType type) {
@@ -153,17 +118,6 @@ public class Graph implements Serializable {
             result.addAll(elements.get(type));
         }
         return result;
-    }
-
-    public GraphElement getElementByLatexCode(String code) {
-        for(GraphElementType type : GraphElementType.values()) {
-           for (GraphElement element : elements.get(type)){
-               if (element.getLatexCode().equals(code)){
-                   return element;
-               }
-           }
-        }
-        return null;
     }
 
     public void initDefaultModels() {

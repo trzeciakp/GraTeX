@@ -65,7 +65,7 @@ public class CreationRemovalOperation extends Operation {
         }
 
         for (GraphElement element : subjects) {
-            String latexCode = generalController.getParseController().getParserByElementType(element.getType()).parseToLatex(element);
+            String latexCode = getLatexCode(element, generalController.getParseController());
             elements.get(element.getType()).add(latexCode);
         }
 
@@ -79,7 +79,7 @@ public class CreationRemovalOperation extends Operation {
                 for (String latexCode : elements.get(type)) {
                     GraphElement element = generalController.getParseController().getParserByElementType(type).
                             parseToGraph(latexCode, generalController.getGraph());
-                    element.addToGraph(latexCode);
+                    element.addToGraph();
                     if (generalController.getModeController().getMode().getRelatedElementType() == element.getType()) {
                         generalController.getSelectionController().addToSelection(element, true);
                     }
@@ -94,11 +94,12 @@ public class CreationRemovalOperation extends Operation {
     private void removeElements() {
         for (GraphElementType type : GraphElementType.values()) {
             for (String latexCode : elements.get(type)) {
-                GraphElement element = generalController.getGraph().getElementByLatexCode(latexCode);
+                GraphElement element = getElementByLatexCode(latexCode, generalController.getGraph(), generalController.getParseController());
                 element.removeFromGraph();
                 for (GraphElement connectedElement : element.getConnectedElements()) {
-                    if (!elements.get(connectedElement.getType()).contains(connectedElement.getLatexCode())) {
-                        elements.get(connectedElement.getType()).add(connectedElement.getLatexCode());
+                    String connectedElementLatexCode = getLatexCode(connectedElement, generalController.getParseController());
+                    if (!elements.get(connectedElement.getType()).contains(connectedElementLatexCode)) {
+                        elements.get(connectedElement.getType()).add(connectedElementLatexCode);
                     }
                 }
             }

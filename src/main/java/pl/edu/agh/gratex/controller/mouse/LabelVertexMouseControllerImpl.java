@@ -64,7 +64,7 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
                 labelV.setOwner(owner);
                 labelV.setModel(generalController.getGraph().getLabelVDefaultModel());
                 labelV.setPosition(LabelVUtils.getPositionFromCursorLocation(owner, mouseX, mouseY));
-                LabelVUtils.updateLocation(labelV);
+                labelV.updateLocation();
                 new CreationRemovalOperation(generalController, labelV, OperationType.ADD_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_ADD, true);
             } else {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_LABEL_V_EXISTS));

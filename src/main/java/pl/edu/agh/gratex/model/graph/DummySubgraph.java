@@ -18,6 +18,8 @@ public class DummySubgraph {
     private Graph graph;
     private ParseController parseController;
 
+    private Image cannotCopyImage = Application.loadImage("cannotcopy.png");
+
     public LinkedList<Vertex> vertices = new LinkedList<>();
     public LinkedList<Edge> edges = new LinkedList<>();
     public LinkedList<LabelV> labelsV = new LinkedList<>();
@@ -62,6 +64,9 @@ public class DummySubgraph {
 
             if (duplicatedVertex.getPosX() < minX) {
                 minX = duplicatedVertex.getPosX();
+            }
+
+            if (duplicatedVertex.getPosY() < minY) {
                 minY = duplicatedVertex.getPosY();
             }
         }
@@ -94,18 +99,23 @@ public class DummySubgraph {
         return result;
     }
 
-    public void drawAll(Graphics2D g) {
-        for (Edge edge : edges) {
-            edge.draw(g, true);
+    public void drawAll(Graphics2D g, int mouseX, int mouseY) {
+        if (fitsIntoPosition()) {
+            for (Edge edge : edges) {
+                edge.draw(g, true);
+            }
+            for (Vertex vertex : vertices) {
+                vertex.draw(g, true);
+            }
+            for (Edge edge : edges) {
+                edge.drawLabel(g, true);
+            }
+            for (Vertex vertex : vertices) {
+                vertex.drawLabel(g, true);
+            }
         }
-        for (Vertex vertex : vertices) {
-            vertex.draw(g, true);
-        }
-        for (Edge edge : edges) {
-            edge.drawLabel(g, true);
-        }
-        for (Vertex vertex : vertices) {
-            vertex.drawLabel(g, true);
+        else {
+            g.drawImage(cannotCopyImage, mouseX - cannotCopyImage.getWidth(null), mouseY - cannotCopyImage.getHeight(null), null);
         }
     }
 
@@ -135,9 +145,8 @@ public class DummySubgraph {
 
     private GraphElement getCopy(GraphElement graphElement) {
         try {
-            GraphElementParser parser = parseController.getParserByElementType(graphElement.getType());
-            String code = parser.parseToLatex(graphElement);
-            return parser.parseToGraph(code, graph);
+            String code = parseController.getParserByElementType(graphElement.getType()).parseToLatex(graphElement);
+            return parseController.getParserByElementType(graphElement.getType()).parseToGraph(code, graph);
         } catch (Exception e) {
             e.printStackTrace();
             Application.criticalError("Parser error", e);

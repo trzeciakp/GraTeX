@@ -47,7 +47,6 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
         cancelCurrentOperation();
         mode = currentMode;
-
         operationController.reportOperationEvent(null);
     }
 
@@ -60,7 +59,6 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     public void toolChanged(ToolType previousTool, ToolType currentTool) {
         cancelCurrentOperation();
         tool = currentTool;
-
         operationController.reportOperationEvent(null);
     }
 
@@ -85,10 +83,10 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
                     if (dummySubgraph.fitsIntoPosition()) {
                         new CreationRemovalOperation(generalController, dummySubgraph.getElements(), OperationType.DUPLICATION,
                                 StringLiterals.INFO_SUBGRAPH_DUPLICATE, true);
-                        dummySubgraph = null;
                     } else {
                         operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_SUBGRAPH_CANNOT_PASTE));
                     }
+                    dummySubgraph = null;
                 } else if (!mousePressed) {
                     selectionController.addToSelection(controllers.get(mode).getElementFromPosition(mouseX, mouseY), e.isControlDown());
                 }
@@ -185,9 +183,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     public void drawCopiedSubgraph(Graphics2D g) {
         if (dummySubgraph != null) {
             dummySubgraph.calculatePositions(mouseX, mouseY);
-            if (dummySubgraph.fitsIntoPosition()) {
-                dummySubgraph.drawAll(g);
-            }
+            dummySubgraph.drawAll(g, mouseX, mouseY);
         }
     }
 
@@ -203,9 +199,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
         controllers.get(mode).reset();
         isElementMoving = false;
         mousePressed = false;
-        if (dummySubgraph != null) {
-            dummySubgraph = null;
-        }
+        dummySubgraph = null;
     }
 
     @Override

@@ -25,7 +25,7 @@ public class LabelEdgeDrawable implements Drawable {
         LabelE labelE = (LabelE) graphElement;
         Graphics2D g = (Graphics2D) g2d.create();
 
-        LabelEUtils.updateLocation(labelE);
+        labelE.updateLocation();
 
         if (selectionController.selectionContains(labelE)) {
             g.setColor(Const.SELECTION_COLOR);

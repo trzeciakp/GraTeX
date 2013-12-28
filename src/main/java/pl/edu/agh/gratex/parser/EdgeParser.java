@@ -1,11 +1,10 @@
 package pl.edu.agh.gratex.parser;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.EdgeUtils;
-import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 import pl.edu.agh.gratex.parser.elements.StaticParseElement;
@@ -13,7 +12,6 @@ import pl.edu.agh.gratex.parser.elements.edge.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -30,7 +28,7 @@ public class EdgeParser extends GraphElementParser {
 
     @Override
     public List<ParseElement> createParseList() {
-        List<ParseElement> parseList = new ArrayList<ParseElement>();
+        List<ParseElement> parseList = new ArrayList<>();
         parseList.add(new StaticParseElement("\\draw [", false));
         parseList.add(new LineWidthEdgeParser());
         parseList.add(new DirectionEdgeParser());

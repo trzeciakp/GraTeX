@@ -25,7 +25,7 @@ public class LabelVertexDrawable implements Drawable {
         LabelV labelV = (LabelV) graphElement;
         Graphics2D g = (Graphics2D) g2d.create();
 
-        LabelVUtils.updateLocation(labelV);
+        labelV.updateLocation();
 
         if (selectionController.selectionContains(labelV)) {
             g.setColor(Const.SELECTION_COLOR);

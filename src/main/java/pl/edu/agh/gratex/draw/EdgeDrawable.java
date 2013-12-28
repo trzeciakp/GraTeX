@@ -33,7 +33,7 @@ public class EdgeDrawable implements Drawable {
 
         Graphics2D g = (Graphics2D) g2d.create();
 
-        EdgeUtils.updateLocation(edge);
+        edge.updateLocation();
 
         if (vertexA != vertexB) {
             if (edge.getRelativeEdgeAngle() != 0) {
