@@ -9,14 +9,11 @@ import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
-import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 
 /**
  *
@@ -24,7 +21,7 @@ import java.awt.geom.Point2D;
 public class LabelVertexMouseControllerImpl extends GraphElementMouseController {
     private GeneralController generalController;
 
-    private LabelV currentlyMovedLabel;
+    private LabelV currentlyDraggedLabel;
     private AlterationOperation currentDragOperation;
 
     public LabelVertexMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
@@ -33,57 +30,41 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     }
 
     @Override
-    public void shiftDownChanged() {
-    }
-
-    @Override
     public void reset() {
-        finishMovingElement();
-        currentlyMovedLabel = null;
+        finishMoving();
+        currentlyDraggedLabel = null;
         currentDragOperation = null;
     }
 
     @Override
-    public void paintCurrentlyAddedElement(Graphics2D g) {
-        Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
-        if (temp != null) {
-            if (temp.getLabel() == null) {
+    public void drawCurrentlyAddedElement(Graphics2D g) {
+        Vertex vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
+        if (vertex != null) {
+            if (vertex.getLabel() == null) {
                 LabelV labelV = (LabelV) getGraphElementFactory().create(GraphElementType.LABEL_VERTEX, generalController.getGraph());
-                labelV.setOwner(temp);
+                labelV.setOwner(vertex);
                 labelV.setModel(generalController.getGraph().getLabelVDefaultModel());
-
-                Point2D p1 = new Point(temp.getPosX(), temp.getPosY());
-                Point2D p2 = new Point(mouseX, mouseY);
-                double angle = Math.toDegrees(Math.asin((mouseX - temp.getPosX()) / p1.distance(p2)));
-                if (mouseY < temp.getPosY()) {
-                    if (mouseX < temp.getPosX()) {
-                        angle += 360;
-                    }
-                } else {
-                    angle = 180 - angle;
-                }
-                labelV.setPosition(((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8);
-
-                generalController.getGraph().getLabelVDefaultModel().position = labelV.getPosition();
+                labelV.setPosition(LabelVUtils.getPositionFromCursorLocation(vertex, mouseX, mouseY));
                 labelV.draw(g, true);
             }
         }
     }
 
     @Override
-    public LabelV getElementFromPosition(MouseEvent e) {
-        return GraphUtils.getLabelVFromPosition(generalController.getGraph(), e.getX(), e.getY());
+    public LabelV getElementFromPosition(int mouseX, int mouseY) {
+        return GraphUtils.getLabelVFromPosition(generalController.getGraph(), mouseX, mouseY);
     }
 
     @Override
-    public void addNewElement(MouseEvent e) {
-        Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), e.getX(), e.getY());
-        if (temp != null) {
-            if (temp.getLabel() == null) {
+    public void addNewElement(int mouseX, int mouseY) {
+        Vertex owner = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
+        if (owner != null) {
+            if (owner.getLabel() == null) {
                 LabelV labelV = (LabelV) getGraphElementFactory().create(GraphElementType.LABEL_VERTEX, generalController.getGraph());
-                labelV.setOwner(temp);
+                labelV.setOwner(owner);
                 labelV.setModel(generalController.getGraph().getLabelVDefaultModel());
-                LabelVUtils.updatePosition(labelV);
+                labelV.setPosition(LabelVUtils.getPositionFromCursorLocation(owner, mouseX, mouseY));
+                LabelVUtils.updateLocation(labelV);
                 new CreationRemovalOperation(generalController, labelV, OperationType.ADD_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_ADD, true);
             } else {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_LABEL_V_EXISTS));
@@ -94,42 +75,22 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     }
 
     @Override
-    public void moveSelection(MouseEvent e) {
-        if (currentlyMovedLabel == null) {
-            startMoving(e);
+    public void moveSelection(int mouseX, int mouseY) {
+        if (currentlyDraggedLabel == null) {
+            currentlyDraggedLabel = getElementFromPosition(mouseX, mouseY);
+            generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);
+            currentDragOperation = new AlterationOperation(generalController, currentlyDraggedLabel, OperationType.MOVE_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_MOVE);
         } else {
-            continueMoving(e);
+            Vertex vertex = currentlyDraggedLabel.getOwner();
+            currentlyDraggedLabel.setPosition(LabelVUtils.getPositionFromCursorLocation(vertex, mouseX, mouseY));
         }
-    }
-
-    private void startMoving(MouseEvent e) {
-        currentlyMovedLabel = getElementFromPosition(e);
-        generalController.getSelectionController().addToSelection(currentlyMovedLabel, false);
-        currentDragOperation = new AlterationOperation(generalController, currentlyMovedLabel, OperationType.MOVE_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_MOVE);
-    }
-
-    private void continueMoving(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        Vertex vertex = currentlyMovedLabel.getOwner();
-        Point2D p1 = new Point(vertex.getPosX(), vertex.getPosY());
-        Point2D p2 = new Point(x, y);
-        double angle = Math.toDegrees(Math.asin((x - vertex.getPosX()) / p1.distance(p2)));
-        if (y < vertex.getPosY()) {
-            if (x < vertex.getPosX()) {
-                angle += 360;
-            }
-        } else {
-            angle = 180 - angle;
-        }
-        currentlyMovedLabel.setPosition(((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8);
     }
 
     @Override
-    public void finishMovingElement() {
-        if (currentlyMovedLabel != null) {
+    public void finishMoving() {
+        if (currentlyDraggedLabel != null) {
             currentDragOperation.finish();
-            currentlyMovedLabel = null;
+            currentlyDraggedLabel = null;
         }
     }
 }

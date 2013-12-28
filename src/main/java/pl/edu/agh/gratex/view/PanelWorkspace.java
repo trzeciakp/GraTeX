@@ -2,22 +2,18 @@ package pl.edu.agh.gratex.view;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.CursorType;
-import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
 import pl.edu.agh.gratex.controller.operation.Operation;
 import pl.edu.agh.gratex.controller.operation.OperationListener;
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.net.URL;
 import java.util.*;
 
 @SuppressWarnings("serial")
@@ -80,7 +76,7 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
             paintGrid(g2d, generalController.getGraph());
 
             if (mouseInWorkspace) {
-                mouseController.paintCurrentlyAddedElement(g2d);
+                mouseController.drawCurrentlyAddedElement(g2d);
                 paintCopiedSubgraph(g2d);
             }
 
@@ -119,7 +115,7 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     }
 
     public void paintCopiedSubgraph(Graphics2D g) {
-        mouseController.paintCopiedSubgraph(g);
+        mouseController.drawCopiedSubgraph(g);
     }
 
 

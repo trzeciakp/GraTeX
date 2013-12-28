@@ -15,11 +15,12 @@ public interface MouseController {
 
     public Rectangle getSelectionArea();
 
-    public void paintCurrentlyAddedElement(Graphics2D g);
-    public void paintCopiedSubgraph(Graphics2D g);
+    public void drawCurrentlyAddedElement(Graphics2D g);
+    public void drawCopiedSubgraph(Graphics2D g);
 
     public void duplicateSubgraph();
 
+    // TODO Nie wiadomo czy to potrzebne, patrz github -> issues -> #11
     public boolean isEdgeCurrentlyAdded(Edge edge);
 
     public void cancelCurrentOperation();

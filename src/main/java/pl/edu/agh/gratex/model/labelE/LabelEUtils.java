@@ -6,8 +6,10 @@ import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class LabelEUtils {
+    // Returns true if (x, y) is in the area occupied by the label
     public static boolean intersects(LabelE labelE, int x, int y) {
         return labelE.getOutline().contains(x, y);
     }
@@ -16,7 +18,7 @@ public class LabelEUtils {
     public static void draw(LabelE labelE, Graphics2D g2d, boolean dummy) {
         Graphics2D g = (Graphics2D) g2d.create();
 
-        updatePosition(labelE);
+        updateLocation(labelE);
 
         if (labelE.getGraph().getGeneralController().getSelectionController().selectionContains(labelE)) {
             g.setColor(Const.SELECTION_COLOR);
@@ -40,7 +42,75 @@ public class LabelEUtils {
     }
 */
 
-    public static void updatePosition(LabelE labelE) {
+    // Calculates the position of LabelE (in % of bias) according to vertex and cursor location
+    // Will return (-1 * position) if the label was placed below the edge
+    public static int getPositionFromCursorLocation(Edge owner, int mouseX, int mouseY) {
+        int bias;
+        boolean topPlacement;
+
+        if (owner.getVertexA() == owner.getVertexB()) {
+            // Owner edge is a loop
+            double angle = -Math.toDegrees(Math.atan2(mouseX - owner.getArcMiddle().x, mouseY - owner.getArcMiddle().y)) + 270 + owner.getRelativeEdgeAngle();
+            return (int) Math.round((angle % 360) / 3.6);
+
+        } else {
+            // Owner edge is not a loop
+            if (owner.getRelativeEdgeAngle() == 0) {
+                // Owner edge is not curved
+                Point p1 = owner.getInPoint();
+                Point p2 = owner.getOutPoint();
+
+                if (p2.x < p1.x) {
+                    Point tempP = p2;
+                    p2 = p1;
+                    p1 = tempP;
+                }
+
+                Point c = new Point(mouseX, mouseY);
+                double p1p2 = p1.distance(p2);
+                double p1c = p1.distance(c);
+                double p2c = p2.distance(c);
+                double mc = Line2D.ptLineDist((double) p1.x, (double) p1.y, (double) p2.x, (double) p2.y, (double) mouseX, (double) mouseY);
+
+                topPlacement = ((p2.x - p1.x) * (c.y - p1.y) - (p2.y - p1.y) * (c.x - p1.x) < 0);
+
+                if (p1c * p1c > p2c * p2c + p1p2 * p1p2) {
+                    bias = 100;
+                } else if (p2c * p2c > p1c * p1c + p1p2 * p1p2) {
+                    bias = 0;
+                } else {
+                    bias = (int) Math.round(100 * Math.sqrt(p1c * p1c - mc * mc) / p1p2);
+                }
+                return (topPlacement ? 1 : -1) * bias;
+
+            } else {
+                // Owner edge is curved
+                double startAngle = (Math.toDegrees(Math
+                        .atan2(owner.getOutPoint().x - owner.getArcMiddle().x, owner.getOutPoint().y - owner.getArcMiddle().y)) + 270) % 360;
+                double endAngle = (Math.toDegrees(Math.atan2(owner.getInPoint().x - owner.getArcMiddle().x, owner.getInPoint().y - owner.getArcMiddle().y)) + 270) % 360;
+                double mouseAngle = (Math.toDegrees(Math.atan2(mouseX - owner.getArcMiddle().x, mouseY - owner.getArcMiddle().y)) + 270) % 360;
+
+                int position;
+                double alpha = (startAngle - mouseAngle + 360) % 360;
+                if (alpha > 180) {
+                    alpha -= 360;
+                }
+                double beta = (startAngle - endAngle + 360) % 360;
+                if (beta > 180) {
+                    beta -= 360;
+                }
+
+                position = (int) Math.round(100 * (alpha / beta));
+                position = Math.min(100, position);
+                position = Math.max(0, position);
+                topPlacement = (owner.getArcMiddle().distance(new Point(mouseX, mouseY)) > owner.getArcRadius());
+                return (topPlacement ? 1 : -1) * position;
+            }
+        }
+    }
+
+    // Calculates the location of LabelE and attributes needed for parsing
+    public static void updateLocation(LabelE labelE) {
         FontMetrics fm = new Canvas().getFontMetrics(labelE.getFont());
         int width = fm.stringWidth(labelE.getText());
         int height = fm.getAscent();

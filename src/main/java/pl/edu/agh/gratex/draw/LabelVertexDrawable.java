@@ -3,8 +3,6 @@ package pl.edu.agh.gratex.draw;
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.GraphElement;
-import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.utils.DrawingTools;
@@ -27,11 +25,11 @@ public class LabelVertexDrawable implements Drawable {
         LabelV labelV = (LabelV) graphElement;
         Graphics2D g = (Graphics2D) g2d.create();
 
-        LabelVUtils.updatePosition(labelV);
+        LabelVUtils.updateLocation(labelV);
 
         if (selectionController.selectionContains(labelV)) {
             g.setColor(Const.SELECTION_COLOR);
-            g.fillRect(labelV.getOutline().x, labelV.getOutline().y, labelV.getOutline().width, labelV.getOutline().height);
+            g.fill(labelV.getOutline());
         }
 
         g.setFont(labelV.getFont());

@@ -1,5 +1,8 @@
 package pl.edu.agh.gratex.constants;
 
+import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.utils.DrawingTools;
+
 import java.awt.*;
 
 public class Const {
@@ -47,4 +50,9 @@ public class Const {
     public final static int ARROW_LENGTH_BASIC = 10;
     // Ratio: length of arrow head to lineWidth
     public final static int ARROW_LENGTH_FACTOR = 2;
+
+    // Stroke used to draw angle visualization
+    public final static Stroke ANGLE_VISUALIZATION_STROKE = DrawingTools.getStroke(2, LineType.DASHED, 0.0);
+    // Color used to draw angle visualization
+    public final static Color ANGLE_VISUALIZATION_COLOR = Color.gray;
 }

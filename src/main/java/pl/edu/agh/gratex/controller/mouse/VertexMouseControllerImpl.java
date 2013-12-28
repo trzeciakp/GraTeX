@@ -13,7 +13,6 @@ import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
 public class VertexMouseControllerImpl extends GraphElementMouseController {
 
@@ -27,18 +26,14 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public void shiftDownChanged() {
-    }
-
-    @Override
     public void reset() {
-        finishMovingElement();
+        finishMoving();
         currentlyDraggedVertex = null;
         currentDragOperation = null;
     }
 
     @Override
-    public void paintCurrentlyAddedElement(Graphics2D g) {
+    public void drawCurrentlyAddedElement(Graphics2D g) {
         Vertex vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
         vertex.setModel(generalController.getGraph().getVertexDefaultModel());
         VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
@@ -50,16 +45,16 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public Vertex getElementFromPosition(MouseEvent e) {
-        return GraphUtils.getVertexFromPosition(generalController.getGraph(), e.getX(), e.getY());
+    public Vertex getElementFromPosition(int mouseX, int mouseY) {
+        return GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
     }
 
     @Override
-    public void addNewElement(MouseEvent e) {
+    public void addNewElement(int mouseX, int mouseY) {
         Vertex vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
         vertex.setModel(generalController.getGraph().getVertexDefaultModel());
-        vertex.setPosX(e.getX());
-        vertex.setPosY(e.getY());
+        vertex.setPosX(mouseX);
+        vertex.setPosY(mouseY);
         if (generalController.getGraph().gridOn) {
             VertexUtils.adjustToGrid(vertex);
         }
@@ -77,9 +72,9 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public void moveSelection(MouseEvent e) {
+    public void moveSelection(int mouseX, int mouseY) {
         if(currentlyDraggedVertex == null) {
-            currentlyDraggedVertex = getElementFromPosition(e);
+            currentlyDraggedVertex = getElementFromPosition(mouseX, mouseY);
             generalController.getSelectionController().addToSelection(currentlyDraggedVertex, false);
 
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedVertex, OperationType.MOVE_VERTEX, StringLiterals.INFO_VERTEX_MOVE);
@@ -89,8 +84,8 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
             int oldPosX = vertex.getPosX();
             int oldPosY = vertex.getPosY();
 
-            vertex.setPosX(e.getX());
-            vertex.setPosY(e.getY());
+            vertex.setPosX(mouseX);
+            vertex.setPosY(mouseY);
 
             if (generalController.getGraph().gridOn) {
                 VertexUtils.adjustToGrid(vertex);
@@ -105,7 +100,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public void finishMovingElement() {
+    public void finishMoving() {
         if(currentlyDraggedVertex != null) {
             currentDragOperation.finish();
             currentlyDraggedVertex = null;

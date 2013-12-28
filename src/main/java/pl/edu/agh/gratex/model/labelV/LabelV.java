@@ -3,7 +3,6 @@ package pl.edu.agh.gratex.model.labelV;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.draw.LabelVertexDrawable;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
@@ -40,7 +39,7 @@ public class LabelV extends GraphElement implements Serializable {
     public void addToGraph(String code) {
         graph.getLabelsV().add(this);
         getOwner().setLabel(this);
-        LabelVUtils.updatePosition(this);
+        LabelVUtils.updateLocation(this);
         setLatexCode(code);
     }
 

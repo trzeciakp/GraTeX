@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.controller.mouse;
 import pl.edu.agh.gratex.constants.*;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
+import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
@@ -74,20 +75,22 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
         switch (tool) {
             case ADD:
                 selectionController.clearSelection();
-                controllers.get(mode).addNewElement(e);
+                controllers.get(mode).addNewElement(mouseX, mouseY);
                 break;
             case REMOVE:
-                controllers.get(mode).removeElement(e);
+                controllers.get(mode).removeElement(mouseX, mouseY);
                 break;
             case SELECT:
                 if (dummySubgraph != null) {
-                    if (dummySubgraph.fitsIntoPosition()){
+                    if (dummySubgraph.fitsIntoPosition()) {
                         new CreationRemovalOperation(generalController, dummySubgraph.getElements(), OperationType.DUPLICATION,
                                 StringLiterals.INFO_SUBGRAPH_DUPLICATE, true);
                         dummySubgraph = null;
+                    } else {
+                        operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_SUBGRAPH_CANNOT_PASTE));
                     }
                 } else if (!mousePressed) {
-                    selectionController.addToSelection(controllers.get(mode).getElementFromPosition(e), e.isControlDown());
+                    selectionController.addToSelection(controllers.get(mode).getElementFromPosition(mouseX, mouseY), e.isControlDown());
                 }
                 break;
         }
@@ -98,10 +101,10 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
         mousePressed = true;
         mousePressX = e.getX();
         mousePressY = e.getY();
-        GraphElement element = controllers.get(mode).getElementFromPosition(e);
+        GraphElement element = controllers.get(mode).getElementFromPosition(mouseX, mouseY);
         boolean isProperTool = (tool == ToolType.ADD || tool == ToolType.SELECT);
         if (isProperTool && element != null && selectionController.selectionContains(element)) {
-            controllers.get(mode).moveSelection(e);
+            controllers.get(mode).moveSelection(mouseX, mouseY);
             isElementMoving = true;
         }
     }
@@ -121,7 +124,8 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
             }
         } else {
             isElementMoving = false;
-            controllers.get(mode).finishMovingElement();
+            controllers.get(mode).finishMoving();
+            selectionController.repeatSelection();
         }
 
         operationController.reportOperationEvent(null);
@@ -131,8 +135,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     public void processMouseMoving(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
-        controllers.get(mode).processMouseMoving(tool, e);
-
+        controllers.get(mode).setMouseLocation(mouseX, mouseY);
         operationController.reportOperationEvent(null);
     }
 
@@ -140,17 +143,16 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     public void processMouseDragging(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
-        controllers.get(mode).processMouseDragging(tool, e);
+        controllers.get(mode).setMouseLocation(mouseX, mouseY);
         if (isElementMoving) {
-            controllers.get(mode).moveSelection(e);
+            controllers.get(mode).moveSelection(mouseX, mouseY);
         }
-
         operationController.reportOperationEvent(null);
     }
 
     @Override
     public void processShiftPressing(boolean flag) {
-        controllers.get(mode).processShiftPressing(flag);
+        controllers.get(mode).setShiftDown(flag);
         operationController.reportOperationEvent(null);
     }
 
@@ -171,16 +173,16 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     }
 
     @Override
-    public void paintCurrentlyAddedElement(Graphics2D g) {
+    public void drawCurrentlyAddedElement(Graphics2D g) {
         if (tool == ToolType.ADD) {
-            controllers.get(mode).paintCurrentlyAddedElement(g);
+            controllers.get(mode).drawCurrentlyAddedElement(g);
         }
 
         operationController.reportOperationEvent(null);
     }
 
     @Override
-    public void paintCopiedSubgraph(Graphics2D g) {
+    public void drawCopiedSubgraph(Graphics2D g) {
         if (dummySubgraph != null) {
             dummySubgraph.calculatePositions(mouseX, mouseY);
             if (dummySubgraph.fitsIntoPosition()) {
@@ -189,6 +191,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
         }
     }
 
+    // TODO Nie wiadomo czy to potrzebne, patrz github -> issues -> #11
     @Override
     public boolean isEdgeCurrentlyAdded(Edge edge) {
         //TODO
@@ -208,5 +211,6 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     @Override
     public void duplicateSubgraph() {
         dummySubgraph = new DummySubgraph(generalController.getGraph(), selectionController.getSelection(), generalController.getParseController());
+        operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_SUBGRAPH_WHERE_TO_PASTE));
     }
 }

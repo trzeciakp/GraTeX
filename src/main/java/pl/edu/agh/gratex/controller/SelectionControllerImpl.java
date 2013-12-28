@@ -111,6 +111,11 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     }
 
     @Override
+    public void repeatSelection() {
+        informListeners();
+    }
+
+    @Override
     public void addListener(SelectionListener listener) {
         listeners.add(listener);
     }

@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.draw;
 
 import pl.edu.agh.gratex.constants.Const;
-import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
@@ -33,7 +33,7 @@ public class EdgeDrawable implements Drawable {
 
         Graphics2D g = (Graphics2D) g2d.create();
 
-        EdgeUtils.updatePosition(edge);
+        EdgeUtils.updateLocation(edge);
 
         if (vertexA != vertexB) {
             if (edge.getRelativeEdgeAngle() != 0) {
@@ -132,8 +132,8 @@ public class EdgeDrawable implements Drawable {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
 
-        g.setColor(Color.gray);
-        g.setStroke(DrawingTools.getStroke(2, LineType.DASHED, 0.0));
+        g.setColor(Const.ANGLE_VISUALIZATION_COLOR);
+        g.setStroke(Const.ANGLE_VISUALIZATION_STROKE);
         g.drawLine(vertexA.getPosX(), vertexA.getPosY(), vertexB.getPosX(), vertexB.getPosY());
 
         Point m = new Point((vertexA.getPosX() + vertexB.getPosX()) / 2, (vertexA.getPosY() + vertexB.getPosY()) / 2);
@@ -148,12 +148,12 @@ public class EdgeDrawable implements Drawable {
 
         g.setFont(new Font("Times New Roman", Font.PLAIN, 60));
         FontMetrics fm = g.getFontMetrics();
-        String alphaText = Character.toString('\u03B1');
+        String alphaText = StringLiterals.ALPHA;
 
         int arcAngle = edge.getRelativeEdgeAngle();
         if (arcAngle > 180) {
             arcAngle -= 360;
-            alphaText = '-' + Character.toString('\u03B1');
+            alphaText = "-" + StringLiterals.ALPHA;
         }
         double angle = Math.toRadians(edge.getOutAngle() - arcAngle / 2);
         int x = vertexA.getPosX() - fm.stringWidth(alphaText) / 2 + (int) Math.round((d / 4) * Math.cos(angle));

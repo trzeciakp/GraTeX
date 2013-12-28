@@ -4,6 +4,12 @@ import pl.edu.agh.gratex.model.graph.GraphNumeration;
 
 public class StringLiterals {
     //==================================================
+    // Miscellaneous
+
+    // "alpha" letter used to mark angles
+    public final static String ALPHA = Character.toString('\u03B1');
+
+    //==================================================
     // Window titles
 
     // General
@@ -35,10 +41,8 @@ public class StringLiterals {
     public final static String TITLE_SAVE_FILE_DIALOG = "Save as...";
 
 
-    //==================================================
+    // ==================================================
     // Popup dialogs, error messages etc.
-
-    public final static String MESSAGE_ERROR_GENERAL = "The application has encountered an error:\n";
 
     public final static String MESSAGE_ERROR_CRITICAL = "The application has encountered a critical error and will now terminate:\n";
 
@@ -163,7 +167,7 @@ public class StringLiterals {
     // ControlManager
     public final static String INFO_SUBGRAPH_DUPLICATE = "supgraph duplicated";
     public final static String INFO_SUBGRAPH_WHERE_TO_PASTE = "choose location for the copy of subgraph";
-    public final static String INFO_CANNOT_PASTE_SUBGRAPH = "cannot insert this subgraph here - vertices collide with existing ones or are out of bounds";
+    public final static String INFO_SUBGRAPH_CANNOT_PASTE = "cannot insert this subgraph here - vertices collide with existing ones or are out of bounds";
     public final static String INFO_CANNOT_CREATE_VERTEX_BOUNDARY = "cannot create a vertex here - too close to page edge";
     public final static String INFO_CANNOT_CREATE_VERTEX_COLLISION = "cannot create a vertex here - too close to another vertex";
     public final static String INFO_CHOOSE_EDGE_START = "Choose a starting vertex for the edge (click)";
@@ -234,7 +238,7 @@ public class StringLiterals {
         return tipPart1 + tipPart2 + tipPart3;
     }
 
-    public final static String INFO_GENERIC_GRID(boolean gridOn, int gridResolutionX, int gridResolutionY) {
+    public static String INFO_GENERIC_GRID(boolean gridOn, int gridResolutionX, int gridResolutionY) {
         if (gridOn) {
             return String.format("%dx%d grid enabled", gridResolutionX, gridResolutionY);
         } else {
@@ -242,13 +246,13 @@ public class StringLiterals {
         }
     }
 
-    public final static String INFO_GENERIC_NUMERATION(boolean digital, int startingNumber) {
+    public static String INFO_GENERIC_NUMERATION(boolean digital, int startingNumber) {
         String numerationType = digital ? "digital" : "alphabetical";
         String startingNumString = digital ? Integer.toString(startingNumber) : GraphNumeration.digitalToAlphabetical(startingNumber);
         return String.format("%s numeration enabled (starting with '%s')", numerationType, startingNumString);
     }
 
-    public final static String INFO_GENERIC_SELECT_ALL(ModeType mode){
+    public static String INFO_GENERIC_SELECT_ALL(ModeType mode){
         return "all " + mode.getRelatedElementType().getPluralName() + " selected";
     }
 }

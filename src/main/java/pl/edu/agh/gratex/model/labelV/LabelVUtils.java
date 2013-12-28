@@ -1,17 +1,37 @@
 package pl.edu.agh.gratex.model.labelV;
 
 import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class LabelVUtils {
+    // Returns true if (x, y) is in the area occupied by the label
     public static boolean intersects(LabelV labelV, int x, int y) {
         return labelV.getOutline().contains(x, y);
     }
 
-    public static void updatePosition(LabelV labelV) {
+    // Calculates the position of LabelV (N, S, W, E etc) according to vertex and cursor location
+    public static int getPositionFromCursorLocation(Vertex owner, int mouseX, int mouseY) {
+        Point2D p1 = new Point(owner.getPosX(), owner.getPosY());
+        Point2D p2 = new Point(mouseX, mouseY);
+        double angle = Math.toDegrees(Math.asin((mouseX - owner.getPosX()) / p1.distance(p2)));
+        if (mouseY < owner.getPosY()) {
+            if (mouseX < owner.getPosX()) {
+                angle += 360;
+            }
+        } else {
+            angle = 180 - angle;
+        }
+        return ((int) Math.abs(Math.ceil((angle - 22.5) / 45))) % 8;
+    }
+
+
+    // Calculates the location of LabelV and attributes needed for parsing
+    public static void updateLocation(LabelV labelV) {
         FontMetrics fm = new Canvas().getFontMetrics(labelV.getFont());
         int width = fm.stringWidth(labelV.getText());
         int height = fm.getAscent();
@@ -77,7 +97,7 @@ public class LabelVUtils {
     public static void draw(LabelV labelV, Graphics2D g2d, boolean dummy) {
         Graphics2D g = (Graphics2D) g2d.create();
 
-        updatePosition(labelV);
+        updateLocation(labelV);
 
         if (labelV.getGraph().getGeneralController().getSelectionController().selectionContains(labelV)) {
             g.setColor(Const.SELECTION_COLOR);

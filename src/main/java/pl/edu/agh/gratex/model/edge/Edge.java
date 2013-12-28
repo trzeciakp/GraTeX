@@ -2,7 +2,6 @@ package pl.edu.agh.gratex.model.edge;
 
 
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.draw.EdgeDrawable;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
@@ -180,7 +179,7 @@ public class Edge extends GraphElement implements Serializable {
     @Override
     public void addToGraph(String code) {
         graph.getEdges().add(this);
-        EdgeUtils.updatePosition(this);
+        EdgeUtils.updateLocation(this);
         setLatexCode(code);
     }
 

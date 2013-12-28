@@ -20,8 +20,6 @@ public interface GeneralController {
 
     public Graph getGraph();
 
-    public void resetWorkspace();
-
     public void newGraphFile();
 
     public void openGraphFile();

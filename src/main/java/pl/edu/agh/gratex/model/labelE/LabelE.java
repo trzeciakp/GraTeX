@@ -3,7 +3,6 @@ package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.draw.LabelEdgeDrawable;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
@@ -17,8 +16,8 @@ import java.util.*;
 import java.util.List;
 
 
+@SuppressWarnings("serial")
 public class LabelE extends GraphElement implements Serializable {
-    private static final long serialVersionUID = 7816741486248743237L;
 
     // Wartości edytowalne przez użytkowanika
     private String text;
@@ -51,7 +50,7 @@ public class LabelE extends GraphElement implements Serializable {
     public void addToGraph(String code) {
         graph.getLabelsE().add(this);
         getOwner().setLabel(this);
-        LabelEUtils.updatePosition(this);
+        LabelEUtils.updateLocation(this);
         setLatexCode(code);
     }
 

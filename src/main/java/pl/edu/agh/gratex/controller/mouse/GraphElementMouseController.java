@@ -20,6 +20,7 @@ public abstract class GraphElementMouseController {
     protected int mouseX;
     protected int mouseY;
     protected boolean shiftDown;
+
     private GeneralController generalController;
     private GraphElementFactory graphElementFactory;
 
@@ -32,34 +33,30 @@ public abstract class GraphElementMouseController {
         return graphElementFactory;
     }
 
-    public void processMouseMoving(ToolType toolType, MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
+    public void setMouseLocation(int x, int y)
+    {
+        mouseX = x;
+        mouseY = y;
     }
 
-    //to fix dummy vertex while moving after vertex added
-    public void processMouseDragging(ToolType toolType, MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
-    }
-
-    public void processShiftPressing(boolean flag) {
+    public void setShiftDown(boolean flag) {
         shiftDown = flag;
         shiftDownChanged();
     }
 
-    public abstract void shiftDownChanged();
+    public void shiftDownChanged() {
+    }
 
     public abstract void reset();
 
-    public abstract void paintCurrentlyAddedElement(Graphics2D g);
+    public abstract void drawCurrentlyAddedElement(Graphics2D g);
 
-    public abstract GraphElement getElementFromPosition(MouseEvent e);
+    public abstract GraphElement getElementFromPosition(int mouseX, int mouseY);
 
-    public abstract void addNewElement(MouseEvent e);
+    public abstract void addNewElement(int mouseX, int mouseY);
 
-    public void removeElement(MouseEvent e) {
-        GraphElement temp = getElementFromPosition(e);
+    public void removeElement(int mouseX, int mouseY) {
+        GraphElement temp = getElementFromPosition(mouseX, mouseY);
         if (temp != null) {
             ModeType mode = generalController.getModeController().getMode();
             new CreationRemovalOperation(generalController, temp, OperationType.REMOVE_OPERATION(mode),
@@ -69,8 +66,7 @@ public abstract class GraphElementMouseController {
         }
     }
 
-    //TODO maybe it should it be changed to handle moving whole selection not single element like it is now
-    public abstract void moveSelection(MouseEvent e);
+    public abstract void moveSelection(int mouseX, int mouseY);
 
-    public abstract void finishMovingElement();
+    public abstract void finishMoving();
 }

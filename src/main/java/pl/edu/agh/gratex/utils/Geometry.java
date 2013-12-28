@@ -22,9 +22,9 @@ public class Geometry {
             double b1 = -Math.sin(Math.toRadians(angle));
             double c1 = 0.0;
 
-            double a2 = 0.0;
-            double b2 = 0.0;
-            double c2 = 0.0;
+            double a2;
+            double b2;
+            double c2;
 
             if (vertex.getShape() == 2) {
                 a2 = 1;

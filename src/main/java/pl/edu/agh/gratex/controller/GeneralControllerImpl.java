@@ -184,14 +184,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         return false;
     }
 
-    //TODO it should be changed
-    public void resetWorkspace() {
-        selectionController.clearSelection();
-        //mouseController.finishMovingElement();
-        //mouseController.cancelCurrentOperation();
-        operationController.reportOperationEvent(null);
-    }
-
     @Override
     public void editGraphTemplate() {
         GraphTemplateDialog gdd = new GraphTemplateDialog(mainWindow, this, graphElementFactory);
@@ -335,5 +327,10 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         } else {
             return true;
         }
+    }
+
+    private void resetWorkspace() {
+        selectionController.clearSelection();
+        operationController.reportOperationEvent(null);
     }
 }

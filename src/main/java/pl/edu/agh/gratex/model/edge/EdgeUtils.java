@@ -14,6 +14,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 public class EdgeUtils {
+    // Returns true if (x, y) is close enough to the edge
     public static boolean intersects(Edge edge, int x, int y) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
@@ -41,7 +42,6 @@ public class EdgeUtils {
                     double clickAngle = (Math.toDegrees(Math.atan2(click.getX() - edge.getArcMiddle().x, click.getY() - edge.getArcMiddle().y)) + 270) % 360;
                     if (edge.getArc().extent < 0) {
                         double endAngle = (edge.getArc().start + edge.getArc().extent + 720) % 360;
-
                         return (clickAngle - endAngle + 720) % 360 < (edge.getArc().start - endAngle + 720) % 360;
                     } else {
                         return (edge.getArc().extent) % 360 > (clickAngle - edge.getArc().start + 720) % 360;
@@ -62,82 +62,50 @@ public class EdgeUtils {
         return false;
     }
 
-    private static void calculateInOutPoints(Edge edge) {
-        Vertex vertexA = edge.getVertexA();
-        Vertex vertexB = edge.getVertexB();
-
-        double beta = (Math.toDegrees(Math.atan2(vertexB.getPosX() - vertexA.getPosX(), vertexB.getPosY() - vertexA.getPosY()))) + 270;
-        edge.setOutPoint(Geometry.calculateEdgeExitPoint(vertexA, edge.getRelativeEdgeAngle() + beta));
-        edge.setInPoint(Geometry.calculateEdgeExitPoint(vertexB, 180 - edge.getRelativeEdgeAngle() + beta));
-        edge.setOutAngle((int) Math.round(Math.toDegrees(Math.atan2(edge.getOutPoint().x - vertexA.getPosX(), edge.getOutPoint().y - vertexA.getPosY())) + 270) % 360);
-        edge.setInAngle((int) Math.round(Math.toDegrees(Math.atan2(edge.getInPoint().x - vertexB.getPosX(), edge.getInPoint().y - vertexB.getPosY())) + 270) % 360);
-    }
-
-    private static void calculateArcParameters(Edge edge) {
-        if (edge.getRelativeEdgeAngle() != 0) {
-            double mx = (edge.getOutPoint().x + edge.getInPoint().x) / 2;
-            double my = (edge.getOutPoint().y + edge.getInPoint().y) / 2;
-            double dx = (edge.getInPoint().x - edge.getOutPoint().x) / 2;
-            double dy = (edge.getInPoint().y - edge.getOutPoint().y) / 2;
-            edge.getArcMiddle().x = (int) Math.round(mx - dy * Math.cos(Math.toRadians(edge.getRelativeEdgeAngle())) / Math.sin(Math.toRadians(edge.getRelativeEdgeAngle())));
-            edge.getArcMiddle().y = (int) Math.round(my + dx * Math.cos(Math.toRadians(edge.getRelativeEdgeAngle())) / Math.sin(Math.toRadians(edge.getRelativeEdgeAngle())));
-            edge.setArcRadius((int) Math.round(Math.sqrt((edge.getArcMiddle().x - edge.getOutPoint().x) * (edge.getArcMiddle().x - edge.getOutPoint().x) +
-                    (edge.getArcMiddle().y - edge.getOutPoint().y) * (edge.getArcMiddle().y - edge.getOutPoint().y))));
-        }
-    }
-
-    private static void updateArrowPosition(Edge edge) {
-        int ax;
-        int ay;
-        int bx = edge.getInPoint().x;
-        int by = edge.getInPoint().y;
-
-        if (edge.getVertexA() == edge.getVertexB()) {
-            ax = 2 * bx - edge.getVertexA().getPosX();
-            ay = 2 * by - edge.getVertexA().getPosY();
-        } else if (edge.getRelativeEdgeAngle() != 0) {
-            int x1 = bx - (edge.getArcMiddle().y - by);
-            int y1 = by + (edge.getArcMiddle().x - bx);
-            int x2 = bx + (edge.getArcMiddle().y - by);
-            int y2 = by - (edge.getArcMiddle().x - bx);
-            if (Point.distance(x1, y1, edge.getVertexB().getPosX(), edge.getVertexB().getPosY()) >
-                    Point.distance(x2, y2, edge.getVertexB().getPosX(), edge.getVertexB().getPosY())) {
-                ax = x1;
-                ay = y1;
+    // Calculates the angle of edge (in degrees) according to cursor location and type of edge
+    public static int getEdgeAngleFromCursorLocation(Edge edge, int mouseX, int mouseY) {
+        int intAngle;
+        if (edge.getVertexA() != edge.getVertexB()) {
+            // Edge is not a loop
+            double angle;
+            if (Point.distance(mouseX, mouseY, edge.getVertexA().getPosX(), edge.getVertexA().getPosY()) <
+                    Point.distance(mouseX, mouseY, edge.getVertexB().getPosX(), edge.getVertexB().getPosY())) {
+                // Cursor is closer to vertex A
+                angle = Math.toDegrees(Math.atan2(
+                        mouseX - edge.getVertexA().getPosX(),
+                        mouseY - edge.getVertexA().getPosY())) + 270;
+                angle = angle - Math.toDegrees(Math.atan2(
+                        edge.getVertexB().getPosX() - edge.getVertexA().getPosX(),
+                        edge.getVertexB().getPosY() - edge.getVertexA().getPosY())) + 270;
             } else {
-                ax = x2;
-                ay = y2;
+                // Cursor is closer to vertex B
+                angle = Math.toDegrees(Math.atan2(
+                        mouseX - edge.getVertexB().getPosX(),
+                        mouseY - edge.getVertexB().getPosY())) + 270;
+                angle = -angle + Math.toDegrees(Math.atan2(
+                        edge.getVertexA().getPosX() - edge.getVertexB().getPosX(),
+                        edge.getVertexA().getPosY() - edge.getVertexB().getPosY())) + 270;
+            }
+            intAngle = ((((int) Math.floor(angle) / 5) * 5) + 720) % 360;
+            if (intAngle > 60) {
+                if (intAngle < 180) {
+                    intAngle = 60;
+                } else if (intAngle < 300) {
+                    intAngle = 300;
+                }
+
             }
         } else {
-            ax = edge.getVertexA().getPosX();
-            ay = edge.getVertexA().getPosY();
+            // Edge is a loop
+            double angle = (Math.toDegrees(Math.atan2(
+                    mouseX - edge.getVertexB().getPosX(),
+                    mouseY - edge.getVertexB().getPosY())) + 270) % 360;
+            intAngle = ((int) Math.floor((angle + 45) / 90) % 4) * 90;
         }
-
-        int dx = bx - ax;
-        int dy = by - ay;
-
-        int[] p1 = new int[]{ax - dy, ay + dx};
-        int[] p2 = new int[]{ax + dy, ay - dx};
-
-        if (edge.getArrowTypeENUM() == ArrowType.FILLED) {
-
-            p1 = new int[]{ax - dy / 2, ay + dx / 2};
-            p2 = new int[]{ax + dy / 2, ay - dx / 2};
-        }
-
-        double part = (Const.ARROW_LENGTH_BASIC + Const.ARROW_LENGTH_FACTOR * edge.getLineWidth())
-                / Math.sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]));
-
-        p1[0] = bx - (int) Math.round(part * (bx - p1[0]));
-        p1[1] = by - (int) Math.round(part * (by - p1[1]));
-        p2[0] = bx - (int) Math.round(part * (bx - p2[0]));
-        p2[1] = by - (int) Math.round(part * (by - p2[1]));
-
-        edge.setArrowLine1(new int[]{p1[0], p1[1], bx, by});
-        edge.setArrowLine2(new int[]{p2[0], p2[1], bx, by});
+        return intAngle;
     }
 
-    public static void updatePosition(Edge edge) {
+    public static void updateLocation(Edge edge) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
 
@@ -272,6 +240,82 @@ public class EdgeUtils {
         }
     }
 
+    private static void calculateInOutPoints(Edge edge) {
+        Vertex vertexA = edge.getVertexA();
+        Vertex vertexB = edge.getVertexB();
+
+        double beta = (Math.toDegrees(Math.atan2(vertexB.getPosX() - vertexA.getPosX(), vertexB.getPosY() - vertexA.getPosY()))) + 270;
+        edge.setOutPoint(Geometry.calculateEdgeExitPoint(vertexA, edge.getRelativeEdgeAngle() + beta));
+        edge.setInPoint(Geometry.calculateEdgeExitPoint(vertexB, 180 - edge.getRelativeEdgeAngle() + beta));
+        edge.setOutAngle((int) Math.round(Math.toDegrees(Math.atan2(edge.getOutPoint().x - vertexA.getPosX(), edge.getOutPoint().y - vertexA.getPosY())) + 270) % 360);
+        edge.setInAngle((int) Math.round(Math.toDegrees(Math.atan2(edge.getInPoint().x - vertexB.getPosX(), edge.getInPoint().y - vertexB.getPosY())) + 270) % 360);
+    }
+
+    private static void calculateArcParameters(Edge edge) {
+        if (edge.getRelativeEdgeAngle() != 0) {
+            double mx = (edge.getOutPoint().x + edge.getInPoint().x) / 2;
+            double my = (edge.getOutPoint().y + edge.getInPoint().y) / 2;
+            double dx = (edge.getInPoint().x - edge.getOutPoint().x) / 2;
+            double dy = (edge.getInPoint().y - edge.getOutPoint().y) / 2;
+            edge.getArcMiddle().x = (int) Math.round(mx - dy * Math.cos(Math.toRadians(edge.getRelativeEdgeAngle())) / Math.sin(Math.toRadians(edge.getRelativeEdgeAngle())));
+            edge.getArcMiddle().y = (int) Math.round(my + dx * Math.cos(Math.toRadians(edge.getRelativeEdgeAngle())) / Math.sin(Math.toRadians(edge.getRelativeEdgeAngle())));
+            edge.setArcRadius((int) Math.round(Math.sqrt((edge.getArcMiddle().x - edge.getOutPoint().x) * (edge.getArcMiddle().x - edge.getOutPoint().x) +
+                    (edge.getArcMiddle().y - edge.getOutPoint().y) * (edge.getArcMiddle().y - edge.getOutPoint().y))));
+        }
+    }
+
+    private static void updateArrowPosition(Edge edge) {
+        int ax;
+        int ay;
+        int bx = edge.getInPoint().x;
+        int by = edge.getInPoint().y;
+
+        if (edge.getVertexA() == edge.getVertexB()) {
+            ax = 2 * bx - edge.getVertexA().getPosX();
+            ay = 2 * by - edge.getVertexA().getPosY();
+        } else if (edge.getRelativeEdgeAngle() != 0) {
+            int x1 = bx - (edge.getArcMiddle().y - by);
+            int y1 = by + (edge.getArcMiddle().x - bx);
+            int x2 = bx + (edge.getArcMiddle().y - by);
+            int y2 = by - (edge.getArcMiddle().x - bx);
+            if (Point.distance(x1, y1, edge.getVertexB().getPosX(), edge.getVertexB().getPosY()) >
+                    Point.distance(x2, y2, edge.getVertexB().getPosX(), edge.getVertexB().getPosY())) {
+                ax = x1;
+                ay = y1;
+            } else {
+                ax = x2;
+                ay = y2;
+            }
+        } else {
+            ax = edge.getVertexA().getPosX();
+            ay = edge.getVertexA().getPosY();
+        }
+
+        int dx = bx - ax;
+        int dy = by - ay;
+
+        int[] p1 = new int[]{ax - dy, ay + dx};
+        int[] p2 = new int[]{ax + dy, ay - dx};
+
+        if (edge.getArrowTypeENUM() == ArrowType.FILLED) {
+
+            p1 = new int[]{ax - dy / 2, ay + dx / 2};
+            p2 = new int[]{ax + dy / 2, ay - dx / 2};
+        }
+
+        double part = (Const.ARROW_LENGTH_BASIC + Const.ARROW_LENGTH_FACTOR * edge.getLineWidth())
+                / Math.sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]));
+
+        p1[0] = bx - (int) Math.round(part * (bx - p1[0]));
+        p1[1] = by - (int) Math.round(part * (by - p1[1]));
+        p2[0] = bx - (int) Math.round(part * (bx - p2[0]));
+        p2[1] = by - (int) Math.round(part * (by - p2[1]));
+
+        edge.setArrowLine1(new int[]{p1[0], p1[1], bx, by});
+        edge.setArrowLine2(new int[]{p2[0], p2[1], bx, by});
+    }
+
+    /*
     private static void drawAngleVisualisation(Edge edge, Graphics2D g) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
@@ -311,14 +355,13 @@ public class EdgeUtils {
         g.draw(new Arc2D.Double(vertexB.getPosX() - (d / 3), vertexB.getPosY() - (d / 3), d / 1.5, d / 1.5, edge.getInAngle(), arcAngle, Arc2D.OPEN));
     }
 
-/*
     public static void draw(Edge edge, Graphics2D g2d, boolean dummy) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
 
         Graphics2D g = (Graphics2D) g2d.create();
 
-        updatePosition(edge);
+        updateLocation(edge);
 
         if (vertexA != vertexB) {
             if (edge.getRelativeEdgeAngle() != 0) {

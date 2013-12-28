@@ -14,8 +14,6 @@ import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Line2D;
 
 /**
  *
@@ -25,6 +23,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
 
     private LabelE currentlyDraggedLabel;
     private AlterationOperation currentDragOperation;
+    private boolean shiftChangedWhileAdding;
 
     public LabelEdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
         super(generalController, graphElementFactory);
@@ -33,113 +32,61 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
 
 
     @Override
-    public void shiftDownChanged(){
-        if (currentlyDraggedLabel != null){
+    public void shiftDownChanged() {
+        shiftChangedWhileAdding = true;
+        if (currentlyDraggedLabel != null) {
             currentlyDraggedLabel.setHorizontalPlacement(shiftDown);
         }
     }
 
     @Override
     public void reset() {
-        finishMovingElement();
+        finishMoving();
         currentlyDraggedLabel = null;
         currentDragOperation = null;
         shiftDown = false;
+        shiftChangedWhileAdding = false;
     }
 
     @Override
-    public void paintCurrentlyAddedElement(Graphics2D g) {
-        Edge temp = GraphUtils.getEdgeFromPosition(generalController.getGraph(), mouseX, mouseY);
-        if (temp != null) {
-            if (temp.getLabel() == null) {
+    public void drawCurrentlyAddedElement(Graphics2D g) {
+        Edge owner = GraphUtils.getEdgeFromPosition(generalController.getGraph(), mouseX, mouseY);
+        if (owner != null) {
+            if (owner.getLabel() == null) {
                 LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());
-                labelE.setOwner(temp);
+                labelE.setOwner(owner);
                 labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
-
-                int bias;
-                int x = mouseX;
-                int y = mouseY;
-
-                if (temp.getVertexA() == temp.getVertexB()) {
-                    double angle = -Math.toDegrees(Math.atan2(x - temp.getArcMiddle().x, y - temp.getArcMiddle().y)) + 270 + temp.getRelativeEdgeAngle();
-                    labelE.setPosition((int) Math.round((angle % 360) / 3.6));
-                } else {
-                    if (temp.getRelativeEdgeAngle() == 0) {
-                        Point p1 = temp.getInPoint();
-                        Point p2 = temp.getOutPoint();
-
-                        if (p2.x < p1.x) {
-                            Point tempP = p2;
-                            p2 = p1;
-                            p1 = tempP;
-                        }
-
-                        Point c = new Point(x, y);
-                        double p1p2 = p1.distance(p2);
-                        double p1c = p1.distance(c);
-                        double p2c = p2.distance(c);
-                        double mc = Line2D.ptLineDist((double) p1.x, (double) p1.y, (double) p2.x, (double) p2.y, (double) x, (double) y);
-
-                        labelE.setTopPlacement(((p2.x - p1.x) * (c.y - p1.y) - (p2.y - p1.y) * (c.x - p1.x) < 0));
-
-                        if (p1c * p1c > p2c * p2c + p1p2 * p1p2) {
-                            bias = 100;
-                        } else if (p2c * p2c > p1c * p1c + p1p2 * p1p2) {
-                            bias = 0;
-                        } else {
-                            bias = (int) Math.round(100 * Math.sqrt(p1c * p1c - mc * mc) / p1p2);
-                        }
-                        labelE.setPosition(bias);
-                    } else {
-                        double startAngle = (Math.toDegrees(Math
-                                .atan2(temp.getOutPoint().x - temp.getArcMiddle().x, temp.getOutPoint().y - temp.getArcMiddle().y)) + 270) % 360;
-                        double endAngle = (Math.toDegrees(Math.atan2(temp.getInPoint().x - temp.getArcMiddle().x, temp.getInPoint().y - temp.getArcMiddle().y)) + 270) % 360;
-                        double mouseAngle = (Math.toDegrees(Math.atan2(x - temp.getArcMiddle().x, y - temp.getArcMiddle().y)) + 270) % 360;
-
-                        int position;
-                        double alpha = (startAngle - mouseAngle + 360) % 360;
-                        if (alpha > 180) {
-                            alpha -= 360;
-                        }
-                        double beta = (startAngle - endAngle + 360) % 360;
-                        if (beta > 180) {
-                            beta -= 360;
-                        }
-
-                        position = (int) Math.round(100 * (alpha / beta));
-
-                        if (position > -1 && position < 101) {
-                            labelE.setTopPlacement((temp.getArcMiddle().distance(new Point(x, y)) > temp.getArcRadius()));
-                            labelE.setPosition(position);
-                        }
-                    }
+                if (shiftChangedWhileAdding) {
+                    labelE.setHorizontalPlacement(shiftDown);
                 }
-
-                generalController.getGraph().getLabelEDefaultModel().topPlacement = 0;
-                if (labelE.isTopPlacement()) {
-                    generalController.getGraph().getLabelEDefaultModel().topPlacement = 1;
-                }
-                generalController.getGraph().getLabelEDefaultModel().position = labelE.getPosition();
+                int position = LabelEUtils.getPositionFromCursorLocation(owner, mouseX, mouseY);
+                labelE.setPosition(Math.abs(position));
+                labelE.setTopPlacement(position >= 0);
                 labelE.draw(g, true);
             }
         }
     }
 
     @Override
-    public LabelE getElementFromPosition(MouseEvent e) {
-        return GraphUtils.getLabelEFromPosition(generalController.getGraph(), e.getX(), e.getY());
+    public LabelE getElementFromPosition(int mouseX, int mouseY) {
+        return GraphUtils.getLabelEFromPosition(generalController.getGraph(), mouseX, mouseY);
     }
 
     @Override
-    public void addNewElement(MouseEvent e) {
-        Edge temp = GraphUtils.getEdgeFromPosition(generalController.getGraph(), e.getX(), e.getY());
-        if (temp != null) {
-            if (temp.getLabel() == null) {
+    public void addNewElement(int mouseX, int mouseY) {
+        Edge owner = GraphUtils.getEdgeFromPosition(generalController.getGraph(), mouseX, mouseY);
+        if (owner != null) {
+            if (owner.getLabel() == null) {
                 LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());
-                labelE.setOwner(temp);
-                labelE.setHorizontalPlacement(shiftDown);
+                labelE.setOwner(owner);
                 labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
-                LabelEUtils.updatePosition(labelE);
+                if (shiftChangedWhileAdding) {
+                    labelE.setHorizontalPlacement(shiftDown);
+                }
+                int position = LabelEUtils.getPositionFromCursorLocation(owner, mouseX, mouseY);
+                labelE.setPosition(Math.abs(position));
+                labelE.setTopPlacement(position >= 0);
+                LabelEUtils.updateLocation(labelE);
                 new CreationRemovalOperation(generalController, labelE, OperationType.ADD_LABEL_EDGE, StringLiterals.INFO_LABEL_E_ADD, true);
             } else {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_LABEL_E_EXISTS));
@@ -147,84 +94,30 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
         } else {
             generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_FOR_LABEL));
         }
+        shiftChangedWhileAdding = false;
     }
 
     @Override
-    public void moveSelection(MouseEvent e) {
-        if(currentlyDraggedLabel == null) {
-            currentlyDraggedLabel = getElementFromPosition(e);
+    public void moveSelection(int mouseX, int mouseY) {
+        if (currentlyDraggedLabel == null) {
+            currentlyDraggedLabel = getElementFromPosition(mouseX, mouseY);
             generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedLabel, OperationType.MOVE_LABEL_EDGE, StringLiterals.INFO_LABEL_E_MOVE);
         } else {
-           continueMoving(e);
-        }
-    }
-
-    private void continueMoving(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        int bias;
-        Edge edge = currentlyDraggedLabel.getOwner();
-        LabelE labelE = currentlyDraggedLabel;
-        if (edge.getVertexA() == edge.getVertexB()) {
-            double angle = -Math.toDegrees(Math.atan2(x - edge.getArcMiddle().x, y - edge.getArcMiddle().y)) + 270 + edge.getRelativeEdgeAngle();
-            labelE.setPosition((int) Math.round((angle % 360) / 3.6));
-        } else {
-            if (edge.getRelativeEdgeAngle() == 0) {
-                Point p1 = edge.getInPoint();
-                Point p2 = edge.getOutPoint();
-
-                if (p2.x < p1.x) {
-                    Point temp = p2;
-                    p2 = p1;
-                    p1 = temp;
-                }
-
-                Point c = new Point(x, y);
-                double p1p2 = p1.distance(p2);
-                double p1c = p1.distance(c);
-                double p2c = p2.distance(c);
-                double mc = Line2D.ptLineDist((double) p1.x, (double) p1.y, (double) p2.x, (double) p2.y, (double) x, (double) y);
-
-                labelE.setTopPlacement(((p2.x - p1.x) * (c.y - p1.y) - (p2.y - p1.y) * (c.x - p1.x) < 0));
-
-                if (p1c * p1c > p2c * p2c + p1p2 * p1p2) {
-                    bias = 100;
-                } else if (p2c * p2c > p1c * p1c + p1p2 * p1p2) {
-                    bias = 0;
-                } else {
-                    bias = (int) Math.round(100 * Math.sqrt(p1c * p1c - mc * mc) / p1p2);
-                }
-                labelE.setPosition(bias);
-            } else {
-                double startAngle = (Math.toDegrees(Math.atan2(edge.getOutPoint().x - edge.getArcMiddle().x, edge.getOutPoint().y - edge.getArcMiddle().y)) + 270) % 360;
-                double endAngle = (Math.toDegrees(Math.atan2(edge.getInPoint().x - edge.getArcMiddle().x, edge.getInPoint().y - edge.getArcMiddle().y)) + 270) % 360;
-                double mouseAngle = (Math.toDegrees(Math.atan2(x - edge.getArcMiddle().x, y - edge.getArcMiddle().y)) + 270) % 360;
-
-                int position;
-                double alpha = (startAngle - mouseAngle + 360) % 360;
-                if (alpha > 180) {
-                    alpha -= 360;
-                }
-                double beta = (startAngle - endAngle + 360) % 360;
-                if (beta > 180) {
-                    beta -= 360;
-                }
-
-                position = (int) Math.round(100 * (alpha / beta));
-
-                if (position > -1 && position < 101) {
-                    labelE.setTopPlacement((edge.getArcMiddle().distance(new Point(x, y)) > edge.getArcRadius()));
-                    labelE.setPosition(position);
-                }
+            Edge owner = currentlyDraggedLabel.getOwner();
+            if (shiftChangedWhileAdding) {
+                currentlyDraggedLabel.setHorizontalPlacement(shiftDown);
             }
+            int position = LabelEUtils.getPositionFromCursorLocation(owner, mouseX, mouseY);
+            currentlyDraggedLabel.setPosition(Math.abs(position));
+            currentlyDraggedLabel.setTopPlacement(position >= 0);
         }
     }
 
     @Override
-    public void finishMovingElement() {
-        if(currentlyDraggedLabel != null) {
-            LabelEUtils.updatePosition(currentlyDraggedLabel);
+    public void finishMoving() {
+        if (currentlyDraggedLabel != null) {
+            LabelEUtils.updateLocation(currentlyDraggedLabel);
             currentDragOperation.finish();
             currentlyDraggedLabel = null;
         }
