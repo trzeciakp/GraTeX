@@ -112,13 +112,14 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
             }
         }
         comboBoxLineType = new JComboBox<LineType>(lineTypes.toArray(new LineType[0]));
-        comboBoxLineType.setBounds(101, 39, 80, 20);
+        //comboBoxLineType.setBounds(101, 39, 80, 20);
         comboBoxLineType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 //int newValue = ((Option) comboBoxLineType.getSelectedItem()).getValue();
                 LineType newValue = (LineType) comboBoxLineType.getSelectedItem();
                 //if ((newValue != -1) && (model.lineType != newValue) || (!changedByUser))
-                if (newValue != LineType.EMPTY && model.lineType != newValue || (!changedByUser)) {
+                if(!newValue.isEmpty() && model.lineType != newValue || !changedByUser) {
+                //if (newValue != LineType.EMPTY && model.lineType != newValue || (!changedByUser)) {
                     model.lineType = newValue;
                     changed();
                 } else {

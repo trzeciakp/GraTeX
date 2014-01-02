@@ -17,6 +17,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Vector;
 
 @SuppressWarnings("serial")
@@ -445,7 +446,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /************************ USTAWIANIE BOUNDS *******************************/
 
         int spacing = 35;
-        labels = new Vector<>();
+        labels = new ArrayList<>();
         labels.add(lblVertexType);
         labels.add(lblVertexSize);
         labels.add(lblColor);
@@ -458,7 +459,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
         for (int i = 0; i < labels.size(); i++)
             labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
-        components = new Vector<>();
+        components = new ArrayList<>();
         components.add(comboBoxVertexType);
         components.add(spinnerVertexSize);
         components.add(comboBoxVertexColor);

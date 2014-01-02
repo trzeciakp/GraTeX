@@ -41,4 +41,7 @@ public abstract class AbstractPropertyPanel extends JPanel {
         }
     }
 
+    public void focusFirstElement() {
+        components.get(0).requestFocus();
+    }
 }

@@ -51,6 +51,11 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         changedByUser = true;
     }
 
+    @Override
+    public void focusFirstElement() {
+        super.focusFirstElement();
+    }
+
     public LabelVertexPropertyPanel() {
         model = new LabelVertexPropertyModel();
         initialize();

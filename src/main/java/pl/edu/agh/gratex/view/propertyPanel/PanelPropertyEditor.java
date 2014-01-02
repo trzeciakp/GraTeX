@@ -45,6 +45,8 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
         for (GraphElement graphElement : selection) {
             graphElement.setModel(model);
         }
+        //TODO assure that disabled-enabled fields are
+        panelsMap.get(mode).setModel(model);
         operation.finish();
     }
 
@@ -88,7 +90,7 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     public void setEnabled(boolean flag) {
         panelsMap.get(mode).setEnabled(flag);
         if (flag) {
-            panelsMap.get(mode).components.get(0).requestFocus();
+            panelsMap.get(mode).focusFirstElement();
         }
     }
 
