@@ -56,24 +56,6 @@ public class LabelV extends GraphElement  {
     }
 
     @Override
-    public String toString() {
-        return "LabelV{" +
-                "text='" + getText() + '\'' +
-                ", font=" + Const.DEFAULT_FONT +
-                ", fontColor=" + getFontColor() +
-                ", position=" + getPosition() +
-                ", spacing=" + getSpacing() +
-                ", posX=" + posX +
-                ", posY=" + posY +
-                ", owner=" + owner +
-                ", drawX=" + drawX +
-                ", drawY=" + drawY +
-                ", outline=" + outline +
-                ", graph=" + graph +
-                '}';
-    }
-
-    @Override
     public GraphElementType getType() {
         return GraphElementType.LABEL_VERTEX;
     }
@@ -94,20 +76,17 @@ public class LabelV extends GraphElement  {
         propertyModel.setFontColor(fontColor);
     }
 
-    public int getPosition() {
-        return propertyModel.getPosition();
-    }
-
     public LabelPosition getLabelPosition() {
-        return LabelPosition.values()[propertyModel.getPosition() +1];
+        return propertyModel.getLabelPosition();
     }
 
     public void setLabelPosition(LabelPosition labelPosition) {
-        propertyModel.setPosition(labelPosition.getValue());
+        propertyModel.setLabelPosition(labelPosition);
     }
 
     public void setPosition(int position) {
-        propertyModel.setPosition(position);
+        //TODO try to get rid of usages of this function
+        propertyModel.setLabelPosition(LabelPosition.values()[position+1]);
     }
 
     public int getSpacing() {

@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.properties.ArrowType;
+import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
@@ -79,7 +80,7 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
 
         ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setText("Label");
         ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setFontColor(Color.black);
-        ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setPosition(PropertyModel.EMPTY);
+        ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setLabelPosition(LabelPosition.EMPTY);
         ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setSpacing(5);
 
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setText("Label");

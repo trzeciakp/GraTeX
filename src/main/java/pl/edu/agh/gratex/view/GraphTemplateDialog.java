@@ -13,6 +13,7 @@ import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 import pl.edu.agh.gratex.view.propertyPanel.PanelPropertyEditor;
@@ -205,7 +206,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
 
         LabelV labelV1 = (LabelV) graphElementFactory.create(GraphElementType.LABEL_VERTEX, graph);
         labelV1.setOwner(vertex2);
-        labelV1.setPosition(3);
+        labelV1.setLabelPosition(LabelPosition.SE);
         vertex1.setLabel(labelV1);
         graph.getLabelsV().add(labelV1);
 

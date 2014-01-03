@@ -38,12 +38,12 @@ public class LabelVUtils {
         int descent = fm.getDescent();
         int spacing = labelV.getSpacing();
 
-        Point exitPoint = Geometry.calculateEdgeExitPoint(labelV.getOwner(), (450 - 45 * labelV.getPosition()) % 360);
+        Point exitPoint = Geometry.calculateEdgeExitPoint(labelV.getOwner(), (450 - 45 * labelV.getLabelPosition().getValue()) % 360);
 
         double drawPosX = 0.0;
         double drawPosY = 0.0;
 
-        switch (labelV.getPosition()) {
+        switch (labelV.getLabelPosition().getValue()) {
             case 0: {
                 drawPosX = exitPoint.x;
                 drawPosY = exitPoint.y - spacing - height / 2;

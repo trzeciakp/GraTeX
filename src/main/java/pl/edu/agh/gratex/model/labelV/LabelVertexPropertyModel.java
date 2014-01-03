@@ -1,25 +1,26 @@
 package pl.edu.agh.gratex.model.labelV;
 
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.LabelPosition;
 
 import java.awt.*;
 
 public class LabelVertexPropertyModel extends PropertyModel {
     private String text = "";
     private Color fontColor = null;
-    private int position = PropertyModel.EMPTY;
+    private LabelPosition labelPosition = LabelPosition.EMPTY;
     private int spacing = PropertyModel.EMPTY;
 
     @Override
     public PropertyModel getCopy() {
         LabelVertexPropertyModel result = new LabelVertexPropertyModel();
         if (text != null) {
-            result.setText(new String(text));
+            result.setText(text);
         }
         if (fontColor != null) {
             result.setFontColor(new Color(fontColor.getRGB()));
         }
-        result.setPosition(position);
+        result.setLabelPosition(labelPosition);
         result.setSpacing(spacing);
         return result;
     }
@@ -37,8 +38,8 @@ public class LabelVertexPropertyModel extends PropertyModel {
             }
         }
 
-        if (model.position != position) {
-            position = -1;
+        if (model.labelPosition != labelPosition) {
+            labelPosition = LabelPosition.EMPTY;
         }
 
         if (model.spacing != spacing) {
@@ -58,8 +59,8 @@ public class LabelVertexPropertyModel extends PropertyModel {
             fontColor = new Color(model.fontColor.getRGB());
         }
 
-        if (model.position > -1) {
-            spacing = model.position;
+        if (!model.labelPosition.isEmpty()) {
+            labelPosition = model.labelPosition;
         }
 
         if (model.spacing > -1) {
@@ -83,12 +84,12 @@ public class LabelVertexPropertyModel extends PropertyModel {
         this.fontColor = fontColor;
     }
 
-    public int getPosition() {
-        return position;
+    public LabelPosition getLabelPosition() {
+        return labelPosition;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setLabelPosition(LabelPosition labelPosition) {
+        this.labelPosition = labelPosition;
     }
 
     public int getSpacing() {
