@@ -1,7 +1,5 @@
 package pl.edu.agh.gratex.controller.mouse;
 
-import pl.edu.agh.gratex.model.edge.Edge;
-
 import java.awt.*;
 import java.awt.event.MouseEvent;
 

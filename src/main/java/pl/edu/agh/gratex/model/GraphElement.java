@@ -35,7 +35,6 @@ public abstract class GraphElement {
     }
 
     public PropertyModel getModel() {
-        //TODO nie bylo getCopy(), powinno byc?
         return propertyModel.getCopy();
     }
 

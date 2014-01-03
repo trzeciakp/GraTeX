@@ -3,7 +3,6 @@ package pl.edu.agh.gratex.controller.mouse;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
@@ -11,11 +10,8 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
-/**
- *
- */
+
 public abstract class GraphElementMouseController {
     protected int mouseX;
     protected int mouseY;
@@ -33,8 +29,7 @@ public abstract class GraphElementMouseController {
         return graphElementFactory;
     }
 
-    public void setMouseLocation(int x, int y)
-    {
+    public void setMouseLocation(int x, int y) {
         mouseX = x;
         mouseY = y;
     }

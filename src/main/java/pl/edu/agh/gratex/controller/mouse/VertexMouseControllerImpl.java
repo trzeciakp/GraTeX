@@ -14,6 +14,7 @@ import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
 import java.awt.*;
 
+
 public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     private GeneralController generalController;
@@ -51,7 +52,6 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void addNewElement(int mouseX, int mouseY) {
         Vertex vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
-        //vertex.setModel(generalController.getGraph().getVertexDefaultModel());
         vertex.setPosX(mouseX);
         vertex.setPosY(mouseY);
         if (generalController.getGraph().gridOn) {

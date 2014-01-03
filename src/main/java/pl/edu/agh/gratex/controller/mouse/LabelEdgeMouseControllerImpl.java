@@ -15,9 +15,7 @@ import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 
 import java.awt.*;
 
-/**
- *
- */
+
 public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     private GeneralController generalController;
 
@@ -55,7 +53,6 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
             if (owner.getLabel() == null) {
                 LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());
                 labelE.setOwner(owner);
-                //labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
                 if (shiftChangedWhileAdding) {
                     labelE.setHorizontalPlacement(shiftDown);
                 }
@@ -79,7 +76,6 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
             if (owner.getLabel() == null) {
                 LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());
                 labelE.setOwner(owner);
-                //labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
                 if (shiftChangedWhileAdding) {
                     labelE.setHorizontalPlacement(shiftDown);
                 }
@@ -117,7 +113,6 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void finishMoving() {
         if (currentlyDraggedLabel != null) {
-            //currentlyDraggedLabel.updateLocation();
             currentDragOperation.finish();
             currentlyDraggedLabel = null;
         }

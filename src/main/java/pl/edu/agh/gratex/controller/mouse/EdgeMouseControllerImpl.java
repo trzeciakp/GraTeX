@@ -16,9 +16,7 @@ import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
 
-/**
- *
- */
+
 public class EdgeMouseControllerImpl extends GraphElementMouseController {
     private GeneralController generalController;
 
@@ -98,7 +96,6 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         } else {
             if (currentlyAddedEdge == null) {
                 currentlyAddedEdge = (Edge) getGraphElementFactory().create(GraphElementType.EDGE,generalController.getGraph());
-                //currentlyAddedEdge.setModel(generalController.getGraph().getEdgeDefaultModel());
                 currentlyAddedEdge.setVertexA(temp);
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_END));
             } else {
@@ -209,10 +206,5 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             changingEdgeAngle = false;
             currentlyDraggedEdge = null;
         }
-    }
-
-    // TODO Nie wiadomo czy to potrzebne, patrz github -> issues -> #11
-    public Edge getCurrentlyAddedEdge() {
-        return currentlyAddedEdge;
     }
 }
