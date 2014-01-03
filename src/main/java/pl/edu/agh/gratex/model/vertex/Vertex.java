@@ -75,6 +75,11 @@ public class Vertex extends GraphElement {
         return propertyModel.getNumber();
     }
 
+    public void setNumber(int number) {
+        propertyModel.setNumber(number);
+        this.text = GraphNumeration.digitalToAlphabetical(number);
+    }
+
     public int getRadius() {
         return propertyModel.getRadius();
     }
@@ -177,11 +182,6 @@ public class Vertex extends GraphElement {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public void setNumber(int number) {
-        propertyModel.setNumber(number);
-        this.text = GraphNumeration.digitalToAlphabetical(number);
     }
 
     public String getLabelInside() {

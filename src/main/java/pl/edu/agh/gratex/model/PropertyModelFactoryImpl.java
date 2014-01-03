@@ -59,7 +59,7 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
 
     public void initDefaultModels() {
         //TODO
-        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setNumber(-1);
+        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setNumber(PropertyModel.EMPTY);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setRadius(40);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setShape(1);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setVertexColor(new Color(new Float(1), new Float(0.5), new Float(0)));
@@ -67,22 +67,22 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLineWidth(1);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLineColor(Color.black);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setFontColor(Color.black);
-        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLabelInside(1);
+        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLabelInside(PropertyModel.YES);
 
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineType(LineType.SOLID);
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineWidth(1);
-        ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setDirected(0);
+        ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setDirected(PropertyModel.NO);
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineColor(Color.black);
-        ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setRelativeEdgeAngle(0);
+        ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setRelativeEdgeAngle(PropertyModel.EMPTY);
 
         ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setText("Label");
         ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setFontColor(Color.black);
-        ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setPosition(0);
+        ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setPosition(PropertyModel.EMPTY);
         ((LabelVertexPropertyModel) createDefaultModel(GraphElementType.LABEL_VERTEX)).setSpacing(5);
 
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setText("Label");
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setFontColor(Color.black);
-        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setPosition(50);
+        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setPosition(PropertyModel.EMPTY);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setSpacing(5);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setTopPlacement(1);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(0);

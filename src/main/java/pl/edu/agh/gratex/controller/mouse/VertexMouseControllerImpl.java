@@ -35,8 +35,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void drawCurrentlyAddedElement(Graphics2D g) {
         Vertex vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
-        //vertex.setModel(generalController.getGraph().getVertexDefaultModel());
-        VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
+        vertex.setNumber(generalController.getGraph().getGraphNumeration().getNextFreeNumber());
         vertex.setPosX(mouseX);
         vertex.setPosY(mouseY);
         if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) && VertexUtils.fitsIntoPage(vertex)) {
@@ -61,7 +60,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
 
         if (VertexUtils.fitsIntoPage(vertex)) {
             if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex)) {
-                VertexUtils.updateNumber(vertex, generalController.getGraph().getGraphNumeration().getNextFreeNumber());
+                vertex.setNumber(generalController.getGraph().getGraphNumeration().getNextFreeNumber());
                 new CreationRemovalOperation(generalController, vertex, OperationType.ADD_VERTEX, StringLiterals.INFO_VERTEX_ADD, true);
             } else {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_VERTEX_COLLISION));

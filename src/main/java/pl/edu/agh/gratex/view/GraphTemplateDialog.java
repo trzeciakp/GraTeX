@@ -10,15 +10,10 @@ import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.PropertyModelFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelV;
-import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
-import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 import pl.edu.agh.gratex.view.propertyPanel.PanelPropertyEditor;
 
@@ -43,17 +38,6 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
     private Graph graph;
     private boolean result;
 
-    //TODO convert fields to local
-    private Vertex vertex1;
-    private Vertex vertex2;
-    private Edge edge1;
-    private Edge edge2;
-    private Edge edge3;
-    private LabelV labelV1;
-    private LabelE labelE1;
-    private LabelE labelE2;
-    private LabelE labelE3;
-
     private JButton button_restoreDefaultSettings;
     private JCheckBox checkBox_applyToAll;
     private JButton button_save;
@@ -63,11 +47,6 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
     private PanelPropertyEditor panel_propertyEditor;
     private PanelPreview panel_preview;
     private JLabel label_hint;
-
-    private JPanel vertexPanel;
-    private JPanel edgePanel;
-    private JPanel labelVPanel;
-    private JPanel labelEPanel;
 
     private EnumMap<GraphElementType, PropertyModel> currentModels = new EnumMap<>(GraphElementType.class);
 
@@ -117,33 +96,9 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
             graphElement.setModel(model);
         }
         currentModels.get(modelType).updateWithModel(model);
-
-        /*if (model instanceof VertexPropertyModel) {
-            ((VertexPropertyModel) model).setNumber(-1);
-            vertex1.setModel(model);
-            graph.setVertexDefaultModel((VertexPropertyModel) vertex1.getModel());
-            graph.getVertexDefaultModel().setNumber(-1);
-        } else if (model instanceof EdgePropertyModel) {
-            ((EdgePropertyModel) model).setRelativeEdgeAngle(-1);
-            edge1.setModel(model);
-            edge2.setModel(model);
-            edge3.setModel(model);
-            graph.setEdgeDefaultModel((EdgePropertyModel) edge1.getModel());
-            graph.getEdgeDefaultModel().setRelativeEdgeAngle(-1);
-        } else if (model instanceof LabelVertexPropertyModel) {
-            labelV1.setModel(model);
-            graph.setLabelVDefaultModel((LabelVertexPropertyModel) labelV1.getModel());
-            graph.getLabelVDefaultModel().setText(null);
-        } else {
-            labelE1.setModel(model);
-            labelE2.setModel(model);
-            labelE3.setModel(model);
-            graph.setLabelEDefaultModel((LabelEdgePropertyModel) labelE1.getModel());
-            graph.getLabelEDefaultModel().setText(null);
-        } */
     }
 
-    private void setDefaultsModelsToAllGraphElements() {
+    private void setDefaultModelsToAllGraphElements() {
         PropertyModelFactory propertyModelFactory = graphElementFactory.getPropertyModelFactory();
         for (GraphElement graphElement : graph.getAllElements()) {
             PropertyModel model = propertyModelFactory.createDefaultModel(graphElement.getType()).getCopy();
@@ -172,23 +127,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
 
         button_restoreDefaultSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //graph.initDefaultModels();
-                //TODO czy potrzebne?
-                /*graph.getEdgeDefaultModel().setLoop(-1);
-                graph.getEdgeDefaultModel().setRelativeEdgeAngle(-1);
-                graph.getLabelVDefaultModel().setText(null);
-                graph.getLabelEDefaultModel().setText(null);*/
-                edge1.setRelativeEdgeAngle(300);
-                edge2.setRelativeEdgeAngle(180);
-                edge3.setRelativeEdgeAngle(0);
-                /*vertex1.setModel(graph.getVertexDefaultModel());
-                edge1.setModel(graph.getEdgeDefaultModel());
-                edge2.setModel(graph.getEdgeDefaultModel());
-                edge3.setModel(graph.getEdgeDefaultModel());
-                labelV1.setModel(graph.getLabelVDefaultModel());
-                labelE1.setModel(graph.getLabelEDefaultModel());
-                labelE2.setModel(graph.getLabelEDefaultModel());    */
-                setDefaultsModelsToAllGraphElements();
+                setDefaultModelsToAllGraphElements();
                 panel_preview.repaint();
                 modeController.setMode(ModeType.values()[tabbedPane.getSelectedIndex()]);
             }
@@ -229,81 +168,59 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         graph = new Graph();
         graph.gridOn = false;
 
-        /*
-        graph.setVertexDefaultModel((VertexPropertyModel) generalController.getGraph().getVertexDefaultModel().getCopy());
-        graph.setEdgeDefaultModel((EdgePropertyModel) generalController.getGraph().getEdgeDefaultModel().getCopy());
-        graph.getEdgeDefaultModel().setLoop(-1);
-        graph.getEdgeDefaultModel().setRelativeEdgeAngle(-1);
-        graph.setLabelVDefaultModel((LabelVertexPropertyModel) generalController.getGraph().getLabelVDefaultModel().getCopy());
-        graph.getLabelVDefaultModel().setText(null);
-        graph.setLabelEDefaultModel((LabelEdgePropertyModel) generalController.getGraph().getLabelEDefaultModel().getCopy());
-        graph.getLabelEDefaultModel().setText(null);*/
-
-        vertex1 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
-        VertexUtils.updateNumber(vertex1, 1);
-        vertex1.setPosX(240);
-        vertex1.setPosY(190);
+        Vertex vertex1 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
+        vertex1.setNumber(1);
+        VertexUtils.setPartOfNumeration(vertex1, true);
+        vertex1.setPosX(180);
+        vertex1.setPosY(240);
         graph.getVertices().add(vertex1);
-        //vertex1.setModel(graph.getVertexDefaultModel());
 
-        vertex2 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
-        VertexUtils.updateNumber(vertex1, 2);
-        vertex2.setShape(1);
-        vertex2.setVertexColor(new Color(200, 200, 200));
-        vertex2.setLineType(LineType.SOLID);
-        vertex2.setLineWidth(1);
-        vertex2.setLineColor(Color.black);
-        vertex2.setFontColor(Color.black);
-        vertex2.setLabelInside(true);
-        vertex2.setRadius(15);
-        vertex2.setPosX(490);
-        vertex2.setPosY(313);
+        Vertex vertex2 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
+        vertex2.setNumber(2);
+        VertexUtils.setPartOfNumeration(vertex2, true);
+        vertex2.setPosX(350);
+        vertex2.setPosY(240);
         graph.getVertices().add(vertex2);
-        //vertex2.setModel(graph.getVertexDefaultModel());
 
-        edge1 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
-        //edge1.setModel(graph.getEdgeDefaultModel());
+        Edge edge1 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
         edge1.setVertexA(vertex2);
         edge1.setVertexB(vertex1);
         edge1.setRelativeEdgeAngle(300);
         graph.getEdges().add(edge1);
 
-        edge2 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
-//        edge2.setModel(graph.getEdgeDefaultModel());
+        Edge edge2 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
         edge2.setVertexA(vertex1);
         edge2.setVertexB(vertex1);
         edge2.setRelativeEdgeAngle(180);
         graph.getEdges().add(edge2);
 
-        edge3 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
-//        edge3.setModel(graph.getEdgeDefaultModel());
+        Edge edge3 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
         edge3.setVertexA(vertex1);
         edge3.setVertexB(vertex2);
         edge3.setRelativeEdgeAngle(0);
         graph.getEdges().add(edge3);
 
-        labelV1 = (LabelV) graphElementFactory.create(GraphElementType.LABEL_VERTEX, graph);
-        labelV1.setOwner(vertex1);
+        LabelV labelV1 = (LabelV) graphElementFactory.create(GraphElementType.LABEL_VERTEX, graph);
+        labelV1.setOwner(vertex2);
+        labelV1.setPosition(3);
         vertex1.setLabel(labelV1);
-//        labelV1.setModel(graph.getLabelVDefaultModel());
         graph.getLabelsV().add(labelV1);
 
-        labelE1 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
+        LabelE labelE1 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
         labelE1.setOwner(edge1);
+        labelE1.setPosition(35);
         edge1.setLabel(labelE1);
-//        labelE1.setModel(graph.getLabelEDefaultModel());
         graph.getLabelsE().add(labelE1);
 
-        labelE2 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
+        LabelE labelE2 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
         labelE2.setOwner(edge2);
         edge2.setLabel(labelE2);
-//        labelE2.setModel(graph.getLabelEDefaultModel());
         graph.getLabelsE().add(labelE2);
 
-        labelE3 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
+        LabelE labelE3 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
         labelE3.setOwner(edge3);
+        labelE3.setPosition(35);
         edge3.setLabel(labelE3);
-//        labelE3.setModel(graph.getLabelEDefaultModel());
         graph.getLabelsE().add(labelE3);
 
         setTemplateModelsToAllGraphElements();
@@ -333,7 +250,8 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         panel_propertyEditor.disableLabelEdition();
         panel_propertyEditor.setModel(currentModels.get(GraphElementType.VERTEX));
 
-        vertexPanel = new JPanel();
+
+        JPanel vertexPanel = new JPanel();
         vertexPanel.setLayout(null);
         tabbedPane.addTab("Vertex", null, vertexPanel, null);
 
@@ -341,15 +259,15 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         vertexPanel.add(label_hint);
         vertexPanel.add(panel_preview);
 
-        edgePanel = new JPanel();
+        JPanel edgePanel = new JPanel();
         edgePanel.setLayout(null);
         tabbedPane.addTab("Edge", null, edgePanel, null);
 
-        labelVPanel = new JPanel();
+        JPanel labelVPanel = new JPanel();
         labelVPanel.setLayout(null);
         tabbedPane.addTab("Label (V)", null, labelVPanel, null);
 
-        labelEPanel = new JPanel();
+        JPanel labelEPanel = new JPanel();
         labelEPanel.setLayout(null);
         tabbedPane.addTab("Label (E)", null, labelEPanel, null);
 
@@ -377,21 +295,6 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
         panel_propertyEditor.setModel(currentModels.get(currentMode.getRelatedElementType()));
-        /*switch(currentMode)
-        {
-            case VERTEX:
-                panel_propertyEditor.setModel(graph.getVertexDefaultModel());
-                break;
-            case EDGE:
-                panel_propertyEditor.setModel(graph.getEdgeDefaultModel());
-                break;
-            case LABEL_VERTEX:
-                panel_propertyEditor.setModel(graph.getLabelVDefaultModel());
-                break;
-            case LABEL_EDGE:
-                panel_propertyEditor.setModel(graph.getLabelEDefaultModel());
-                break;
-        }                */
     }
 
     @Override

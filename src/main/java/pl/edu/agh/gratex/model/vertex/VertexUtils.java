@@ -12,16 +12,6 @@ import java.awt.*;
 import java.awt.geom.Area;
 
 public class VertexUtils {
-    public static void updateNumber(Vertex vertex, int number) {
-        vertex.setNumber(number);
-        //vertex.setText(GraphNumeration.digitalToAlphabetical(number));
-        /*if (vertex.getGraph().getGraphNumeration().isNumerationDigital()) {
-            vertex.setText(Integer.toString(number));
-        } else {
-            vertex.setText(GraphNumeration.digitalToAlphabetical(number));
-        } */
-    }
-
     public static void setPartOfNumeration(Vertex vertex, boolean flag) {
         vertex.getGraph().getGraphNumeration().setUsed(vertex.getNumber(), flag);
     }

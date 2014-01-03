@@ -123,7 +123,7 @@ public class VertexDrawable implements Drawable {
             if (dummy) {
                 g.setColor(DrawingTools.getDummyColor(vertex.getFontColor()));
             }
-            VertexUtils.updateNumber(vertex, vertex.getNumber());
+            vertex.setNumber(vertex.getNumber());
             if (vertex.getLabelInside() != null) {
                 g.setFont(Const.DEFAULT_FONT);
                 FontMetrics fm = g.getFontMetrics();

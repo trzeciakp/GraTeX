@@ -45,6 +45,7 @@ public class GraphNumeration {
     }
 
     public void setUsed(int index, boolean flag) {
+        System.out.println("index = [" + index + "], flag = [" + flag + "]");
         usedNumber[index] = flag;
     }
 

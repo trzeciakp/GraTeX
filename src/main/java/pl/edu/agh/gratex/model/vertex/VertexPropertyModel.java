@@ -90,7 +90,7 @@ public class VertexPropertyModel extends PropertyModel {
 
         if (model.number > -1) {
             VertexUtils.setPartOfNumeration((Vertex) owner, false);
-            VertexUtils.updateNumber((Vertex) owner, model.number);
+            number = model.number;
             VertexUtils.setPartOfNumeration((Vertex) owner, true);
         }
 
