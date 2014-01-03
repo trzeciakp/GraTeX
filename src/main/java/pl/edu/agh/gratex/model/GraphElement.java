@@ -24,6 +24,7 @@ public abstract class GraphElement {
     protected GraphElement(Graph graph, PropertyModel propertyModel) {
         this.graph = graph;
         this.propertyModel = propertyModel;
+        this.propertyModel.setOwner(this);
     }
 
     public void updateLocation() {
