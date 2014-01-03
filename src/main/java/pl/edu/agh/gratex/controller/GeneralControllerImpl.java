@@ -9,6 +9,7 @@ import pl.edu.agh.gratex.draw.DrawableFactoryImpl;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.GraphElementFactoryImpl;
+import pl.edu.agh.gratex.model.PropertyModelFactory;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.parser.Parser;
@@ -40,7 +41,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         operationController = new OperationControllerImpl(this);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
         DrawableFactory drawableFactory = new DrawableFactoryImpl(selectionController);
-        graphElementFactory = new GraphElementFactoryImpl(drawableFactory);
+        PropertyModelFactory propertyModelFactory = new PropertyModelFactory();
+        graphElementFactory = new GraphElementFactoryImpl(drawableFactory, propertyModelFactory);
 
         GraphElementControllersFactory elementControllersFactory = new GraphElementControllersFactoryImpl(this, new ColorMapperTmpImpl(), graphElementFactory);
         parseController = new ParseControllerImpl(elementControllersFactory);

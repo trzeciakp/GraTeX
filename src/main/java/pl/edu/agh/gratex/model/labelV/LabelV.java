@@ -26,8 +26,8 @@ public class LabelV extends GraphElement  {
     private int drawY;
     private Rectangle outline;
 
-    public LabelV(Vertex element, Graph graph) {
-        super(graph);
+    public LabelV(Vertex element, Graph graph, PropertyModel propertyModel) {
+        super(graph, propertyModel);
         setOwner(element);
         setText("Label");
     }

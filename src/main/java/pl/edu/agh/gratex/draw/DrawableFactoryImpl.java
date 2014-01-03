@@ -11,7 +11,7 @@ import java.util.EnumMap;
 public class DrawableFactoryImpl implements DrawableFactory {
 
     private SelectionController selectionController;
-    private EnumMap<GraphElementType, Drawable> defaultDrawable = new EnumMap<GraphElementType, Drawable>(GraphElementType.class);
+    private EnumMap<GraphElementType, Drawable> defaultDrawable = new EnumMap<>(GraphElementType.class);
     private DummyEdgeDrawable dummyEdgeDrawable;
 
     public DrawableFactoryImpl(SelectionController selectionController) {

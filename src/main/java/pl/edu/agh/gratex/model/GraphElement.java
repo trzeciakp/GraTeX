@@ -8,7 +8,6 @@ import java.awt.*;
 import java.util.List;
 
 
-@SuppressWarnings("serial")
 public abstract class GraphElement {
     protected Graph graph;
     protected Drawable drawable;
@@ -22,14 +21,9 @@ public abstract class GraphElement {
         this.drawable = drawable;
     }
 
-    protected GraphElement(Graph graph) {
+    protected GraphElement(Graph graph, PropertyModel propertyModel) {
         this.graph = graph;
-        if (graph != null) {
-            propertyModel = graph.getPropertyModelFactory().create(getType());
-        } else {
-            propertyModel = new PropertyModelFactory().create(getType());
-        }
-        propertyModel.setOwner(this);
+        this.propertyModel = propertyModel;
     }
 
     public void updateLocation() {

@@ -33,8 +33,8 @@ public class Edge extends GraphElement {
     private int[] arrowLine1 = null;
     private int[] arrowLine2 = null;
 
-    public Edge(Graph graph) {
-        super(graph);
+    public Edge(Graph graph, PropertyModel propertyModel) {
+        super(graph, propertyModel);
     }
 
     public boolean isLoop() {

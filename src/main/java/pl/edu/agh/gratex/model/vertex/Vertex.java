@@ -25,8 +25,8 @@ public class Vertex extends GraphElement {
     private LabelV label = null;
     private String text;
 
-    public Vertex(Graph graph) {
-        super(graph);
+    public Vertex(Graph graph, PropertyModel propertyModel) {
+        super(graph, propertyModel);
     }
 
     public Graph getGraph() {

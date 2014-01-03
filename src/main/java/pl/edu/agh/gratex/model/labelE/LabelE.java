@@ -27,8 +27,8 @@ public class LabelE extends GraphElement {
     private int drawX;
     private int drawY;
 
-    public LabelE(Edge element, Graph graph) {
-        super(graph);
+    public LabelE(Edge element, Graph graph, PropertyModel propertyModel) {
+        super(graph, propertyModel);
         setOwner(element);
         setText("Label");
     }

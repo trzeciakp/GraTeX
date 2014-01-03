@@ -7,7 +7,6 @@ import pl.edu.agh.gratex.model.GraphElement;
  *
  */
 public interface DrawableFactory {
-
     Drawable createDefaultDrawable(GraphElementType type);
     Drawable createDummyEdgeDrawable();
 }
