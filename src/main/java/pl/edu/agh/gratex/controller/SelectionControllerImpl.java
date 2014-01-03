@@ -30,6 +30,7 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
         mode = currentMode;
+        clearSelection();
     }
 
     @Override
@@ -40,6 +41,7 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     @Override
     public void toolChanged(ToolType previousTool, ToolType currentTool) {
         tool = currentTool;
+        clearSelection();
     }
 
     @Override
