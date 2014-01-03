@@ -24,6 +24,7 @@ public abstract class Operation {
     }
 
     public String getLatexCode(GraphElement element, ParseController parseController) {
+        element.updateLocation();
         return parseController.getParserByElementType(element.getType()).parseToLatex(element);
     }
 
