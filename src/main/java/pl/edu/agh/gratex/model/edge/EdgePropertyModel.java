@@ -24,11 +24,39 @@ public class EdgePropertyModel extends PropertyModel {
         if (lineColor != null) {
             result.setLineColor(new Color(lineColor.getRGB()));
         }
-        result.setRelativeEdgeAngle(relativeEdgeAngle);
         result.setLoop(isLoop);
+        result.setRelativeEdgeAngle(relativeEdgeAngle);
         result.setDirected(directed);
 
         return result;
+    }
+
+    @Override
+    public void mergeWithModel(PropertyModel pm) {
+        EdgePropertyModel model = (EdgePropertyModel) pm;
+        if (model.getLineType() != LineType.EMPTY) {
+            lineType = model.getLineType();
+        }
+
+        if (model.getLineWidth() > -1) {
+            lineWidth = model.getLineWidth();
+        }
+
+        if (model.getDirected() > -1) {
+            directed = model.getDirected();
+        }
+
+        if (model.getLineColor() != null) {
+            lineColor = new Color(model.getLineColor().getRGB());
+        }
+
+        if (model.getRelativeEdgeAngle() > -1) {
+            relativeEdgeAngle = model.getRelativeEdgeAngle();
+        }
+
+        if (model.getArrowType() > -1) {
+            arrowType = model.getArrowType();
+        }
     }
 
     @Override
@@ -63,34 +91,6 @@ public class EdgePropertyModel extends PropertyModel {
 
         if (model.arrowType != arrowType) {
             arrowType = -1;
-        }
-    }
-
-    @Override
-    public void mergeWithModel(PropertyModel pm) {
-        EdgePropertyModel model = (EdgePropertyModel) pm;
-        if (model.getLineType() != LineType.EMPTY) {
-            lineType = model.getLineType();
-        }
-
-        if (model.getLineWidth() > -1) {
-            lineWidth = model.getLineWidth();
-        }
-
-        if (model.getDirected() > -1) {
-            directed = model.getDirected();
-        }
-
-        if (model.getLineColor() != null) {
-            lineColor = new Color(model.getLineColor().getRGB());
-        }
-
-        if (model.getRelativeEdgeAngle() > -1) {
-            relativeEdgeAngle = model.getRelativeEdgeAngle();
-        }
-
-        if (model.getArrowType() > -1) {
-            arrowType = model.getArrowType();
         }
     }
 

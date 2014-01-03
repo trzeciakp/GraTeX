@@ -26,6 +26,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     private Edge currentlyDraggedEdge;
     private AlterationOperation currentDragOperation;
     private boolean changingEdgeAngle;
+    private boolean disconnectedVertexA;
     private Vertex edgeDragDummy;
 
     public EdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
@@ -156,8 +157,10 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 edgeDragDummy.setRadius(2);
                 if (c.distance(va) < c.distance(vb)) {
                     edge.setVertexA(edgeDragDummy);
+                    disconnectedVertexA = true;
                 } else {
                     edge.setVertexB(edgeDragDummy);
+                    disconnectedVertexA = false;
                 }
             }
         }
@@ -169,7 +172,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         } else {
             Vertex vertex;
             if ((vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY)) != null) {
-                if (currentlyDraggedEdge.getVertexA() == edgeDragDummy) {
+                if (disconnectedVertexA) {
                     currentlyDraggedEdge.setVertexA(vertex);
                 } else {
                     currentlyDraggedEdge.setVertexB(vertex);
@@ -179,6 +182,11 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 edgeDragDummy.setPosX(mouseX);
                 edgeDragDummy.setPosY(mouseY);
                 currentlyDraggedEdge.setRelativeEdgeAngle(0);
+                if (disconnectedVertexA) {
+                    currentlyDraggedEdge.setVertexA(edgeDragDummy);
+                } else {
+                    currentlyDraggedEdge.setVertexB(edgeDragDummy);
+                }
             }
         }
     }

@@ -42,6 +42,13 @@ public class Edge extends GraphElement {
     }
 
     @Override
+    public PropertyModel getModel() {
+        EdgePropertyModel pm = (EdgePropertyModel) propertyModel.getCopy();
+        pm.setLoop(isLoop() ? PropertyModel.YES : PropertyModel.NO);
+        return pm;
+    }
+
+    @Override
     public void updateLocation() {
         EdgeUtils.updateLocation(this);
     }

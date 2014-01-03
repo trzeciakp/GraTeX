@@ -194,7 +194,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             if (templateGraph.gridOn) {
                 List<GraphElement> elements = graph.getAllElements();
                 AlterationOperation operation = new AlterationOperation(this, elements, OperationType.TEMPLATE_GLOBAL_APPLY, StringLiterals.INFO_TEMPLATE_APPLIED_GLOBALLY);
-                // TODO Na razie robie tak żeby działało, może kiedyś uda się to ładniej napisać
                 for (GraphElement graphElement : elements) {
                     switch (graphElement.getType()) {
                         case VERTEX:
@@ -306,7 +305,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     // Internal functions
 
     private boolean checkForUnsavedProgress() {
-        // TODO this nie bedzie potrzebne, czytaj FileManager
         if(fileManager.hasContentChanged(graph)) {
             Object[] options = {"Save", "Don't save", "Cancel"};
             int option = JOptionPane.showOptionDialog(null, "There have been changes since last save.\n"

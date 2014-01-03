@@ -15,8 +15,8 @@ import java.util.*;
 import java.util.List;
 
 
+@SuppressWarnings("serial")
 public class EdgePropertyPanel extends AbstractPropertyPanel {
-    private static final long serialVersionUID = 5389175138358360647L;
 
     private EdgePropertyModel model;
     private JLabel lblLineType;

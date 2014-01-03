@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model.labelE;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
+import java.util.LinkedList;
 
 public class LabelEdgePropertyModel extends PropertyModel {
     private String text = "";
@@ -30,6 +31,35 @@ public class LabelEdgePropertyModel extends PropertyModel {
         result.setHorizontalPlacement(horizontalPlacement);
 
         return result;
+    }
+
+    @Override
+    public void mergeWithModel(PropertyModel pm) {
+        LabelEdgePropertyModel model = (LabelEdgePropertyModel) pm;
+
+        if (model.getText() != null) {
+            text = new String(model.getText());
+        }
+
+        if (model.getFontColor() != null) {
+            fontColor = new Color(model.getFontColor().getRGB());
+        }
+
+        if (model.getPosition() > -1) {
+            position = model.getPosition();
+        }
+
+        if (model.getSpacing() > -1) {
+            spacing = model.getSpacing();
+        }
+
+        if (model.getTopPlacement() > -1) {
+            topPlacement = model.getTopPlacement();
+        }
+
+        if (model.getHorizontalPlacement() > -1) {
+            horizontalPlacement = model.getHorizontalPlacement();
+        }
     }
 
     @Override
@@ -64,35 +94,6 @@ public class LabelEdgePropertyModel extends PropertyModel {
 
         if (model.isLoop != isLoop) {
             isLoop = -1;
-        }
-    }
-
-    @Override
-    public void mergeWithModel(PropertyModel pm) {
-        LabelEdgePropertyModel model = (LabelEdgePropertyModel) pm;
-
-        if (model.getText() != null) {
-            text = new String(model.getText());
-        }
-
-        if (model.getFontColor() != null) {
-            fontColor = new Color(model.getFontColor().getRGB());
-        }
-
-        if (model.getPosition() > -1) {
-            position = model.getPosition();
-        }
-
-        if (model.getSpacing() > -1) {
-            spacing = model.getSpacing();
-        }
-
-        if (model.getTopPlacement() > -1) {
-            topPlacement = model.getTopPlacement();
-        }
-
-        if (model.getHorizontalPlacement() > -1) {
-            horizontalPlacement = model.getHorizontalPlacement();
         }
     }
 

@@ -76,7 +76,7 @@ public class EdgeUtils {
                         mouseY - edge.getVertexA().getPosY())) + 270;
                 angle = angle - Math.toDegrees(Math.atan2(
                         edge.getVertexB().getPosX() - edge.getVertexA().getPosX(),
-                        edge.getVertexB().getPosY() - edge.getVertexA().getPosY())) + 270;
+                        edge.getVertexB().getPosY() - edge.getVertexA().getPosY())) + 90;
             } else {
                 // Cursor is closer to vertex B
                 angle = Math.toDegrees(Math.atan2(

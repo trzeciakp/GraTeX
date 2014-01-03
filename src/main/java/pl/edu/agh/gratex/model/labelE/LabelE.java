@@ -34,6 +34,13 @@ public class LabelE extends GraphElement {
     }
 
     @Override
+    public PropertyModel getModel() {
+        LabelEdgePropertyModel pm = (LabelEdgePropertyModel) propertyModel.getCopy();
+        pm.setLoop(owner.isLoop() ? PropertyModel.YES : PropertyModel.NO);
+        return pm;
+    }
+
+    @Override
     public void addToGraph() {
         graph.getLabelsE().add(this);
         getOwner().setLabel(this);

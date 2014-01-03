@@ -186,14 +186,6 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
             dummySubgraph.drawAll(g, mouseX, mouseY);
         }
     }
-
-    // TODO Nie wiadomo czy to potrzebne, patrz github -> issues -> #11
-    @Override
-    public boolean isEdgeCurrentlyAdded(Edge edge) {
-        //TODO
-        return ((EdgeMouseControllerImpl) controllers.get(ModeType.EDGE)).getCurrentlyAddedEdge() == edge;
-    }
-
     @Override
     public void cancelCurrentOperation() {
         controllers.get(mode).reset();
