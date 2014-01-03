@@ -103,9 +103,6 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
                 new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
                 currentlyAddedEdge = null;
-
-
-
             }
         }
     }
