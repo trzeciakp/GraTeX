@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
+import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
@@ -72,6 +73,7 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineType(LineType.SOLID);
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineWidth(1);
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setDirected(PropertyModel.NO);
+        ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setArrowType(ArrowType.BASIC.getValue());
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineColor(Color.black);
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setRelativeEdgeAngle(PropertyModel.EMPTY);
 
