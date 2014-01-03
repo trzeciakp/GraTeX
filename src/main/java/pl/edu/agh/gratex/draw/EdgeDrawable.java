@@ -55,7 +55,7 @@ public class EdgeDrawable implements Drawable {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
                     g.setStroke(drawingStroke);
-                    g.drawLine(vertexA.getPosX(), vertexA.getPosY(), vertexB.getPosX(), vertexB.getPosY());
+                    g.drawLine(edge.getOutPoint().x, edge.getOutPoint().y, edge.getInPoint().x, edge.getInPoint().y);
                 }
 
                 g.setColor(edge.getLineColor());
@@ -63,7 +63,7 @@ public class EdgeDrawable implements Drawable {
                     g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
                 }
                 g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
-                g.drawLine(vertexA.getPosX(), vertexA.getPosY(), vertexB.getPosX(), vertexB.getPosY());
+                g.drawLine(edge.getOutPoint().x, edge.getOutPoint().y, edge.getInPoint().x, edge.getInPoint().y);
             }
             if (shouldVisualizeAngle(edge)) {
                 drawAngleVisualisation(edge, g);
