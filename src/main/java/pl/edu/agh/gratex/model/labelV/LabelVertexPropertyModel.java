@@ -47,7 +47,7 @@ public class LabelVertexPropertyModel extends PropertyModel {
     }
 
     @Override
-    public void mergeWithModel(PropertyModel pm) {
+    public void updateWithModel(PropertyModel pm) {
         LabelVertexPropertyModel model = (LabelVertexPropertyModel) pm;
 
         if (model.text != null) {

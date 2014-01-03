@@ -34,7 +34,7 @@ public class LabelEdgePropertyModel extends PropertyModel {
     }
 
     @Override
-    public void mergeWithModel(PropertyModel pm) {
+    public void updateWithModel(PropertyModel pm) {
         LabelEdgePropertyModel model = (LabelEdgePropertyModel) pm;
 
         if (model.getText() != null) {

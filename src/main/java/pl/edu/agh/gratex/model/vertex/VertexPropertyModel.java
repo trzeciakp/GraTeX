@@ -85,7 +85,7 @@ public class VertexPropertyModel extends PropertyModel {
     }
 
     @Override
-    public void mergeWithModel(PropertyModel pm) {
+    public void updateWithModel(PropertyModel pm) {
         VertexPropertyModel model = (VertexPropertyModel) pm;
 
         if (model.number > -1) {

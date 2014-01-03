@@ -69,7 +69,7 @@ public class Vertex extends GraphElement {
     }
 
     public void setModel(PropertyModel pm) {
-        propertyModel.mergeWithModel(pm);
+        propertyModel.updateWithModel(pm);
     }
 
     public PropertyModel getModel() {

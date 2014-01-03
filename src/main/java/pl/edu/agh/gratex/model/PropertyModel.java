@@ -91,7 +91,7 @@ public abstract class PropertyModel {
 
     public abstract void andOperator(PropertyModel pm);
 
-    public abstract void mergeWithModel(PropertyModel pm);
+    public abstract void updateWithModel(PropertyModel pm);
 
     public abstract PropertyModel getCopy();
 

@@ -32,7 +32,7 @@ public class EdgePropertyModel extends PropertyModel {
     }
 
     @Override
-    public void mergeWithModel(PropertyModel pm) {
+    public void updateWithModel(PropertyModel pm) {
         EdgePropertyModel model = (EdgePropertyModel) pm;
         if (model.getLineType() != LineType.EMPTY) {
             lineType = model.getLineType();
