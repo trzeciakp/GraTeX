@@ -74,10 +74,14 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
         if (generalController.getGraph() != null) {
             paintGrid(g2d, generalController.getGraph());
-            generalController.getGraph().drawAll(g2d);
 
             if (mouseInWorkspace) {
                 mouseController.drawCurrentlyAddedElement(g2d);
+            }
+
+            generalController.getGraph().drawAll(g2d);
+
+            if (mouseInWorkspace) {
                 paintCopiedSubgraph(g2d);
             }
 

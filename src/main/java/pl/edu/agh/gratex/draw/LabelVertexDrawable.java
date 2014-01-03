@@ -32,7 +32,7 @@ public class LabelVertexDrawable implements Drawable {
             g.fill(labelV.getOutline());
         }
 
-        g.setFont(labelV.getFont());
+        g.setFont(Const.DEFAULT_FONT);
         g.setColor(labelV.getFontColor());
         if (dummy) {
             g.setColor(DrawingTools.getDummyColor(labelV.getFontColor()));

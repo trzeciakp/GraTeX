@@ -1,10 +1,8 @@
 package pl.edu.agh.gratex.model.labelE;
 
 
-import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
@@ -12,29 +10,18 @@ import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
-import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
 
 @SuppressWarnings("serial")
-public class LabelE extends GraphElement implements Serializable {
+public class LabelE extends GraphElement {
+    private LabelEdgePropertyModel propertyModel = new LabelEdgePropertyModel(this);
 
-    // Wartości edytowalne przez użytkowanika
-    private String text;
-    private Font font = Const.DEFAULT_FONT;
-    private Color fontColor;
-    private int position;                                        // Procent przesunięcia na krawędzie
-    private int spacing;                                        // odleglość napisu od krawędzi
-    private boolean topPlacement;                                    // Czy etykieta jest nad krawędzią
-    private boolean horizontalPlacement;                            // Czy etykieta jest zawsze poziomo (nie = równolegle do krawędzi)
+    private int posX;
+    private int posY;
+    private int angle;
 
-    // Wartości potrzebne do parsowania
-    private int posX;                                            // Środek stringa x
-    private int posY;                                            // Środek stringa y
-    private int angle;                                            // Nachylenie (0 stopni gdy pozioma)
-
-    // Pozostałe
     private Edge owner;
     private Polygon outline;
     private int drawX;
@@ -44,7 +31,6 @@ public class LabelE extends GraphElement implements Serializable {
         super(graph);
         setOwner(element);
         setText("Label");
-        //setDrawable(new LabelEdgeDrawable());
     }
 
     @Override
@@ -71,51 +57,27 @@ public class LabelE extends GraphElement implements Serializable {
     }
 
     public void setModel(PropertyModel pm) {
-        LabelEdgePropertyModel model = (LabelEdgePropertyModel) pm;
-
-        if (model.text != null) {
-            setText(model.text);
-        }
-
-        if (model.fontColor != null) {
-            setFontColor(new Color(model.fontColor.getRGB()));
-        }
-
-        if (model.position > -1) {
-            setPosition(model.position);
-        }
-
-        if (model.spacing > -1) {
-            setSpacing(model.spacing);
-        }
-
-        if (model.topPlacement > -1) {
-            setTopPlacement((model.topPlacement == 1));
-        }
-
-        if (model.horizontalPlacement > -1) {
-            setHorizontalPlacement((model.horizontalPlacement == 1));
-        }
+        propertyModel.mergeWithModel(pm);
     }
 
     public PropertyModel getModel() {
-        LabelEdgePropertyModel result = new LabelEdgePropertyModel();
+        LabelEdgePropertyModel result = new LabelEdgePropertyModel(this);
 
-        result.text = new String(getText());
-        result.fontColor = new Color(getFontColor().getRGB());
-        result.position = getPosition();
-        result.spacing = getSpacing();
-        result.topPlacement = 0;
-        result.isLoop = PropertyModel.NO;
+        result.setText(new String(getText()));
+        result.setFontColor(new Color(getFontColor().getRGB()));
+        result.setPosition(getPosition());
+        result.setSpacing(getSpacing());
+        result.setTopPlacement(0);
+        result.setLoop(PropertyModel.NO);
         if (getOwner().getVertexA() == getOwner().getVertexB()) {
-            result.isLoop = PropertyModel.YES;
+            result.setLoop(PropertyModel.YES);
         }
         if (isTopPlacement()) {
-            result.topPlacement = 1;
+            result.setTopPlacement(1);
         }
-        result.horizontalPlacement = 0;
+        result.setHorizontalPlacement(0);
         if (isHorizontalPlacement()) {
-            result.horizontalPlacement = 1;
+            result.setHorizontalPlacement(1);
         }
 
         return result;
@@ -126,85 +88,68 @@ public class LabelE extends GraphElement implements Serializable {
         return GraphElementType.LABEL_EDGE;
     }
 
-    @Override
-    public Graph getGraph() {
-        return graph;
-    }
-/*
-    public void draw(Graphics2D g2d, boolean dummy) {
-        LabelEUtils.draw(this, g2d, dummy);
-    }*/
-
     public String getText() {
-        return text;
+        return propertyModel.getText();
     }
 
     public void setText(String text) {
-        this.text = text;
-    }
-
-    public Font getFont() {
-        return font;
-    }
-
-    public void setFont(Font font) {
-        this.font = font;
+        propertyModel.setText(text);
     }
 
     public Color getFontColor() {
-        return fontColor;
+        return propertyModel.getFontColor();
     }
 
     public void setFontColor(Color fontColor) {
-        this.fontColor = fontColor;
+        propertyModel.setFontColor(fontColor);
     }
 
     public int getPosition() {
-        return position;
+        return propertyModel.getPosition();
     }
 
     public void setPosition(int position) {
-        this.position = position;
+        propertyModel.setPosition(position);
     }
 
     public int getSpacing() {
-        return spacing;
+        return propertyModel.getSpacing();
     }
 
     public void setSpacing(int spacing) {
-        this.spacing = spacing;
+        propertyModel.setSpacing(spacing);
     }
 
     public boolean isTopPlacement() {
-        return topPlacement;
+        return propertyModel.getTopPlacement() == 1;
     }
 
     public void setTopPlacement(boolean topPlacement) {
-        this.topPlacement = topPlacement;
+        propertyModel.setTopPlacement(topPlacement ? 1 : 0);
     }
 
     public void setTopPlacement(LabelTopPlacement topPlacement) {
-        this.topPlacement = (topPlacement == LabelTopPlacement.ABOVE);
+        propertyModel.setTopPlacement((topPlacement == LabelTopPlacement.ABOVE) ? 1 : 0);
     }
 
     public LabelTopPlacement getTopPlacement() {
-        return (topPlacement? LabelTopPlacement.ABOVE: LabelTopPlacement.BELOW);
+        return (propertyModel.getTopPlacement() == 1 ? LabelTopPlacement.ABOVE: LabelTopPlacement.BELOW);
     }
 
     public boolean isHorizontalPlacement() {
-        return horizontalPlacement;
+        return propertyModel.getHorizontalPlacement() == 1;
     }
 
     public void setHorizontalPlacement(boolean horizontalPlacement) {
-        this.horizontalPlacement = horizontalPlacement;
+        propertyModel.setHorizontalPlacement(horizontalPlacement ? 1 : 0);
     }
 
     public void setHorizontalPlacement(LabelHorizontalPlacement horizontalPlacement) {
-        this.horizontalPlacement = (horizontalPlacement == LabelHorizontalPlacement.LEVEL);
+        propertyModel.setHorizontalPlacement((horizontalPlacement == LabelHorizontalPlacement.LEVEL) ? 1 : 0);
     }
 
     public LabelHorizontalPlacement getHorizontalPlacement() {
-        return (horizontalPlacement? LabelHorizontalPlacement.LEVEL: LabelHorizontalPlacement.TANGENT);
+        return (propertyModel.getHorizontalPlacement() == 1 ? LabelHorizontalPlacement.LEVEL: LabelHorizontalPlacement.TANGENT);
     }
 
     public int getPosX() {

@@ -98,10 +98,10 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             spinnerNumber.setValue(model.number);
         } else
             spinnerNumber.setValue(GraphNumeration.digitalToAlphabetical(model.number));
-        if (model.type == -1)
+        if (model.shape == -1)
             comboBoxVertexType.setSelectedIndex(0);
         else
-            comboBoxVertexType.setSelectedIndex(model.type);
+            comboBoxVertexType.setSelectedIndex(model.shape);
         if (model.radius == -1)
             spinnerVertexSize.setValue(" ");
         else
@@ -131,17 +131,17 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         Option[] vertexTypes = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(ShapeType.CIRCLE.getValue(), "circle"),
                 new Option(ShapeType.TRIANGLE.getValue(), "triangle"), new Option(ShapeType.SQUARE.getValue(), "square"),
                 new Option(ShapeType.PENTAGON.getValue(), "pentagon"), new Option(ShapeType.HEXAGON.getValue(), "hexagon")};
-        comboBoxVertexType = new JComboBox<Option>(vertexTypes);
+        comboBoxVertexType = new JComboBox<>(vertexTypes);
         comboBoxVertexType.setBounds(101, 89, 80, 20);
         comboBoxVertexType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxVertexType.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.type != newValue) || (!changedByUser)) {
-                    model.type = newValue;
+                if ((newValue != -1) && (model.shape != newValue) || (!changedByUser)) {
+                    model.shape = newValue;
                     changed();
                 } else {
-                    if (model.type != -1)
-                        comboBoxVertexType.setSelectedIndex(model.type);
+                    if (model.shape != -1)
+                        comboBoxVertexType.setSelectedIndex(model.shape);
                     else
                         comboBoxVertexType.setSelectedIndex(0);
                 }

@@ -79,7 +79,15 @@ public abstract class PropertyModel implements Serializable {
 
     }
 
+    protected GraphElement owner;
+
+    public PropertyModel(GraphElement owner) {
+        this.owner = owner;
+    }
+
     public abstract void andOperator(PropertyModel pm);
+
+    public abstract void mergeWithModel(PropertyModel pm);
 
     public static PropertyModel andOpertarorList(GraphElementType type, List<? extends GraphElement> elements) {
         //TODO

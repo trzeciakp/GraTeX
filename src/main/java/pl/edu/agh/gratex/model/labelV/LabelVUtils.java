@@ -32,7 +32,7 @@ public class LabelVUtils {
 
     // Calculates the location of LabelV and attributes needed for parsing
     public static void updateLocation(LabelV labelV) {
-        FontMetrics fm = new Canvas().getFontMetrics(labelV.getFont());
+        FontMetrics fm = new Canvas().getFontMetrics(Const.DEFAULT_FONT);
         int width = fm.stringWidth(labelV.getText());
         int height = fm.getAscent();
         int descent = fm.getDescent();

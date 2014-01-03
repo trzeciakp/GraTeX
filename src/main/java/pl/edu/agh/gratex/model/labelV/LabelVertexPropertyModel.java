@@ -1,19 +1,28 @@
 package pl.edu.agh.gratex.model.labelV;
 
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
 import java.io.Serializable;
 
-public class LabelVertexPropertyModel extends PropertyModel implements Serializable {
-    private static final long serialVersionUID = -848169351667747331L;
-
-    public String text;
-    public Color fontColor;
-    public int position;
-    public int spacing;
+public class LabelVertexPropertyModel extends PropertyModel {
+    private String text;
+    private Color fontColor;
+    private int position;
+    private int spacing;
 
     public LabelVertexPropertyModel() {
+        super(null);
+        init();
+    }
+
+    public LabelVertexPropertyModel(GraphElement owner) {
+        super(owner);
+        init();
+    }
+
+    private void init() {
         text = "";
         fontColor = null;
         position = PropertyModel.EMPTY;
@@ -21,6 +30,7 @@ public class LabelVertexPropertyModel extends PropertyModel implements Serializa
     }
 
     public LabelVertexPropertyModel(LabelVertexPropertyModel pm) {
+        super(null);
         copy(pm);
 
     }
@@ -56,5 +66,58 @@ public class LabelVertexPropertyModel extends PropertyModel implements Serializa
         if (model.spacing != spacing) {
             spacing = -1;
         }
+    }
+
+    @Override
+    public void mergeWithModel(PropertyModel pm) {
+        LabelVertexPropertyModel model = (LabelVertexPropertyModel) pm;
+
+        if (model.text != null) {
+            text = new String(model.text);
+        }
+
+        if (model.fontColor != null) {
+            fontColor = new Color(model.fontColor.getRGB());
+        }
+
+        if (model.position > -1) {
+            spacing = model.position;
+        }
+
+        if (model.spacing > -1) {
+            spacing = model.spacing;
+        }
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Color getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(Color fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
     }
 }

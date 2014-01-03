@@ -36,7 +36,7 @@ public class LabelEdgeDrawable implements Drawable {
         if (dummy) {
             g.setColor(DrawingTools.getDummyColor(labelE.getFontColor()));
         }
-        g.setFont(labelE.getFont());
+        g.setFont(Const.DEFAULT_FONT);
         if (labelE.isHorizontalPlacement()) {
             g.drawString(labelE.getText(), labelE.getDrawX(), labelE.getDrawY());
         } else {

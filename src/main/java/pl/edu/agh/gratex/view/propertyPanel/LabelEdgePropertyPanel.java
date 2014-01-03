@@ -14,8 +14,8 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 
+@SuppressWarnings("serial")
 public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
-    private static final long serialVersionUID = -1874186094439321153L;
 
     private LabelEdgePropertyModel model;
     private JLabel labelText;
@@ -46,32 +46,32 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
     public void setModel(PropertyModel pm) {
         changedByUser = false;
         model = new LabelEdgePropertyModel((LabelEdgePropertyModel) pm);
-        textField.setText(model.text);
+        textField.setText(model.getText());
 
         spinnerPosition.setVisible(true);
         comboBoxPosition.setVisible(false);
-        comboBoxFontColor.setSelectedItem(model.fontColor);
-        if (model.isLoop < PropertyModel.YES) {
-            if (model.position == -1)
+        comboBoxFontColor.setSelectedItem(model.getFontColor());
+        if (model.getLoop() < PropertyModel.YES) {
+            if (model.getPosition() == -1)
                 spinnerPosition.setValue(" ");
             else
-                spinnerPosition.setValue(model.position + " %");
-        } else if (model.isLoop == PropertyModel.YES) {
+                spinnerPosition.setValue(model.getPosition() + " %");
+        } else if (model.getLoop() == PropertyModel.YES) {
             lblPlace.setEnabled(false);
             comboBoxPlace.setEnabled(false);
             lblRotation.setEnabled(false);
             comboBoxRotation.setEnabled(false);
             spinnerPosition.setVisible(false);
             comboBoxPosition.setVisible(true);
-            comboBoxPosition.setSelectedIndex((model.position - 25) / 25);
+            comboBoxPosition.setSelectedIndex((model.getPosition() - 25) / 25);
         }
 
-        if (model.spacing == -1)
+        if (model.getSpacing() == -1)
             spinnerDistance.setValue(" ");
         else
-            spinnerDistance.setValue(model.spacing + " px");
-        comboBoxPlace.setSelectedIndex(model.topPlacement + 1);
-        comboBoxRotation.setSelectedIndex(model.horizontalPlacement + 1);
+            spinnerDistance.setValue(model.getSpacing() + " px");
+        comboBoxPlace.setSelectedIndex(model.getTopPlacement() + 1);
+        comboBoxRotation.setSelectedIndex(model.getHorizontalPlacement() + 1);
 
         changedByUser = true;
     }
@@ -93,8 +93,8 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         textField = new JTextField();
         textField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (!textField.getText().equals(model.text)) {
-                    model.text = textField.getText();
+                if (!textField.getText().equals(model.getText())) {
+                    model.setText(textField.getText());
                     changed();
                 }
             }
@@ -116,12 +116,12 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
                 if (changedByUser) {
                     Color newValue = (Color) comboBoxFontColor.getSelectedItem();
                     if (newValue != null) {
-                        if (!newValue.equals(model.fontColor)) {
-                            model.fontColor = newValue;
+                        if (!newValue.equals(model.getFontColor())) {
+                            model.setFontColor(newValue);
                             changed();
                         }
                     } else {
-                        comboBoxFontColor.setSelectedItem(model.fontColor);
+                        comboBoxFontColor.setSelectedItem(model.getFontColor());
                     }
                 }
                 repaint();
@@ -152,17 +152,17 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
                 value = value.substring(0, value.indexOf(" "));
                 try {
                     int newValue = Integer.parseInt(value);
-                    if (model.position != newValue) {
-                        model.position = newValue;
+                    if (model.getPosition() != newValue) {
+                        model.setPosition(newValue);
                         changed();
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.position != -1)
-                            spinnerPosition.setValue(model.position + " px");
+                        if (model.getPosition() != -1)
+                            spinnerPosition.setValue(model.getPosition() + " px");
                     } else {
                         spinnerPosition.setValue(" ");
-                        model.position = -1;
+                        model.setPosition(-1);
                     }
                 }
             }
@@ -174,11 +174,11 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         comboBoxPosition.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxPosition.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.position != newValue) || (!changedByUser)) {
-                    model.position = newValue;
+                if ((newValue != -1) && (model.getPosition() != newValue) || (!changedByUser)) {
+                    model.setPosition(newValue);
                     changed();
                 } else {
-                    comboBoxPosition.setSelectedIndex(model.position + 1);
+                    comboBoxPosition.setSelectedIndex(model.getPosition() + 1);
                 }
             }
         });
@@ -208,17 +208,17 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
                 value = value.substring(0, value.indexOf(" "));
                 try {
                     int newValue = Integer.parseInt(value);
-                    if (model.spacing != newValue) {
-                        model.spacing = newValue;
+                    if (model.getSpacing() != newValue) {
+                        model.setSpacing(newValue);
                         changed();
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.spacing != -1)
-                            spinnerDistance.setValue(model.spacing + " px");
+                        if (model.getSpacing() != -1)
+                            spinnerDistance.setValue(model.getSpacing() + " px");
                     } else {
                         spinnerDistance.setValue(" ");
-                        model.spacing = -1;
+                        model.setSpacing(-1);
                     }
                 }
             }
@@ -239,11 +239,11 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         comboBoxPlace.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxPlace.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.topPlacement != newValue) || (!changedByUser)) {
-                    model.topPlacement = newValue;
+                if ((newValue != -1) && (model.getTopPlacement() != newValue) || (!changedByUser)) {
+                    model.setTopPlacement(newValue);
                     changed();
                 } else {
-                    comboBoxPlace.setSelectedIndex(model.topPlacement + 1);
+                    comboBoxPlace.setSelectedIndex(model.getTopPlacement() + 1);
                 }
             }
         });
@@ -263,11 +263,11 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         comboBoxRotation.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxRotation.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.horizontalPlacement != newValue) || (!changedByUser)) {
-                    model.horizontalPlacement = newValue;
+                if ((newValue != -1) && (model.getHorizontalPlacement() != newValue) || (!changedByUser)) {
+                    model.setHorizontalPlacement(newValue);
                     changed();
                 } else {
-                    comboBoxRotation.setSelectedIndex(model.horizontalPlacement + 1);
+                    comboBoxRotation.setSelectedIndex(model.getHorizontalPlacement() + 1);
                 }
             }
         });

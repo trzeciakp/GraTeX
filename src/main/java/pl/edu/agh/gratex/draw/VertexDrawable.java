@@ -125,7 +125,7 @@ public class VertexDrawable implements Drawable {
             }
             VertexUtils.updateNumber(vertex, vertex.getNumber());
             if (vertex.getLabelInside() != null) {
-                g.setFont(vertex.getFont());
+                g.setFont(Const.DEFAULT_FONT);
                 FontMetrics fm = g.getFontMetrics();
                 g.drawString(vertex.getLabelInside(), posX - fm.stringWidth(vertex.getLabelInside()) / 2, posY + (fm.getAscent() - fm.getDescent()) / 2);
             }

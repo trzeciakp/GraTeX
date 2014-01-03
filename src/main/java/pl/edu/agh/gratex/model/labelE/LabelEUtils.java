@@ -111,7 +111,7 @@ public class LabelEUtils {
 
     // Calculates the location of LabelE and attributes needed for parsing
     public static void updateLocation(LabelE labelE) {
-        FontMetrics fm = new Canvas().getFontMetrics(labelE.getFont());
+        FontMetrics fm = new Canvas().getFontMetrics(Const.DEFAULT_FONT);
         int width = fm.stringWidth(labelE.getText());
         int height = fm.getAscent();
         int descent = fm.getDescent();

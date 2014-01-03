@@ -6,35 +6,30 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.awt.*;
-import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
 
-public class LabelV extends GraphElement implements Serializable {
-    private static final long serialVersionUID = 5054682946344977073L;
+public class LabelV extends GraphElement  {
+    private LabelVertexPropertyModel propertyModel = new LabelVertexPropertyModel(this);
 
-    // Wartości edytowalne przez użytkowanika
-    private String text;
-    private Font font = Const.DEFAULT_FONT;
-    private Color fontColor;
-    private int position;                                        // 0-N; 1-NE; 2-E; ...; 7 - NW;
-    private int spacing;                                        // odleglość napisu od obrysu wierzchołka
+    private int posX;
+    private int posY;
 
-    // Wartości potrzebne do parsowania
-    private int posX;                                            // \ Środek stringa
-    private int posY;                                            // / Środek stringa
-
-    // Pozostałe
     private Vertex owner;
     private int drawX;
     private int drawY;
     private Rectangle outline;
+
+    public LabelV(Vertex element, Graph graph) {
+        super(graph);
+        setOwner(element);
+        setText("Label");
+    }
 
     @Override
     public void addToGraph() {
@@ -62,11 +57,11 @@ public class LabelV extends GraphElement implements Serializable {
     @Override
     public String toString() {
         return "LabelV{" +
-                "text='" + text + '\'' +
-                ", font=" + font +
-                ", fontColor=" + fontColor +
-                ", position=" + position +
-                ", spacing=" + spacing +
+                "text='" + getText() + '\'' +
+                ", font=" + Const.DEFAULT_FONT +
+                ", fontColor=" + getFontColor() +
+                ", position=" + getPosition() +
+                ", spacing=" + getSpacing() +
                 ", posX=" + posX +
                 ", posY=" + posY +
                 ", owner=" + owner +
@@ -77,40 +72,17 @@ public class LabelV extends GraphElement implements Serializable {
                 '}';
     }
 
-    public LabelV(Vertex element, Graph graph) {
-        super(graph);
-        setOwner(element);
-        setText("Label");
-        //setDrawable(new LabelVertexDrawable());
-    }
-
     public void setModel(PropertyModel pm) {
-        LabelVertexPropertyModel model = (LabelVertexPropertyModel) pm;
-
-        if (model.text != null) {
-            setText(new String(model.text));
-        }
-
-        if (model.fontColor != null) {
-            setFontColor(new Color(model.fontColor.getRGB()));
-        }
-
-        if (model.position > -1) {
-            setPosition(model.position);
-        }
-
-        if (model.spacing > -1) {
-            setSpacing(model.spacing);
-        }
+        propertyModel.mergeWithModel(pm);
     }
 
     public PropertyModel getModel() {
-        LabelVertexPropertyModel result = new LabelVertexPropertyModel();
+        LabelVertexPropertyModel result = new LabelVertexPropertyModel(this);
 
-        result.text = new String(getText());
-        result.fontColor = new Color(getFontColor().getRGB());
-        result.position = getPosition();
-        result.spacing = getSpacing();
+        result.setText(new String(getText()));
+        result.setFontColor(new Color(getFontColor().getRGB()));
+        result.setPosition(getPosition());
+        result.setSpacing(getSpacing());
 
         return result;
     }
@@ -120,62 +92,44 @@ public class LabelV extends GraphElement implements Serializable {
         return GraphElementType.LABEL_VERTEX;
     }
 
-    @Override
-    public Graph getGraph() {
-        return graph;
-    }
-/*
-    @Override
-    public void draw(Graphics2D g, boolean dummy) {
-        LabelVUtils.draw(this, g, dummy);
-    }*/
-
     public String getText() {
-        return text;
+        return propertyModel.getText();
     }
 
     public void setText(String text) {
-        this.text = text;
-    }
-
-    public Font getFont() {
-        return font;
-    }
-
-    public void setFont(Font font) {
-        this.font = font;
+        propertyModel.setText(text);
     }
 
     public Color getFontColor() {
-        return fontColor;
+        return propertyModel.getFontColor();
     }
 
     public void setFontColor(Color fontColor) {
-        this.fontColor = fontColor;
+        propertyModel.setFontColor(fontColor);
     }
 
     public int getPosition() {
-        return position;
+        return propertyModel.getPosition();
     }
 
     public LabelPosition getLabelPosition() {
-        return LabelPosition.values()[position+1];
+        return LabelPosition.values()[propertyModel.getPosition() +1];
     }
 
     public void setLabelPosition(LabelPosition labelPosition) {
-        this.position = labelPosition.getValue();
+        propertyModel.setPosition(labelPosition.getValue());
     }
 
     public void setPosition(int position) {
-        this.position = position;
+        propertyModel.setPosition(position);
     }
 
     public int getSpacing() {
-        return spacing;
+        return propertyModel.getSpacing();
     }
 
     public void setSpacing(int spacing) {
-        this.spacing = spacing;
+        propertyModel.setSpacing(spacing);
     }
 
     public int getPosX() {

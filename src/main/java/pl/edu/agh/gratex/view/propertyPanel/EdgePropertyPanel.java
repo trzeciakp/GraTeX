@@ -49,37 +49,37 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
     public void setModel(PropertyModel pm) {
         changedByUser = false;
         model = new EdgePropertyModel((EdgePropertyModel) pm);
-        if (model.directed == PropertyModel.YES) {
+        if (model.getDirected() == PropertyModel.YES) {
             lblArrowType.setEnabled(true);
             comboBoxArrowType.setEnabled(true);
-        } else if (model.directed == PropertyModel.NO) {
+        } else if (model.getDirected() == PropertyModel.NO) {
             lblArrowType.setEnabled(false);
             comboBoxArrowType.setEnabled(false);
         }
-        comboBoxLineType.setSelectedItem(model.lineType);
-        if (model.lineWidth == -1)
+        comboBoxLineType.setSelectedItem(model.getLineType());
+        if (model.getLineWidth() == -1)
             spinnerLineSize.setValue(" ");
         else
-            spinnerLineSize.setValue(model.lineWidth + " px");
-        comboBoxLineColor.setSelectedItem(model.lineColor);
-        comboBoxDirect.setSelectedIndex(model.directed + 1);
-        comboBoxArrowType.setSelectedIndex(model.arrowType + 1);
+            spinnerLineSize.setValue(model.getLineWidth() + " px");
+        comboBoxLineColor.setSelectedItem(model.getLineColor());
+        comboBoxDirect.setSelectedIndex(model.getDirected() + 1);
+        comboBoxArrowType.setSelectedIndex(model.getArrowType() + 1);
         spinnerAngle.setVisible(true);
         comboBoxAngle.setVisible(false);
-        if (model.isLoop == PropertyModel.YES) {
+        if (model.getLoop() == PropertyModel.YES) {
             spinnerAngle.setVisible(false);
             comboBoxAngle.setVisible(true);
-            if (model.relativeEdgeAngle >= 0)
-                comboBoxAngle.setSelectedIndex(model.relativeEdgeAngle / 90 + 1);
+            if (model.getRelativeEdgeAngle() >= 0)
+                comboBoxAngle.setSelectedIndex(model.getRelativeEdgeAngle() / 90 + 1);
             else
                 comboBoxAngle.setSelectedIndex(0);
-        } else if (model.relativeEdgeAngle == PropertyModel.EMPTY) {
+        } else if (model.getRelativeEdgeAngle() == PropertyModel.EMPTY) {
             spinnerAngle.setValue(" ");
-        } else if (model.relativeEdgeAngle > 180)
-            spinnerAngle.setValue(model.relativeEdgeAngle - 360 + " deg");
+        } else if (model.getRelativeEdgeAngle() > 180)
+            spinnerAngle.setValue(model.getRelativeEdgeAngle() - 360 + " deg");
         else
-            spinnerAngle.setValue(model.relativeEdgeAngle + " deg");
-        if (model.isLoop == PropertyModel.EMPTY) {
+            spinnerAngle.setValue(model.getRelativeEdgeAngle() + " deg");
+        if (model.getLoop() == PropertyModel.EMPTY) {
             spinnerAngle.setEnabled(false);
             lblAngle.setEnabled(false);
         }
@@ -118,12 +118,12 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
                 //int newValue = ((Option) comboBoxLineType.getSelectedItem()).getValue();
                 LineType newValue = (LineType) comboBoxLineType.getSelectedItem();
                 //if ((newValue != -1) && (model.lineType != newValue) || (!changedByUser))
-                if(!newValue.isEmpty() && model.lineType != newValue || !changedByUser) {
+                if(!newValue.isEmpty() && model.getLineType() != newValue || !changedByUser) {
                 //if (newValue != LineType.EMPTY && model.lineType != newValue || (!changedByUser)) {
-                    model.lineType = newValue;
+                    model.setLineType(newValue);
                     changed();
                 } else {
-                    comboBoxLineType.setSelectedItem(model.lineType);
+                    comboBoxLineType.setSelectedItem(model.getLineType());
                 }
             }
         });
@@ -152,17 +152,17 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
                 value = value.substring(0, value.indexOf(" "));
                 try {
                     int newValue = Integer.parseInt(value);
-                    if (model.lineWidth != newValue) {
-                        model.lineWidth = newValue;
+                    if (model.getLineWidth() != newValue) {
+                        model.setLineWidth(newValue);
                         changed();
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.lineWidth != -1)
-                            spinnerLineSize.setValue(model.lineWidth + " px");
+                        if (model.getLineWidth() != -1)
+                            spinnerLineSize.setValue(model.getLineWidth() + " px");
                     } else {
                         spinnerLineSize.setValue(" ");
-                        model.lineWidth = -1;
+                        model.setLineWidth(-1);
                     }
                 }
             }
@@ -183,12 +183,12 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
                 if (changedByUser) {
                     Color newValue = (Color) comboBoxLineColor.getSelectedItem();
                     if (newValue != null) {
-                        if (!newValue.equals(model.lineColor)) {
-                            model.lineColor = newValue;
+                        if (!newValue.equals(model.getLineColor())) {
+                            model.setLineColor(newValue);
                             changed();
                         }
                     } else {
-                        comboBoxLineColor.setSelectedItem(model.lineColor);
+                        comboBoxLineColor.setSelectedItem(model.getLineColor());
                     }
                 }
                 repaint();
@@ -210,11 +210,11 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         comboBoxDirect.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxDirect.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.directed != newValue) || (!changedByUser)) {
-                    model.directed = newValue;
+                if ((newValue != -1) && (model.getDirected() != newValue) || (!changedByUser)) {
+                    model.setDirected(newValue);
                     changed();
                 } else {
-                    comboBoxDirect.setSelectedIndex(model.directed + 1);
+                    comboBoxDirect.setSelectedIndex(model.getDirected() + 1);
                 }
             }
         });
@@ -234,11 +234,11 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         comboBoxArrowType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxArrowType.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.arrowType != newValue) || (!changedByUser)) {
-                    model.arrowType = newValue;
+                if ((newValue != -1) && (model.getArrowType() != newValue) || (!changedByUser)) {
+                    model.setArrowType(newValue);
                     changed();
                 } else {
-                    comboBoxArrowType.setSelectedIndex(model.arrowType + 1);
+                    comboBoxArrowType.setSelectedIndex(model.getArrowType() + 1);
                 }
             }
         });
@@ -269,17 +269,17 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
                     int tmp = Integer.parseInt(value);
                     if (tmp < 0)
                         tmp += 360;
-                    if (tmp != model.relativeEdgeAngle) {
-                        model.relativeEdgeAngle = tmp;
+                    if (tmp != model.getRelativeEdgeAngle()) {
+                        model.setRelativeEdgeAngle(tmp);
                         changed();
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.relativeEdgeAngle != -1)
-                            spinnerAngle.setValue((model.relativeEdgeAngle >= 0 ? model.relativeEdgeAngle : model.relativeEdgeAngle + 360) + " deg");
+                        if (model.getRelativeEdgeAngle() != -1)
+                            spinnerAngle.setValue((model.getRelativeEdgeAngle() >= 0 ? model.getRelativeEdgeAngle() : model.getRelativeEdgeAngle() + 360) + " deg");
                     } else {
                         spinnerAngle.setValue(" ");
-                        model.relativeEdgeAngle = -1;
+                        model.setRelativeEdgeAngle(-1);
                     }
                 }
 
@@ -293,12 +293,12 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         comboBoxAngle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxAngle.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.relativeEdgeAngle != newValue) || (!changedByUser)) {
-                    model.relativeEdgeAngle = newValue;
+                if ((newValue != -1) && (model.getRelativeEdgeAngle() != newValue) || (!changedByUser)) {
+                    model.setRelativeEdgeAngle(newValue);
                     changed();
                 } else {
-                    if (model.relativeEdgeAngle >= 0)
-                        comboBoxAngle.setSelectedIndex(model.relativeEdgeAngle / 90 + 1);
+                    if (model.getRelativeEdgeAngle() >= 0)
+                        comboBoxAngle.setSelectedIndex(model.getRelativeEdgeAngle() / 90 + 1);
                     else
                         comboBoxAngle.setSelectedIndex(0);
                 }

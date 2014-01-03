@@ -12,30 +12,19 @@ import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
 import java.awt.geom.Arc2D;
-import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
 
-public class Edge extends GraphElement implements Serializable {
-    private static final long serialVersionUID = -7941761380307220731L;
+public class Edge extends GraphElement {
+    private EdgePropertyModel propertyModel = new EdgePropertyModel(this);
 
-    // Wartości edytowalne przez użytkowanika
-    private LineType lineType;
-    private int lineWidth;
-    private boolean directed;                                        // Z shiftem rysujemy skierowaną
-    private int arrowType;
-    private Color lineColor;
-    private int relativeEdgeAngle;
-
-    // Wartości potrzebne do parsowania
     private Vertex vertexA;
     private Vertex vertexB;
     private LabelE label;
     private int inAngle;
     private int outAngle;
 
-    // Pozostałe
     private Point arcMiddle = new Point();
     private int arcRadius;
     private Point outPoint;
@@ -46,7 +35,6 @@ public class Edge extends GraphElement implements Serializable {
 
     public Edge(Graph graph) {
         super(graph);
-        //setDrawable(new EdgeDrawable());
     }
 
     public boolean isLoop() {
@@ -81,79 +69,25 @@ public class Edge extends GraphElement implements Serializable {
         return result;
     }
 
-//    public Edge getCopy(LinkedList<Vertex> vertices) {
-//        Vertex _vertexA = null;
-//        Vertex _vertexB = null;
-//        Iterator<Vertex> itv = vertices.listIterator();
-//        Vertex tempV;
-//        while (itv.hasNext()) {
-//            tempV = itv.next();
-//            if (tempV.getPosX() == getVertexA().getPosX() && tempV.getPosY() == getVertexA().getPosY()) {
-//                _vertexA = tempV;
-//            }
-//            if (tempV.getPosX() == getVertexB().getPosX() && tempV.getPosY() == getVertexB().getPosY()) {
-//                _vertexB = tempV;
-//            }
-//        }
-//
-//        Edge result = new Edge(this.graph);
-//        result.setModel(getModel());
-//        if (_vertexA == null || _vertexB == null) {
-//            return null;
-//        }
-//        result.setVertexA(_vertexA);
-//        result.setVertexB(_vertexB);
-//
-//        if (getLabel() != null) {
-//            result.setLabel(getLabel().getCopy(result));
-//        }
-//
-//        return result;
-//    }
-
     public void setModel(PropertyModel pm) {
-        EdgePropertyModel model = (EdgePropertyModel) pm;
-
-        if (model.lineType != LineType.EMPTY) {
-            setLineType(model.lineType);
-        }
-
-        if (model.lineWidth > -1) {
-            setLineWidth(model.lineWidth);
-        }
-
-        if (model.directed > -1) {
-            setDirected((model.directed == 1));
-        }
-
-        if (model.lineColor != null) {
-            setLineColor(new Color(model.lineColor.getRGB()));
-        }
-
-        if (model.relativeEdgeAngle > -1) {
-            setRelativeEdgeAngle(model.relativeEdgeAngle);
-        }
-
-        if (model.arrowType > -1) {
-            setArrowType(model.arrowType);
-        }
+        propertyModel.mergeWithModel(pm);
     }
 
     public PropertyModel getModel() {
-        EdgePropertyModel result = new EdgePropertyModel();
+        EdgePropertyModel result = new EdgePropertyModel(this);
 
-        result.lineWidth = getLineWidth();
-        result.lineType = getLineType();
-        result.arrowType = getArrowType();
-        result.lineColor = new Color(getLineColor().getRGB());
-        result.relativeEdgeAngle = getRelativeEdgeAngle();
+        result.setLineWidth(getLineWidth());
+        result.setLineType(getLineType());
+        result.setArrowType(getArrowType());
+        result.setLineColor(new Color(getLineColor().getRGB()));
+        result.setRelativeEdgeAngle(getRelativeEdgeAngle());
         if (getVertexA() == getVertexB()) {
-            result.isLoop = PropertyModel.YES;
+            result.setLoop(PropertyModel.YES);
         } else
-            result.isLoop = PropertyModel.NO;
-        result.directed = 0;
+            result.setLoop(PropertyModel.NO);
+        result.setDirected(0);
         if (isDirected()) {
-            result.directed = 1;
+            result.setDirected(1);
         }
 
         return result;
@@ -162,11 +96,6 @@ public class Edge extends GraphElement implements Serializable {
     @Override
     public GraphElementType getType() {
         return GraphElementType.EDGE;
-    }
-
-    @Override
-    public Graph getGraph() {
-        return graph;
     }
 
     public void drawLabel(Graphics2D g, boolean dummy) {
@@ -194,67 +123,61 @@ public class Edge extends GraphElement implements Serializable {
         }
         return result;
     }
-/*
-    @Override
-    public void draw(Graphics2D g, boolean dummy) {
-        EdgeUtils.draw(this, g, dummy);
-    }*/
-
 
     public int getLineWidth() {
-        return lineWidth;
+        return propertyModel.getLineWidth();
     }
 
     public void setLineWidth(int lineWidth) {
-        this.lineWidth = lineWidth;
+        propertyModel.setLineWidth(lineWidth);
     }
 
     public LineType getLineType() {
-        return lineType;
+        return propertyModel.getLineType();
     }
 
     public void setLineType(LineType lineType) {
-        this.lineType = lineType;
+        propertyModel.setLineType(lineType);
     }
 
     public boolean isDirected() {
-        return directed;
+        return propertyModel.getDirected() == PropertyModel.YES;
     }
 
     public void setDirected(boolean directed) {
-        this.directed = directed;
+        propertyModel.setDirected(directed ? PropertyModel.YES : PropertyModel.NO);
     }
 
     public int getArrowType() {
-        return arrowType;
+        return propertyModel.getArrowType();
     }
 
     public void setArrowType(int arrowType) {
-        this.arrowType = arrowType;
+        propertyModel.setArrowType(arrowType);
     }
 
     public void setArrowType(ArrowType arrowType) {
-        this.arrowType = arrowType.getValue();
+        propertyModel.setArrowType(arrowType.getValue());
     }
 
     public ArrowType getArrowTypeENUM() {
-        return ArrowType.values()[this.arrowType + 1];
+        return ArrowType.values()[propertyModel.getArrowType() + 1];
     }
 
     public Color getLineColor() {
-        return lineColor;
+        return propertyModel.getLineColor();
     }
 
     public void setLineColor(Color lineColor) {
-        this.lineColor = lineColor;
+        propertyModel.setLineColor(lineColor);
     }
 
     public int getRelativeEdgeAngle() {
-        return relativeEdgeAngle;
+        return propertyModel.getRelativeEdgeAngle();
     }
 
     public void setRelativeEdgeAngle(int relativeEdgeAngle) {
-        this.relativeEdgeAngle = relativeEdgeAngle;
+        propertyModel.setRelativeEdgeAngle(relativeEdgeAngle);
     }
 
     public Vertex getVertexA() {

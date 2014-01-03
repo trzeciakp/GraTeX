@@ -40,13 +40,13 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
     public void setModel(PropertyModel pm) {
         changedByUser = false;
         model = new LabelVertexPropertyModel((LabelVertexPropertyModel) pm);
-        textField.setText(model.text);
-        comboBoxFontColor.setSelectedItem(model.fontColor);
-        comboBoxPosition.setSelectedIndex(model.position + 1);
-        if (model.spacing == -1)
+        textField.setText(model.getText());
+        comboBoxFontColor.setSelectedItem(model.getFontColor());
+        comboBoxPosition.setSelectedIndex(model.getPosition() + 1);
+        if (model.getSpacing() == -1)
             spinnerDistance.setValue(" ");
         else
-            spinnerDistance.setValue(model.spacing + " px");
+            spinnerDistance.setValue(model.getSpacing() + " px");
 
         changedByUser = true;
     }
@@ -73,8 +73,8 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         textField = new JTextField();
         textField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (!textField.getText().equals(model.text)) {
-                    model.text = textField.getText();
+                if (!textField.getText().equals(model.getText())) {
+                    model.setText(textField.getText());
                     changed();
                 }
             }
@@ -96,12 +96,12 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
                 if (changedByUser) {
                     Color newValue = (Color) comboBoxFontColor.getSelectedItem();
                     if (newValue != null) {
-                        if (!newValue.equals(model.fontColor)) {
-                            model.fontColor = newValue;
+                        if (!newValue.equals(model.getFontColor())) {
+                            model.setFontColor(newValue);
                             changed();
                         }
                     } else {
-                        comboBoxFontColor.setSelectedItem(model.fontColor);
+                        comboBoxFontColor.setSelectedItem(model.getFontColor());
                     }
                 }
                 repaint();
@@ -127,11 +127,11 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         comboBoxPosition.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxPosition.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.position != newValue) || (!changedByUser)) {
-                    model.position = newValue;
+                if ((newValue != -1) && (model.getPosition() != newValue) || (!changedByUser)) {
+                    model.setPosition(newValue);
                     changed();
                 } else {
-                    comboBoxPosition.setSelectedIndex(model.position + 1);
+                    comboBoxPosition.setSelectedIndex(model.getPosition() + 1);
                 }
             }
         });
@@ -160,17 +160,17 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
                 value = value.substring(0, value.indexOf(" "));
                 try {
                     int newValue = Integer.parseInt(value);
-                    if (model.spacing != newValue) {
-                        model.spacing = newValue;
+                    if (model.getSpacing() != newValue) {
+                        model.setSpacing(newValue);
                         changed();
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.spacing != -1)
-                            spinnerDistance.setValue(model.spacing + " px");
+                        if (model.getSpacing() != -1)
+                            spinnerDistance.setValue(model.getSpacing() + " px");
                     } else {
                         spinnerDistance.setValue(" ");
-                        model.spacing = -1;
+                        model.setSpacing(-1);
                     }
                 }
             }

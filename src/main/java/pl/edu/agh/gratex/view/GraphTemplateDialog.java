@@ -107,22 +107,22 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
             graph.setVertexDefaultModel((VertexPropertyModel) vertex1.getModel());
             graph.getVertexDefaultModel().number = -1;
         } else if (model instanceof EdgePropertyModel) {
-            ((EdgePropertyModel) model).relativeEdgeAngle = -1;
+            ((EdgePropertyModel) model).setRelativeEdgeAngle(-1);
             edge1.setModel(model);
             edge2.setModel(model);
             edge3.setModel(model);
             graph.setEdgeDefaultModel((EdgePropertyModel) edge1.getModel());
-            graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
+            graph.getEdgeDefaultModel().setRelativeEdgeAngle(-1);
         } else if (model instanceof LabelVertexPropertyModel) {
             labelV1.setModel(model);
             graph.setLabelVDefaultModel((LabelVertexPropertyModel) labelV1.getModel());
-            graph.getLabelVDefaultModel().text = null;
+            graph.getLabelVDefaultModel().setText(null);
         } else {
             labelE1.setModel(model);
             labelE2.setModel(model);
             labelE3.setModel(model);
             graph.setLabelEDefaultModel((LabelEdgePropertyModel) labelE1.getModel());
-            graph.getLabelEDefaultModel().text = null;
+            graph.getLabelEDefaultModel().setText(null);
         }
     }
 
@@ -140,10 +140,10 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("e = [erm]");
                 graph.initDefaultModels();
-                graph.getEdgeDefaultModel().isLoop = -1;
-                graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
-                graph.getLabelVDefaultModel().text = null;
-                graph.getLabelEDefaultModel().text = null;
+                graph.getEdgeDefaultModel().setLoop(-1);
+                graph.getEdgeDefaultModel().setRelativeEdgeAngle(-1);
+                graph.getLabelVDefaultModel().setText(null);
+                graph.getLabelEDefaultModel().setText(null);
                 vertex1.setModel(graph.getVertexDefaultModel());
                 edge1.setModel(graph.getEdgeDefaultModel());
                 edge1.setRelativeEdgeAngle(300);
@@ -192,12 +192,12 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
 
         graph.setVertexDefaultModel(new VertexPropertyModel(generalController.getGraph().getVertexDefaultModel()));
         graph.setEdgeDefaultModel(new EdgePropertyModel(generalController.getGraph().getEdgeDefaultModel()));
-        graph.getEdgeDefaultModel().isLoop = -1;
-        graph.getEdgeDefaultModel().relativeEdgeAngle = -1;
+        graph.getEdgeDefaultModel().setLoop(-1);
+        graph.getEdgeDefaultModel().setRelativeEdgeAngle(-1);
         graph.setLabelVDefaultModel(new LabelVertexPropertyModel(generalController.getGraph().getLabelVDefaultModel()));
-        graph.getLabelVDefaultModel().text = null;
+        graph.getLabelVDefaultModel().setText(null);
         graph.setLabelEDefaultModel(new LabelEdgePropertyModel(generalController.getGraph().getLabelEDefaultModel()));
-        graph.getLabelEDefaultModel().text = null;
+        graph.getLabelEDefaultModel().setText(null);
 
         vertex1 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
         vertex1.setModel(graph.getVertexDefaultModel());

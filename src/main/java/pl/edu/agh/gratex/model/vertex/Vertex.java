@@ -1,41 +1,25 @@
 package pl.edu.agh.gratex.model.vertex;
 
 
-import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.draw.VertexDrawable;
+import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.GraphNumeration;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
-import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 
 import java.awt.*;
-import java.io.Serializable;
-import java.util.*;
+import java.util.LinkedList;
 import java.util.List;
 
 
-@SuppressWarnings("serial")
-public class Vertex extends GraphElement implements Serializable {
+public class Vertex extends GraphElement {
+    private VertexPropertyModel propertyModel = new VertexPropertyModel(this);
 
-    // Wartości edytowalne przez użytkowanika
-    private int number;
-    private int radius;
-    private int shape;
-    private Color vertexColor;
-    private int lineWidth;
-    private LineType lineType;
-    private Color lineColor;
-    private Font font = Const.DEFAULT_FONT;
-    private Color fontColor;
-    private boolean labelInside;
-
-    // Wartości potrzebne do parsowania
     private int posX;
     private int posY;
     private LabelV label = null;
@@ -43,11 +27,10 @@ public class Vertex extends GraphElement implements Serializable {
 
     public Vertex(Graph graph) {
         super(graph);
-        //setDrawable(new VertexDrawable());
     }
 
-    public int getNumber() {
-        return number;
+    public Graph getGraph() {
+        return graph;
     }
 
     @Override
@@ -78,10 +61,6 @@ public class Vertex extends GraphElement implements Serializable {
         }
         return result;
     }
-/*
-    public void draw(Graphics2D g2d, boolean dummy) {
-        VertexUtils.drawVertex(this, g2d, dummy);
-    }*/
 
     public void drawLabel(Graphics2D g, boolean dummy) {
         if (getLabel() != null) {
@@ -90,53 +69,15 @@ public class Vertex extends GraphElement implements Serializable {
     }
 
     public void setModel(PropertyModel pm) {
-        VertexPropertyModel model = (VertexPropertyModel) pm;
-
-        if (model.number > -1) {
-            VertexUtils.setPartOfNumeration(this, false);
-            VertexUtils.updateNumber(this, model.number);
-            VertexUtils.setPartOfNumeration(this, true);
-        }
-
-        if (model.radius > -1) {
-            setRadius(model.radius);
-        }
-
-        if (model.type > -1) {
-            setShape(model.type);
-        }
-
-        if (model.vertexColor != null) {
-            setVertexColor(new Color(model.vertexColor.getRGB()));
-        }
-
-        if (model.lineWidth > -1) {
-            setLineWidth(model.lineWidth);
-        }
-
-        if (model.lineType != LineType.EMPTY) {
-            setLineType(model.lineType);
-        }
-
-        if (model.lineColor != null) {
-            setLineColor(new Color(model.lineColor.getRGB()));
-        }
-
-        if (model.fontColor != null) {
-            setFontColor(new Color(model.fontColor.getRGB()));
-        }
-
-        if (model.labelInside > -1) {
-            setLabelInside((model.labelInside == 1));
-        }
+        propertyModel.mergeWithModel(pm);
     }
 
     public PropertyModel getModel() {
-        VertexPropertyModel result = new VertexPropertyModel();
+        VertexPropertyModel result = new VertexPropertyModel(this);
 
-        result.number = number;
+        result.number = getNumber();
         result.radius = getRadius();
-        result.type = getShape();
+        result.shape = getShape();
         result.vertexColor = new Color(getVertexColor().getRGB());
         result.lineWidth = getLineWidth();
         result.lineType = getLineType();
@@ -153,85 +94,80 @@ public class Vertex extends GraphElement implements Serializable {
     // ============================================
     // Getters & setters
 
+    public int getNumber() {
+        return propertyModel.number;
+    }
+
     public int getRadius() {
-        return radius;
+        return propertyModel.radius;
     }
 
     public void setRadius(int radius) {
-        this.radius = radius;
+        propertyModel.radius = radius;
     }
 
     public int getShape() {
-        return shape;
-    }
-
-    @Override
-    public Graph getGraph() {
-        return graph;
+        return propertyModel.shape;
     }
 
     public void setShape(int shape) {
-        this.shape = shape;
+        propertyModel.shape = shape;
     }
 
     public void setShape(ShapeType shape) {
-        this.shape = shape.getValue();
+        propertyModel.shape = shape.getValue();
     }
 
     public ShapeType getShapeENUM() {
-        return ShapeType.values()[shape];
+        return ShapeType.values()[propertyModel.shape];
     }
 
     public Color getVertexColor() {
-        return vertexColor;
+        return propertyModel.vertexColor;
     }
 
     public void setVertexColor(Color vertexColor) {
-        this.vertexColor = vertexColor;
+        propertyModel.vertexColor = vertexColor;
     }
 
     public int getLineWidth() {
-        return lineWidth;
+        return propertyModel.lineWidth;
     }
 
     public void setLineWidth(int lineWidth) {
-        this.lineWidth = lineWidth;
+        propertyModel.lineWidth = lineWidth;
     }
 
     public LineType getLineType() {
-        return lineType;
+        return propertyModel.lineType;
     }
 
     public void setLineType(LineType lineType) {
-        this.lineType = lineType;
+        propertyModel.lineType = lineType;
     }
 
     public Color getLineColor() {
-        return lineColor;
+        return propertyModel.lineColor;
     }
 
     public void setLineColor(Color lineColor) {
-        this.lineColor = lineColor;
-    }
-
-    public Font getFont() {
-        return font;
+        propertyModel.lineColor = lineColor;
     }
 
     public Color getFontColor() {
-        return fontColor;
+        return propertyModel.fontColor;
     }
 
     public void setFontColor(Color fontColor) {
-        this.fontColor = fontColor;
+        propertyModel.fontColor = fontColor;
     }
 
     public boolean isLabelInside() {
-        return labelInside;
+        return propertyModel.labelInside == 1;
     }
 
     public void setLabelInside(boolean labelInside) {
-        this.labelInside = labelInside;
+        propertyModel.labelInside = labelInside ? 1 : 0;
     }
 
     public int getPosX() {
@@ -267,13 +203,13 @@ public class Vertex extends GraphElement implements Serializable {
     }
 
     public void setNumber(int number) {
-        this.number = number;
+        propertyModel.number = number;
         this.text = GraphNumeration.digitalToAlphabetical(number);
     }
 
     public String getLabelInside() {
-        if(getGraph().getGraphNumeration().isNumerationDigital()) {
-            return String.valueOf(number);
+        if (getGraph().getGraphNumeration().isNumerationDigital()) {
+            return String.valueOf(propertyModel.number);
         } else {
             return text;
         }

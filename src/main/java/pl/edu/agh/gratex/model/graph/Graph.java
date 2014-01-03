@@ -3,9 +3,9 @@ package pl.edu.agh.gratex.model.graph;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.PropertyModelFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelE;
@@ -24,9 +24,7 @@ import java.util.List;
 
 
 public class Graph implements Serializable {
-    // TODO To jest statyczne, bo sie graf nie serializował (wymagał serializowalności GeneralControllera i całego wszechświata przez to)
-    // TODO Jak zmienimy sposób zapisu, należy usunąć słowo static
-    private static GeneralController generalController;
+    private PropertyModelFactory propertyModelFactory;
 
     private VertexPropertyModel vertexDefaultModel;
     private EdgePropertyModel edgeDefaultModel;
@@ -120,12 +118,16 @@ public class Graph implements Serializable {
         return result;
     }
 
+    public PropertyModelFactory getPropertyModelFactory() {
+        return propertyModelFactory;
+    }
+
     public void initDefaultModels() {
         //TODO
         setVertexDefaultModel(new VertexPropertyModel());
         getVertexDefaultModel().number = -1;
         getVertexDefaultModel().radius = 40;
-        getVertexDefaultModel().type = 1;
+        getVertexDefaultModel().shape = 1;
         getVertexDefaultModel().vertexColor = new Color(new Float(1), new Float(0.5), new Float(0));
         getVertexDefaultModel().lineType = LineType.SOLID;
         getVertexDefaultModel().lineWidth = 1;
@@ -134,25 +136,25 @@ public class Graph implements Serializable {
         getVertexDefaultModel().labelInside = 1;
 
         setEdgeDefaultModel(new EdgePropertyModel());
-        getEdgeDefaultModel().lineType = LineType.SOLID;
-        getEdgeDefaultModel().lineWidth = 1;
-        getEdgeDefaultModel().directed = 0;
-        getEdgeDefaultModel().lineColor = Color.black;
-        getEdgeDefaultModel().relativeEdgeAngle = 0;
+        getEdgeDefaultModel().setLineType(LineType.SOLID);
+        getEdgeDefaultModel().setLineWidth(1);
+        getEdgeDefaultModel().setDirected(0);
+        getEdgeDefaultModel().setLineColor(Color.black);
+        getEdgeDefaultModel().setRelativeEdgeAngle(0);
 
         setLabelVDefaultModel(new LabelVertexPropertyModel());
-        getLabelVDefaultModel().text = "Label";
-        getLabelVDefaultModel().fontColor = Color.black;
-        getLabelVDefaultModel().position = 0;
-        getLabelVDefaultModel().spacing = 5;
+        getLabelVDefaultModel().setText("Label");
+        getLabelVDefaultModel().setFontColor(Color.black);
+        getLabelVDefaultModel().setPosition(0);
+        getLabelVDefaultModel().setSpacing(5);
 
         setLabelEDefaultModel(new LabelEdgePropertyModel());
-        getLabelEDefaultModel().text = "Label";
-        getLabelEDefaultModel().fontColor = Color.black;
-        getLabelEDefaultModel().position = 50;
-        getLabelEDefaultModel().spacing = 5;
-        getLabelEDefaultModel().topPlacement = 1;
-        getLabelEDefaultModel().horizontalPlacement = 0;
+        getLabelEDefaultModel().setText("Label");
+        getLabelEDefaultModel().setFontColor(Color.black);
+        getLabelEDefaultModel().setPosition(50);
+        getLabelEDefaultModel().setSpacing(5);
+        getLabelEDefaultModel().setTopPlacement(1);
+        getLabelEDefaultModel().setHorizontalPlacement(0);
     }
 
     public VertexPropertyModel getVertexDefaultModel() {

@@ -14,8 +14,11 @@ import java.util.List;
 @SuppressWarnings("serial")
 public abstract class GraphElement implements Serializable {
     protected Graph graph;
+    protected Drawable drawable;
 
-    private Drawable drawable;
+    public Graph getGraph() {
+        return graph;
+    }
 
     public void setDrawable(Drawable drawable) {
         this.drawable = drawable;
@@ -37,8 +40,6 @@ public abstract class GraphElement implements Serializable {
     public abstract PropertyModel getModel();
 
     public abstract GraphElementType getType();
-
-    public abstract Graph getGraph();
 
     public abstract void addToGraph();
 
