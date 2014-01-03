@@ -98,9 +98,13 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
         return panelsMap.get(mode).getModel();
     }
 
-    public void disableLabelEdition() {
-        disableLabelEdition(ModeType.LABEL_EDGE);
-        disableLabelEdition(ModeType.LABEL_VERTEX);
+    public void disableUnnecessaryFields() {
+        for (AbstractPropertyPanel abstractPropertyPanel : panelsMap.values()) {
+            abstractPropertyPanel.disableUnnecessaryFields();
+        }
+
+        //disableLabelEdition(ModeType.LABEL_EDGE);
+        //disableLabelEdition(ModeType.LABEL_VERTEX);
     }
 
     private void disableLabelEdition(ModeType type) {

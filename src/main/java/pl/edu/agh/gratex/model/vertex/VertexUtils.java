@@ -2,13 +2,8 @@ package pl.edu.agh.gratex.model.vertex;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.graph.GraphNumeration;
-import pl.edu.agh.gratex.model.properties.ShapeType;
-import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
-import pl.edu.agh.gratex.model.properties.LineType;
 
-import java.awt.*;
 import java.awt.geom.Area;
 
 public class VertexUtils {
@@ -18,8 +13,8 @@ public class VertexUtils {
 
     public static void adjustToGrid(Vertex vertex) {
         Graph graph = vertex.getGraph();
-        vertex.setPosX(((vertex.getPosX() + (graph.gridResolutionX / 2)) / graph.gridResolutionX) * graph.gridResolutionX);
-        vertex.setPosY(((vertex.getPosY() + (graph.gridResolutionY / 2)) / graph.gridResolutionY) * graph.gridResolutionY);
+        vertex.setPosX(((vertex.getPosX() + (graph.getGridResolutionX() / 2)) / graph.getGridResolutionX()) * graph.getGridResolutionX());
+        vertex.setPosY(((vertex.getPosY() + (graph.getGridResolutionY() / 2)) / graph.getGridResolutionY()) * graph.getGridResolutionY());
     }
 
     public static boolean collides(Vertex vertex1, Vertex vertex2) {

@@ -90,13 +90,13 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
     }
 
     private void paintGrid(Graphics2D g, Graph graph) {
-        if (graph.gridOn) {
+        if (graph.isGridOn()) {
             g.setColor(Const.GRID_COLOR);
 
-            for (int i = graph.gridResolutionX; i < Const.PAGE_WIDTH; i += graph.gridResolutionX)
+            for (int i = graph.getGridResolutionX(); i < Const.PAGE_WIDTH; i += graph.getGridResolutionX())
                 g.drawLine(i, 0, i, Const.PAGE_HEIGHT);
 
-            for (int i = graph.gridResolutionY; i < Const.PAGE_HEIGHT; i += graph.gridResolutionY)
+            for (int i = graph.getGridResolutionY(); i < Const.PAGE_HEIGHT; i += graph.getGridResolutionY())
                 g.drawLine(0, i, Const.PAGE_WIDTH, i);
         }
     }

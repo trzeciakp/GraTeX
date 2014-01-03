@@ -54,7 +54,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
         Vertex vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
         vertex.setPosX(mouseX);
         vertex.setPosY(mouseY);
-        if (generalController.getGraph().gridOn) {
+        if (generalController.getGraph().isGridOn()) {
             VertexUtils.adjustToGrid(vertex);
         }
 
@@ -86,7 +86,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
             vertex.setPosX(mouseX);
             vertex.setPosY(mouseY);
 
-            if (generalController.getGraph().gridOn) {
+            if (generalController.getGraph().isGridOn()) {
                 VertexUtils.adjustToGrid(vertex);
             }
 

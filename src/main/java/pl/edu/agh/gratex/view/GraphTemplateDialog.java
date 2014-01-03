@@ -95,7 +95,10 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         for (GraphElement graphElement : graph.getElements(modelType)) {
             graphElement.setModel(model);
         }
-        currentModels.get(modelType).updateWithModel(model);
+        PropertyModel currentModel = currentModels.get(modelType);
+        currentModel.updateWithModel(model);
+        //to refresh fields which should be enabled/disabled
+        panel_propertyEditor.setModel(currentModel);
     }
 
     private void setDefaultModelsToAllGraphElements() {
@@ -166,7 +169,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
 
     private void initGraph() {
         graph = new Graph();
-        graph.gridOn = false;
+        graph.setGridOn(false);
 
         Vertex vertex1 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
         vertex1.setNumber(1);
@@ -247,7 +250,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         panel_propertyEditor.setBounds(10, 10, 200, 380);
         panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
         panel_propertyEditor.setEnabled(true);
-        panel_propertyEditor.disableLabelEdition();
+        panel_propertyEditor.disableUnnecessaryFields();
         panel_propertyEditor.setModel(currentModels.get(GraphElementType.VERTEX));
 
 

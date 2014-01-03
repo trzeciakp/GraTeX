@@ -118,6 +118,12 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         changedByUser = true;
     }
 
+    @Override
+    public void disableUnnecessaryFields() {
+        super.disableUnnecessaryFields();
+        spinnerNumber.setEnabled(false);
+    }
+
     private void initialize() {
         setLayout(null);
 

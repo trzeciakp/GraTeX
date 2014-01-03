@@ -1,7 +1,6 @@
 package pl.edu.agh.gratex.draw;
 
 import pl.edu.agh.gratex.constants.Const;
-import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
@@ -42,7 +41,7 @@ public class VertexDrawable implements Drawable {
 
         int tempX = 0;
         int tempY = 0;
-        if (dummy && graph.gridOn) {
+        if (dummy && graph.isGridOn()) {
             tempX = posX;
             tempY = posY;
             VertexUtils.adjustToGrid(vertex);
@@ -131,7 +130,7 @@ public class VertexDrawable implements Drawable {
             }
         }
 
-        if (dummy && graph.gridOn) {
+        if (dummy && graph.isGridOn()) {
             vertex.setPosX(tempX);
             vertex.setPosY(tempY);
         }

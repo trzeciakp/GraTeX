@@ -241,20 +241,20 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void toggleGrid() {
-        if (graph.gridOn) {
-            graph.gridOn = false;
+        if (graph.isGridOn()) {
+            graph.setGridOn(false);
         } else {
-            GridDialog gd = new GridDialog(mainWindow, graph.gridResolutionX, graph.gridResolutionY);
+            GridDialog gd = new GridDialog(mainWindow, graph.getGridResolutionX(), graph.getGridResolutionY());
             int[] result = gd.showDialog();
             if (result != null) {
-                graph.gridOn = true;
-                graph.gridResolutionX = result[0];
-                graph.gridResolutionY = result[1];
+                graph.setGridOn(true);
+                graph.setGridResolutionX(result[0]);
+                graph.setGridResolutionY(result[1]);
                 GraphUtils.adjustVerticesToGrid(graph);
             }
         }
         operationController.reportOperationEvent(new GenericOperation(
-                StringLiterals.INFO_GENERIC_GRID(graph.gridOn, graph.gridResolutionX, graph.gridResolutionY)));
+                StringLiterals.INFO_GENERIC_GRID(graph.isGridOn(), graph.getGridResolutionX(), graph.getGridResolutionY())));
     }
 
     @Override

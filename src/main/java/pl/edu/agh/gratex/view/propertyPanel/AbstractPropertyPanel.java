@@ -41,6 +41,10 @@ public abstract class AbstractPropertyPanel extends JPanel {
         }
     }
 
+    public void disableUnnecessaryFields() {
+
+    }
+
     public void focusFirstElement() {
         components.get(0).requestFocus();
     }

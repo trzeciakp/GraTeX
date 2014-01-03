@@ -77,6 +77,15 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         changedByUser = true;
     }
 
+    @Override
+    public void disableUnnecessaryFields() {
+        super.disableUnnecessaryFields();
+        comboBoxPlace.setEnabled(false);
+        comboBoxPosition.setEnabled(false);
+        textField.setEnabled(false);
+        textField.setFocusable(false);
+    }
+
     public LabelEdgePropertyPanel() {
         model = new LabelEdgePropertyModel();
         initialize();

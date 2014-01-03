@@ -24,9 +24,9 @@ import java.util.List;
 public class Graph {
     private EnumMap<GraphElementType, List<? extends GraphElement>> elements;
 
-    public int gridResolutionX = 20;
-    public int gridResolutionY = 20;
-    public boolean gridOn;
+    private int gridResolutionX = 20;
+    private int gridResolutionY = 20;
+    private boolean gridOn;
 
     // TODO przeniesc to gdzie indziej, do jakiegos kontrolera?
     private GraphNumeration graphNumeration;
@@ -104,5 +104,29 @@ public class Graph {
             result.addAll(elements.get(type));
         }
         return result;
+    }
+
+    public int getGridResolutionX() {
+        return gridResolutionX;
+    }
+
+    public void setGridResolutionX(int gridResolutionX) {
+        this.gridResolutionX = gridResolutionX;
+    }
+
+    public int getGridResolutionY() {
+        return gridResolutionY;
+    }
+
+    public void setGridResolutionY(int gridResolutionY) {
+        this.gridResolutionY = gridResolutionY;
+    }
+
+    public boolean isGridOn() {
+        return gridOn;
+    }
+
+    public void setGridOn(boolean gridOn) {
+        this.gridOn = gridOn;
     }
 }

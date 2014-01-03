@@ -87,6 +87,12 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         changedByUser = true;
     }
 
+    @Override
+    public void disableUnnecessaryFields() {
+        super.disableUnnecessaryFields();
+        spinnerAngle.setEnabled(false);
+    }
+
     public EdgePropertyPanel() {
         model = new EdgePropertyModel();
         initialize();

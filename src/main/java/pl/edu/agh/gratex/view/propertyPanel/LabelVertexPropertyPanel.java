@@ -52,6 +52,14 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
     }
 
     @Override
+    public void disableUnnecessaryFields() {
+        super.disableUnnecessaryFields();
+        comboBoxPosition.setEnabled(false);
+        textField.setEnabled(false);
+        textField.setFocusable(false);
+    }
+
+    @Override
     public void focusFirstElement() {
         super.focusFirstElement();
     }
