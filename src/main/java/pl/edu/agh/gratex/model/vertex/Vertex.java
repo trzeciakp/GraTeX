@@ -68,14 +68,6 @@ public class Vertex extends GraphElement {
         }
     }
 
-    public void setModel(PropertyModel pm) {
-        propertyModel.updateWithModel(pm);
-    }
-
-    public PropertyModel getModel() {
-        return propertyModel.getCopy();
-    }
-
     // ============================================
     // Getters & setters
 
