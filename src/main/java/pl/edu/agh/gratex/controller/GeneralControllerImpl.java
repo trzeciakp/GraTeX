@@ -6,10 +6,7 @@ import pl.edu.agh.gratex.controller.mouse.MouseControllerImpl;
 import pl.edu.agh.gratex.controller.operation.*;
 import pl.edu.agh.gratex.draw.DrawableFactory;
 import pl.edu.agh.gratex.draw.DrawableFactoryImpl;
-import pl.edu.agh.gratex.model.GraphElement;
-import pl.edu.agh.gratex.model.GraphElementFactory;
-import pl.edu.agh.gratex.model.GraphElementFactoryImpl;
-import pl.edu.agh.gratex.model.PropertyModelFactory;
+import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.parser.Parser;
@@ -41,7 +38,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         operationController = new OperationControllerImpl(this);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
         DrawableFactory drawableFactory = new DrawableFactoryImpl(selectionController);
-        PropertyModelFactory propertyModelFactory = new PropertyModelFactory();
+        PropertyModelFactory propertyModelFactory = new PropertyModelFactoryImpl();
         graphElementFactory = new GraphElementFactoryImpl(drawableFactory, propertyModelFactory);
 
         GraphElementControllersFactory elementControllersFactory = new GraphElementControllersFactoryImpl(this, new ColorMapperTmpImpl(), graphElementFactory);
@@ -185,38 +182,44 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void editGraphTemplate() {
         GraphTemplateDialog gdd = new GraphTemplateDialog(mainWindow, this, graphElementFactory);
-        Graph templateGraph = gdd.displayDialog();
+        //Graph templateGraph = gdd.displayDialog();
+        boolean shouldTemplateBeSetToAllElements = gdd.displayDialog();
 
-        if (templateGraph != null) {
+        /*if (templateGraph != null) {
             graph.setVertexDefaultModel(templateGraph.getVertexDefaultModel());
             graph.setEdgeDefaultModel(templateGraph.getEdgeDefaultModel());
             graph.setLabelVDefaultModel(templateGraph.getLabelVDefaultModel());
-            graph.setLabelEDefaultModel(templateGraph.getLabelEDefaultModel());
+            graph.setLabelEDefaultModel(templateGraph.getLabelEDefaultModel());*/
 
-            if (templateGraph.gridOn) {
-                List<GraphElement> elements = graph.getAllElements();
-                AlterationOperation operation = new AlterationOperation(this, elements, OperationType.TEMPLATE_GLOBAL_APPLY, StringLiterals.INFO_TEMPLATE_APPLIED_GLOBALLY);
-                for (GraphElement graphElement : elements) {
-                    switch (graphElement.getType()) {
-                        case VERTEX:
-                            graphElement.setModel(templateGraph.getVertexDefaultModel());
-                            break;
-                        case EDGE:
-                            graphElement.setModel(templateGraph.getEdgeDefaultModel());
-                            break;
-                        case LABEL_VERTEX:
-                            graphElement.setModel(templateGraph.getLabelVDefaultModel());
-                            break;
-                        case LABEL_EDGE:
-                            graphElement.setModel(templateGraph.getLabelEDefaultModel());
-                            break;
-                    }
-                }
-                operation.finish();
-            } else {
-                operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_TEMPLATE_CHANGE));
+        //if (templateGraph.gridOn) {
+        if(shouldTemplateBeSetToAllElements) {
+            List<GraphElement> elements = graph.getAllElements();
+            AlterationOperation operation = new AlterationOperation(this, elements, OperationType.TEMPLATE_GLOBAL_APPLY, StringLiterals.INFO_TEMPLATE_APPLIED_GLOBALLY);
+            PropertyModelFactory propertyModelFactory = graphElementFactory.getPropertyModelFactory();
+            for (GraphElement element : elements) {
+                element.setModel(propertyModelFactory.createTemplateModel(element.getType()));
             }
+            /*for (GraphElement graphElement : elements) {
+                switch (graphElement.getType()) {
+                    case VERTEX:
+                        graphElement.setModel(templateGraph.getVertexDefaultModel());
+                        break;
+                    case EDGE:
+                        graphElement.setModel(templateGraph.getEdgeDefaultModel());
+                        break;
+                    case LABEL_VERTEX:
+                        graphElement.setModel(templateGraph.getLabelVDefaultModel());
+                        break;
+                    case LABEL_EDGE:
+                        graphElement.setModel(templateGraph.getLabelEDefaultModel());
+                        break;
+                }
+            }*/
+            operation.finish();
+        } else {
+            operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_TEMPLATE_CHANGE));
         }
+        //}
     }
 
     @Override

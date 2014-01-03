@@ -98,7 +98,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         } else {
             if (currentlyAddedEdge == null) {
                 currentlyAddedEdge = (Edge) getGraphElementFactory().create(GraphElementType.EDGE,generalController.getGraph());
-                currentlyAddedEdge.setModel(generalController.getGraph().getEdgeDefaultModel());
+                //currentlyAddedEdge.setModel(generalController.getGraph().getEdgeDefaultModel());
                 currentlyAddedEdge.setVertexA(temp);
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_END));
             } else {

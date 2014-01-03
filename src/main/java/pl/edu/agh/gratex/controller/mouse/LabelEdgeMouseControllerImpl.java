@@ -55,7 +55,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
             if (owner.getLabel() == null) {
                 LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());
                 labelE.setOwner(owner);
-                labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
+                //labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
                 if (shiftChangedWhileAdding) {
                     labelE.setHorizontalPlacement(shiftDown);
                 }
@@ -79,7 +79,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
             if (owner.getLabel() == null) {
                 LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());
                 labelE.setOwner(owner);
-                labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
+                //labelE.setModel(generalController.getGraph().getLabelEDefaultModel());
                 if (shiftChangedWhileAdding) {
                     labelE.setHorizontalPlacement(shiftDown);
                 }

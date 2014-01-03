@@ -16,7 +16,7 @@ public class LabelEUtils {
 /*
 
     public static void draw(LabelE labelE, Graphics2D g2d, boolean dummy) {
-        Graphics2D g = (Graphics2D) g2d.create();
+        Graphics2D g = (Graphics2D) g2d.createEmptyModel();
 
         updateLocation(labelE);
 

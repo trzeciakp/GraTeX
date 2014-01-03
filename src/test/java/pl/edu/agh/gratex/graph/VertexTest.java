@@ -5,6 +5,7 @@ import org.mockito.Mockito;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.vertex.Vertex;
+import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -16,7 +17,7 @@ public class VertexTest {
     public void testGetType() throws Exception {
         GraphElementType expectedType = GraphElementType.VERTEX;
         Graph mockedGraph = Mockito.mock(Graph.class);
-        assertEquals("test type", expectedType, new Vertex(mockedGraph).getType());
+        assertEquals("test type", expectedType, new Vertex(mockedGraph, new VertexPropertyModel()).getType());
     }
 
     @Test

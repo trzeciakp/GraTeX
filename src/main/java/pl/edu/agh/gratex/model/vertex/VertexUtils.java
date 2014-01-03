@@ -50,7 +50,7 @@ public class VertexUtils {
     }
 /*
     public static void drawVertex(Vertex vertex, Graphics2D graphics, boolean dummy) {
-        Graphics2D g = (Graphics2D) graphics.create();
+        Graphics2D g = (Graphics2D) graphics.createEmptyModel();
         Graph graph = vertex.getGraph();
 
         int posX = vertex.getPosX();

@@ -95,7 +95,7 @@ public class LabelVUtils {
 /*
 
     public static void draw(LabelV labelV, Graphics2D g2d, boolean dummy) {
-        Graphics2D g = (Graphics2D) g2d.create();
+        Graphics2D g = (Graphics2D) g2d.createEmptyModel();
 
         updateLocation(labelV);
 

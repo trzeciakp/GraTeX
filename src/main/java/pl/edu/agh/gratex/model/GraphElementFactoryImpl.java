@@ -24,7 +24,7 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
     @Override
     public GraphElement create(GraphElementType type, Graph graph) {
         GraphElement result = null;
-        PropertyModel propertyModel = propertyModelFactory.create(type);
+        PropertyModel propertyModel = propertyModelFactory.createTemplateModel(type);
         switch (type) {
             case VERTEX:
                 result = new Vertex(graph, propertyModel);
@@ -40,6 +40,7 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
                 break;
         }
         if(result != null) {
+            //result.setModel(getPropertyModelFactory().createTemplateModel(result.getType()));
             result.setDrawable(drawableFactory.createDefaultDrawable(type));
         }
         return result;
@@ -48,5 +49,11 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
     @Override
     public DrawableFactory getDrawableFactory() {
         return drawableFactory;
+    }
+
+    @Override
+    public PropertyModelFactory getPropertyModelFactory() {
+        //TODO
+        return propertyModelFactory;
     }
 }

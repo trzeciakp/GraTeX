@@ -359,7 +359,7 @@ public class EdgeUtils {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
 
-        Graphics2D g = (Graphics2D) g2d.create();
+        Graphics2D g = (Graphics2D) g2d.createEmptyModel();
 
         updateLocation(edge);
 

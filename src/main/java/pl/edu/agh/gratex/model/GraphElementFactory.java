@@ -11,4 +11,5 @@ public interface GraphElementFactory {
 
     GraphElement create(GraphElementType type, Graph graph);
     DrawableFactory getDrawableFactory();
+    PropertyModelFactory getPropertyModelFactory();
 }

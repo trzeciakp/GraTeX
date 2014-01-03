@@ -6,11 +6,15 @@ import org.mockito.Mockito;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
+import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.vertex.Vertex;
+import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 
 import java.awt.*;
@@ -44,10 +48,10 @@ public class LabelVertexParserTest {
         Mockito.when(COLOR_MAPPER.getColorText(EXPECTED_COLOR)).thenReturn(EXPECTED_COLOR_TEXT);
         Mockito.when(MOCKED_GRAPH.getVertexById(1)).thenReturn(EXPECTED_VERTEX);
         Mockito.when(EXPECTED_VERTEX.getNumber()).thenReturn(1);
-        Mockito.when(FACTORY.create(GraphElementType.EDGE, MOCKED_GRAPH)).thenReturn(new Edge(MOCKED_GRAPH));
-        Mockito.when(FACTORY.create(GraphElementType.LABEL_EDGE, MOCKED_GRAPH)).thenReturn(new LabelE(null, MOCKED_GRAPH));
-        Mockito.when(FACTORY.create(GraphElementType.VERTEX, MOCKED_GRAPH)).thenReturn(new Vertex(MOCKED_GRAPH));
-        Mockito.when(FACTORY.create(GraphElementType.LABEL_VERTEX, MOCKED_GRAPH)).thenReturn(new LabelV(null, MOCKED_GRAPH));
+        Mockito.when(FACTORY.create(GraphElementType.EDGE, MOCKED_GRAPH)).thenReturn(new Edge(MOCKED_GRAPH, new EdgePropertyModel()));
+        Mockito.when(FACTORY.create(GraphElementType.LABEL_EDGE, MOCKED_GRAPH)).thenReturn(new LabelE(null, MOCKED_GRAPH, new LabelEdgePropertyModel()));
+        Mockito.when(FACTORY.create(GraphElementType.VERTEX, MOCKED_GRAPH)).thenReturn(new Vertex(MOCKED_GRAPH, new VertexPropertyModel()));
+        Mockito.when(FACTORY.create(GraphElementType.LABEL_VERTEX, MOCKED_GRAPH)).thenReturn(new LabelV(null, MOCKED_GRAPH, new LabelVertexPropertyModel()));
     }
 
     @Test

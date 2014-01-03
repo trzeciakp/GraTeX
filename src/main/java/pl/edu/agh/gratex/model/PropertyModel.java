@@ -97,9 +97,9 @@ public abstract class PropertyModel {
 
     public static PropertyModel andOpertarorList(GraphElementType type, List<? extends GraphElement> elements) {
         //TODO
-        PropertyModelFactory propertyModelFactory = new PropertyModelFactory();
+        PropertyModelFactory propertyModelFactory = new PropertyModelFactoryImpl();
         if(elements.size() == 0) {
-            return propertyModelFactory.create(type);
+            return propertyModelFactory.createEmptyModel(type);
         }
         PropertyModel result = elements.get(0).getModel();
         for (GraphElement element : elements) {

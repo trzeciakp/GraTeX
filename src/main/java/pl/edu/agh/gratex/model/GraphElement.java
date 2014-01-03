@@ -34,7 +34,8 @@ public abstract class GraphElement {
     }
 
     public PropertyModel getModel() {
-        return propertyModel;
+        //TODO nie bylo getCopy(), powinno byc?
+        return propertyModel.getCopy();
     }
 
     public void draw(Graphics2D g, boolean dummy) {
