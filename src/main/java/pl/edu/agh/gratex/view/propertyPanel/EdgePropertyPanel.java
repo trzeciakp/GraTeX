@@ -48,7 +48,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
 
     public void setModel(PropertyModel pm) {
         changedByUser = false;
-        model = new EdgePropertyModel((EdgePropertyModel) pm);
+        model = (EdgePropertyModel) pm.getCopy();
         if (model.getDirected() == PropertyModel.YES) {
             lblArrowType.setEnabled(true);
             comboBoxArrowType.setEnabled(true);

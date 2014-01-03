@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.view.propertyPanel;
 
+import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
@@ -45,7 +46,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
 
     public void setModel(PropertyModel pm) {
         changedByUser = false;
-        model = new LabelEdgePropertyModel((LabelEdgePropertyModel) pm);
+        model = (LabelEdgePropertyModel) pm.getCopy();
         textField.setText(model.getText());
 
         spinnerPosition.setVisible(true);

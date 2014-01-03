@@ -18,7 +18,7 @@ import java.util.List;
 
 
 public class Vertex extends GraphElement {
-    private VertexPropertyModel propertyModel = new VertexPropertyModel(this);
+    private VertexPropertyModel propertyModel = (VertexPropertyModel) super.propertyModel;
 
     private int posX;
     private int posY;
@@ -73,101 +73,86 @@ public class Vertex extends GraphElement {
     }
 
     public PropertyModel getModel() {
-        VertexPropertyModel result = new VertexPropertyModel(this);
-
-        result.number = getNumber();
-        result.radius = getRadius();
-        result.shape = getShape();
-        result.vertexColor = new Color(getVertexColor().getRGB());
-        result.lineWidth = getLineWidth();
-        result.lineType = getLineType();
-        result.lineColor = new Color(getLineColor().getRGB());
-        result.labelInside = 0;
-        if (isLabelInside()) {
-            result.fontColor = new Color(getFontColor().getRGB());
-            result.labelInside = 1;
-        }
-
-        return result;
+        return propertyModel.getCopy();
     }
 
     // ============================================
     // Getters & setters
 
     public int getNumber() {
-        return propertyModel.number;
+        return propertyModel.getNumber();
     }
 
     public int getRadius() {
-        return propertyModel.radius;
+        return propertyModel.getRadius();
     }
 
     public void setRadius(int radius) {
-        propertyModel.radius = radius;
+        propertyModel.setRadius(radius);
     }
 
     public int getShape() {
-        return propertyModel.shape;
+        return propertyModel.getShape();
     }
 
     public void setShape(int shape) {
-        propertyModel.shape = shape;
+        propertyModel.setShape(shape);
     }
 
     public void setShape(ShapeType shape) {
-        propertyModel.shape = shape.getValue();
+        propertyModel.setShape(shape.getValue());
     }
 
     public ShapeType getShapeENUM() {
-        return ShapeType.values()[propertyModel.shape];
+        return ShapeType.values()[propertyModel.getShape()];
     }
 
     public Color getVertexColor() {
-        return propertyModel.vertexColor;
+        return propertyModel.getVertexColor();
     }
 
     public void setVertexColor(Color vertexColor) {
-        propertyModel.vertexColor = vertexColor;
+        propertyModel.setVertexColor(vertexColor);
     }
 
     public int getLineWidth() {
-        return propertyModel.lineWidth;
+        return propertyModel.getLineWidth();
     }
 
     public void setLineWidth(int lineWidth) {
-        propertyModel.lineWidth = lineWidth;
+        propertyModel.setLineWidth(lineWidth);
     }
 
     public LineType getLineType() {
-        return propertyModel.lineType;
+        return propertyModel.getLineType();
     }
 
     public void setLineType(LineType lineType) {
-        propertyModel.lineType = lineType;
+        propertyModel.setLineType(lineType);
     }
 
     public Color getLineColor() {
-        return propertyModel.lineColor;
+        return propertyModel.getLineColor();
     }
 
     public void setLineColor(Color lineColor) {
-        propertyModel.lineColor = lineColor;
+        propertyModel.setLineColor(lineColor);
     }
 
     public Color getFontColor() {
-        return propertyModel.fontColor;
+        return propertyModel.getFontColor();
     }
 
     public void setFontColor(Color fontColor) {
-        propertyModel.fontColor = fontColor;
+        propertyModel.setFontColor(fontColor);
     }
 
     public boolean isLabelInside() {
-        return propertyModel.labelInside == 1;
+        return propertyModel.getLabelInside() == 1;
     }
 
     public void setLabelInside(boolean labelInside) {
-        propertyModel.labelInside = labelInside ? 1 : 0;
+        propertyModel.setLabelInside(labelInside ? 1 : 0);
     }
 
     public int getPosX() {
@@ -203,13 +188,13 @@ public class Vertex extends GraphElement {
     }
 
     public void setNumber(int number) {
-        propertyModel.number = number;
+        propertyModel.setNumber(number);
         this.text = GraphNumeration.digitalToAlphabetical(number);
     }
 
     public String getLabelInside() {
         if (getGraph().getGraphNumeration().isNumerationDigital()) {
-            return String.valueOf(propertyModel.number);
+            return String.valueOf(propertyModel.getNumber());
         } else {
             return text;
         }

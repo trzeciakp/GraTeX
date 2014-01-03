@@ -1,68 +1,41 @@
 package pl.edu.agh.gratex.model.vertex;
 
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
-import java.io.Serializable;
 
 public class VertexPropertyModel extends PropertyModel {
-    public int number;
-    public int radius;
-    public int shape;
-    public Color vertexColor;
-    public LineType lineType;
-    public int lineWidth;
-    public Color lineColor;
-    public Color fontColor;
-    public int labelInside;
+    private int number = -1;
+    private int radius = PropertyModel.EMPTY;
+    private int shape = PropertyModel.EMPTY;
+    private Color vertexColor = null;
+    private LineType lineType = LineType.EMPTY;
+    private int lineWidth = PropertyModel.EMPTY;
+    private Color lineColor = null;
+    private Color fontColor = null;
+    private int labelInside = PropertyModel.EMPTY;
 
-    public VertexPropertyModel() {
-        super(null);
-        init();
-    }
+    @Override
+    public PropertyModel getCopy() {
+        VertexPropertyModel result = new VertexPropertyModel();
+        result.number = number;
+        result.radius = radius;
+        result.shape = shape;
+        if (vertexColor != null) {
+            result.vertexColor = new Color(vertexColor.getRGB());
+        }
+        result.lineWidth = lineWidth;
+        result.lineType = lineType;
+        if (lineColor != null) {
+            result.lineColor = new Color(lineColor.getRGB());
+        }
+        result.labelInside = labelInside;
+        if (fontColor != null) {
+            result.fontColor = new Color(fontColor.getRGB());
+        }
 
-    public VertexPropertyModel(GraphElement owner) {
-        super(owner);
-        init();
-    }
-
-    private void init() {
-        radius = PropertyModel.EMPTY;
-        shape = PropertyModel.EMPTY;
-        vertexColor = null;
-        lineWidth = PropertyModel.EMPTY;
-        lineType = LineType.EMPTY;
-        lineColor = null;
-        labelInside = PropertyModel.EMPTY;
-        number = -1;
-    }
-
-    public VertexPropertyModel(VertexPropertyModel pm) {
-        super(null);
-        copy(pm);
-    }
-
-    private void copy(VertexPropertyModel pm) {
-        number = pm.number;
-        radius = pm.radius;
-        shape = pm.shape;
-        if (pm.vertexColor != null)
-            vertexColor = new Color(pm.vertexColor.getRGB());
-        else
-            vertexColor = null;
-        lineType = pm.lineType;
-        lineWidth = pm.lineWidth;
-        if (pm.lineColor != null)
-            lineColor = new Color(pm.lineColor.getRGB());
-        else
-            lineColor = null;
-        labelInside = pm.labelInside;
-        if (pm.fontColor != null)
-            fontColor = new Color(pm.fontColor.getRGB());
-        else
-            fontColor = null;
+        return result;
     }
 
     public void andOperator(PropertyModel pm) {
@@ -153,5 +126,77 @@ public class VertexPropertyModel extends PropertyModel {
             labelInside = model.labelInside;
         }
 
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public int getShape() {
+        return shape;
+    }
+
+    public void setShape(int shape) {
+        this.shape = shape;
+    }
+
+    public Color getVertexColor() {
+        return vertexColor;
+    }
+
+    public void setVertexColor(Color vertexColor) {
+        this.vertexColor = vertexColor;
+    }
+
+    public LineType getLineType() {
+        return lineType;
+    }
+
+    public void setLineType(LineType lineType) {
+        this.lineType = lineType;
+    }
+
+    public int getLineWidth() {
+        return lineWidth;
+    }
+
+    public void setLineWidth(int lineWidth) {
+        this.lineWidth = lineWidth;
+    }
+
+    public Color getLineColor() {
+        return lineColor;
+    }
+
+    public void setLineColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    public Color getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(Color fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public int getLabelInside() {
+        return labelInside;
+    }
+
+    public void setLabelInside(int labelInside) {
+        this.labelInside = labelInside;
     }
 }

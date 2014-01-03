@@ -44,38 +44,6 @@ public class PropertyModelFactory {
         }
     }
 
-    public PropertyModel createCopyModel(GraphElement type) {
-        switch (type.getType()) {
-            case VERTEX:
-                return createVertexCopyModel((VertexPropertyModel) type.getModel());
-            case EDGE:
-                return createEdgeCopyModel((EdgePropertyModel) type.getModel());
-            case LABEL_VERTEX:
-                return createLabelVertexCopyModel((LabelVertexPropertyModel) type.getModel());
-            case LABEL_EDGE:
-                return createLabelEdgeCopyModel((LabelEdgePropertyModel) type.getModel());
-            default:
-                return null;
-        }
-    }
-
-
-    private PropertyModel createLabelEdgeCopyModel(LabelEdgePropertyModel model) {
-        return new LabelEdgePropertyModel(model);
-    }
-
-    private PropertyModel createLabelVertexCopyModel(LabelVertexPropertyModel model) {
-        return new LabelVertexPropertyModel(model);
-    }
-
-    private PropertyModel createEdgeCopyModel(EdgePropertyModel model) {
-        return new EdgePropertyModel(model);
-    }
-
-    private PropertyModel createVertexCopyModel(VertexPropertyModel model) {
-        return new VertexPropertyModel(model);
-    }
-
     private PropertyModel createLabelEdgeDefaultModel() {
         return null;
     }

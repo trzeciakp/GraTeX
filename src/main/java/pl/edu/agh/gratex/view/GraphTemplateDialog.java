@@ -102,10 +102,10 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
 
     private void updateModel(PropertyModel model) {
         if (model instanceof VertexPropertyModel) {
-            ((VertexPropertyModel) model).number = -1;
+            ((VertexPropertyModel) model).setNumber(-1);
             vertex1.setModel(model);
             graph.setVertexDefaultModel((VertexPropertyModel) vertex1.getModel());
-            graph.getVertexDefaultModel().number = -1;
+            graph.getVertexDefaultModel().setNumber(-1);
         } else if (model instanceof EdgePropertyModel) {
             ((EdgePropertyModel) model).setRelativeEdgeAngle(-1);
             edge1.setModel(model);
@@ -190,13 +190,13 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         graph = new Graph();
         graph.gridOn = false;
 
-        graph.setVertexDefaultModel(new VertexPropertyModel(generalController.getGraph().getVertexDefaultModel()));
-        graph.setEdgeDefaultModel(new EdgePropertyModel(generalController.getGraph().getEdgeDefaultModel()));
+        graph.setVertexDefaultModel((VertexPropertyModel) generalController.getGraph().getVertexDefaultModel().getCopy());
+        graph.setEdgeDefaultModel((EdgePropertyModel) generalController.getGraph().getEdgeDefaultModel().getCopy());
         graph.getEdgeDefaultModel().setLoop(-1);
         graph.getEdgeDefaultModel().setRelativeEdgeAngle(-1);
-        graph.setLabelVDefaultModel(new LabelVertexPropertyModel(generalController.getGraph().getLabelVDefaultModel()));
+        graph.setLabelVDefaultModel((LabelVertexPropertyModel) generalController.getGraph().getLabelVDefaultModel().getCopy());
         graph.getLabelVDefaultModel().setText(null);
-        graph.setLabelEDefaultModel(new LabelEdgePropertyModel(generalController.getGraph().getLabelEDefaultModel()));
+        graph.setLabelEDefaultModel((LabelEdgePropertyModel) generalController.getGraph().getLabelEDefaultModel().getCopy());
         graph.getLabelEDefaultModel().setText(null);
 
         vertex1 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);

@@ -18,10 +18,9 @@ import pl.edu.agh.gratex.view.*;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.Serializable;
 import java.util.List;
 
-public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener, Serializable {
+public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener {
     private MainWindow mainWindow;
     private OperationController operationController;
     private ModeController modeController;

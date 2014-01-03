@@ -4,13 +4,12 @@ import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.model.GraphElement;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SelectionControllerImpl implements SelectionController, ToolListener, ModeListener, Serializable {
+public class SelectionControllerImpl implements SelectionController, ToolListener, ModeListener {
     private GeneralController generalController;
 
     private List<GraphElement> selection = new LinkedList<>();

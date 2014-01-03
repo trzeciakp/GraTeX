@@ -1,39 +1,35 @@
 package pl.edu.agh.gratex.model.labelE;
 
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
-import java.io.Serializable;
 
 public class LabelEdgePropertyModel extends PropertyModel {
+    private String text = "";
+    private Color fontColor = null;
+    private int position = PropertyModel.EMPTY;
+    private int spacing = PropertyModel.EMPTY;
+    private int topPlacement = PropertyModel.EMPTY;
+    private int horizontalPlacement = PropertyModel.EMPTY;
+    private int isLoop = PropertyModel.EMPTY;
 
-    private String text;
-    private Color fontColor;
-    private int position;
-    private int spacing;
-    private int topPlacement;
-    private int horizontalPlacement;
-    private int isLoop;
+    @Override
+    public PropertyModel getCopy() {
+        LabelEdgePropertyModel result = new LabelEdgePropertyModel();
 
-    public LabelEdgePropertyModel() {
-        super(null);
-        init();
-    }
+        if (text != null) {
+            result.setText(new String(text));
+        }
+        if (fontColor != null) {
+            result.setFontColor(new Color(fontColor.getRGB()));
+        }
+        result.setPosition(position);
+        result.setSpacing(spacing);
+        result.setLoop(isLoop);
+        result.setTopPlacement(topPlacement);
+        result.setHorizontalPlacement(horizontalPlacement);
 
-    public LabelEdgePropertyModel(GraphElement owner) {
-        super(owner);
-        init();
-    }
-
-    private void init() {
-        text = "";
-        fontColor = null;
-        position = PropertyModel.EMPTY;
-        spacing = PropertyModel.EMPTY;
-        topPlacement = PropertyModel.EMPTY;
-        horizontalPlacement = PropertyModel.EMPTY;
-        isLoop = PropertyModel.EMPTY;
+        return result;
     }
 
     @Override
@@ -98,25 +94,6 @@ public class LabelEdgePropertyModel extends PropertyModel {
         if (model.getHorizontalPlacement() > -1) {
             horizontalPlacement = model.getHorizontalPlacement();
         }
-    }
-
-    public LabelEdgePropertyModel(LabelEdgePropertyModel pm) {
-        super(null);
-        copy(pm);
-    }
-
-    private void copy(LabelEdgePropertyModel pm) {
-        if (pm.text != null)
-            text = new String(pm.text);
-        if (pm.fontColor != null)
-            fontColor = new Color(pm.fontColor.getRGB());
-        else
-            fontColor = null;
-        position = pm.position;
-        spacing = pm.spacing;
-        topPlacement = pm.topPlacement;
-        horizontalPlacement = pm.horizontalPlacement;
-        isLoop = pm.isLoop;
     }
 
     public String getText() {

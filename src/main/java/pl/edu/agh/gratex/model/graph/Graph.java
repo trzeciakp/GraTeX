@@ -2,7 +2,6 @@ package pl.edu.agh.gratex.model.graph;
 
 
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.PropertyModelFactory;
@@ -17,14 +16,13 @@ import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
 import java.awt.*;
-import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class Graph implements Serializable {
-    private PropertyModelFactory propertyModelFactory;
+public class Graph {
+    private PropertyModelFactory propertyModelFactory = new PropertyModelFactory();
 
     private VertexPropertyModel vertexDefaultModel;
     private EdgePropertyModel edgeDefaultModel;
@@ -125,15 +123,15 @@ public class Graph implements Serializable {
     public void initDefaultModels() {
         //TODO
         setVertexDefaultModel(new VertexPropertyModel());
-        getVertexDefaultModel().number = -1;
-        getVertexDefaultModel().radius = 40;
-        getVertexDefaultModel().shape = 1;
-        getVertexDefaultModel().vertexColor = new Color(new Float(1), new Float(0.5), new Float(0));
-        getVertexDefaultModel().lineType = LineType.SOLID;
-        getVertexDefaultModel().lineWidth = 1;
-        getVertexDefaultModel().lineColor = Color.black;
-        getVertexDefaultModel().fontColor = Color.black;
-        getVertexDefaultModel().labelInside = 1;
+        getVertexDefaultModel().setNumber(-1);
+        getVertexDefaultModel().setRadius(40);
+        getVertexDefaultModel().setShape(1);
+        getVertexDefaultModel().setVertexColor(new Color(new Float(1), new Float(0.5), new Float(0)));
+        getVertexDefaultModel().setLineType(LineType.SOLID);
+        getVertexDefaultModel().setLineWidth(1);
+        getVertexDefaultModel().setLineColor(Color.black);
+        getVertexDefaultModel().setFontColor(Color.black);
+        getVertexDefaultModel().setLabelInside(1);
 
         setEdgeDefaultModel(new EdgePropertyModel());
         getEdgeDefaultModel().setLineType(LineType.SOLID);

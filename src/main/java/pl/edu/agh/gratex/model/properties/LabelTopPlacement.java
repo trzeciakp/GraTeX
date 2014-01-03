@@ -1,8 +1,6 @@
 package pl.edu.agh.gratex.model.properties;
 
-import java.io.Serializable;
-
-public enum LabelTopPlacement implements Serializable, Emptible {
+public enum LabelTopPlacement implements Emptible {
     EMPTY(-1) {
         public String toString() {
             return " ";

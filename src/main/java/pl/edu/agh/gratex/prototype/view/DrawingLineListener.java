@@ -6,15 +6,14 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrawingLineListener implements MouseMotionListener, MouseListener, Serializable {
+public class DrawingLineListener implements MouseMotionListener, MouseListener {
 
-    private List<Point> points = new ArrayList<Point>();
+    private List<Point> points = new ArrayList<>();
     private LineController controller;
-    private List<Point> smoothedPoints = new ArrayList<Point>();
+    private List<Point> smoothedPoints = new ArrayList<>();
 
     public DrawingLineListener(LineController controller) {
         this.controller = controller;

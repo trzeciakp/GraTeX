@@ -3,12 +3,11 @@ package pl.edu.agh.gratex.model;
 import pl.edu.agh.gratex.constants.GraphElementType;
 
 import java.awt.*;
-import java.io.Serializable;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
-public abstract class PropertyModel implements Serializable {
+public abstract class PropertyModel {
 
     public final static int EMPTY = -1;
     public final static int NONE = 0;
@@ -81,13 +80,20 @@ public abstract class PropertyModel implements Serializable {
 
     protected GraphElement owner;
 
-    public PropertyModel(GraphElement owner) {
+    public void setOwner(GraphElement owner) {
         this.owner = owner;
     }
+
+    public GraphElement getOwner() {
+        return owner;
+    }
+
 
     public abstract void andOperator(PropertyModel pm);
 
     public abstract void mergeWithModel(PropertyModel pm);
+
+    public abstract PropertyModel getCopy();
 
     public static PropertyModel andOpertarorList(GraphElementType type, List<? extends GraphElement> elements) {
         //TODO
@@ -95,7 +101,7 @@ public abstract class PropertyModel implements Serializable {
         if(elements.size() == 0) {
             return propertyModelFactory.create(type);
         }
-        PropertyModel result = propertyModelFactory.createCopyModel(elements.get(0));
+        PropertyModel result = elements.get(0).getModel();
         for (GraphElement element : elements) {
             result.andOperator(element.getModel());
         }

@@ -1,59 +1,34 @@
 package pl.edu.agh.gratex.model.edge;
 
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
-import java.io.Serializable;
 
 
-public class EdgePropertyModel extends PropertyModel  {
+public class EdgePropertyModel extends PropertyModel {
+    private LineType lineType = LineType.EMPTY;
+    private int lineWidth = PropertyModel.EMPTY;
+    private int directed = PropertyModel.EMPTY;
+    private Color lineColor = null;
+    private int relativeEdgeAngle = PropertyModel.EMPTY;
+    private int isLoop = PropertyModel.NO;
+    private int arrowType = PropertyModel.EMPTY;
 
-    private LineType lineType;
-    private int lineWidth;
-    private int directed;
-    private Color lineColor;
-    private int relativeEdgeAngle;
-    private int isLoop;
-    private int arrowType;
+    @Override
+    public PropertyModel getCopy() {
+        EdgePropertyModel result = new EdgePropertyModel();
+        result.setLineWidth(lineWidth);
+        result.setLineType(lineType);
+        result.setArrowType(arrowType);
+        if (lineColor != null) {
+            result.setLineColor(new Color(lineColor.getRGB()));
+        }
+        result.setRelativeEdgeAngle(relativeEdgeAngle);
+        result.setLoop(isLoop);
+        result.setDirected(directed);
 
-    public EdgePropertyModel() {
-        super(null);
-        init();
-    }
-
-    public EdgePropertyModel(GraphElement owner) {
-        super(owner);
-        init();
-    }
-
-    private void init() {
-        lineType = LineType.EMPTY;
-        lineWidth = PropertyModel.EMPTY;
-        directed = PropertyModel.EMPTY;
-        lineColor = null;
-        relativeEdgeAngle = PropertyModel.EMPTY;
-        isLoop = PropertyModel.NO;
-        arrowType = PropertyModel.EMPTY;
-    }
-
-    public EdgePropertyModel(EdgePropertyModel pm) {
-        super(null);
-        copy(pm);
-    }
-
-    private void copy(EdgePropertyModel pm) {
-        lineType = pm.lineType;
-        lineWidth = pm.lineWidth;
-        directed = pm.directed;
-        if (pm.lineColor != null)
-            lineColor = new Color(pm.lineColor.getRGB());
-        else
-            lineColor = null;
-        relativeEdgeAngle = pm.relativeEdgeAngle;
-        isLoop = pm.isLoop;
-        arrowType = pm.arrowType;
+        return result;
     }
 
     @Override

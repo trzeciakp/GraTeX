@@ -17,7 +17,7 @@ import java.util.List;
 
 
 public class Edge extends GraphElement {
-    private EdgePropertyModel propertyModel = new EdgePropertyModel(this);
+    private EdgePropertyModel propertyModel = (EdgePropertyModel) super.propertyModel;
 
     private Vertex vertexA;
     private Vertex vertexB;
@@ -66,30 +66,6 @@ public class Edge extends GraphElement {
         result = 31 * result + (vertexB != null ? vertexB.getNumber() : 0);
         result = 31 * result + inAngle;
         result = 31 * result + outAngle;
-        return result;
-    }
-
-    public void setModel(PropertyModel pm) {
-        propertyModel.mergeWithModel(pm);
-    }
-
-    public PropertyModel getModel() {
-        EdgePropertyModel result = new EdgePropertyModel(this);
-
-        result.setLineWidth(getLineWidth());
-        result.setLineType(getLineType());
-        result.setArrowType(getArrowType());
-        result.setLineColor(new Color(getLineColor().getRGB()));
-        result.setRelativeEdgeAngle(getRelativeEdgeAngle());
-        if (getVertexA() == getVertexB()) {
-            result.setLoop(PropertyModel.YES);
-        } else
-            result.setLoop(PropertyModel.NO);
-        result.setDirected(0);
-        if (isDirected()) {
-            result.setDirected(1);
-        }
-
         return result;
     }
 

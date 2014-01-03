@@ -1,8 +1,6 @@
 package pl.edu.agh.gratex.model.properties;
 
-import java.io.Serializable;
-
-public enum ShapeType implements Serializable, Emptible {
+public enum ShapeType implements Emptible {
     EMPTY(-1) {
         @Override
         public boolean isEmpty() {

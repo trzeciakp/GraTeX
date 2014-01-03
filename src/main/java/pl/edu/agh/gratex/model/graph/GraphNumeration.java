@@ -2,9 +2,7 @@ package pl.edu.agh.gratex.model.graph;
 
 import pl.edu.agh.gratex.constants.Const;
 
-import java.io.Serializable;
-
-public class GraphNumeration implements Serializable {
+public class GraphNumeration {
     public static final char[] letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
     private boolean[] usedNumber;

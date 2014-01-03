@@ -1,49 +1,27 @@
 package pl.edu.agh.gratex.model.labelV;
 
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
-import java.io.Serializable;
 
 public class LabelVertexPropertyModel extends PropertyModel {
-    private String text;
-    private Color fontColor;
-    private int position;
-    private int spacing;
+    private String text = "";
+    private Color fontColor = null;
+    private int position = PropertyModel.EMPTY;
+    private int spacing = PropertyModel.EMPTY;
 
-    public LabelVertexPropertyModel() {
-        super(null);
-        init();
-    }
-
-    public LabelVertexPropertyModel(GraphElement owner) {
-        super(owner);
-        init();
-    }
-
-    private void init() {
-        text = "";
-        fontColor = null;
-        position = PropertyModel.EMPTY;
-        spacing = PropertyModel.EMPTY;
-    }
-
-    public LabelVertexPropertyModel(LabelVertexPropertyModel pm) {
-        super(null);
-        copy(pm);
-
-    }
-
-    private void copy(LabelVertexPropertyModel pm) {
-        if (pm.text != null)
-            text = new String(pm.text);
-        if (pm.fontColor != null)
-            fontColor = new Color(pm.fontColor.getRGB());
-        else
-            fontColor = null;
-        position = pm.position;
-        spacing = pm.spacing;
+    @Override
+    public PropertyModel getCopy() {
+        LabelVertexPropertyModel result = new LabelVertexPropertyModel();
+        if (text != null) {
+            result.setText(new String(text));
+        }
+        if (fontColor != null) {
+            result.setFontColor(new Color(fontColor.getRGB()));
+        }
+        result.setPosition(position);
+        result.setSpacing(spacing);
+        return result;
     }
 
     public void andOperator(PropertyModel pm) {

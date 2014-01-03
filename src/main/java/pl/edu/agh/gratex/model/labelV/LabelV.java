@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -15,7 +16,7 @@ import java.util.List;
 
 
 public class LabelV extends GraphElement  {
-    private LabelVertexPropertyModel propertyModel = new LabelVertexPropertyModel(this);
+    private LabelVertexPropertyModel propertyModel = (LabelVertexPropertyModel) super.propertyModel;
 
     private int posX;
     private int posY;
@@ -70,21 +71,6 @@ public class LabelV extends GraphElement  {
                 ", outline=" + outline +
                 ", graph=" + graph +
                 '}';
-    }
-
-    public void setModel(PropertyModel pm) {
-        propertyModel.mergeWithModel(pm);
-    }
-
-    public PropertyModel getModel() {
-        LabelVertexPropertyModel result = new LabelVertexPropertyModel(this);
-
-        result.setText(new String(getText()));
-        result.setFontColor(new Color(getFontColor().getRGB()));
-        result.setPosition(getPosition());
-        result.setSpacing(getSpacing());
-
-        return result;
     }
 
     @Override

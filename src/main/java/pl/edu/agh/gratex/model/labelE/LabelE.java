@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
@@ -14,9 +15,8 @@ import java.util.*;
 import java.util.List;
 
 
-@SuppressWarnings("serial")
 public class LabelE extends GraphElement {
-    private LabelEdgePropertyModel propertyModel = new LabelEdgePropertyModel(this);
+    private LabelEdgePropertyModel propertyModel = (LabelEdgePropertyModel) super.propertyModel;
 
     private int posX;
     private int posY;
@@ -54,33 +54,6 @@ public class LabelE extends GraphElement {
     @Override
     public List<? extends GraphElement> getConnectedElements() {
         return new LinkedList<>();
-    }
-
-    public void setModel(PropertyModel pm) {
-        propertyModel.mergeWithModel(pm);
-    }
-
-    public PropertyModel getModel() {
-        LabelEdgePropertyModel result = new LabelEdgePropertyModel(this);
-
-        result.setText(new String(getText()));
-        result.setFontColor(new Color(getFontColor().getRGB()));
-        result.setPosition(getPosition());
-        result.setSpacing(getSpacing());
-        result.setTopPlacement(0);
-        result.setLoop(PropertyModel.NO);
-        if (getOwner().getVertexA() == getOwner().getVertexB()) {
-            result.setLoop(PropertyModel.YES);
-        }
-        if (isTopPlacement()) {
-            result.setTopPlacement(1);
-        }
-        result.setHorizontalPlacement(0);
-        if (isHorizontalPlacement()) {
-            result.setHorizontalPlacement(1);
-        }
-
-        return result;
     }
 
     @Override

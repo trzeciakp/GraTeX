@@ -1,7 +1,7 @@
 package pl.edu.agh.gratex.view.propertyPanel;
 
-import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.properties.LabelPosition;
 
 import javax.swing.*;
@@ -13,8 +13,8 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 
+@SuppressWarnings("serial")
 public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
-    private static final long serialVersionUID = -8920073345520413341L;
 
     private LabelVertexPropertyModel model;
     private JLabel labelText;
@@ -39,7 +39,7 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
 
     public void setModel(PropertyModel pm) {
         changedByUser = false;
-        model = new LabelVertexPropertyModel((LabelVertexPropertyModel) pm);
+        model = (LabelVertexPropertyModel) pm.getCopy();
         textField.setText(model.getText());
         comboBoxFontColor.setSelectedItem(model.getFontColor());
         comboBoxPosition.setSelectedIndex(model.getPosition() + 1);

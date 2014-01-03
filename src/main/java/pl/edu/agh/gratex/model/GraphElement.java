@@ -1,20 +1,18 @@
 package pl.edu.agh.gratex.model;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.draw.Drawable;
 import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
-import java.io.Serializable;
 import java.util.List;
 
 
 @SuppressWarnings("serial")
-public abstract class GraphElement implements Serializable {
+public abstract class GraphElement {
     protected Graph graph;
     protected Drawable drawable;
+    protected PropertyModel propertyModel;
 
     public Graph getGraph() {
         return graph;
@@ -26,18 +24,28 @@ public abstract class GraphElement implements Serializable {
 
     protected GraphElement(Graph graph) {
         this.graph = graph;
+        if (graph != null) {
+            propertyModel = graph.getPropertyModelFactory().create(getType());
+        } else {
+            propertyModel = new PropertyModelFactory().create(getType());
+        }
+        propertyModel.setOwner(this);
     }
 
     public void updateLocation() {
     }
 
+    public void setModel(PropertyModel pm) {
+        propertyModel.mergeWithModel(pm);
+    }
+
+    public PropertyModel getModel() {
+        return propertyModel;
+    }
+
     public void draw(Graphics2D g, boolean dummy) {
         drawable.draw(this, g, dummy);
     }
-
-    public abstract void setModel(PropertyModel pm);
-
-    public abstract PropertyModel getModel();
 
     public abstract GraphElementType getType();
 

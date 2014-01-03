@@ -18,7 +18,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Vector;
 
 @SuppressWarnings("serial")
 public class VertexPropertyPanel extends AbstractPropertyPanel {
@@ -76,45 +75,45 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
     public void setModel(PropertyModel pm) {
 
-        model = new VertexPropertyModel((VertexPropertyModel) pm);
+        model = (VertexPropertyModel) pm.getCopy();
         changedByUser = false;
         lblNumber.setEnabled(true);
         spinnerNumber.setEnabled(true);
-        if (model.labelInside == PropertyModel.NO) {
+        if (model.getLabelInside() == PropertyModel.NO) {
             lblNumber.setEnabled(false);
             spinnerNumber.setEnabled(false);
             lblFontColor.setEnabled(false);
             comboBoxFontColor.setEnabled(false);
-        } else if (model.labelInside == PropertyModel.YES) {
+        } else if (model.getLabelInside() == PropertyModel.YES) {
             lblFontColor.setEnabled(true);
             comboBoxFontColor.setEnabled(true);
         }
         updateNumeration();
-        if (model.number == -1) {
+        if (model.getNumber() == -1) {
             lblNumber.setEnabled(false);
             spinnerNumber.setEnabled(false);
             spinnerNumber.setValue(" ");
         } else if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
-            spinnerNumber.setValue(model.number);
+            spinnerNumber.setValue(model.getNumber());
         } else
-            spinnerNumber.setValue(GraphNumeration.digitalToAlphabetical(model.number));
-        if (model.shape == -1)
+            spinnerNumber.setValue(GraphNumeration.digitalToAlphabetical(model.getNumber()));
+        if (model.getShape() == -1)
             comboBoxVertexType.setSelectedIndex(0);
         else
-            comboBoxVertexType.setSelectedIndex(model.shape);
-        if (model.radius == -1)
+            comboBoxVertexType.setSelectedIndex(model.getShape());
+        if (model.getRadius() == -1)
             spinnerVertexSize.setValue(" ");
         else
-            spinnerVertexSize.setValue(model.radius + " px");
-        comboBoxVertexColor.setSelectedItem(model.vertexColor);
-        comboBoxFontColor.setSelectedItem(model.fontColor);
-        comboBoxLineType.setSelectedItem(model.lineType);
-        if (model.lineWidth == -1)
+            spinnerVertexSize.setValue(model.getRadius() + " px");
+        comboBoxVertexColor.setSelectedItem(model.getVertexColor());
+        comboBoxFontColor.setSelectedItem(model.getFontColor());
+        comboBoxLineType.setSelectedItem(model.getLineType());
+        if (model.getLineWidth() == -1)
             spinnerLineSize.setValue(" ");
         else
-            spinnerLineSize.setValue(model.lineWidth + " px");
-        comboBoxLineColor.setSelectedItem(model.lineColor);
-        comboBoxLabelInside.setSelectedIndex(model.labelInside + 1);
+            spinnerLineSize.setValue(model.getLineWidth() + " px");
+        comboBoxLineColor.setSelectedItem(model.getLineColor());
+        comboBoxLabelInside.setSelectedIndex(model.getLabelInside() + 1);
 
         changedByUser = true;
     }
@@ -136,12 +135,12 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         comboBoxVertexType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxVertexType.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.shape != newValue) || (!changedByUser)) {
-                    model.shape = newValue;
+                if ((newValue != -1) && (model.getShape() != newValue) || (!changedByUser)) {
+                    model.setShape(newValue);
                     changed();
                 } else {
-                    if (model.shape != -1)
-                        comboBoxVertexType.setSelectedIndex(model.shape);
+                    if (model.getShape() != -1)
+                        comboBoxVertexType.setSelectedIndex(model.getShape());
                     else
                         comboBoxVertexType.setSelectedIndex(0);
                 }
@@ -172,17 +171,17 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                 value = value.substring(0, value.indexOf(" "));
                 try {
                     int newValue = Integer.parseInt(value);
-                    if (model.radius != newValue) {
-                        model.radius = newValue;
+                    if (model.getRadius() != newValue) {
+                        model.setRadius(newValue);
                         changed();
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.radius != -1)
-                            spinnerVertexSize.setValue(model.radius + " px");
+                        if (model.getRadius() != -1)
+                            spinnerVertexSize.setValue(model.getRadius() + " px");
                     } else {
                         spinnerVertexSize.setValue(" ");
-                        model.radius = -1;
+                        model.setRadius(-1);
                     }
                 }
             }
@@ -202,12 +201,12 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                 if (changedByUser) {
                     Color newValue = (Color) comboBoxVertexColor.getSelectedItem();
                     if (newValue != null) {
-                        if (!newValue.equals(model.vertexColor)) {
-                            model.vertexColor = newValue;
+                        if (!newValue.equals(model.getVertexColor())) {
+                            model.setVertexColor(newValue);
                             changed();
                         }
                     } else {
-                        comboBoxVertexColor.setSelectedItem(model.vertexColor);
+                        comboBoxVertexColor.setSelectedItem(model.getVertexColor());
                     }
                 }
                 repaint();
@@ -227,11 +226,11 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         comboBoxLineType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 LineType newValue = ((LineType) comboBoxLineType.getSelectedItem());
-                if ((newValue != LineType.EMPTY) && (model.lineType != newValue) || (!changedByUser)) {
-                    model.lineType = newValue;
+                if ((newValue != LineType.EMPTY) && (model.getLineType() != newValue) || (!changedByUser)) {
+                    model.setLineType(newValue);
                     changed();
                 } else {
-                    comboBoxLineType.setSelectedItem(model.lineType);
+                    comboBoxLineType.setSelectedItem(model.getLineType());
                 }
             }
         });
@@ -260,17 +259,17 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                 value = value.substring(0, value.indexOf(" "));
                 try {
                     int newValue = Integer.parseInt(value);
-                    if (model.lineWidth != newValue) {
-                        model.lineWidth = newValue;
+                    if (model.getLineWidth() != newValue) {
+                        model.setLineWidth(newValue);
                         changed();
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.lineWidth != -1)
-                            spinnerLineSize.setValue(model.lineWidth + " px");
+                        if (model.getLineWidth() != -1)
+                            spinnerLineSize.setValue(model.getLineWidth() + " px");
                     } else {
                         spinnerLineSize.setValue(" ");
-                        model.lineWidth = -1;
+                        model.setLineWidth(-1);
                     }
                 }
             }
@@ -291,12 +290,12 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                 if (changedByUser) {
                     Color newValue = (Color) comboBoxLineColor.getSelectedItem();
                     if (newValue != null) {
-                        if (!newValue.equals(model.lineColor)) {
-                            model.lineColor = newValue;
+                        if (!newValue.equals(model.getLineColor())) {
+                            model.setLineColor(newValue);
                             changed();
                         }
                     } else {
-                        comboBoxLineColor.setSelectedItem(model.lineColor);
+                        comboBoxLineColor.setSelectedItem(model.getLineColor());
                     }
                 }
                 repaint();
@@ -318,11 +317,11 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         comboBoxLabelInside.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int newValue = ((Option) comboBoxLabelInside.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.labelInside != newValue) || (!changedByUser)) {
-                    model.labelInside = newValue;
+                if ((newValue != -1) && (model.getLabelInside() != newValue) || (!changedByUser)) {
+                    model.setLabelInside(newValue);
                     changed();
                 } else {
-                    comboBoxLabelInside.setSelectedIndex(model.labelInside + 1);
+                    comboBoxLabelInside.setSelectedIndex(model.getLabelInside() + 1);
                 }
             }
         });
@@ -341,12 +340,12 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                 if (changedByUser) {
                     Color newValue = (Color) comboBoxFontColor.getSelectedItem();
                     if (newValue != null) {
-                        if (!newValue.equals(model.fontColor)) {
-                            model.fontColor = newValue;
+                        if (!newValue.equals(model.getFontColor())) {
+                            model.setFontColor(newValue);
                             changed();
                         }
                     } else {
-                        comboBoxFontColor.setSelectedItem(model.fontColor);
+                        comboBoxFontColor.setSelectedItem(model.getFontColor());
                     }
                 }
                 repaint();
@@ -421,7 +420,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                         while ((value > 0) && (value < Const.MAX_VERTEX_NUMBER)) {
                             if (!generalController.getGraph().getGraphNumeration().isUsed(value)) {
 
-                                model.number = value;
+                                model.setNumber(value);
                                 previous = value;
                                 setValue(value);
                                 changed();
