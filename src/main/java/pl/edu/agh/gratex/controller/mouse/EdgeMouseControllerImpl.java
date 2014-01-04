@@ -4,12 +4,15 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
+import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.edge.EdgeUtils;
+import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.view.Application;
@@ -26,6 +29,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     private boolean changingEdgeAngle;
     private boolean disconnectedVertexA;
     private Vertex edgeDragDummy;
+    private String initialLatexCodeOfDraggedEdge;
 
     public EdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
         super(generalController, graphElementFactory);
@@ -69,7 +73,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 currentlyAddedEdge.setRelativeEdgeAngle(angle);
 
             }
-            if(currentlyAddedEdge.getRelativeEdgeAngle() != 0) {
+            if (currentlyAddedEdge.getRelativeEdgeAngle() != 0) {
                 currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDummyEdgeDrawable());
             } else {
                 currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
@@ -95,13 +99,17 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             }
         } else {
             if (currentlyAddedEdge == null) {
-                currentlyAddedEdge = (Edge) getGraphElementFactory().create(GraphElementType.EDGE,generalController.getGraph());
+                currentlyAddedEdge = (Edge) getGraphElementFactory().create(GraphElementType.EDGE, generalController.getGraph());
                 currentlyAddedEdge.setVertexA(temp);
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_END));
             } else {
                 currentlyAddedEdge.setVertexB(temp);
-                currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
-                new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
+                if (!checkIfEdgeExists(currentlyAddedEdge)) {
+                    currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
+                    new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
+                } else {
+                    generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_EDGE_EXISTS));
+                }
                 currentlyAddedEdge = null;
             }
         }
@@ -119,6 +127,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     private void startMoving(int mouseX, int mouseY) {
         Edge edge = getElementFromPosition(mouseX, mouseY);
         currentlyDraggedEdge = edge;
+        initialLatexCodeOfDraggedEdge = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(currentlyDraggedEdge);
         generalController.getSelectionController().addToSelection(edge, false);
 
         currentDragOperation = new AlterationOperation(generalController, currentlyDraggedEdge, OperationType.MOVE_EDGE, StringLiterals.INFO_EDGE_MOVE);
@@ -187,13 +196,21 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void finishMoving() {
         if (currentlyDraggedEdge != null) {
-            if (currentlyDraggedEdge.getVertexA() != edgeDragDummy && currentlyDraggedEdge.getVertexB() != edgeDragDummy) {
-                currentDragOperation.finish();
+            boolean restoreState = false;
+            if (checkIfEdgeExists(currentlyDraggedEdge)) {
+                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_MOVE_EDGE_EXISTS));
+                restoreState = true;
             } else {
-                // Restore original edge state (it was dropped in mid air)
+                if (currentlyDraggedEdge.getVertexA() != edgeDragDummy && currentlyDraggedEdge.getVertexB() != edgeDragDummy) {
+                    currentDragOperation.finish();
+                } else {
+                    restoreState = true;
+                }
+            }
+            if (restoreState) {
+                // Restore original edge state (it was dropped in mid air or moving was not permitted)
                 try {
-                    generalController.getParseController().getEdgeParser().updateElementWithCode(
-                            currentlyDraggedEdge, generalController.getParseController().getEdgeParser().parseToLatex(currentlyDraggedEdge));
+                    generalController.getParseController().getEdgeParser().updateElementWithCode(currentlyDraggedEdge, initialLatexCodeOfDraggedEdge);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Application.criticalError("Parser error", e);
@@ -202,5 +219,18 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             changingEdgeAngle = false;
             currentlyDraggedEdge = null;
         }
+    }
+
+    private boolean checkIfEdgeExists(Edge edge) {
+        edge.updateLocation();
+        String latexCode = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(edge);
+        boolean result = false;
+        for (GraphElement graphElement : generalController.getGraph().getEdges()) {
+            String existingLatexCode = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(graphElement);
+            if (existingLatexCode.equals(latexCode) && graphElement != edge) {
+                result = true;
+            }
+        }
+        return result;
     }
 }
