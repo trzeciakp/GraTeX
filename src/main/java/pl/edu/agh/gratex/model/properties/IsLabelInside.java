@@ -13,7 +13,7 @@ public enum IsLabelInside implements Emptible{
 
         @Override
         public boolean isEmpty() {
-            return false;
+            return true;
         }
     }, YES, NO;
 

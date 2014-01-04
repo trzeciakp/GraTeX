@@ -52,7 +52,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         if (model.getDirected() == IsDirected.YES) {
             lblArrowType.setEnabled(true);
             comboBoxArrowType.setEnabled(true);
-        } else if (model.getDirected() == IsDirected.NO) {
+        } else {
             lblArrowType.setEnabled(false);
             comboBoxArrowType.setEnabled(false);
         }
@@ -64,8 +64,6 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         }
         comboBoxLineColor.setSelectedItem(model.getLineColor());
         comboBoxDirect.setSelectedItem(model.getDirected());
-        //comboBoxDirect.setSelectedIndex(model.getDirected() + 1);
-        //comboBoxArrowType.setSelectedIndex(model.getArrowType() + 1);
         comboBoxArrowType.setSelectedItem(model.getArrowType());
         spinnerAngle.setVisible(true);
         comboBoxAngle.setVisible(false);
@@ -88,7 +86,6 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
             spinnerAngle.setEnabled(false);
             lblAngle.setEnabled(false);
         }
-
         changedByUser = true;
     }
 

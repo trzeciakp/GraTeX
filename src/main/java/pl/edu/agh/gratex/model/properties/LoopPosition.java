@@ -10,7 +10,7 @@ public enum LoopPosition implements Emptible {
 
         @Override
         public boolean isEmpty() {
-            return false;
+            return true;
         }
     }, P25("25 %", 25), P50("50 %", 50), P75("75 %", 75);
 

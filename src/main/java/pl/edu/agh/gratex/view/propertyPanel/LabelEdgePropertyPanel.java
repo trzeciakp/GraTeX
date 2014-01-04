@@ -52,19 +52,24 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         spinnerPosition.setVisible(true);
         comboBoxPosition.setVisible(false);
         comboBoxFontColor.setSelectedItem(model.getFontColor());
-        if (model.getLoop().isEmpty() || model.getLoop() == IsLoop.NO) {
+        if (model.getLoop() == IsLoop.NO) {
             if (model.getPosition() == PropertyModel.EMPTY) {
                 spinnerPosition.setValue(StringLiterals.EMPTY_VALUE);
             } else {
                 spinnerPosition.setValue(model.getPosition() + StringLiterals.PERCENT_SUFFIX);
             }
-        } else if (model.getLoop() == IsLoop.YES) {
+        } else if (model.getLoop().isEmpty() || (model.getLoop() == IsLoop.YES)) {
             lblPlace.setEnabled(false);
             comboBoxPlace.setEnabled(false);
             lblRotation.setEnabled(false);
             comboBoxRotation.setEnabled(false);
             spinnerPosition.setVisible(false);
             comboBoxPosition.setVisible(true);
+            if(model.getLoop().isEmpty()) {
+                comboBoxPosition.setEnabled(false);
+            } else {
+                comboBoxPosition.setEnabled(true);
+            }
             comboBoxPosition.setSelectedItem(LoopPosition.getByValue(model.getPosition()));
         }
 
