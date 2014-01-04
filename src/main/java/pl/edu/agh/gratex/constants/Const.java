@@ -55,7 +55,7 @@ public class Const {
     public final static int EDGE_SELECTION_MARGIN = 10;
 
     // Stroke used to draw angle visualization
-    public final static Stroke ANGLE_VISUALIZATION_STROKE = DrawingTools.getStroke(2, LineType.DASHED, 0.0);
+    public final static Stroke ANGLE_VISUALIZATION_STROKE = DrawingTools.getStroke(LineType.DASHED, 2, 0.0);
     // Color used to draw angle visualization
     public final static Color ANGLE_VISUALIZATION_COLOR = Color.gray;
 }

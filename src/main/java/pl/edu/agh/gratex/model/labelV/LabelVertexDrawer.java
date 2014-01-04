@@ -33,10 +33,7 @@ public class LabelVertexDrawer implements Drawer {
         }
 
         g.setFont(Const.DEFAULT_FONT);
-        g.setColor(labelV.getFontColor());
-        if (graphElement.isDummy()) {
-            g.setColor(DrawingTools.getDummyColor(labelV.getFontColor()));
-        }
+        g.setColor(DrawingTools.getDrawingColor(labelV.getFontColor(), labelV.isDummy()));
         g.drawString(labelV.getText(), labelV.getDrawX(), labelV.getDrawY());
 
         g.dispose();

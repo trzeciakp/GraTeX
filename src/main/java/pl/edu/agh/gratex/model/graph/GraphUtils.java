@@ -4,18 +4,10 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.edge.EdgeUtils;
-import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.model.labelE.LabelEUtils;
-import pl.edu.agh.gratex.model.labelV.LabelV;
-import pl.edu.agh.gratex.model.labelV.LabelVUtils;
-import pl.edu.agh.gratex.utils.Geometry;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
 import java.awt.*;
-import java.awt.geom.Area;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 

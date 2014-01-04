@@ -25,6 +25,10 @@ public class BoundaryMouseController extends GraphElementMouseController {
     private Boundary currentlyDraggedBoundary;
     private AlterationOperation currentDragOperation;
 
+    private int startPointX;
+    private int startPointY;
+
+
     public BoundaryMouseController(GeneralController generalController, GraphElementFactory graphElementFactory) {
         super(generalController, graphElementFactory);
     }
@@ -40,10 +44,10 @@ public class BoundaryMouseController extends GraphElementMouseController {
     @Override
     public GraphElement getCurrentlyAddedElement() {
         if (currentlyAddedBoundary != null) {
-            currentlyAddedBoundary.setLeftCornerX(Math.min(mouseX, currentlyAddedBoundary.getLeftCornerX()));
-            currentlyAddedBoundary.setLeftCornerY(Math.min(mouseY, currentlyAddedBoundary.getLeftCornerY()));
-            currentlyAddedBoundary.setWidth(Math.abs(mouseX - currentlyAddedBoundary.getLeftCornerX()));
-            currentlyAddedBoundary.setHeight(Math.abs(mouseY - currentlyAddedBoundary.getLeftCornerY()));
+            currentlyAddedBoundary.setLeftCornerX(Math.min(mouseX, startPointX));
+            currentlyAddedBoundary.setLeftCornerY(Math.min(mouseY, startPointY));
+            currentlyAddedBoundary.setWidth(Math.abs(mouseX - startPointX));
+            currentlyAddedBoundary.setHeight(Math.abs(mouseY - startPointY));
             return currentlyAddedBoundary;
         }
         return null;
@@ -55,8 +59,14 @@ public class BoundaryMouseController extends GraphElementMouseController {
             currentlyAddedBoundary = (Boundary) getGraphElementFactory().create(GraphElementType.BOUNDARY, generalController.getGraph());
             currentlyAddedBoundary.setLeftCornerX(mouseX);
             currentlyAddedBoundary.setLeftCornerY(mouseY);
+            startPointX = mouseX;
+            startPointY = mouseY;
             generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_BOUNDARY_END));
         } else {
+            currentlyAddedBoundary.setLeftCornerX(Math.min(mouseX, startPointX));
+            currentlyAddedBoundary.setLeftCornerY(Math.min(mouseY, startPointY));
+            currentlyAddedBoundary.setWidth(Math.abs(mouseX - startPointX));
+            currentlyAddedBoundary.setHeight(Math.abs(mouseY - startPointY));
             new CreationRemovalOperation(generalController, currentlyAddedBoundary, OperationType.ADD_BOUNDARY, StringLiterals.INFO_BOUNDARY_ADD, true);
             currentlyAddedBoundary = null;
         }

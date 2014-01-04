@@ -32,10 +32,7 @@ public class LabelEdgeDrawer implements Drawer {
             g.fillPolygon(labelE.getOutline());
         }
 
-        g.setColor(labelE.getFontColor());
-        if (graphElement.isDummy()) {
-            g.setColor(DrawingTools.getDummyColor(labelE.getFontColor()));
-        }
+        g.setColor(DrawingTools.getDrawingColor(labelE.getFontColor(), labelE.isDummy()));
         g.setFont(Const.DEFAULT_FONT);
         if (labelE.isHorizontalPlacement()) {
             g.drawString(labelE.getText(), labelE.getDrawX(), labelE.getDrawY());

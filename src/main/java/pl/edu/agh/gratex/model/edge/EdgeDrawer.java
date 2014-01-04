@@ -43,11 +43,8 @@ public class EdgeDrawer implements Drawer {
                     g.draw(edge.getArc());
                 }
 
-                g.setColor(edge.getLineColor());
-                if (graphElement.isDummy()) {
-                    g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-                }
-                g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
+                g.setColor(DrawingTools.getDrawingColor(edge.getLineColor(), edge.isDummy()));
+                g.setStroke(DrawingTools.getStroke(edge.getLineType(), edge.getLineWidth(), 0.0));
                 g.draw(edge.getArc());
             } else {
                 if (selectionController.selectionContains(edge)) {
@@ -57,11 +54,8 @@ public class EdgeDrawer implements Drawer {
                     g.drawLine(edge.getOutPoint().x, edge.getOutPoint().y, edge.getInPoint().x, edge.getInPoint().y);
                 }
 
-                g.setColor(edge.getLineColor());
-                if (graphElement.isDummy()) {
-                    g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-                }
-                g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
+                g.setColor(DrawingTools.getDrawingColor(edge.getLineColor(), edge.isDummy()));
+                g.setStroke(DrawingTools.getStroke(edge.getLineType(), edge.getLineWidth(), 0.0));
                 g.drawLine(edge.getOutPoint().x, edge.getOutPoint().y, edge.getInPoint().x, edge.getInPoint().y);
             }
             if (shouldVisualizeAngle(edge)) {
@@ -75,11 +69,8 @@ public class EdgeDrawer implements Drawer {
                 g.draw(edge.getArc());
             }
 
-            g.setColor(edge.getLineColor());
-            if (graphElement.isDummy()) {
-                g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-            }
-            g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
+            g.setColor(DrawingTools.getDrawingColor(edge.getLineColor(), edge.isDummy()));
+            g.setStroke(DrawingTools.getStroke(edge.getLineType(), edge.getLineWidth(), 0.0));
             g.draw(edge.getArc());
         }
 
@@ -93,10 +84,7 @@ public class EdgeDrawer implements Drawer {
                     g.drawLine(edge.getArrowLine2()[0], edge.getArrowLine2()[1], edge.getArrowLine2()[2], edge.getArrowLine2()[3]);
                 }
 
-                g.setColor(edge.getLineColor());
-                if (graphElement.isDummy()) {
-                    g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-                }
+                g.setColor(DrawingTools.getDrawingColor(edge.getLineColor(), edge.isDummy()));
                 g.setStroke(new BasicStroke(edge.getLineWidth()));
                 g.drawLine(edge.getArrowLine1()[0], edge.getArrowLine1()[1], edge.getArrowLine1()[2], edge.getArrowLine1()[3]);
                 g.drawLine(edge.getArrowLine2()[0], edge.getArrowLine2()[1], edge.getArrowLine2()[2], edge.getArrowLine2()[3]);
@@ -109,10 +97,7 @@ public class EdgeDrawer implements Drawer {
                             new int[]{edge.getArrowLine1()[1], edge.getArrowLine1()[3], edge.getArrowLine2()[1]}, 3));
                 }
 
-                g.setColor(edge.getLineColor());
-                if (graphElement.isDummy()) {
-                    g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-                }
+                g.setColor(DrawingTools.getDrawingColor(edge.getLineColor(), edge.isDummy()));
                 g.setStroke(new BasicStroke(edge.getLineWidth()));
                 g.fillPolygon(new Polygon(new int[]{edge.getArrowLine1()[0], edge.getArrowLine1()[2], edge.getArrowLine2()[0]},
                         new int[]{edge.getArrowLine1()[1], edge.getArrowLine1()[3], edge.getArrowLine2()[1]}, 3));

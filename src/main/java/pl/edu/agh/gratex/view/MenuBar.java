@@ -86,6 +86,9 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Sel
             case LABEL_EDGE:
                 menuItems.get(MenuBarItem.LABELE_MODE).setSelected(true);
                 break;
+            case BOUNDARY:
+                menuItems.get(MenuBarItem.LABELE_MODE).setSelected(true);
+                break;
         }
     }
 
@@ -240,6 +243,13 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Sel
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         modeController.setMode(ModeType.LABEL_EDGE);
+                    }
+                };
+            case BOUNDARY_MODE:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        modeController.setMode(ModeType.BOUNDARY);
                     }
                 };
             case ADD_TOOL:

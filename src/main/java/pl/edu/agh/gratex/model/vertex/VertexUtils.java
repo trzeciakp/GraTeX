@@ -3,7 +3,6 @@ package pl.edu.agh.gratex.model.vertex;
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.properties.ShapeType;
-import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
 import java.awt.geom.Area;

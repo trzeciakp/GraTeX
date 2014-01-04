@@ -40,17 +40,11 @@ public class BoundaryDrawer implements Drawer {
             g.fillRect(topLeftX - lineWidth / 2 - 5, topLeftY - lineWidth / 2 - 5, width + lineWidth + 10, height + lineWidth + 10);
         }
 
-        g.setColor(fillColor);
-        if (boundary.isDummy()) {
-            g.setColor(DrawingTools.getDummyColor(fillColor));
-        }
+        g.setColor(DrawingTools.getDrawingColor(fillColor, boundary.isDummy()));
         g.fillRect(topLeftX, topLeftY, width, height);
 
-        g.setColor(lineColor);
-        if (boundary.isDummy()) {
-            g.setColor(DrawingTools.getDummyColor(lineColor));
-        }
-        g.setStroke(DrawingTools.getStroke(lineWidth, lineType, 2 * (width + height)));
+        g.setColor(DrawingTools.getDrawingColor(lineColor, boundary.isDummy()));
+        g.setStroke(DrawingTools.getStroke(lineType, lineWidth, 2 * (width + height)));
         g.drawRect(topLeftX, topLeftY, width, height);
 
         g.dispose();
