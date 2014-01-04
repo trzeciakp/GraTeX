@@ -6,9 +6,7 @@ import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
-import java.awt.geom.Arc2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
+import java.awt.geom.*;
 
 public class EdgeUtils {
     // Returns true if (x, y) is close enough to the edge
@@ -45,14 +43,19 @@ public class EdgeUtils {
                     }
                 }
             } else {
-                if ((Math.min(vertexA.getPosX(), vertexB.getPosX()) <= x && Math.max(vertexA.getPosX(), vertexB.getPosX()) >= x)
-                        || (Math.min(vertexA.getPosY(), vertexB.getPosY()) <= y && Math.max(vertexA.getPosY(), vertexB.getPosY()) >= y)) {
-                    if (click.distance(va) > vertexA.getRadius() && click.distance(vb) > vertexB.getRadius()) {
-                        double distance = Line2D.ptLineDist((double) vertexA.getPosX(), (double) vertexA.getPosY(), (double) vertexB.getPosX(),
-                                (double) vertexB.getPosY(), (double) x, (double) y);
-                        return distance < 12;
-                    }
-                }
+                Path2D path = new Path2D.Double();
+                path.moveTo(edge.getInPoint().x, edge.getInPoint().y);
+                path.lineTo(edge.getOutPoint().x, edge.getOutPoint().y);
+                Shape clippedPath = new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN).createStrokedShape(path);
+                return new Area(clippedPath).contains(x, y);
+//                if ((Math.min(vertexA.getPosX(), vertexB.getPosX()) <= x && Math.max(vertexA.getPosX(), vertexB.getPosX()) >= x)
+//                        || (Math.min(vertexA.getPosY(), vertexB.getPosY()) <= y && Math.max(vertexA.getPosY(), vertexB.getPosY()) >= y)) {
+//                    if (click.distance(va) > vertexA.getRadius() && click.distance(vb) > vertexB.getRadius()) {
+//                        double distance = Line2D.ptLineDist((double) vertexA.getPosX(), (double) vertexA.getPosY(), (double) vertexB.getPosX(),
+//                                (double) vertexB.getPosY(), (double) x, (double) y);
+//                        return distance < 12;
+//                    }
+//                }
             }
         }
 

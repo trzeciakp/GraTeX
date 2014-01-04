@@ -51,6 +51,9 @@ public class Const {
     // Ratio: length of arrow head to lineWidth
     public final static int ARROW_LENGTH_FACTOR = 2;
 
+    // How far from edge will selection work
+    public final static int EDGE_SELECTION_MARGIN = 10;
+
     // Stroke used to draw angle visualization
     public final static Stroke ANGLE_VISUALIZATION_STROKE = DrawingTools.getStroke(2, LineType.DASHED, 0.0);
     // Color used to draw angle visualization

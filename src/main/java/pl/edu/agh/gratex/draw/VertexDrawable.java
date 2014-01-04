@@ -59,8 +59,6 @@ public class VertexDrawable implements Drawable {
             if (dummy) {
                 g.setColor(DrawingTools.getDummyColor(vertexColor));
             }
-            // TODO Tutaj chyba wystarczy najpierw namalowac na bialo gruba linie, a na tym podwojna, a nie tak kombonowac na jana ze srednica wierzcholka
-            // TODO Czyli przerobic metode CompositeStroke.createStrokenShape().
             if (lineType == LineType.DOUBLE) {
                 Shape innerOutline = Geometry.getVertexShape(shape + 1, radius - 2 - (lineWidth * 23) / 16, posX, posY);
                 if (shape == ShapeType.CIRCLE.getValue()) {
