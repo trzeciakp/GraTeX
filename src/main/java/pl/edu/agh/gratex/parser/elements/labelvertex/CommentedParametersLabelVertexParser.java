@@ -52,7 +52,7 @@ public class CommentedParametersLabelVertexParser extends ParseElement {
         int spacing = Integer.parseInt(matcher.group(SPACING_GROUP));
         labelV.setOwner(owner);
         labelV.setSpacing(spacing);
-        labelV.setPosition(labelPosition.getValue());
+        labelV.setLabelPosition(labelPosition);
     }
 
     @Override

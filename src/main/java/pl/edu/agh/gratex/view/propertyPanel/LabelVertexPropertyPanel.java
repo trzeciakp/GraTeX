@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.view.propertyPanel;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.properties.LabelPosition;
@@ -10,11 +11,13 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Vector;
 
 
 @SuppressWarnings("serial")
 public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
+
 
     private LabelVertexPropertyModel model;
     private JLabel labelText;
@@ -22,7 +25,7 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
     private JLabel lblColor;
     private JComboBox<Color> comboBoxFontColor;
     private JLabel lblPosition;
-    private JComboBox<Option> comboBoxPosition;
+    private JComboBox<LabelPosition> comboBoxPosition;
     private JLabel lblDistance;
     private JSpinner spinnerDistance;
     private static int MIN_SIZE = 0;
@@ -42,11 +45,11 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         model = (LabelVertexPropertyModel) pm.getCopy();
         textField.setText(model.getText());
         comboBoxFontColor.setSelectedItem(model.getFontColor());
-        comboBoxPosition.setSelectedIndex(model.getPosition() + 1);
+        comboBoxPosition.setSelectedItem(model.getLabelPosition());
         if (model.getSpacing() == -1)
-            spinnerDistance.setValue(" ");
+            spinnerDistance.setValue(StringLiterals.EMPTY_VALUE);
         else
-            spinnerDistance.setValue(model.getSpacing() + " px");
+            spinnerDistance.setValue(model.getSpacing() + StringLiterals.PX_SUFFIX);
 
         changedByUser = true;
     }
@@ -73,9 +76,8 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
     private void initialize() {
         setLayout(null);
         /**************************** TEXT TEXTFIELD ******************************/
-        labelText = new JLabel("Text:");
+        labelText = new JLabel(StringLiterals.LABEL_VERTEX_TEXT);
         labelText.setHorizontalAlignment(SwingConstants.LEFT);
-        labelText.setBounds(26, 42, 64, 14);
         add(labelText);
 
         textField = new JTextField();
@@ -87,15 +89,13 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
                 }
             }
         });
-        textField.setBounds(102, 35, 122, 28);
         add(textField);
         textField.setColumns(10);
         /**************************************************************************/
 
         /**************************** COLOR COMBOBOX ******************************/
-        lblColor = new JLabel("Text color:");
+        lblColor = new JLabel(StringLiterals.LABEL_VERTEX_TEXT_COLOR);
         lblColor.setHorizontalAlignment(SwingConstants.LEFT);
-        lblColor.setBounds(6, 67, 84, 14);
         add(lblColor);
 
         comboBoxFontColor = new ColorComboBox();
@@ -119,27 +119,25 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** POSITION COMBOBOX ***************************/
-        lblPosition = new JLabel("Position:");
+        lblPosition = new JLabel(StringLiterals.LABEL_VERTEX_POSITION);
         lblPosition.setHorizontalAlignment(SwingConstants.LEFT);
-        lblPosition.setBounds(26, 92, 64, 14);
         add(lblPosition);
 
-        Option[] positions = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(LabelPosition.N.getValue(), "N"),
+       /* Option[] positions = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(LabelPosition.N.getValue(), "N"),
                 new Option(LabelPosition.NE.getValue(), "NE"), new Option(LabelPosition.E.getValue(), "E"), new Option(LabelPosition.SE.getValue(), "SE"),
                 new Option(LabelPosition.S.getValue(), "S"), new Option(LabelPosition.SW.getValue(), "SW"), new Option(LabelPosition.W.getValue(), "W"),
                 new Option(LabelPosition.NW.getValue(), "NW")};
-
-        comboBoxPosition = new JComboBox<Option>(positions);
-        comboBoxPosition.setBounds(101, 89, 80, 20);
+*/
+        comboBoxPosition = new JComboBox<LabelPosition>(LabelPosition.values());
         comboBoxPosition.setMaximumRowCount(9);
         comboBoxPosition.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                int newValue = ((Option) comboBoxPosition.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.getPosition() != newValue) || (!changedByUser)) {
-                    model.setPosition(newValue);
+                LabelPosition newValue = ((LabelPosition) comboBoxPosition.getSelectedItem());
+                if ((!newValue.isEmpty()) && (model.getLabelPosition() != newValue) || (!changedByUser)) {
+                    model.setLabelPosition(newValue);
                     changed();
                 } else {
-                    comboBoxPosition.setSelectedIndex(model.getPosition() + 1);
+                    comboBoxPosition.setSelectedItem(model.getLabelPosition());
                 }
             }
         });
@@ -147,25 +145,25 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** DISTANCE SPINNER ****************************/
-        lblDistance = new JLabel("Distance:");
+        lblDistance = new JLabel(StringLiterals.LABEL_VERTEX_DISTANCE);
         lblDistance.setHorizontalAlignment(SwingConstants.LEFT);
-        lblDistance.setBounds(6, 117, 84, 14);
         add(lblDistance);
 
         MIN_SIZE = 0;
         MAX_SIZE = 99;
+        //TODO
         String[] distances = new String[MAX_SIZE - MIN_SIZE + 2];
-        distances[0] = new String(" ");
-        for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++)
-            distances[i - MIN_SIZE + 1] = new String(i + " px");
+        distances[0] = StringLiterals.EMPTY_VALUE;
+        for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++) {
+            distances[i - MIN_SIZE + 1] = i + StringLiterals.PX_SUFFIX;
+        }
 
         spinnerDistance = new JSpinner();
         spinnerDistance.setModel(new SpinnerListModel(distances));
-        spinnerDistance.setBounds(101, 38, 50, 22);
         spinnerDistance.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 String value = (String) spinnerDistance.getValue();
-                value = value.substring(0, value.indexOf(" "));
+                value = value.substring(0, value.indexOf(StringLiterals.EMPTY_VALUE));
                 try {
                     int newValue = Integer.parseInt(value);
                     if (model.getSpacing() != newValue) {
@@ -175,9 +173,9 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
                         if (model.getSpacing() != -1)
-                            spinnerDistance.setValue(model.getSpacing() + " px");
+                            spinnerDistance.setValue(model.getSpacing() + StringLiterals.PX_SUFFIX);
                     } else {
-                        spinnerDistance.setValue(" ");
+                        spinnerDistance.setValue(StringLiterals.EMPTY_VALUE);
                         model.setSpacing(-1);
                     }
                 }
@@ -190,7 +188,7 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         /************************ USTAWIANIE BOUNDS *******************************/
 
         int spacing = 35;
-        labels = new Vector<>();
+        labels = new ArrayList<>();
         labels.add(labelText);
         labels.add(lblColor);
         labels.add(lblPosition);
@@ -198,7 +196,7 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
 
         for (int i = 0; i < labels.size(); i++)
             labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
-        components = new Vector<>();
+        components = new ArrayList<>();
         components.add(textField);
         components.add(comboBoxFontColor);
         components.add(comboBoxPosition);

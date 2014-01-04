@@ -121,6 +121,12 @@ public class StringLiterals {
 
     // This should go before message when undoing changes
     private final static String UNDO_PREFIX = "[UNDONE] ";
+    public static final String LABEL_VERTEX_POSITION = "Position:";
+    public static final String LABEL_VERTEX_DISTANCE = "Distance:";
+    public static final String EMPTY_VALUE = " ";
+    public static final String PX_SUFFIX = " px";
+    public static final String LABEL_VERTEX_TEXT = "Text:";
+    public static final String LABEL_VERTEX_TEXT_COLOR = "Text color:";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;

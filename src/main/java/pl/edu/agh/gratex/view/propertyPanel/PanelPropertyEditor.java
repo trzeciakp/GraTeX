@@ -89,9 +89,9 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
 
     public void setEnabled(boolean flag) {
         panelsMap.get(mode).setEnabled(flag);
-        if (flag) {
+        /*if (flag) {
             panelsMap.get(mode).focusFirstElement();
-        }
+        }*/
     }
 
     public PropertyModel getModel() {
