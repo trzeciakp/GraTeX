@@ -25,7 +25,6 @@ public class VertexUtils {
         return !area.isEmpty();
     }
 
-
     public static boolean fitsIntoPage(Vertex vertex) {
         return !((vertex.getPosX() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) ||
                 (vertex.getPosX() + vertex.getRadius() + vertex.getLineWidth() / 2 > Const.PAGE_WIDTH) ||

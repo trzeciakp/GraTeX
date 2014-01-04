@@ -13,6 +13,10 @@ public class DrawingTools {
         }
     }
 
+    public static Color getReverseColor(Color color) {
+        return new Color(255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue());
+    }
+
     public static Stroke getStroke(LineType lineType, int lineWidth, double perimeter) {
         switch (lineType) {
             case NONE:

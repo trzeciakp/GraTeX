@@ -177,6 +177,7 @@ public class StringLiterals {
     public final static String INFO_EDGE_MOVE = "edge moved";
     public final static String INFO_LABEL_V_MOVE = "label (vertex) moved";
     public final static String INFO_LABEL_E_MOVE = "label (edge) moved";
+    public final static String INFO_BOUNDARY_MOVE = "boundary moved";
 
     // OldOperationList
     public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
@@ -229,48 +230,52 @@ public class StringLiterals {
     // MainWindow
     public static String INFO_MODE_AND_TOOL(ModeType mode, ToolType tool) {
         String tipPart1 = mode.toString() + " mode - ";
-        //TODO add boundary
         String tipPart3 = "";
         String tipPart4a = "";
         String tipPart4b = "";
 
         switch (mode) {
             case VERTEX: {
-                tipPart4a = "a vertex. ";
-                tipPart4b = "a vertex. ";
+                tipPart4a = "a vertex.";
+                tipPart4b = "a vertex.";
                 break;
             }
             case EDGE: {
                 tipPart4a = "an edge. Hold down SHIFT for directed edge. Hold down CTRL for straight edge.";
-                tipPart4b = "an edge. ";
+                tipPart4b = "an edge.";
                 break;
             }
             case LABEL_VERTEX: {
-                tipPart4a = "a label to a vertex. ";
-                tipPart4b = "a label of a vertex. ";
+                tipPart4a = "a label to a vertex.";
+                tipPart4b = "a label of a vertex.";
                 break;
             }
             case LABEL_EDGE: {
                 tipPart4a = "a label to an edge. Hold down SHIFT for horizontal label.";
-                tipPart4b = "a label of an edge. ";
+                tipPart4b = "a label of an edge.";
+                break;
+            }
+            case BOUNDARY: {
+                tipPart4a = "a boundary.";
+                tipPart4b = "a boundary.";
                 break;
             }
         }
 
 
-        String tipPart2 = tool.toString() + " tool. ";
+        String tipPart2 = tool.toString() + " tool.";
         switch (tool) {
             case ADD: {
-                tipPart3 = "Left-click to add " + tipPart4a;
+                tipPart3 = " Left-click to add " + tipPart4a;
                 break;
             }
             case REMOVE: {
-                tipPart3 = "Left-click to removeFromGraph " + tipPart4b + "Click and drag to removeFromGraph all items in the area.";
+                tipPart3 = " Left-click to removeFromGraph " + tipPart4b + " Click and drag to remove all items in the area.";
                 break;
             }
             case SELECT: {
-                tipPart3 = "Left-click to select " + tipPart4b
-                        + "Click and drag to select all items in the area. CTRL + click/drag to extend selection.";
+                tipPart3 = " Left-click to select " + tipPart4b
+                        + " Click and drag to select all items in the area. CTRL + click/drag to extend selection.";
                 break;
             }
         }

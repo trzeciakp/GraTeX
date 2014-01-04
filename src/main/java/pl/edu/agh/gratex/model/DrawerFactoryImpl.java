@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.boundary.BoundaryDrawer;
+import pl.edu.agh.gratex.model.boundary.EditedBoundaryDrawer;
 import pl.edu.agh.gratex.model.edge.DummyEdgeDrawer;
 import pl.edu.agh.gratex.model.edge.EdgeDrawer;
 import pl.edu.agh.gratex.model.labelE.LabelEdgeDrawer;
@@ -15,20 +16,16 @@ import java.util.EnumMap;
  *
  */
 public class DrawerFactoryImpl implements DrawerFactory {
-
-    private SelectionController selectionController;
     private EnumMap<GraphElementType, Drawer> defaultDrawable = new EnumMap<>(GraphElementType.class);
-    private DummyEdgeDrawer dummyEdgeDrawable;
+    private DummyEdgeDrawer dummyEdgeDrawable = new DummyEdgeDrawer(defaultDrawable.get(GraphElementType.EDGE));
+    private EditedBoundaryDrawer editedBoundaryDrawer = new EditedBoundaryDrawer();
 
     public DrawerFactoryImpl(SelectionController selectionController) {
-        this.selectionController = selectionController;
         defaultDrawable.put(GraphElementType.VERTEX, new VertexDrawer(selectionController));
         defaultDrawable.put(GraphElementType.LABEL_VERTEX, new LabelVertexDrawer(selectionController));
         defaultDrawable.put(GraphElementType.EDGE, new EdgeDrawer(selectionController));
         defaultDrawable.put(GraphElementType.LABEL_EDGE, new LabelEdgeDrawer(selectionController));
         defaultDrawable.put(GraphElementType.BOUNDARY, new BoundaryDrawer(selectionController));
-
-        dummyEdgeDrawable = new DummyEdgeDrawer(defaultDrawable.get(GraphElementType.EDGE));
     }
 
     @Override
@@ -41,5 +38,9 @@ public class DrawerFactoryImpl implements DrawerFactory {
         return dummyEdgeDrawable;
     }
 
-
+    @Override
+    public Drawer createEditedBoundaryDrawable() {
+        System.out.println(editedBoundaryDrawer);
+        return editedBoundaryDrawer;
+    }
 }
