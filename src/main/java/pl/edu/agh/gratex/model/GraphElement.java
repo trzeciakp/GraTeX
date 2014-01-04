@@ -1,12 +1,10 @@
 package pl.edu.agh.gratex.model;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.draw.Drawable;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 import java.awt.*;
 import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.List;
 
 public abstract class GraphElement {
     protected Graph graph;
-    protected Drawable drawable;
+    protected Drawer drawer;
     protected PropertyModel propertyModel;
     protected boolean dummy = true;
 
@@ -35,8 +33,8 @@ public abstract class GraphElement {
         finalizeRemovingFromGraph();
     }
 
-    public void setDrawable(Drawable drawable) {
-        this.drawable = drawable;
+    public void setDrawer(Drawer drawer) {
+        this.drawer = drawer;
     }
 
     protected GraphElement(Graph graph, PropertyModel propertyModel) {
@@ -57,7 +55,7 @@ public abstract class GraphElement {
     }
 
     public void draw(Graphics2D g) {
-        drawable.draw(this, g);
+        drawer.draw(this, g);
     }
 
     public boolean isDummy() {

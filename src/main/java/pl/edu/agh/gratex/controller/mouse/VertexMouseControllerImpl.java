@@ -20,14 +20,11 @@ import java.util.List;
 
 
 public class VertexMouseControllerImpl extends GraphElementMouseController {
-
-    private GeneralController generalController;
     private Vertex currentlyDraggedVertex;
     private AlterationOperation currentDragOperation;
 
     public VertexMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
         super(generalController, graphElementFactory);
-        this.generalController = generalController;
     }
 
     @Override
@@ -38,21 +35,15 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public List<GraphElement> getCurrentlyAddedElements() {
-        List<GraphElement> result = new LinkedList<>();
+    public GraphElement getCurrentlyAddedElement() {
         Vertex vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
         vertex.setNumber(generalController.getGraph().getGraphNumeration().getNextFreeNumber());
         vertex.setPosX(mouseX);
         vertex.setPosY(mouseY);
         if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) && VertexUtils.fitsIntoPage(vertex)) {
-            result.add(vertex);
+            return vertex;
         }
-        return result;
-    }
-
-    @Override
-    public Vertex getElementFromPosition(int mouseX, int mouseY) {
-        return (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);
+        return null;
     }
 
     @Override
@@ -79,7 +70,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void moveSelection(int mouseX, int mouseY) {
         if(currentlyDraggedVertex == null) {
-            currentlyDraggedVertex = getElementFromPosition(mouseX, mouseY);
+            currentlyDraggedVertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
 
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedVertex, OperationType.MOVE_VERTEX, StringLiterals.INFO_VERTEX_MOVE);
         } else {

@@ -23,7 +23,7 @@ public interface MouseController {
 
     public Rectangle getSelectionArea();
 
-    public List<GraphElement> getCurrentlyAddedElements();
+    public GraphElement getCurrentlyAddedElement();
 
     public List<GraphElement> getCopiedSubgraph();
 

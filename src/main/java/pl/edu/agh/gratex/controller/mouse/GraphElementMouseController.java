@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.controller.mouse;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
@@ -20,8 +21,8 @@ public abstract class GraphElementMouseController {
     protected boolean shiftDown;
     protected boolean ctrlDown;
 
-    private GeneralController generalController;
-    private GraphElementFactory graphElementFactory;
+    protected GeneralController generalController;
+    protected GraphElementFactory graphElementFactory;
 
     protected GraphElementMouseController(GeneralController generalController, GraphElementFactory graphElementFactory) {
         this.generalController = generalController;
@@ -55,14 +56,13 @@ public abstract class GraphElementMouseController {
 
     public abstract void reset();
 
-    public abstract List<GraphElement> getCurrentlyAddedElements();
-
-    public abstract GraphElement getElementFromPosition(int mouseX, int mouseY);
+    public abstract GraphElement getCurrentlyAddedElement();
 
     public abstract void addNewElement(int mouseX, int mouseY);
 
     public void removeElement(int mouseX, int mouseY) {
-        GraphElement temp = getElementFromPosition(mouseX, mouseY);
+        GraphElement temp = generalController.getGraph().getElementFromPosition(
+                generalController.getModeController().getMode().getRelatedElementType(), mouseX, mouseY);
         if (temp != null) {
             ModeType mode = generalController.getModeController().getMode();
             new CreationRemovalOperation(generalController, temp, OperationType.REMOVE_OPERATION(mode),

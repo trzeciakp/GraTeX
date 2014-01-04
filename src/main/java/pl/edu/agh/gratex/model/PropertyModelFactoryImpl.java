@@ -92,10 +92,8 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(LabelRotation.TANGENT);
 
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineColor(Color.blue);
-        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("cyan"));
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setFillColor(PropertyModel.REVERSE_COLORS.get("cyan"));
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineType(LineType.SOLID);
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineWidth(1);
     }
-
-
 }

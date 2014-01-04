@@ -1,9 +1,6 @@
 package pl.edu.agh.gratex.controller.mouse;
 
-import pl.edu.agh.gratex.constants.ModeType;
-import pl.edu.agh.gratex.constants.OperationType;
-import pl.edu.agh.gratex.constants.StringLiterals;
-import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.constants.*;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
@@ -94,7 +91,9 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
                     }
                     dummySubgraph = null;
                 } else if (!mousePressed) {
-                    selectionController.addToSelection(controllers.get(mode).getElementFromPosition(mouseX, mouseY), e.isControlDown());
+                    selectionController.addToSelection(
+                            generalController.getGraph().getElementFromPosition(mode.getRelatedElementType(), mouseX, mouseY),
+                            e.isControlDown());
                 }
                 break;
         }
@@ -105,7 +104,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
         mousePressed = true;
         mousePressX = e.getX();
         mousePressY = e.getY();
-        GraphElement element = controllers.get(mode).getElementFromPosition(mouseX, mouseY);
+        GraphElement element = generalController.getGraph().getElementFromPosition(mode.getRelatedElementType(), mouseX, mouseY);
         boolean isProperTool = (tool == ToolType.ADD || tool == ToolType.SELECT);
         if (isProperTool && element != null && selectionController.selectionContains(element)) {
             controllers.get(mode).moveSelection(mouseX, mouseY);
@@ -183,11 +182,11 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     }
 
     @Override
-    public List<GraphElement> getCurrentlyAddedElements() {
+    public GraphElement getCurrentlyAddedElement() {
         if (tool == ToolType.ADD) {
-            return controllers.get(mode).getCurrentlyAddedElements();
+            return controllers.get(mode).getCurrentlyAddedElement();
         } else {
-            return new LinkedList<>();
+            return null;
         }
     }
 

@@ -115,6 +115,37 @@ public class StringLiterals {
     // PanelToolbox
     public final static String COMBOBOX_PANEL_TOOLBOX_MODE = "Edition mode";
 
+    // PropertyPanels
+    public static final String LABEL_VERTEX_POSITION = "Position:";
+    public static final String LABEL_VERTEX_DISTANCE = "Distance:";
+    public static final String EMPTY_VALUE = " ";
+    public static final String PX_SUFFIX = " px";
+    public static final String PERCENT_SUFFIX = " %";
+    public static final String DEG_SUFFIX = " deg";
+    public static final String LABEL_VERTEX_TEXT = "Text:";
+    public static final String LABEL_VERTEX_TEXT_COLOR = "Text color:";
+    public static final String LABEL_EDGE_ROTATION = "Rotation";
+    public static final String LABEL_EDGE_PLACEMENT = "Placement:";
+    public static final String LABEL_EDGE_TEXT = "Text:";
+    public static final String LABEL_EDGE_POSITION = "Position:";
+    public static final String LABEL_EDGE_DISTANCE = "Distance:";
+    public static final String LABEL_EDGE_TEXT_COLOR = "Text color:";
+    public static final String EDGE_LINE_TYPE = "Line type:";
+    public static final String EDGE_LINE_WIDTH = "Line width:";
+    public static final String EDGE_LINE_COLOR = "Line color:";
+    public static final String EDGE_DIRECTED = "Directed:";
+    public static final String EDGE_ARROW_TYPE = "Arrow type:";
+    public static final String EDGE_ANGLE = "Angle:";
+    public static final String VERTEX_SHAPE_TYPE = "Vertex type:";
+    public static final String VERTEX_SIZE = "Vertex size:";
+    public static final String VERTEX_COLOR = "Vertex color:";
+    public static final String VERTEX_LINE_TYPE = "Line type:";
+    public static final String VERTEX_LINE_COLOR = "Line color:";
+    public static final String VERTEX_LABEL_INSIDE = "Label inside:";
+    public static final String VERTEX_NUMBER = "Number:";
+    public static final String VERTEX_LINE_WIDTH = "Line width:";
+    public static final String VERTEX_FONT_COLOR = "Font color:";
+
 
     //==================================================
     // Messages that go to label_info in MainWindow
@@ -138,6 +169,7 @@ public class StringLiterals {
     public final static String INFO_EDGE_ADD = "edge added";
     public final static String INFO_LABEL_V_ADD = "label added to a vertex";
     public final static String INFO_LABEL_E_ADD = "label added to an edge";
+    public final static String INFO_BOUNDARY_ADD = "boundary added";
 
 
     // DragOperation
@@ -168,11 +200,14 @@ public class StringLiterals {
     public final static String INFO_SUBGRAPH_DUPLICATE = "supgraph duplicated";
     public final static String INFO_SUBGRAPH_WHERE_TO_PASTE = "choose location for the copy of subgraph";
     public final static String INFO_SUBGRAPH_CANNOT_PASTE = "cannot insert this subgraph here - vertices collide with existing ones or are out of bounds";
+
     public final static String INFO_CANNOT_CREATE_VERTEX_BOUNDARY = "cannot createEmptyModel a vertex here - too close to page edge";
     public final static String INFO_CANNOT_CREATE_VERTEX_COLLISION = "cannot createEmptyModel a vertex here - too close to another vertex";
+
     public final static String INFO_CHOOSE_EDGE_START = "Choose a starting vertex for the edge (click)";
     public final static String INFO_CHOOSE_EDGE_END = "Now choose the target vertex (click)";
     public final static String INFO_EDGE_ADDING_CANCELLED = "Adding edge cancelled";
+
     public final static String INFO_NOTHING_TO_REMOVE = "Nothing to remove";
     public final static String INFO_CHOOSE_VERTEX_FOR_LABEL = "Choose a vertex to attach label to";
     public final static String INFO_CANNOT_CREATE_LABEL_V_EXISTS = "Cannot create the label, as this vertex already has one";
@@ -180,6 +215,8 @@ public class StringLiterals {
     public final static String INFO_CANNOT_CREATE_EDGE_EXISTS = "Cannot create the edge, such edge already exists";
     public final static String INFO_CANNOT_MOVE_EDGE_EXISTS = "Cannot move the edge here, such edge already exists";
     public final static String INFO_CHOOSE_EDGE_FOR_LABEL = "Choose an edge to attach label to";
+
+    public final static String INFO_CHOOSE_BOUNDARY_END = "Choose opposite corner for the boundary";
 
     // SaveFileDialog
     public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";
@@ -258,35 +295,4 @@ public class StringLiterals {
     public static String INFO_GENERIC_SELECT_ALL(ModeType mode){
         return "all " + mode.getRelatedElementType().getPluralName() + " selected";
     }
-
-    //PROPERTY PANEL
-    public static final String LABEL_VERTEX_POSITION = "Position:";
-    public static final String LABEL_VERTEX_DISTANCE = "Distance:";
-    public static final String EMPTY_VALUE = " ";
-    public static final String PX_SUFFIX = " px";
-    public static final String PERCENT_SUFFIX = " %";
-    public static final String DEG_SUFFIX = " deg";
-    public static final String LABEL_VERTEX_TEXT = "Text:";
-    public static final String LABEL_VERTEX_TEXT_COLOR = "Text color:";
-    public static final String LABEL_EDGE_ROTATION = "Rotation";
-    public static final String LABEL_EDGE_PLACEMENT = "Placement:";
-    public static final String LABEL_EDGE_TEXT = "Text:";
-    public static final String LABEL_EDGE_POSITION = "Position:";
-    public static final String LABEL_EDGE_DISTANCE = "Distance:";
-    public static final String LABEL_EDGE_TEXT_COLOR = "Text color:";
-    public static final String EDGE_LINE_TYPE = "Line type:";
-    public static final String EDGE_LINE_WIDTH = "Line width:";
-    public static final String EDGE_LINE_COLOR = "Line color:";
-    public static final String EDGE_DIRECTED = "Directed:";
-    public static final String EDGE_ARROW_TYPE = "Arrow type:";
-    public static final String EDGE_ANGLE = "Angle:";
-    public static final String VERTEX_SHAPE_TYPE = "Vertex type:";
-    public static final String VERTEX_SIZE = "Vertex size:";
-    public static final String VERTEX_COLOR = "Vertex color:";
-    public static final String VERTEX_LINE_TYPE = "Line type:";
-    public static final String VERTEX_LINE_COLOR = "Line color:";
-    public static final String VERTEX_LABEL_INSIDE = "Label inside:";
-    public static final String VERTEX_NUMBER = "Number:";
-    public static final String VERTEX_LINE_WIDTH = "Line width:";
-    public static final String VERTEX_FONT_COLOR = "Font color:";
 }

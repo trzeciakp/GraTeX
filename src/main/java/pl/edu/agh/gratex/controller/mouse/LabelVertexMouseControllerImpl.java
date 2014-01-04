@@ -21,14 +21,11 @@ import java.util.List;
 
 
 public class LabelVertexMouseControllerImpl extends GraphElementMouseController {
-    private GeneralController generalController;
-
     private LabelV currentlyDraggedLabel;
     private AlterationOperation currentDragOperation;
 
     public LabelVertexMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
         super(generalController, graphElementFactory);
-        this.generalController = generalController;
     }
 
     @Override
@@ -39,23 +36,17 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     }
 
     @Override
-    public List<GraphElement> getCurrentlyAddedElements() {
-        List<GraphElement> result = new LinkedList<>();
+    public GraphElement getCurrentlyAddedElement() {
         Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);;
         if (vertex != null) {
             if (vertex.getLabel() == null) {
                 LabelV labelV = (LabelV) getGraphElementFactory().create(GraphElementType.LABEL_VERTEX, generalController.getGraph());
                 labelV.setOwner(vertex);
                 labelV.setPosition(LabelVUtils.getPositionFromCursorLocation(vertex, mouseX, mouseY));
-                result.add(labelV);
+                return labelV;
             }
         }
-        return result;
-    }
-
-    @Override
-    public LabelV getElementFromPosition(int mouseX, int mouseY) {
-        return (LabelV) generalController.getGraph().getElementFromPosition(GraphElementType.LABEL_VERTEX, mouseX, mouseY);
+        return null;
     }
 
     @Override
@@ -79,7 +70,7 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     @Override
     public void moveSelection(int mouseX, int mouseY) {
         if (currentlyDraggedLabel == null) {
-            currentlyDraggedLabel = getElementFromPosition(mouseX, mouseY);
+            currentlyDraggedLabel = (LabelV) generalController.getGraph().getElementFromPosition(GraphElementType.LABEL_VERTEX, mouseX, mouseY);
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedLabel, OperationType.MOVE_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_MOVE);
         } else {
             generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);

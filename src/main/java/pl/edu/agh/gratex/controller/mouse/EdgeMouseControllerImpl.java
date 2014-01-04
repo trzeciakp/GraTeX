@@ -4,7 +4,6 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
@@ -12,8 +11,6 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.edge.EdgeUtils;
-import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.view.Application;
 
@@ -23,8 +20,6 @@ import java.util.List;
 
 
 public class EdgeMouseControllerImpl extends GraphElementMouseController {
-    private GeneralController generalController;
-
     private Edge currentlyAddedEdge;
     private Edge currentlyDraggedEdge;
     private AlterationOperation currentDragOperation;
@@ -35,7 +30,6 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
 
     public EdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
         super(generalController, graphElementFactory);
-        this.generalController = generalController;
         edgeDragDummy = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, null);
     }
 
@@ -59,8 +53,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public List<GraphElement> getCurrentlyAddedElements() {
-        List<GraphElement> result = new LinkedList<>();
+    public GraphElement getCurrentlyAddedElement() {
         if (currentlyAddedEdge != null) {
             Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
             if (vertex == null) {
@@ -83,18 +76,13 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 currentlyAddedEdge.setRelativeEdgeAngle(angle);
             }
             if (currentlyAddedEdge.getRelativeEdgeAngle() != 0) {
-                currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDummyEdgeDrawable());
+                currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDummyEdgeDrawable());
             } else {
-                currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
+                currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDefaultDrawable(GraphElementType.EDGE));
             }
-            result.add(currentlyAddedEdge);
+            return currentlyAddedEdge;
         }
-        return result;
-    }
-
-    @Override
-    public Edge getElementFromPosition(int mouseX, int mouseY) {
-        return (Edge) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);
+        return null;
     }
 
     @Override
@@ -115,7 +103,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             } else {
                 currentlyAddedEdge.setVertexB(vertex);
                 if (!checkIfEdgeExists(currentlyAddedEdge)) {
-                    currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
+                    currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDefaultDrawable(GraphElementType.EDGE));
                     new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
                 } else {
                     generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_EDGE_EXISTS));
@@ -135,7 +123,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     private void startMoving(int mouseX, int mouseY) {
-        Edge edge = getElementFromPosition(mouseX, mouseY);
+        Edge edge = (Edge) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);
         currentlyDraggedEdge = edge;
         initialLatexCodeOfDraggedEdge = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(currentlyDraggedEdge);
 

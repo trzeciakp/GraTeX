@@ -1,10 +1,10 @@
-package pl.edu.agh.gratex.draw;
+package pl.edu.agh.gratex.model.labelV;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.controller.SelectionController;
+import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.labelV.LabelV;
-import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.utils.DrawingTools;
 
 import java.awt.*;
@@ -12,11 +12,11 @@ import java.awt.*;
 /**
  *
  */
-public class LabelVertexDrawable implements Drawable {
+public class LabelVertexDrawer implements Drawer {
 
     private SelectionController selectionController;
 
-    public LabelVertexDrawable(SelectionController selectionController) {
+    public LabelVertexDrawer(SelectionController selectionController) {
         this.selectionController = selectionController;
     }
 

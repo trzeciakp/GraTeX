@@ -1,7 +1,8 @@
-package pl.edu.agh.gratex.draw;
+package pl.edu.agh.gratex.model.vertex;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.controller.SelectionController;
+import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -15,11 +16,11 @@ import java.awt.*;
 /**
  *
  */
-public class VertexDrawable implements Drawable {
+public class VertexDrawer implements Drawer {
 
     private SelectionController selectionController;
 
-    public VertexDrawable(SelectionController selectionController) {
+    public VertexDrawer(SelectionController selectionController) {
         this.selectionController = selectionController;
     }
 
@@ -27,7 +28,6 @@ public class VertexDrawable implements Drawable {
     public void draw(GraphElement graphElement, Graphics graphics) {
         Vertex vertex = (Vertex) graphElement;
         Graphics2D g = (Graphics2D) graphics.create();
-        Graph graph = vertex.getGraph();
 
         int posX = vertex.getPosX();
         int posY = vertex.getPosY();
@@ -40,7 +40,7 @@ public class VertexDrawable implements Drawable {
 
         int tempX = 0;
         int tempY = 0;
-        if (graphElement.isDummy() && graph.isGridOn()) {
+        if (graphElement.isDummy() && vertex.getGraph().isGridOn()) {
             tempX = posX;
             tempY = posY;
             VertexUtils.adjustToGrid(vertex);
@@ -123,7 +123,7 @@ public class VertexDrawable implements Drawable {
             }
         }
 
-        if (graphElement.isDummy() && graph.isGridOn()) {
+        if (graphElement.isDummy() && vertex.getGraph().isGridOn()) {
             vertex.setPosX(tempX);
             vertex.setPosY(tempY);
         }

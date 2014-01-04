@@ -1,8 +1,9 @@
-package pl.edu.agh.gratex.draw;
+package pl.edu.agh.gratex.model.edge;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.SelectionController;
+import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.properties.ArrowType;
@@ -15,11 +16,11 @@ import java.awt.geom.Arc2D;
 /**
  *
  */
-public class EdgeDrawable implements Drawable {
+public class EdgeDrawer implements Drawer {
 
     private SelectionController selectionController;
 
-    public EdgeDrawable(SelectionController selectionController) {
+    public EdgeDrawer(SelectionController selectionController) {
         this.selectionController = selectionController;
     }
 
