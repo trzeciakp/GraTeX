@@ -18,8 +18,6 @@ public class DummySubgraph {
     private Graph graph;
     private ParseController parseController;
 
-    private Image cannotCopyImage = Application.loadImage("cannotcopy.png");
-
     public LinkedList<Vertex> vertices = new LinkedList<>();
     public LinkedList<Edge> edges = new LinkedList<>();
     public LinkedList<LabelV> labelsV = new LinkedList<>();
@@ -97,26 +95,6 @@ public class DummySubgraph {
         result.addAll(labelsV);
         result.addAll(labelsE);
         return result;
-    }
-
-    public void drawAll(Graphics2D g, int mouseX, int mouseY) {
-        if (fitsIntoPosition()) {
-            for (Edge edge : edges) {
-                edge.draw(g, true);
-            }
-            for (Vertex vertex : vertices) {
-                vertex.draw(g, true);
-            }
-            for (Edge edge : edges) {
-                edge.drawLabel(g, true);
-            }
-            for (Vertex vertex : vertices) {
-                vertex.drawLabel(g, true);
-            }
-        }
-        else {
-            g.drawImage(cannotCopyImage, mouseX - cannotCopyImage.getWidth(null), mouseY - cannotCopyImage.getHeight(null), null);
-        }
     }
 
     public void calculatePositions(int targetX, int targetY) {

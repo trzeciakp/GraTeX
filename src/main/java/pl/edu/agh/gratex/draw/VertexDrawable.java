@@ -24,8 +24,8 @@ public class VertexDrawable implements Drawable {
     }
 
     @Override
-    public void draw(GraphElement element, Graphics graphics, boolean dummy) {
-        Vertex vertex = (Vertex) element;
+    public void draw(GraphElement graphElement, Graphics graphics) {
+        Vertex vertex = (Vertex) graphElement;
         Graphics2D g = (Graphics2D) graphics.create();
         Graph graph = vertex.getGraph();
 
@@ -40,7 +40,7 @@ public class VertexDrawable implements Drawable {
 
         int tempX = 0;
         int tempY = 0;
-        if (dummy && graph.isGridOn()) {
+        if (graphElement.isDummy() && graph.isGridOn()) {
             tempX = posX;
             tempY = posY;
             VertexUtils.adjustToGrid(vertex);
@@ -55,7 +55,7 @@ public class VertexDrawable implements Drawable {
             g.setColor(Color.white);
             g.fill(VertexUtils.getVertexShape(shapeType, radius + lineWidth / 2, posX, posY));
             g.setColor(vertexColor);
-            if (dummy) {
+            if (graphElement.isDummy()) {
                 g.setColor(DrawingTools.getDummyColor(vertexColor));
             }
             if (lineType == LineType.DOUBLE) {
@@ -73,7 +73,7 @@ public class VertexDrawable implements Drawable {
                 g.fill(innerOutline);
 
                 g.setColor(lineColor);
-                if (dummy) {
+                if (graphElement.isDummy()) {
                     g.setColor(DrawingTools.getDummyColor(lineColor));
                 }
                 g.setStroke(DrawingTools.getStroke(lineWidth, LineType.SOLID, 0.0));
@@ -84,7 +84,7 @@ public class VertexDrawable implements Drawable {
                 g.fill(vertexShape);
 
                 g.setColor(lineColor);
-                if (dummy) {
+                if (graphElement.isDummy()) {
                     g.setColor(DrawingTools.getDummyColor(lineColor));
                 }
 
@@ -112,7 +112,7 @@ public class VertexDrawable implements Drawable {
 
         if (vertex.isLabelInside()) {
             g.setColor(vertex.getFontColor());
-            if (dummy) {
+            if (graphElement.isDummy()) {
                 g.setColor(DrawingTools.getDummyColor(vertex.getFontColor()));
             }
             vertex.setNumber(vertex.getNumber());
@@ -123,7 +123,7 @@ public class VertexDrawable implements Drawable {
             }
         }
 
-        if (dummy && graph.isGridOn()) {
+        if (graphElement.isDummy() && graph.isGridOn()) {
             vertex.setPosX(tempX);
             vertex.setPosY(tempY);
         }

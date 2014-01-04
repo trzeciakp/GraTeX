@@ -1,18 +1,22 @@
 package pl.edu.agh.gratex.controller.mouse;
 
-import pl.edu.agh.gratex.constants.*;
+import pl.edu.agh.gratex.constants.ModeType;
+import pl.edu.agh.gratex.constants.OperationType;
+import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.model.GraphElement;
-import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.DummySubgraph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.EnumMap;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class MouseControllerImpl implements MouseController, ToolListener, ModeListener {
@@ -179,21 +183,35 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     }
 
     @Override
-    public void drawCurrentlyAddedElement(Graphics2D g) {
+    public List<GraphElement> getCurrentlyAddedElements() {
         if (tool == ToolType.ADD) {
-            controllers.get(mode).drawCurrentlyAddedElement(g);
+            return controllers.get(mode).getCurrentlyAddedElements();
+        } else {
+            return new LinkedList<>();
         }
-
-        operationController.reportOperationEvent(null);
     }
 
     @Override
-    public void drawCopiedSubgraph(Graphics2D g) {
+    public List<GraphElement> getCopiedSubgraph() {
         if (dummySubgraph != null) {
             dummySubgraph.calculatePositions(mouseX, mouseY);
-            dummySubgraph.drawAll(g, mouseX, mouseY);
+            if (dummySubgraph.fitsIntoPosition()) {
+                return dummySubgraph.getElements();
+            }
         }
+        return new LinkedList<>();
     }
+
+    @Override
+    public Point locationOfCannotCopyIcon() {
+        if (dummySubgraph != null) {
+            if (!dummySubgraph.fitsIntoPosition()) {
+                return new Point(mouseX, mouseY);
+            }
+        }
+        return null;
+    }
+
     @Override
     public void cancelCurrentOperation() {
         controllers.get(mode).reset();

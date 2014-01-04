@@ -24,7 +24,7 @@ public class EdgeDrawable implements Drawable {
     }
 
     @Override
-    public void draw(GraphElement graphElement, Graphics g2d, boolean dummy) {
+    public void draw(GraphElement graphElement, Graphics g2d) {
         Edge edge = (Edge) graphElement;
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
@@ -43,7 +43,7 @@ public class EdgeDrawable implements Drawable {
                 }
 
                 g.setColor(edge.getLineColor());
-                if (dummy) {
+                if (graphElement.isDummy()) {
                     g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
                 }
                 g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
@@ -57,7 +57,7 @@ public class EdgeDrawable implements Drawable {
                 }
 
                 g.setColor(edge.getLineColor());
-                if (dummy) {
+                if (graphElement.isDummy()) {
                     g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
                 }
                 g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
@@ -75,7 +75,7 @@ public class EdgeDrawable implements Drawable {
             }
 
             g.setColor(edge.getLineColor());
-            if (dummy) {
+            if (graphElement.isDummy()) {
                 g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
             }
             g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
@@ -93,7 +93,7 @@ public class EdgeDrawable implements Drawable {
                 }
 
                 g.setColor(edge.getLineColor());
-                if (dummy) {
+                if (graphElement.isDummy()) {
                     g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
                 }
                 g.setStroke(new BasicStroke(edge.getLineWidth()));
@@ -109,7 +109,7 @@ public class EdgeDrawable implements Drawable {
                 }
 
                 g.setColor(edge.getLineColor());
-                if (dummy) {
+                if (graphElement.isDummy()) {
                     g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
                 }
                 g.setStroke(new BasicStroke(edge.getLineWidth()));

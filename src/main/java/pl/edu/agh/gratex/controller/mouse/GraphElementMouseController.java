@@ -10,6 +10,8 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 
 public abstract class GraphElementMouseController {
@@ -53,7 +55,7 @@ public abstract class GraphElementMouseController {
 
     public abstract void reset();
 
-    public abstract void drawCurrentlyAddedElement(Graphics2D g);
+    public abstract List<GraphElement> getCurrentlyAddedElements();
 
     public abstract GraphElement getElementFromPosition(int mouseX, int mouseY);
 

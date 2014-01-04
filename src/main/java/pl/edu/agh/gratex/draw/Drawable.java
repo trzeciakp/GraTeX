@@ -8,6 +8,5 @@ import java.awt.*;
  *
  */
 public interface Drawable {
-
-    void draw(GraphElement graphElement, Graphics g, boolean dummy);
+    void draw(GraphElement graphElement, Graphics g);
 }

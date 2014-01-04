@@ -7,6 +7,8 @@ import pl.edu.agh.gratex.model.graph.Graph;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -14,6 +16,7 @@ public abstract class GraphElement {
     protected Graph graph;
     protected Drawable drawable;
     protected PropertyModel propertyModel;
+    protected boolean dummy = true;
 
     public Graph getGraph() {
         return graph;
@@ -40,8 +43,12 @@ public abstract class GraphElement {
         return propertyModel.getCopy();
     }
 
-    public void draw(Graphics2D g, boolean dummy) {
-        drawable.draw(this, g, dummy);
+    public void draw(Graphics2D g) {
+        drawable.draw(this, g);
+    }
+
+    public boolean isDummy() {
+        return dummy;
     }
 
     public boolean contains(int x, int y) {
@@ -56,9 +63,19 @@ public abstract class GraphElement {
 
     public abstract GraphElementType getType();
 
+    public abstract int getDrawingPriority();
+
     public abstract void addToGraph();
 
     public abstract void removeFromGraph();
 
     public abstract List<? extends GraphElement> getConnectedElements();
+
+    public static final void sortByDrawingPriorities(List<GraphElement> elements) {
+        Collections.sort(elements, new Comparator<GraphElement>() {
+            public int compare(GraphElement el1, GraphElement el2) {
+                return Integer.compare(el1.getDrawingPriority(), el2.getDrawingPriority());
+            }
+        });
+    }
 }

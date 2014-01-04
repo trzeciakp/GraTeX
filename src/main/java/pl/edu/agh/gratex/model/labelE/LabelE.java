@@ -47,12 +47,14 @@ public class LabelE extends GraphElement {
         graph.getLabelsE().add(this);
         getOwner().setLabel(this);
         updateLocation();
+        dummy = false;
     }
 
     @Override
     public void removeFromGraph() {
         graph.getLabelsE().remove(this);
         getOwner().setLabel(null);
+        dummy = true;
     }
 
     @Override
@@ -73,6 +75,11 @@ public class LabelE extends GraphElement {
     @Override
     public Area getArea() {
         return new Area(outline);
+    }
+
+    @Override
+    public int getDrawingPriority() {
+        return 3;
     }
 
     public String getText() {

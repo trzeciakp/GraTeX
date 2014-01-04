@@ -21,7 +21,7 @@ public class LabelVertexDrawable implements Drawable {
     }
 
     @Override
-    public void draw(GraphElement graphElement, Graphics g2d, boolean dummy) {
+    public void draw(GraphElement graphElement, Graphics g2d) {
         LabelV labelV = (LabelV) graphElement;
         Graphics2D g = (Graphics2D) g2d.create();
 
@@ -34,7 +34,7 @@ public class LabelVertexDrawable implements Drawable {
 
         g.setFont(Const.DEFAULT_FONT);
         g.setColor(labelV.getFontColor());
-        if (dummy) {
+        if (graphElement.isDummy()) {
             g.setColor(DrawingTools.getDummyColor(labelV.getFontColor()));
         }
         g.drawString(labelV.getText(), labelV.getDrawX(), labelV.getDrawY());

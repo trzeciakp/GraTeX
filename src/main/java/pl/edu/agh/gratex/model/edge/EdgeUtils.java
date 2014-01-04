@@ -57,8 +57,8 @@ public class EdgeUtils {
         Vertex vertexB = edge.getVertexB();
 
         if (vertexA != vertexB) {
-            calculateInOutPoints(edge);
-            calculateArcParameters(edge);
+            updateInOutPoints(edge);
+            updateArcParameters(edge);
 
             if (edge.getRelativeEdgeAngle() != 0) {
                 int x1 = edge.getOutPoint().x;
@@ -187,7 +187,7 @@ public class EdgeUtils {
         }
     }
 
-    private static void calculateInOutPoints(Edge edge) {
+    private static void updateInOutPoints(Edge edge) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
 
@@ -198,7 +198,7 @@ public class EdgeUtils {
         edge.setInAngle((int) Math.round(Math.toDegrees(Math.atan2(edge.getInPoint().x - vertexB.getPosX(), edge.getInPoint().y - vertexB.getPosY())) + 270) % 360);
     }
 
-    private static void calculateArcParameters(Edge edge) {
+    private static void updateArcParameters(Edge edge) {
         if (edge.getRelativeEdgeAngle() != 0) {
             double mx = (edge.getOutPoint().x + edge.getInPoint().x) / 2;
             double my = (edge.getOutPoint().y + edge.getInPoint().y) / 2;

@@ -7,12 +7,15 @@ import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 
 public class VertexMouseControllerImpl extends GraphElementMouseController {
@@ -34,14 +37,16 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public void drawCurrentlyAddedElement(Graphics2D g) {
+    public List<GraphElement> getCurrentlyAddedElements() {
+        List<GraphElement> result = new LinkedList<>();
         Vertex vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
         vertex.setNumber(generalController.getGraph().getGraphNumeration().getNextFreeNumber());
         vertex.setPosX(mouseX);
         vertex.setPosY(mouseY);
         if (!GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) && VertexUtils.fitsIntoPage(vertex)) {
-            vertex.draw(g, true);
+            result.add(vertex);
         }
+        return result;
     }
 
     @Override

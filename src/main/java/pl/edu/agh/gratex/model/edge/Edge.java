@@ -83,11 +83,13 @@ public class Edge extends GraphElement {
     public void addToGraph() {
         graph.getEdges().add(this);
         updateLocation();
+        dummy = false;
     }
 
     @Override
     public void removeFromGraph() {
         getGraph().getEdges().remove(this);
+        dummy = true;
     }
 
     @Override
@@ -111,6 +113,11 @@ public class Edge extends GraphElement {
         return new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN).createStrokedShape(edgePath));
     }
 
+    @Override
+    public int getDrawingPriority() {
+        return 1;
+    }
+
 
     public int getNumber() {
         int result = vertexA != null ? vertexA.getNumber() : 0;
@@ -118,12 +125,6 @@ public class Edge extends GraphElement {
         result = 31 * result + inAngle;
         result = 31 * result + outAngle;
         return result;
-    }
-
-    public void drawLabel(Graphics2D g, boolean dummy) {
-        if (getLabel() != null) {
-            getLabel().draw(g, dummy);
-        }
     }
 
     public int getLineWidth() {

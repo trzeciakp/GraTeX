@@ -44,12 +44,14 @@ public class Vertex extends GraphElement {
     public void addToGraph() {
         graph.getVertices().add(this);
         VertexUtils.setPartOfNumeration(this, true);
+        dummy = false;
     }
 
     @Override
     public void removeFromGraph() {
         graph.getVertices().remove(this);
         VertexUtils.setPartOfNumeration(this, false);
+        dummy = true;
     }
 
     @Override
@@ -69,10 +71,9 @@ public class Vertex extends GraphElement {
         return new Area(VertexUtils.getVertexShape(getShape(), getRadius(), posX, posY));
     }
 
-    public void drawLabel(Graphics2D g, boolean dummy) {
-        if (getLabel() != null) {
-            getLabel().draw(g, dummy);
-        }
+    @Override
+    public int getDrawingPriority() {
+        return 2;
     }
 
     // ============================================
