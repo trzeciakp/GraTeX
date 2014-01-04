@@ -22,13 +22,12 @@ import java.util.List;
 
 
 public class Graph {
-    private EnumMap<GraphElementType, List<? extends GraphElement>> elements;
+    private EnumMap<GraphElementType, List<GraphElement>> elements;
 
     private int gridResolutionX = 20;
     private int gridResolutionY = 20;
     private boolean gridOn;
 
-    // TODO przeniesc to gdzie indziej, do jakiegos kontrolera?
     private GraphNumeration graphNumeration;
 
     public Graph() {
@@ -44,38 +43,12 @@ public class Graph {
         return graphNumeration;
     }
 
-    public List<Vertex> getVertices() {
-        return (List<Vertex>) elements.get(GraphElementType.VERTEX);
+    public void addElement(GraphElement graphElement) {
+        elements.get(graphElement.getType()).add(graphElement);
     }
 
-    public Vertex getVertexById(int id) {
-        for (Vertex vertex : getVertices()) {
-            if(vertex.getNumber() == id) {
-                return vertex;
-            }
-        }
-        return null;
-    }
-
-    public List<Edge> getEdges() {
-        return (List<Edge>) elements.get(GraphElementType.EDGE);
-    }
-
-    public Edge getEdgeById(int id) {
-        for (Edge edge : getEdges()) {
-            if(edge.getNumber() == id) {
-                return edge;
-            }
-        }
-        return null;
-    }
-
-    public List<LabelV> getLabelsV() {
-        return (List<LabelV>) elements.get(GraphElementType.LABEL_VERTEX);
-    }
-
-    public List<LabelE> getLabelsE() {
-        return (List<LabelE>) elements.get(GraphElementType.LABEL_EDGE);
+    public void removeElement(GraphElement graphElement) {
+        elements.get(graphElement.getType()).remove(graphElement);
     }
 
     public List<? extends GraphElement> getElements(GraphElementType type) {
@@ -89,6 +62,35 @@ public class Graph {
             result.addAll(elements.get(type));
         }
         return result;
+    }
+
+    public GraphElement getElementFromPosition(GraphElementType graphElementType, int x, int y) {
+        for (GraphElement element : elements.get(graphElementType)) {
+            if (element.contains(x, y)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    public Vertex getVertexById(int id) {
+        for (GraphElement graphElement : elements.get(GraphElementType.VERTEX)) {
+            Vertex vertex = (Vertex) graphElement;
+            if(vertex.getNumber() == id) {
+                return vertex;
+            }
+        }
+        return null;
+    }
+
+    public Edge getEdgeById(int id) {
+        for (GraphElement graphElement : elements.get(GraphElementType.EDGE)) {
+            Edge edge = (Edge) graphElement;
+            if(edge.getNumber() == id) {
+                return edge;
+            }
+        }
+        return null;
     }
 
     public int getGridResolutionX() {

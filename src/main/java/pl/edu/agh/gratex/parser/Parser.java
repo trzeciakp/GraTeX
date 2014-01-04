@@ -17,7 +17,7 @@ import java.util.Iterator;
 public class Parser {
 
     public static String parse(Graph gr) {
-        String result = "\\usetikzlibrary{shapes.geometric}\n\\begin{tikzpicture}\n[every node/.style={inner sep=0pt}]\n";
+        /*String result = "\\usetikzlibrary{shapes.geometric}\n\\begin{tikzpicture}\n[every node/.style={inner sep=0pt}]\n";
 
         Iterator<Vertex> itv = gr.getVertices().listIterator();
         Vertex vtemp = null;
@@ -144,6 +144,7 @@ public class Parser {
         }
 
         result += "\\end{tikzpicture}";
-        return result;
+        return result;*/
+        return "PENIS";
     }
 }

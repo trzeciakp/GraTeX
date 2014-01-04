@@ -22,6 +22,19 @@ public abstract class GraphElement {
         return graph;
     }
 
+    public void addToGraph() {
+        graph.addElement(this);
+        updateLocation();
+        dummy = false;
+        finalizeAddingToGraph();
+    }
+
+    public void removeFromGraph() {
+        graph.removeElement(this);
+        dummy = true;
+        finalizeRemovingFromGraph();
+    }
+
     public void setDrawable(Drawable drawable) {
         this.drawable = drawable;
     }
@@ -59,15 +72,15 @@ public abstract class GraphElement {
         return getArea().intersects(selectionArea);
     }
 
+    public abstract void finalizeAddingToGraph();
+
+    public abstract void finalizeRemovingFromGraph();
+
     public abstract Area getArea();
 
     public abstract GraphElementType getType();
 
     public abstract int getDrawingPriority();
-
-    public abstract void addToGraph();
-
-    public abstract void removeFromGraph();
 
     public abstract List<? extends GraphElement> getConnectedElements();
 

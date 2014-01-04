@@ -9,6 +9,7 @@ import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
+import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.labelV.LabelVUtils;
@@ -40,7 +41,7 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     @Override
     public List<GraphElement> getCurrentlyAddedElements() {
         List<GraphElement> result = new LinkedList<>();
-        Vertex vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
+        Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);;
         if (vertex != null) {
             if (vertex.getLabel() == null) {
                 LabelV labelV = (LabelV) getGraphElementFactory().create(GraphElementType.LABEL_VERTEX, generalController.getGraph());
@@ -54,12 +55,12 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
 
     @Override
     public LabelV getElementFromPosition(int mouseX, int mouseY) {
-        return GraphUtils.getLabelVFromPosition(generalController.getGraph(), mouseX, mouseY);
+        return (LabelV) generalController.getGraph().getElementFromPosition(GraphElementType.LABEL_VERTEX, mouseX, mouseY);
     }
 
     @Override
     public void addNewElement(int mouseX, int mouseY) {
-        Vertex owner = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
+        Vertex owner = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);
         if (owner != null) {
             if (owner.getLabel() == null) {
                 LabelV labelV = (LabelV) getGraphElementFactory().create(GraphElementType.LABEL_VERTEX, generalController.getGraph());

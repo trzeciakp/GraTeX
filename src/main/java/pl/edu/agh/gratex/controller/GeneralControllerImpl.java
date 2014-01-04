@@ -141,7 +141,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             if (file != null) {
                 Graph newGraph;
                 if ((newGraph = fileManager.openFile(file)) != null) {
-                    GraphUtils.deleteUnusedLabels(newGraph);
                     graph = newGraph;
                     resetWorkspace();
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_OK));

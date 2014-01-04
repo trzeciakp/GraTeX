@@ -41,17 +41,13 @@ public class Vertex extends GraphElement {
     }
 
     @Override
-    public void addToGraph() {
-        graph.getVertices().add(this);
+    public void finalizeAddingToGraph() {
         VertexUtils.setPartOfNumeration(this, true);
-        dummy = false;
     }
 
     @Override
-    public void removeFromGraph() {
-        graph.getVertices().remove(this);
+    public void finalizeRemovingFromGraph() {
         VertexUtils.setPartOfNumeration(this, false);
-        dummy = true;
     }
 
     @Override

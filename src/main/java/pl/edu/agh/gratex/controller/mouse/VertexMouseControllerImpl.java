@@ -9,6 +9,7 @@ import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
+import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
@@ -51,7 +52,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public Vertex getElementFromPosition(int mouseX, int mouseY) {
-        return GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
+        return (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
         } else {
             generalController.getSelectionController().addToSelection(currentlyDraggedVertex, false);
             Vertex vertex = currentlyDraggedVertex;
-            generalController.getGraph().getVertices().remove(vertex);
+            generalController.getGraph().removeElement(vertex);
             int oldPosX = vertex.getPosX();
             int oldPosY = vertex.getPosY();
 
@@ -99,7 +100,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
                 vertex.setPosX(oldPosX);
                 vertex.setPosY(oldPosY);
             }
-            generalController.getGraph().getVertices().add(vertex);
+            generalController.getGraph().removeElement(vertex);
         }
     }
 

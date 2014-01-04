@@ -52,7 +52,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     @Override
     public List<GraphElement> getCurrentlyAddedElements() {
         List<GraphElement> result = new LinkedList<>();
-        Edge owner = GraphUtils.getEdgeFromPosition(generalController.getGraph(), mouseX, mouseY);
+        Edge owner = (Edge) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);
         if (owner != null) {
             if (owner.getLabel() == null) {
                 LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());
@@ -71,12 +71,12 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public LabelE getElementFromPosition(int mouseX, int mouseY) {
-        return GraphUtils.getLabelEFromPosition(generalController.getGraph(), mouseX, mouseY);
+        return (LabelE) generalController.getGraph().getElementFromPosition(GraphElementType.LABEL_EDGE, mouseX, mouseY);
     }
 
     @Override
     public void addNewElement(int mouseX, int mouseY) {
-        Edge owner = GraphUtils.getEdgeFromPosition(generalController.getGraph(), mouseX, mouseY);
+        Edge owner = (Edge) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);
         if (owner != null) {
             if (owner.getLabel() == null) {
                 LabelE labelE = (LabelE) getGraphElementFactory().create(GraphElementType.LABEL_EDGE, generalController.getGraph());

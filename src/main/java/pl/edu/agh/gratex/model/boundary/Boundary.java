@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
 
+import java.awt.*;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Boundary extends GraphElement {
 
     @Override
     public Area getArea() {
-        return null;
+        return new Area(new Rectangle(leftCornerX, leftCornerY, width, height));
     }
 
     @Override
@@ -41,13 +42,11 @@ public class Boundary extends GraphElement {
     }
 
     @Override
-    public void addToGraph() {
-        ((List<Boundary>) getGraph().getElements(getType())).add(this);
+    public void finalizeAddingToGraph() {
     }
 
     @Override
-    public void removeFromGraph() {
-        getGraph().getElements(getType()).remove(this);
+    public void finalizeRemovingFromGraph() {
     }
 
     @Override

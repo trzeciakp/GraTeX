@@ -62,7 +62,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     public List<GraphElement> getCurrentlyAddedElements() {
         List<GraphElement> result = new LinkedList<>();
         if (currentlyAddedEdge != null) {
-            Vertex vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
+            Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
             if (vertex == null) {
                 vertex = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, generalController.getGraph());
                 vertex.setPosX(mouseX);
@@ -75,7 +75,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             } else {
                 currentlyAddedEdge.setVertexB(vertex);
             }
-            if (GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY) != null) {
+            if (generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY) != null) {
                 int angle = 0;
                 if (!ctrlDown || currentlyAddedEdge.isLoop()) {
                     angle = EdgeUtils.getEdgeAngleFromCursorLocation(currentlyAddedEdge, mouseX, mouseY);
@@ -94,13 +94,13 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public Edge getElementFromPosition(int mouseX, int mouseY) {
-        return GraphUtils.getEdgeFromPosition(generalController.getGraph(), mouseX, mouseY);
+        return (Edge) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);
     }
 
     @Override
     public void addNewElement(int mouseX, int mouseY) {
-        Vertex temp = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
-        if (temp == null) {
+        Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
+        if (vertex == null) {
             if (currentlyAddedEdge == null) {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_START));
             } else {
@@ -110,10 +110,10 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         } else {
             if (currentlyAddedEdge == null) {
                 currentlyAddedEdge = (Edge) getGraphElementFactory().create(GraphElementType.EDGE, generalController.getGraph());
-                currentlyAddedEdge.setVertexA(temp);
+                currentlyAddedEdge.setVertexA(vertex);
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_END));
             } else {
-                currentlyAddedEdge.setVertexB(temp);
+                currentlyAddedEdge.setVertexB(vertex);
                 if (!checkIfEdgeExists(currentlyAddedEdge)) {
                     currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
                     new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
@@ -202,7 +202,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             currentlyDraggedEdge.setRelativeEdgeAngle(EdgeUtils.getEdgeAngleFromCursorLocation(currentlyDraggedEdge, mouseX, mouseY));
         } else {
             Vertex vertex;
-            if ((vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY)) != null) {
+            if ((vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY)) != null) {
                 if (disconnectedVertexA) {
                     currentlyDraggedEdge.setVertexA(vertex);
                 } else {
@@ -254,7 +254,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         edge.updateLocation();
         String latexCode = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(edge);
         boolean result = false;
-        for (GraphElement graphElement : generalController.getGraph().getEdges()) {
+        for (GraphElement graphElement : generalController.getGraph().getElements(GraphElementType.EDGE)) {
             String existingLatexCode = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(graphElement);
             if (existingLatexCode.equals(latexCode) && graphElement != edge) {
                 result = true;

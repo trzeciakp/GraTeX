@@ -43,18 +43,13 @@ public class LabelE extends GraphElement {
     }
 
     @Override
-    public void addToGraph() {
-        graph.getLabelsE().add(this);
+    public void finalizeAddingToGraph() {
         getOwner().setLabel(this);
-        updateLocation();
-        dummy = false;
     }
 
     @Override
-    public void removeFromGraph() {
-        graph.getLabelsE().remove(this);
+    public void finalizeRemovingFromGraph() {
         getOwner().setLabel(null);
-        dummy = true;
     }
 
     @Override

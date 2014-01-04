@@ -80,16 +80,11 @@ public class Edge extends GraphElement {
     }
 
     @Override
-    public void addToGraph() {
-        graph.getEdges().add(this);
-        updateLocation();
-        dummy = false;
+    public void finalizeAddingToGraph() {
     }
 
     @Override
-    public void removeFromGraph() {
-        getGraph().getEdges().remove(this);
-        dummy = true;
+    public void finalizeRemovingFromGraph() {
     }
 
     @Override
