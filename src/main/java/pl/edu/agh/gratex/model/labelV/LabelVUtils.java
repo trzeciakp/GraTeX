@@ -9,11 +9,6 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class LabelVUtils {
-    // Returns true if (x, y) is in the area occupied by the label
-    public static boolean intersects(LabelV labelV, int x, int y) {
-        return labelV.getOutline().contains(x, y);
-    }
-
     // Calculates the position of LabelV (N, S, W, E etc) according to vertex and cursor location
     public static int getPositionFromCursorLocation(Vertex owner, int mouseX, int mouseY) {
         Point2D p1 = new Point(owner.getPosX(), owner.getPosY());
@@ -92,27 +87,4 @@ public class LabelVUtils {
         labelV.setDrawY((int) (drawPosY - descent + height / 2));
         labelV.setOutline(new Rectangle(labelV.getPosX() - width / 2, labelV.getPosY() - height / 2, width, height));
     }
-/*
-
-    public static void draw(LabelV labelV, Graphics2D g2d, boolean dummy) {
-        Graphics2D g = (Graphics2D) g2d.createEmptyModel();
-
-        updateLocation(labelV);
-
-        if (labelV.getGraph().getGeneralController().getSelectionController().selectionContains(labelV)) {
-            g.setColor(Const.SELECTION_COLOR);
-            g.fillRect(labelV.getOutline().x, labelV.getOutline().y, labelV.getOutline().width, labelV.getOutline().height);
-        }
-
-        g.setFont(labelV.getFont());
-        g.setColor(labelV.getFontColor());
-        if (dummy) {
-            g.setColor(DrawingTools.getDummyColor(labelV.getFontColor()));
-        }
-        g.drawString(labelV.getText(), labelV.getDrawX(), labelV.getDrawY());
-
-        g.dispose();
-    }
-
-*/
 }

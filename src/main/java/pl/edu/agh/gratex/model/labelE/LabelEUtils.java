@@ -10,39 +10,6 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 public class LabelEUtils {
-    // Returns true if (x, y) is in the area occupied by the label
-    public static boolean intersects(LabelE labelE, int x, int y) {
-        return labelE.getOutline().contains(x, y);
-    }
-/*
-
-    public static void draw(LabelE labelE, Graphics2D g2d, boolean dummy) {
-        Graphics2D g = (Graphics2D) g2d.createEmptyModel();
-
-        updateLocation(labelE);
-
-        if (labelE.getGraph().getGeneralController().getSelectionController().selectionContains(labelE)) {
-            g.setColor(Const.SELECTION_COLOR);
-            g.fillPolygon(labelE.getOutline());
-        }
-
-        g.setColor(labelE.getFontColor());
-        if (dummy) {
-            g.setColor(DrawingTools.getDummyColor(labelE.getFontColor()));
-        }
-        g.setFont(labelE.getFont());
-        if (labelE.isHorizontalPlacement()) {
-            g.drawString(labelE.getText(), labelE.getDrawX(), labelE.getDrawY());
-        } else {
-            g.translate(labelE.getDrawX(), labelE.getDrawY());
-            g.rotate(Math.toRadians(360 - labelE.getAngle()), 0, 0);
-            g.drawString(labelE.getText(), 0, 0);
-        }
-
-        g.dispose();
-    }
-*/
-
     // Calculates the position of LabelE (in % of bias) according to vertex and cursor location
     // Will return (-1 * position) if the label was placed below the edge
     public static int getPositionFromCursorLocation(Edge owner, int mouseX, int mouseY) {

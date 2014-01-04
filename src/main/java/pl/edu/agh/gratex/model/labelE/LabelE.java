@@ -12,6 +12,7 @@ import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import java.awt.*;
+import java.awt.geom.Area;
 import java.util.*;
 import java.util.List;
 
@@ -67,6 +68,11 @@ public class LabelE extends GraphElement {
     @Override
     public GraphElementType getType() {
         return GraphElementType.LABEL_EDGE;
+    }
+
+    @Override
+    public Area getArea() {
+        return new Area(outline);
     }
 
     public String getText() {

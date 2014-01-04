@@ -5,6 +5,8 @@ import pl.edu.agh.gratex.draw.Drawable;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 import java.awt.*;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 
 
@@ -41,6 +43,16 @@ public abstract class GraphElement {
     public void draw(Graphics2D g, boolean dummy) {
         drawable.draw(this, g, dummy);
     }
+
+    public boolean contains(int x, int y) {
+        return getArea().contains(x, y);
+    }
+
+    public boolean intersects(Rectangle selectionArea) {
+        return getArea().intersects(selectionArea);
+    }
+
+    public abstract Area getArea();
 
     public abstract GraphElementType getType();
 

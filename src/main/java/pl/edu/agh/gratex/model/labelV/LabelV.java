@@ -11,6 +11,7 @@ import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.awt.*;
+import java.awt.geom.Area;
 import java.util.*;
 import java.util.List;
 
@@ -58,6 +59,11 @@ public class LabelV extends GraphElement  {
     @Override
     public GraphElementType getType() {
         return GraphElementType.LABEL_VERTEX;
+    }
+
+    @Override
+    public Area getArea() {
+        return new Area(outline);
     }
 
     public String getText() {

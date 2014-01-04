@@ -9,59 +9,6 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class EdgeUtils {
-    // Returns true if (x, y) is close enough to the edge
-    public static boolean intersects(Edge edge, int x, int y) {
-        Vertex vertexA = edge.getVertexA();
-        Vertex vertexB = edge.getVertexB();
-
-        Point2D va = new Point(vertexA.getPosX(), vertexA.getPosY());
-        Point2D vb = new Point(vertexB.getPosX(), vertexB.getPosY());
-        Point2D click = new Point(x, y);
-
-        if (vertexA == vertexB) {
-            int r = vertexA.getRadius() + vertexA.getLineWidth() / 2;
-            double dx = edge.getArcMiddle().x - x;
-            double dy = edge.getArcMiddle().y - y;
-            double a = r * 0.75;
-            double b = r * 0.375;
-            if (edge.getRelativeEdgeAngle() == 90 || edge.getRelativeEdgeAngle() == 270) {
-                a = r * 0.375;
-                b = r * 0.75;
-            }
-
-            double distance = (dx * dx) / (a * a) + (dy * dy) / (b * b);
-            return Math.abs(distance - 1) < 1;
-        } else {
-            if (edge.getRelativeEdgeAngle() != 0) {
-                if (Math.abs(click.distance(edge.getArcMiddle()) - edge.getArcRadius()) < 10 + edge.getLineWidth() / 2) {
-                    double clickAngle = (Math.toDegrees(Math.atan2(click.getX() - edge.getArcMiddle().x, click.getY() - edge.getArcMiddle().y)) + 270) % 360;
-                    if (edge.getArc().extent < 0) {
-                        double endAngle = (edge.getArc().start + edge.getArc().extent + 720) % 360;
-                        return (clickAngle - endAngle + 720) % 360 < (edge.getArc().start - endAngle + 720) % 360;
-                    } else {
-                        return (edge.getArc().extent) % 360 > (clickAngle - edge.getArc().start + 720) % 360;
-                    }
-                }
-            } else {
-                Path2D path = new Path2D.Double();
-                path.moveTo(edge.getInPoint().x, edge.getInPoint().y);
-                path.lineTo(edge.getOutPoint().x, edge.getOutPoint().y);
-                Shape clippedPath = new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN).createStrokedShape(path);
-                return new Area(clippedPath).contains(x, y);
-//                if ((Math.min(vertexA.getPosX(), vertexB.getPosX()) <= x && Math.max(vertexA.getPosX(), vertexB.getPosX()) >= x)
-//                        || (Math.min(vertexA.getPosY(), vertexB.getPosY()) <= y && Math.max(vertexA.getPosY(), vertexB.getPosY()) >= y)) {
-//                    if (click.distance(va) > vertexA.getRadius() && click.distance(vb) > vertexB.getRadius()) {
-//                        double distance = Line2D.ptLineDist((double) vertexA.getPosX(), (double) vertexA.getPosY(), (double) vertexB.getPosX(),
-//                                (double) vertexB.getPosY(), (double) x, (double) y);
-//                        return distance < 12;
-//                    }
-//                }
-            }
-        }
-
-        return false;
-    }
-
     // Calculates the angle of edge (in degrees) according to cursor location and type of edge
     public static int getEdgeAngleFromCursorLocation(Edge edge, int mouseX, int mouseY) {
         int intAngle;

@@ -12,8 +12,10 @@ import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.properties.IsLabelInside;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
+import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
+import java.awt.geom.Area;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -61,6 +63,11 @@ public class Vertex extends GraphElement {
             result.add(edge);
         }
         return result;
+    }
+
+    @Override
+    public Area getArea() {
+        return new Area(Geometry.getVertexShape(getShape() + 1, getRadius(), posX, posY));
     }
 
     public void drawLabel(Graphics2D g, boolean dummy) {
