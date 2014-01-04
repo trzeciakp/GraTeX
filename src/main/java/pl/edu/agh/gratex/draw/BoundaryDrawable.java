@@ -13,8 +13,7 @@ public class BoundaryDrawable implements Drawable {
     }
 
     @Override
-    public void draw(GraphElement graphElement, Graphics g, boolean dummy) {
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.drawString("DUUUPA", 10, 10);
+    public void draw(GraphElement graphElement, Graphics g) {
+
     }
 }

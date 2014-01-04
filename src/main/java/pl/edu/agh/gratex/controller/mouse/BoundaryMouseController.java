@@ -7,6 +7,8 @@ import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.boundary.Boundary;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  *
@@ -24,8 +26,8 @@ public class BoundaryMouseController extends GraphElementMouseController {
     }
 
     @Override
-    public void drawCurrentlyAddedElement(Graphics2D g) {
-
+    public List<GraphElement> getCurrentlyAddedElements() {
+        return null;
     }
 
     @Override

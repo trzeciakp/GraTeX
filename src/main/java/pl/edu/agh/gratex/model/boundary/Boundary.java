@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
 
+import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,18 @@ public class Boundary extends GraphElement {
     }
 
     @Override
+    public Area getArea() {
+        return null;
+    }
+
+    @Override
     public GraphElementType getType() {
         return GraphElementType.BOUNDARY;
+    }
+
+    @Override
+    public int getDrawingPriority() {
+        return 0;
     }
 
     @Override
