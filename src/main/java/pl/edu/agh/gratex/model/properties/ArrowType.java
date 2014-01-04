@@ -1,9 +1,7 @@
 package pl.edu.agh.gratex.model.properties;
 
-import pl.edu.agh.gratex.model.PropertyModel;
-
 public enum ArrowType implements Emptible {
-    EMPTY(PropertyModel.EMPTY) {
+    EMPTY {
         public String toString() {
             return " ";
         }
@@ -12,16 +10,7 @@ public enum ArrowType implements Emptible {
         public boolean isEmpty() {
             return true;
         }
-    }, BASIC(0), FILLED(1);
-    private int value;
-
-    public int getValue() {
-        return value;
-    }
-
-    ArrowType(int value) {
-        this.value = value;
-    }
+    }, BASIC, FILLED;
 
     public String toString() {
         return name().toLowerCase();

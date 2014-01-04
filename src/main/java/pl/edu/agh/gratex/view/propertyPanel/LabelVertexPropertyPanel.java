@@ -124,11 +124,6 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         lblPosition.setHorizontalAlignment(SwingConstants.LEFT);
         add(lblPosition);
 
-       /* Option[] positions = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(LabelPosition.N.getValue(), "N"),
-                new Option(LabelPosition.NE.getValue(), "NE"), new Option(LabelPosition.E.getValue(), "E"), new Option(LabelPosition.SE.getValue(), "SE"),
-                new Option(LabelPosition.S.getValue(), "S"), new Option(LabelPosition.SW.getValue(), "SW"), new Option(LabelPosition.W.getValue(), "W"),
-                new Option(LabelPosition.NW.getValue(), "NW")};
-*/
         comboBoxPosition = new JComboBox<LabelPosition>(LabelPosition.values());
         comboBoxPosition.setMaximumRowCount(9);
         comboBoxPosition.addActionListener(new ActionListener() {

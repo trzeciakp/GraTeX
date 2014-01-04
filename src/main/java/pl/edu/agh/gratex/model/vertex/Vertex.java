@@ -9,6 +9,7 @@ import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphNumeration;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.properties.IsLabelInside;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 
@@ -89,19 +90,16 @@ public class Vertex extends GraphElement {
     }
 
     public int getShape() {
-        return propertyModel.getShape();
-    }
-
-    public void setShape(int shape) {
-        propertyModel.setShape(shape);
+        //TODO
+        return propertyModel.getShape().getValue();
     }
 
     public void setShape(ShapeType shape) {
-        propertyModel.setShape(shape.getValue());
+        propertyModel.setShape(shape);
     }
 
     public ShapeType getShapeENUM() {
-        return ShapeType.values()[propertyModel.getShape()];
+        return propertyModel.getShape();
     }
 
     public Color getVertexColor() {
@@ -145,11 +143,11 @@ public class Vertex extends GraphElement {
     }
 
     public boolean isLabelInside() {
-        return propertyModel.getLabelInside() == 1;
+        return propertyModel.getLabelInsideENUM() == IsLabelInside.YES;
     }
 
     public void setLabelInside(boolean labelInside) {
-        propertyModel.setLabelInside(labelInside ? 1 : 0);
+        propertyModel.setLabelInside(labelInside ? IsLabelInside.YES : IsLabelInside.NO);
     }
 
     public int getPosX() {

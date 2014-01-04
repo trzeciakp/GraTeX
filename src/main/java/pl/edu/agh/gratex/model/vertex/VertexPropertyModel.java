@@ -1,20 +1,23 @@
 package pl.edu.agh.gratex.model.vertex;
 
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.IsLabelInside;
 import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.model.properties.ShapeType;
 
 import java.awt.*;
 
 public class VertexPropertyModel extends PropertyModel {
     private int number = -1;
     private int radius = PropertyModel.EMPTY;
-    private int shape = PropertyModel.EMPTY;
     private Color vertexColor = null;
     private LineType lineType = LineType.EMPTY;
     private int lineWidth = PropertyModel.EMPTY;
     private Color lineColor = null;
     private Color fontColor = null;
-    private int labelInside = PropertyModel.EMPTY;
+    private IsLabelInside labelInsideENUM = IsLabelInside.EMPTY;
+    private ShapeType shape = ShapeType.EMPTY;
+
 
     @Override
     public PropertyModel getCopy() {
@@ -30,7 +33,7 @@ public class VertexPropertyModel extends PropertyModel {
         if (lineColor != null) {
             result.lineColor = new Color(lineColor.getRGB());
         }
-        result.labelInside = labelInside;
+        result.labelInsideENUM = labelInsideENUM;
         if (fontColor != null) {
             result.fontColor = new Color(fontColor.getRGB());
         }
@@ -50,7 +53,7 @@ public class VertexPropertyModel extends PropertyModel {
         }
 
         if (model.shape != shape) {
-            shape = PropertyModel.EMPTY;
+            shape = ShapeType.EMPTY;
         }
 
         if (vertexColor != null) {
@@ -79,8 +82,8 @@ public class VertexPropertyModel extends PropertyModel {
             }
         }
 
-        if (model.labelInside != labelInside) {
-            labelInside = PropertyModel.EMPTY;
+        if (model.labelInsideENUM != labelInsideENUM) {
+            labelInsideENUM = IsLabelInside.EMPTY;
         }
     }
 
@@ -98,7 +101,7 @@ public class VertexPropertyModel extends PropertyModel {
             radius = model.radius;
         }
 
-        if (model.shape != PropertyModel.EMPTY) {
+        if (model.shape != ShapeType.EMPTY) {
             shape = model.shape;
         }
 
@@ -122,8 +125,8 @@ public class VertexPropertyModel extends PropertyModel {
             fontColor = new Color(model.fontColor.getRGB());
         }
 
-        if (model.labelInside != PropertyModel.EMPTY) {
-            labelInside = model.labelInside;
+        if (model.labelInsideENUM != IsLabelInside.EMPTY) {
+            labelInsideENUM = model.labelInsideENUM;
         }
 
     }
@@ -142,14 +145,6 @@ public class VertexPropertyModel extends PropertyModel {
 
     public void setRadius(int radius) {
         this.radius = radius;
-    }
-
-    public int getShape() {
-        return shape;
-    }
-
-    public void setShape(int shape) {
-        this.shape = shape;
     }
 
     public Color getVertexColor() {
@@ -192,11 +187,19 @@ public class VertexPropertyModel extends PropertyModel {
         this.fontColor = fontColor;
     }
 
-    public int getLabelInside() {
-        return labelInside;
+    public IsLabelInside getLabelInsideENUM() {
+        return labelInsideENUM;
     }
 
-    public void setLabelInside(int labelInside) {
-        this.labelInside = labelInside;
+    public void setLabelInside(IsLabelInside labelInside) {
+        this.labelInsideENUM = labelInside;
+    }
+
+    public ShapeType getShape() {
+        return shape;
+    }
+
+    public void setShape(ShapeType shape) {
+        this.shape = shape;
     }
 }

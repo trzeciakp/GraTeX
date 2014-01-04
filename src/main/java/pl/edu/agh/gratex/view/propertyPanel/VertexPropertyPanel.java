@@ -2,9 +2,11 @@ package pl.edu.agh.gratex.view.propertyPanel;
 
 
 import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.GraphNumeration;
+import pl.edu.agh.gratex.model.properties.IsLabelInside;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
@@ -26,7 +28,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
     private VertexPropertyModel model;
     private JLabel lblVertexType;
-    private JComboBox<Option> comboBoxVertexType;
+    private JComboBox<ShapeType> comboBoxVertexType;
     private JLabel lblColor;
     private JComboBox<Color> comboBoxVertexColor;
     private JLabel lblLineType;
@@ -38,7 +40,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
     private JLabel lblLineColor;
     private JComboBox<Color> comboBoxLineColor;
     private JLabel lblLabelInside;
-    private JComboBox<Option> comboBoxLabelInside;
+    private JComboBox<IsLabelInside> comboBoxLabelInside;
     private JLabel lblNumber;
     private JSpinner spinnerNumber;
     private JLabel lblFontColor;
@@ -57,8 +59,9 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setModel(listModels[1]);
             ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
-        } else
+        } else {
             spinnerNumber.setModel(listModels[0]);
+        }
     }
 
     public VertexPropertyPanel(GeneralController generalController) {
@@ -79,41 +82,41 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         changedByUser = false;
         lblNumber.setEnabled(true);
         spinnerNumber.setEnabled(true);
-        if (model.getLabelInside() == PropertyModel.NO) {
+        if (model.getLabelInsideENUM() == IsLabelInside.NO) {
             lblNumber.setEnabled(false);
             spinnerNumber.setEnabled(false);
             lblFontColor.setEnabled(false);
             comboBoxFontColor.setEnabled(false);
-        } else if (model.getLabelInside() == PropertyModel.YES) {
+        } else if (model.getLabelInsideENUM() == IsLabelInside.YES) {
             lblFontColor.setEnabled(true);
             comboBoxFontColor.setEnabled(true);
         }
         updateNumeration();
-        if (model.getNumber() == -1) {
+        if (model.getNumber() == PropertyModel.EMPTY) {
             lblNumber.setEnabled(false);
             spinnerNumber.setEnabled(false);
-            spinnerNumber.setValue(" ");
+            spinnerNumber.setValue(StringLiterals.EMPTY_VALUE);
         } else if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setValue(model.getNumber());
-        } else
+        } else {
             spinnerNumber.setValue(GraphNumeration.digitalToAlphabetical(model.getNumber()));
-        if (model.getShape() == -1)
-            comboBoxVertexType.setSelectedIndex(0);
-        else
-            comboBoxVertexType.setSelectedIndex(model.getShape());
-        if (model.getRadius() == -1)
-            spinnerVertexSize.setValue(" ");
-        else
-            spinnerVertexSize.setValue(model.getRadius() + " px");
+        }
+        comboBoxVertexType.setSelectedItem(model.getShape());
+        if (model.getRadius() == PropertyModel.EMPTY) {
+            spinnerVertexSize.setValue(StringLiterals.EMPTY_VALUE);
+        } else {
+            spinnerVertexSize.setValue(model.getRadius() + StringLiterals.PX_SUFFIX);
+        }
         comboBoxVertexColor.setSelectedItem(model.getVertexColor());
         comboBoxFontColor.setSelectedItem(model.getFontColor());
         comboBoxLineType.setSelectedItem(model.getLineType());
-        if (model.getLineWidth() == -1)
-            spinnerLineSize.setValue(" ");
-        else
-            spinnerLineSize.setValue(model.getLineWidth() + " px");
+        if (model.getLineWidth() == PropertyModel.EMPTY) {
+            spinnerLineSize.setValue(StringLiterals.EMPTY_VALUE);
+        } else {
+            spinnerLineSize.setValue(model.getLineWidth() + StringLiterals.PX_SUFFIX);
+        }
         comboBoxLineColor.setSelectedItem(model.getLineColor());
-        comboBoxLabelInside.setSelectedIndex(model.getLabelInside() + 1);
+        comboBoxLabelInside.setSelectedItem(model.getLabelInsideENUM());
 
         changedByUser = true;
     }
@@ -128,27 +131,20 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         setLayout(null);
 
         /**************************** VERTEX TYPE COMBOBOX **************************/
-        lblVertexType = new JLabel("Vertex type:");
+        lblVertexType = new JLabel(StringLiterals.VERTEX_SHAPE_TYPE);
         lblVertexType.setHorizontalAlignment(SwingConstants.LEFT);
         lblVertexType.setBounds(6, 92, 64, 14);
         add(lblVertexType);
 
-        Option[] vertexTypes = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(ShapeType.CIRCLE.getValue(), "circle"),
-                new Option(ShapeType.TRIANGLE.getValue(), "triangle"), new Option(ShapeType.SQUARE.getValue(), "square"),
-                new Option(ShapeType.PENTAGON.getValue(), "pentagon"), new Option(ShapeType.HEXAGON.getValue(), "hexagon")};
-        comboBoxVertexType = new JComboBox<>(vertexTypes);
-        comboBoxVertexType.setBounds(101, 89, 80, 20);
+        comboBoxVertexType = new JComboBox<>(ShapeType.values());
         comboBoxVertexType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                int newValue = ((Option) comboBoxVertexType.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.getShape() != newValue) || (!changedByUser)) {
+                ShapeType newValue = ((ShapeType) comboBoxVertexType.getSelectedItem());
+                if ((!newValue.isEmpty()) && (model.getShape() != newValue) || (!changedByUser)) {
                     model.setShape(newValue);
                     changed();
                 } else {
-                    if (model.getShape() != -1)
-                        comboBoxVertexType.setSelectedIndex(model.getShape());
-                    else
-                        comboBoxVertexType.setSelectedIndex(0);
+                    comboBoxVertexType.setSelectedItem(model.getShape());
                 }
             }
         });
@@ -156,21 +152,20 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** VERTEX SIZE SPINNER *************************/
-        lblVertexSize = new JLabel("Vertex size:");
+        lblVertexSize = new JLabel(StringLiterals.VERTEX_SIZE);
         lblVertexSize.setHorizontalAlignment(SwingConstants.LEFT);
-        lblVertexSize.setBounds(6, 42, 64, 14);
         add(lblVertexSize);
 
         MIN_SIZE = 10;
         MAX_SIZE = 99;
         String[] vertexSizes = new String[MAX_SIZE - MIN_SIZE + 2];
-        vertexSizes[0] = new String(" ");
-        for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++)
-            vertexSizes[i - MIN_SIZE + 1] = new String(i + " px");
+        vertexSizes[0] = StringLiterals.EMPTY_VALUE;
+        for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++) {
+            vertexSizes[i - MIN_SIZE + 1] = i + StringLiterals.PX_SUFFIX;
+        }
 
         spinnerVertexSize = new JSpinner();
         spinnerVertexSize.setModel(new SpinnerListModel(vertexSizes));
-        spinnerVertexSize.setBounds(101, 38, 50, 22);
         spinnerVertexSize.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 String value = (String) spinnerVertexSize.getValue();
@@ -183,11 +178,11 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.getRadius() != -1)
-                            spinnerVertexSize.setValue(model.getRadius() + " px");
+                        if (model.getRadius() != PropertyModel.EMPTY)
+                            spinnerVertexSize.setValue(model.getRadius() + StringLiterals.PX_SUFFIX);
                     } else {
-                        spinnerVertexSize.setValue(" ");
-                        model.setRadius(-1);
+                        spinnerVertexSize.setValue(StringLiterals.EMPTY_VALUE);
+                        model.setRadius(PropertyModel.EMPTY);
                     }
                 }
             }
@@ -196,9 +191,8 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** VERTEX COLOR COMBOBOX ***********************/
-        lblColor = new JLabel("Vertex color:");
+        lblColor = new JLabel(StringLiterals.VERTEX_COLOR);
         lblColor.setHorizontalAlignment(SwingConstants.LEFT);
-        lblColor.setBounds(6, 67, 84, 14);
         add(lblColor);
 
         comboBoxVertexColor = new ColorComboBox();
@@ -222,12 +216,11 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE TYPE COMBOBOX **************************/
-        lblLineType = new JLabel("Line type:");
+        lblLineType = new JLabel(StringLiterals.VERTEX_LINE_TYPE);
         lblLineType.setHorizontalAlignment(SwingConstants.LEFT);
-        lblLineType.setBounds(6, 92, 64, 14);
         add(lblLineType);
 
-        comboBoxLineType = new JComboBox<LineType>(LineType.values());
+        comboBoxLineType = new JComboBox<>(LineType.values());
         comboBoxLineType.setBounds(101, 89, 80, 20);
         comboBoxLineType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
@@ -244,7 +237,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE WIDTH SPINNER **************************/
-        lblLineSize = new JLabel("Line width:");
+        lblLineSize = new JLabel(StringLiterals.VERTEX_LINE_WIDTH);
         lblLineSize.setHorizontalAlignment(SwingConstants.LEFT);
         lblLineSize.setBounds(6, 117, 64, 14);
         add(lblLineSize);
@@ -252,13 +245,12 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         MIN_SIZE = 1;
         MAX_SIZE = 10;
         String[] lineSizes = new String[MAX_SIZE - MIN_SIZE + 2];
-        lineSizes[0] = new String(" ");
+        lineSizes[0] = StringLiterals.EMPTY_VALUE;
         for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++)
-            lineSizes[i - MIN_SIZE + 1] = new String(i + " px");
+            lineSizes[i - MIN_SIZE + 1] = i + StringLiterals.PX_SUFFIX;
 
         spinnerLineSize = new JSpinner();
         spinnerLineSize.setModel(new SpinnerListModel(lineSizes));
-        spinnerLineSize.setBounds(101, 38, 50, 22);
         spinnerLineSize.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 String value = (String) spinnerLineSize.getValue();
@@ -271,11 +263,11 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.getLineWidth() != -1)
-                            spinnerLineSize.setValue(model.getLineWidth() + " px");
+                        if (model.getLineWidth() != PropertyModel.EMPTY)
+                            spinnerLineSize.setValue(model.getLineWidth() + StringLiterals.PX_SUFFIX);
                     } else {
-                        spinnerLineSize.setValue(" ");
-                        model.setLineWidth(-1);
+                        spinnerLineSize.setValue(StringLiterals.EMPTY_VALUE);
+                        model.setLineWidth(PropertyModel.EMPTY);
                     }
                 }
             }
@@ -285,9 +277,8 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE COLOR COMBOBOX *************************/
-        lblLineColor = new JLabel("Line color:");
+        lblLineColor = new JLabel(StringLiterals.VERTEX_LINE_COLOR);
         lblLineColor.setHorizontalAlignment(SwingConstants.LEFT);
-        lblLineColor.setBounds(6, 142, 84, 14);
         add(lblLineColor);
 
         comboBoxLineColor = new ColorComboBox();
@@ -311,23 +302,19 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LABEL INSIDE COMBOBOX ***********************/
-        lblLabelInside = new JLabel("Label inside:");
+        lblLabelInside = new JLabel(StringLiterals.VERTEX_LABEL_INSIDE);
         lblLabelInside.setHorizontalAlignment(SwingConstants.LEFT);
-        lblLabelInside.setBounds(6, 167, 75, 14);
         add(lblLabelInside);
 
-        Option[] labelTypes = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.NO, "no"),
-                new Option(PropertyModel.YES, "yes")};
-        comboBoxLabelInside = new JComboBox<Option>(labelTypes);
-        comboBoxLabelInside.setBounds(101, 164, 81, 20);
+        comboBoxLabelInside = new JComboBox<>(IsLabelInside.values());
         comboBoxLabelInside.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                int newValue = ((Option) comboBoxLabelInside.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.getLabelInside() != newValue) || (!changedByUser)) {
+                IsLabelInside newValue = ((IsLabelInside) comboBoxLabelInside.getSelectedItem());
+                if ((!newValue.isEmpty() && (model.getLabelInsideENUM() != newValue) || (!changedByUser))) {
                     model.setLabelInside(newValue);
                     changed();
                 } else {
-                    comboBoxLabelInside.setSelectedIndex(model.getLabelInside() + 1);
+                    comboBoxLabelInside.setSelectedItem(model.getLabelInsideENUM());
                 }
             }
         });
@@ -335,9 +322,8 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** COLOR COMBOBOX ******************************/
-        lblFontColor = new JLabel("Font color:");
+        lblFontColor = new JLabel(StringLiterals.VERTEX_FONT_COLOR);
         lblFontColor.setHorizontalAlignment(SwingConstants.LEFT);
-        lblFontColor.setBounds(6, 67, 84, 14);
         add(lblFontColor);
 
         comboBoxFontColor = new ColorComboBox();
@@ -361,7 +347,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** NUMBER SPINNER ******************************/
-        lblNumber = new JLabel("Number:");
+        lblNumber = new JLabel(StringLiterals.VERTEX_NUMBER);
         lblNumber.setHorizontalAlignment(SwingConstants.LEFT);
         add(lblNumber);
 
@@ -379,7 +365,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             public void setEnabled(boolean flag) {
                 super.setEnabled(flag);
                 if (!flag) {
-                    setModel(new SpinnerListModel(new String[]{" "}));
+                    setModel(new SpinnerListModel(new String[]{StringLiterals.EMPTY_VALUE}));
                 }
             }
         };
@@ -411,10 +397,11 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             }
 
             private void setValue(int arg) {
-                if (generalController.getGraph().getGraphNumeration().isNumerationDigital())
+                if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
                     spinnerNumber.setValue(arg);
-                else
+                } else {
                     spinnerNumber.setValue(GraphNumeration.digitalToAlphabetical(arg));
+                }
             }
 
             public void stateChanged(ChangeEvent arg0) {

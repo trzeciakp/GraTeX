@@ -18,7 +18,6 @@ import java.util.Vector;
 @SuppressWarnings("serial")
 public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
 
-    public static final String LABEL_EDGE_TEXT_COLOR = "Text color:";
     private LabelEdgePropertyModel model;
     private JLabel labelText;
     private JTextField textField;
@@ -116,7 +115,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** COLOR COMBOBOX ******************************/
-        lblColor = new JLabel(LABEL_EDGE_TEXT_COLOR);
+        lblColor = new JLabel(StringLiterals.LABEL_EDGE_TEXT_COLOR);
         lblColor.setHorizontalAlignment(SwingConstants.LEFT);
         add(lblColor);
 
@@ -221,11 +220,11 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.getSpacing() != -1)
+                        if (model.getSpacing() != PropertyModel.EMPTY)
                             spinnerDistance.setValue(model.getSpacing() + StringLiterals.PX_SUFFIX);
                     } else {
                         spinnerDistance.setValue(StringLiterals.EMPTY_VALUE);
-                        model.setSpacing(-1);
+                        model.setSpacing(PropertyModel.EMPTY);
                     }
                 }
             }

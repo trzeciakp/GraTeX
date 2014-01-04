@@ -1,25 +1,30 @@
 package pl.edu.agh.gratex.model.properties;
 
-import pl.edu.agh.gratex.model.PropertyModel;
-
-public enum LabelHorizontalPlacement implements Emptible {
+/**
+ *
+ */
+public enum IsLabelInside implements Emptible{
     EMPTY {
+
+        @Override
         public String toString() {
             return " ";
         }
 
         @Override
         public boolean isEmpty() {
-            return true;
+            return false;
         }
-    }, TANGENT, LEVEL;
-
-    public String toString() {
-        return name().toLowerCase();
-    }
+    }, YES, NO;
 
     @Override
     public boolean isEmpty() {
         return false;
     }
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
+
 }

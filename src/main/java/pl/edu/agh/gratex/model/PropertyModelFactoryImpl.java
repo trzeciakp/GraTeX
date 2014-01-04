@@ -61,13 +61,13 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         //TODO
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setNumber(PropertyModel.EMPTY);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setRadius(40);
-        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setShape(1);
+        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setShape(ShapeType.CIRCLE);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setVertexColor(new Color(new Float(1), new Float(0.5), new Float(0)));
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLineType(LineType.SOLID);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLineWidth(1);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLineColor(Color.black);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setFontColor(Color.black);
-        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLabelInside(PropertyModel.YES);
+        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLabelInside(IsLabelInside.YES);
 
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineType(LineType.SOLID);
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineWidth(1);

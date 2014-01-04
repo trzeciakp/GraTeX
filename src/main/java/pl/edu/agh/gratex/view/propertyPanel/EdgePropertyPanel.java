@@ -3,10 +3,7 @@ package pl.edu.agh.gratex.view.propertyPanel;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
-import pl.edu.agh.gratex.model.properties.ArrowType;
-import pl.edu.agh.gratex.model.properties.IsDirected;
-import pl.edu.agh.gratex.model.properties.IsLoop;
-import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.model.properties.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -34,7 +31,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
     private JComboBox<ArrowType> comboBoxArrowType;
     private JLabel lblAngle;
     private JSpinner spinnerAngle;
-    private JComboBox<Option> comboBoxAngle;
+    private JComboBox<LoopDirection> comboBoxAngle;
     private static int RANGE;
     private static int STEP;
     private static int MIN_SIZE;
@@ -285,21 +282,15 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         });
         add(spinnerAngle);
 
-        //TODO
-        Option[] loopAngles = new Option[]{new Option(-1, " "), new Option(0, "0 deg"), new Option(90, "90 deg"), new Option(180, "180 deg"),
-                new Option(270, "270 deg")};
-        comboBoxAngle = new JComboBox<Option>(loopAngles);
+        comboBoxAngle = new JComboBox<>(LoopDirection.values());
         comboBoxAngle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                int newValue = ((Option) comboBoxAngle.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.getRelativeEdgeAngle() != newValue) || (!changedByUser)) {
-                    model.setRelativeEdgeAngle(newValue);
+                LoopDirection newValue = ((LoopDirection) comboBoxAngle.getSelectedItem());
+                if ((!newValue.isEmpty()) && (model.getRelativeEdgeAngle() != newValue.getAngle()) || (!changedByUser)) {
+                    model.setRelativeEdgeAngle(newValue.getAngle());
                     changed();
                 } else {
-                    if (model.getRelativeEdgeAngle() >= 0)
-                        comboBoxAngle.setSelectedIndex(model.getRelativeEdgeAngle() / 90 + 1);
-                    else
-                        comboBoxAngle.setSelectedIndex(0);
+                    comboBoxAngle.setSelectedItem(LoopDirection.getByAngle(model.getRelativeEdgeAngle()));
                 }
             }
         });

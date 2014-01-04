@@ -3,7 +3,8 @@ package pl.edu.agh.gratex.model.properties;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 public enum LabelTopPlacement implements Emptible {
-    EMPTY(PropertyModel.EMPTY) {
+    EMPTY {
+        @Override
         public String toString() {
             return " ";
         }
@@ -12,16 +13,7 @@ public enum LabelTopPlacement implements Emptible {
         public boolean isEmpty() {
             return true;
         }
-    }, BELOW(0), ABOVE(1);
-    private int value;
-
-    public int getValue() {
-        return value;
-    }
-
-    LabelTopPlacement(int value) {
-        this.value = value;
-    }
+    }, BELOW, ABOVE;
 
     public String toString() {
         return name().toLowerCase();

@@ -121,25 +121,6 @@ public class StringLiterals {
 
     // This should go before message when undoing changes
     private final static String UNDO_PREFIX = "[UNDONE] ";
-    public static final String LABEL_VERTEX_POSITION = "Position:";
-    public static final String LABEL_VERTEX_DISTANCE = "Distance:";
-    public static final String EMPTY_VALUE = " ";
-    public static final String PX_SUFFIX = " px";
-    public static final String LABEL_VERTEX_TEXT = "Text:";
-    public static final String LABEL_VERTEX_TEXT_COLOR = "Text color:";
-    public static final String LABEL_EDGE_ROTATION = "Rotation";
-    public static final String PERCENT_SUFFIX = " %";
-    public static final String LABEL_EDGE_PLACEMENT = "Placement:";
-    public static final String LABEL_EDGE_TEXT = "Text:";
-    public static final String LABEL_EDGE_POSITION = "Position:";
-    public static final String LABEL_EDGE_DISTANCE = "Distance:";
-    public static final String DEG_SUFFIX = " deg";
-    public static final String EDGE_LINE_TYPE = "Line type:";
-    public static final String EDGE_LINE_WIDTH = "Line width:";
-    public static final String EDGE_LINE_COLOR = "Line color:";
-    public static final String EDGE_DIRECTED = "Directed:";
-    public static final String EDGE_ARROW_TYPE = "Arrow type:";
-    public static final String EDGE_ANGLE = "Angle:";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;
@@ -276,4 +257,35 @@ public class StringLiterals {
     public static String INFO_GENERIC_SELECT_ALL(ModeType mode){
         return "all " + mode.getRelatedElementType().getPluralName() + " selected";
     }
+
+    //PROPERTY PANEL
+    public static final String LABEL_VERTEX_POSITION = "Position:";
+    public static final String LABEL_VERTEX_DISTANCE = "Distance:";
+    public static final String EMPTY_VALUE = " ";
+    public static final String PX_SUFFIX = " px";
+    public static final String PERCENT_SUFFIX = " %";
+    public static final String DEG_SUFFIX = " deg";
+    public static final String LABEL_VERTEX_TEXT = "Text:";
+    public static final String LABEL_VERTEX_TEXT_COLOR = "Text color:";
+    public static final String LABEL_EDGE_ROTATION = "Rotation";
+    public static final String LABEL_EDGE_PLACEMENT = "Placement:";
+    public static final String LABEL_EDGE_TEXT = "Text:";
+    public static final String LABEL_EDGE_POSITION = "Position:";
+    public static final String LABEL_EDGE_DISTANCE = "Distance:";
+    public static final String LABEL_EDGE_TEXT_COLOR = "Text color:";
+    public static final String EDGE_LINE_TYPE = "Line type:";
+    public static final String EDGE_LINE_WIDTH = "Line width:";
+    public static final String EDGE_LINE_COLOR = "Line color:";
+    public static final String EDGE_DIRECTED = "Directed:";
+    public static final String EDGE_ARROW_TYPE = "Arrow type:";
+    public static final String EDGE_ANGLE = "Angle:";
+    public static final String VERTEX_SHAPE_TYPE = "Vertex type:";
+    public static final String VERTEX_SIZE = "Vertex size:";
+    public static final String VERTEX_COLOR = "Vertex color:";
+    public static final String VERTEX_LINE_TYPE = "Line type:";
+    public static final String VERTEX_LINE_COLOR = "Line color:";
+    public static final String VERTEX_LABEL_INSIDE = "Label inside:";
+    public static final String VERTEX_NUMBER = "Number:";
+    public static final String VERTEX_LINE_WIDTH = "Line width:";
+    public static final String VERTEX_FONT_COLOR = "Font color:";
 }
