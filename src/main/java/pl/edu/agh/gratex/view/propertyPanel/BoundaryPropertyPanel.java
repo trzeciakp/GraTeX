@@ -16,4 +16,9 @@ public class BoundaryPropertyPanel extends AbstractPropertyPanel {
     public void setModel(PropertyModel pm) {
 
     }
+
+    @Override
+    protected void initialize() {
+
+    }
 }

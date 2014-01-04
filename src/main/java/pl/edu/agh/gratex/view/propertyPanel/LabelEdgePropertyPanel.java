@@ -94,16 +94,13 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
 
     public LabelEdgePropertyPanel() {
         model = new LabelEdgePropertyModel();
-        initialize();
         setModel(model);
     }
 
-    private void initialize() {
+    protected void initialize() {
         setLayout(null);
         /**************************** TEXT TEXTFIELD ******************************/
-        labelText = new JLabel(StringLiterals.LABEL_EDGE_TEXT);
-        labelText.setHorizontalAlignment(SwingConstants.LEFT);
-        add(labelText);
+        labelText = createJLabel(StringLiterals.LABEL_EDGE_TEXT);
 
         textField = new JTextField();
         textField.addActionListener(new ActionListener() {
@@ -119,9 +116,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** COLOR COMBOBOX ******************************/
-        lblColor = new JLabel(StringLiterals.LABEL_EDGE_TEXT_COLOR);
-        lblColor.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblColor);
+        lblColor = createJLabel(StringLiterals.LABEL_EDGE_TEXT_COLOR);
 
         comboBoxFontColor = new ColorComboBox();
         comboBoxFontColor.addActionListener(new ActionListener() {
@@ -144,9 +139,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** POSITION SPINNER ****************************/
-        lblPosition = new JLabel(StringLiterals.LABEL_EDGE_POSITION);
-        lblPosition.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblPosition);
+        lblPosition = createJLabel(StringLiterals.LABEL_EDGE_POSITION);
 
         MIN_SIZE = 0;
         MAX_SIZE = 99;
@@ -199,9 +192,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** DISTANCE SPINNER ****************************/
-        lblDistance = new JLabel(StringLiterals.LABEL_EDGE_DISTANCE);
-        lblDistance.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblDistance);
+        lblDistance = createJLabel(StringLiterals.LABEL_EDGE_DISTANCE);
 
         MIN_SIZE = 0;
         MAX_SIZE = 99;
@@ -237,9 +228,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** PLACEMENT COMBOBOX **************************/
-        lblPlace = new JLabel(StringLiterals.LABEL_EDGE_PLACEMENT);
-        lblPlace.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblPlace);
+        lblPlace = createJLabel(StringLiterals.LABEL_EDGE_PLACEMENT);
 
         comboBoxPlace = new JComboBox<>(LabelTopPlacement.values());
         comboBoxPlace.addActionListener(new ActionListener() {
@@ -257,9 +246,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** ROTATION COMBOBOX ***************************/
-        lblRotation = new JLabel(StringLiterals.LABEL_EDGE_ROTATION);
-        lblRotation.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblRotation);
+        lblRotation = createJLabel(StringLiterals.LABEL_EDGE_ROTATION);
 
         comboBoxRotation = new JComboBox<LabelRotation>(LabelRotation.values());
         comboBoxRotation.addActionListener(new ActionListener() {
@@ -278,31 +265,16 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
 
         /************************ USTAWIANIE BOUNDS *******************************/
 
-        int spacing = 35;
-        labels = new ArrayList<>();
-        labels.add(labelText);
-        labels.add(lblColor);
-        labels.add(lblPosition);
-        labels.add(lblDistance);
-        labels.add(lblPlace);
-        labels.add(lblRotation);
-
-        for (int i = 0; i < labels.size(); i++)
-            labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
-        components = new ArrayList<>();
         components.add(textField);
         components.add(comboBoxFontColor);
         components.add(spinnerPosition);
         components.add(spinnerDistance);
         components.add(comboBoxPlace);
         components.add(comboBoxRotation);
+    }
 
-        for (int i = 0; i < components.size(); i++)
-            if (components.get(i) instanceof JTextField) {
-                components.get(i).setBounds(90, 24 + i * spacing, 80, 26);
-            } else {
-                components.get(i).setBounds(90, 24 + i * spacing, 80, 25);
-            }
+    protected void setBounds() {
+        super.setBounds();
         comboBoxPosition.setBounds(spinnerPosition.getBounds());
         comboBoxPosition.setVisible(false);
         components.add(comboBoxPosition);

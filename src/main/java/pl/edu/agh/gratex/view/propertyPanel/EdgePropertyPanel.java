@@ -97,17 +97,14 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
 
     public EdgePropertyPanel() {
         model = new EdgePropertyModel();
-        initialize();
         setModel(model);
     }
 
-    private void initialize() {
+    protected void initialize() {
         setLayout(null);
 
         /**************************** LINE TYPE COMBOBOX **************************/
-        lblLineType = new JLabel(StringLiterals.EDGE_LINE_TYPE);
-        lblLineType.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblLineType);
+        lblLineType = createJLabel(StringLiterals.EDGE_LINE_TYPE);
 
         List<LineType> lineTypes = new ArrayList<>();
         for (LineType lineType : LineType.values()) {
@@ -131,10 +128,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE WIDTH SPINNER **************************/
-        lblLineSize = new JLabel(StringLiterals.EDGE_LINE_WIDTH);
-        lblLineSize.setHorizontalAlignment(SwingConstants.LEFT);
-        lblLineSize.setBounds(6, 117, 64, 14);
-        add(lblLineSize);
+        lblLineSize = createJLabel(StringLiterals.EDGE_LINE_WIDTH);
 
         MIN_SIZE = 1;
         MAX_SIZE = 10;
@@ -173,9 +167,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE COLOR COMBOBOX *************************/
-        lblLineColor = new JLabel(StringLiterals.EDGE_LINE_COLOR);
-        lblLineColor.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblLineColor);
+        lblLineColor = createJLabel(StringLiterals.EDGE_LINE_COLOR);
 
         comboBoxLineColor = new ColorComboBox();
         comboBoxLineColor.addActionListener(new ActionListener() {
@@ -198,10 +190,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** DIRECTED COMBOBOX **********************/
-        lblDirect = new JLabel(StringLiterals.EDGE_DIRECTED);
-        lblDirect.setHorizontalAlignment(SwingConstants.LEFT);
-        lblDirect.setBounds(6, 117, 84, 14);
-        add(lblDirect);
+        lblDirect = createJLabel(StringLiterals.EDGE_DIRECTED);
 
         comboBoxDirect = new JComboBox<IsDirected>(IsDirected.values());
         comboBoxDirect.addActionListener(new ActionListener() {
@@ -219,9 +208,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LABEL INSIDE COMBOBOX ***********************/
-        lblArrowType = new JLabel(StringLiterals.EDGE_ARROW_TYPE);
-        lblArrowType.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblArrowType);
+        lblArrowType = createJLabel(StringLiterals.EDGE_ARROW_TYPE);
 
         comboBoxArrowType = new JComboBox<>(ArrowType.values());
         comboBoxArrowType.addActionListener(new ActionListener() {
@@ -239,9 +226,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** ANGLE SPINNER *******************************/
-        lblAngle = new JLabel(StringLiterals.EDGE_ANGLE);
-        lblAngle.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblAngle);
+        lblAngle = createJLabel(StringLiterals.EDGE_ANGLE);
 
         RANGE = 60;
         STEP = 5;
@@ -296,20 +281,6 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
 
         /************************ USTAWIANIE BOUNDS *******************************/
 
-        int spacing = 35;
-        labels = new ArrayList<>();
-        labels.add(lblLineType);
-        labels.add(lblLineSize);
-        labels.add(lblLineColor);
-        labels.add(lblDirect);
-        labels.add(lblArrowType);
-        labels.add(lblAngle);
-
-        for (int i = 0; i < labels.size(); i++) {
-            labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
-        }
-
-        components = new ArrayList<>();
         components.add(comboBoxLineType);
         components.add(spinnerLineSize);
         components.add(comboBoxLineColor);
@@ -317,9 +288,10 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         components.add(comboBoxArrowType);
         components.add(spinnerAngle);
 
-        for (int i = 0; i < components.size(); i++) {
-            components.get(i).setBounds(90, 24 + i * spacing, 80, 25);
-        }
+    }
+
+    protected void setBounds() {
+        super.setBounds();
         comboBoxAngle.setBounds(spinnerAngle.getBounds());
         comboBoxAngle.setVisible(false);
     }

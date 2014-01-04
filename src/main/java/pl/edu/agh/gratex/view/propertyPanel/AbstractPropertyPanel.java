@@ -16,6 +16,8 @@ public abstract class AbstractPropertyPanel extends JPanel {
     protected List<JComponent> components = new ArrayList<>();
 
     public AbstractPropertyPanel() {
+        initialize();
+        setBounds();
     }
 
     protected boolean changedByUser;
@@ -45,7 +47,33 @@ public abstract class AbstractPropertyPanel extends JPanel {
 
     }
 
-    public void focusFirstElement() {
+   /* public void focusFirstElement() {
         components.get(0).requestFocus();
+    }*/
+
+    protected JLabel createJLabel(String text) {
+        JLabel result = new JLabel(text);
+        result.setHorizontalAlignment(SwingConstants.LEFT);
+        add(result);
+        labels.add(result);
+        return result;
+    }
+
+    protected abstract void initialize();
+
+    protected void setBounds() {
+        int spacing = 35;
+
+        for (int i = 0; i < labels.size(); i++) {
+            labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
+        }
+
+        for (int i = 0; i < components.size(); i++) {
+            if (components.get(i) instanceof JTextField) {
+                components.get(i).setBounds(90, 24 + i * spacing, 80, 26);
+            } else {
+                components.get(i).setBounds(90, 24 + i * spacing, 80, 25);
+            }
+        }
     }
 }

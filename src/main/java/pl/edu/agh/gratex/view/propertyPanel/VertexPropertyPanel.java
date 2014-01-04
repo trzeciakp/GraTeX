@@ -68,7 +68,6 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         this.generalController = generalController;
 
         model = new VertexPropertyModel();
-        initialize();
         setModel(model);
     }
 
@@ -127,14 +126,11 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         spinnerNumber.setEnabled(false);
     }
 
-    private void initialize() {
+    protected void initialize() {
         setLayout(null);
 
         /**************************** VERTEX TYPE COMBOBOX **************************/
-        lblVertexType = new JLabel(StringLiterals.VERTEX_SHAPE_TYPE);
-        lblVertexType.setHorizontalAlignment(SwingConstants.LEFT);
-        lblVertexType.setBounds(6, 92, 64, 14);
-        add(lblVertexType);
+        lblVertexType = createJLabel(StringLiterals.VERTEX_SHAPE_TYPE);
 
         comboBoxVertexType = new JComboBox<>(ShapeType.values());
         comboBoxVertexType.addActionListener(new ActionListener() {
@@ -152,9 +148,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** VERTEX SIZE SPINNER *************************/
-        lblVertexSize = new JLabel(StringLiterals.VERTEX_SIZE);
-        lblVertexSize.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblVertexSize);
+        lblVertexSize = createJLabel(StringLiterals.VERTEX_SIZE);
 
         MIN_SIZE = 10;
         MAX_SIZE = 99;
@@ -191,9 +185,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** VERTEX COLOR COMBOBOX ***********************/
-        lblColor = new JLabel(StringLiterals.VERTEX_COLOR);
-        lblColor.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblColor);
+        lblColor = createJLabel(StringLiterals.VERTEX_COLOR);
 
         comboBoxVertexColor = new ColorComboBox();
         comboBoxVertexColor.addActionListener(new ActionListener() {
@@ -216,9 +208,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE TYPE COMBOBOX **************************/
-        lblLineType = new JLabel(StringLiterals.VERTEX_LINE_TYPE);
-        lblLineType.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblLineType);
+        lblLineType = createJLabel(StringLiterals.VERTEX_LINE_TYPE);
 
         comboBoxLineType = new JComboBox<>(LineType.values());
         comboBoxLineType.setBounds(101, 89, 80, 20);
@@ -237,10 +227,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE WIDTH SPINNER **************************/
-        lblLineSize = new JLabel(StringLiterals.VERTEX_LINE_WIDTH);
-        lblLineSize.setHorizontalAlignment(SwingConstants.LEFT);
-        lblLineSize.setBounds(6, 117, 64, 14);
-        add(lblLineSize);
+        lblLineSize = createJLabel(StringLiterals.VERTEX_LINE_WIDTH);
 
         MIN_SIZE = 1;
         MAX_SIZE = 10;
@@ -277,9 +264,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE COLOR COMBOBOX *************************/
-        lblLineColor = new JLabel(StringLiterals.VERTEX_LINE_COLOR);
-        lblLineColor.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblLineColor);
+        lblLineColor = createJLabel(StringLiterals.VERTEX_LINE_COLOR);
 
         comboBoxLineColor = new ColorComboBox();
         comboBoxLineColor.addActionListener(new ActionListener() {
@@ -302,9 +287,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LABEL INSIDE COMBOBOX ***********************/
-        lblLabelInside = new JLabel(StringLiterals.VERTEX_LABEL_INSIDE);
-        lblLabelInside.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblLabelInside);
+        lblLabelInside = createJLabel(StringLiterals.VERTEX_LABEL_INSIDE);
 
         comboBoxLabelInside = new JComboBox<>(IsLabelInside.values());
         comboBoxLabelInside.addActionListener(new ActionListener() {
@@ -322,9 +305,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** COLOR COMBOBOX ******************************/
-        lblFontColor = new JLabel(StringLiterals.VERTEX_FONT_COLOR);
-        lblFontColor.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblFontColor);
+        lblFontColor = createJLabel(StringLiterals.VERTEX_FONT_COLOR);
 
         comboBoxFontColor = new ColorComboBox();
         comboBoxFontColor.addActionListener(new ActionListener() {
@@ -347,9 +328,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** NUMBER SPINNER ******************************/
-        lblNumber = new JLabel(StringLiterals.VERTEX_NUMBER);
-        lblNumber.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblNumber);
+        lblNumber = createJLabel(StringLiterals.VERTEX_NUMBER);
 
         String[] alpha = new String[Const.MAX_VERTEX_NUMBER];
         for (int i = 0; i < Const.MAX_VERTEX_NUMBER; i++) {
@@ -437,21 +416,6 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
 
         /************************ USTAWIANIE BOUNDS *******************************/
 
-        int spacing = 35;
-        labels = new ArrayList<>();
-        labels.add(lblVertexType);
-        labels.add(lblVertexSize);
-        labels.add(lblColor);
-        labels.add(lblLineType);
-        labels.add(lblLineSize);
-        labels.add(lblLineColor);
-        labels.add(lblLabelInside);
-        labels.add(lblFontColor);
-        labels.add(lblNumber);
-
-        for (int i = 0; i < labels.size(); i++)
-            labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
-        components = new ArrayList<>();
         components.add(comboBoxVertexType);
         components.add(spinnerVertexSize);
         components.add(comboBoxVertexColor);
@@ -461,10 +425,5 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         components.add(comboBoxLabelInside);
         components.add(comboBoxFontColor);
         components.add(spinnerNumber);
-
-        for (int i = 0; i < components.size(); i++) {
-            components.get(i).setBounds(90, 24 + i * spacing, 80, 25);
-        }
-
     }
 }

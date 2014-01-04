@@ -62,24 +62,21 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         textField.setEnabled(false);
         textField.setFocusable(false);
     }
-
+/*
     @Override
     public void focusFirstElement() {
         super.focusFirstElement();
-    }
+    }*/
 
     public LabelVertexPropertyPanel() {
         model = new LabelVertexPropertyModel();
-        initialize();
         setModel(model);
     }
 
-    private void initialize() {
+    protected void initialize() {
         setLayout(null);
         /**************************** TEXT TEXTFIELD ******************************/
-        labelText = new JLabel(StringLiterals.LABEL_VERTEX_TEXT);
-        labelText.setHorizontalAlignment(SwingConstants.LEFT);
-        add(labelText);
+        labelText = createJLabel(StringLiterals.LABEL_VERTEX_TEXT);
 
         textField = new JTextField();
         textField.addActionListener(new ActionListener() {
@@ -95,9 +92,7 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** COLOR COMBOBOX ******************************/
-        lblColor = new JLabel(StringLiterals.LABEL_VERTEX_TEXT_COLOR);
-        lblColor.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblColor);
+        lblColor = createJLabel(StringLiterals.LABEL_VERTEX_TEXT_COLOR);
 
         comboBoxFontColor = new ColorComboBox();
         comboBoxFontColor.addActionListener(new ActionListener() {
@@ -120,9 +115,7 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** POSITION COMBOBOX ***************************/
-        lblPosition = new JLabel(StringLiterals.LABEL_VERTEX_POSITION);
-        lblPosition.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblPosition);
+        lblPosition = createJLabel(StringLiterals.LABEL_VERTEX_POSITION);
 
         comboBoxPosition = new JComboBox<LabelPosition>(LabelPosition.values());
         comboBoxPosition.setMaximumRowCount(9);
@@ -141,9 +134,7 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** DISTANCE SPINNER ****************************/
-        lblDistance = new JLabel(StringLiterals.LABEL_VERTEX_DISTANCE);
-        lblDistance.setHorizontalAlignment(SwingConstants.LEFT);
-        add(lblDistance);
+        lblDistance = createJLabel(StringLiterals.LABEL_VERTEX_DISTANCE);
 
         MIN_SIZE = 0;
         MAX_SIZE = 99;
@@ -183,27 +174,9 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /************************ USTAWIANIE BOUNDS *******************************/
-
-        int spacing = 35;
-        labels = new ArrayList<>();
-        labels.add(labelText);
-        labels.add(lblColor);
-        labels.add(lblPosition);
-        labels.add(lblDistance);
-
-        for (int i = 0; i < labels.size(); i++)
-            labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
-        components = new ArrayList<>();
         components.add(textField);
         components.add(comboBoxFontColor);
         components.add(comboBoxPosition);
         components.add(spinnerDistance);
-
-        for (int i = 0; i < components.size(); i++)
-            if (components.get(i) instanceof JTextField) {
-                components.get(i).setBounds(90, 24 + i * spacing, 80, 26);
-            } else {
-                components.get(i).setBounds(90, 24 + i * spacing, 80, 25);
-            }
     }
 }
