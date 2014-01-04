@@ -67,11 +67,14 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 vertex.setRadius(2);
                 currentlyAddedEdge.setRelativeEdgeAngle(0);
             }
-            currentlyAddedEdge.setVertexB(vertex);
+            if (disconnectedVertexA) {
+                currentlyAddedEdge.setVertexA(vertex);
+            } else {
+                currentlyAddedEdge.setVertexB(vertex);
+            }
             if (GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY) != null) {
                 int angle = EdgeUtils.getEdgeAngleFromCursorLocation(currentlyAddedEdge, mouseX, mouseY);
                 currentlyAddedEdge.setRelativeEdgeAngle(angle);
-
             }
             if (currentlyAddedEdge.getRelativeEdgeAngle() != 0) {
                 currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDummyEdgeDrawable());
@@ -128,6 +131,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         Edge edge = getElementFromPosition(mouseX, mouseY);
         currentlyDraggedEdge = edge;
         initialLatexCodeOfDraggedEdge = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(currentlyDraggedEdge);
+        currentlyDraggedEdge.setRelativeEdgeAngle(0);
         generalController.getSelectionController().addToSelection(edge, false);
 
         currentDragOperation = new AlterationOperation(generalController, currentlyDraggedEdge, OperationType.MOVE_EDGE, StringLiterals.INFO_EDGE_MOVE);
@@ -142,10 +146,11 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 edgeDragDummy.setRadius(2);
                 if (c.distance(edge.getInPoint()) < c.distance(edge.getOutPoint())) {
                     edge.setVertexB(edgeDragDummy);
+                    disconnectedVertexA = false;
                 } else {
                     edge.setVertexA(edgeDragDummy);
+                    disconnectedVertexA = true;
                 }
-
             }
         } else {
             Point c = new Point(mouseX, mouseY);

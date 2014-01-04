@@ -62,6 +62,7 @@ public class Edge extends GraphElement {
 
         if (inAngle != edge.inAngle) return false;
         if (outAngle != edge.outAngle) return false;
+        if (getRelativeEdgeAngle() != edge.getRelativeEdgeAngle()) return false;
         if (vertexA != null ? !vertexA.equals(edge.vertexA) : edge.vertexA != null) return false;
         if (vertexB != null ? !vertexB.equals(edge.vertexB) : edge.vertexB != null) return false;
 
