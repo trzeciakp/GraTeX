@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
 import pl.edu.agh.gratex.controller.operation.Operation;
 import pl.edu.agh.gratex.controller.operation.OperationListener;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 import javax.swing.*;
@@ -15,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.*;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class PanelWorkspace extends JPanel implements MouseListener, MouseMotionListener, OperationListener, ToolListener {
@@ -30,6 +32,7 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
     private EnumMap<ToolType, Cursor> cursors = new EnumMap<>(ToolType.class);
     private ToolType tool;
+    private Image cannotCopyImage = Application.loadImage("cannotcopy.png");
 
     public PanelWorkspace(JScrollPane parent, GeneralController generalController) {
         super();
@@ -67,29 +70,34 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         rh.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setRenderingHints(rh);
 
-        g.setColor(Color.GRAY);
-        g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, Const.PAGE_WIDTH, Const.PAGE_HEIGHT);
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, Const.PAGE_WIDTH, Const.PAGE_HEIGHT);
+
 
         if (generalController.getGraph() != null) {
-            paintGrid(g2d, generalController.getGraph());
+            paintGrid(g2d);
 
-            if (mouseInWorkspace) {
-                mouseController.drawCurrentlyAddedElement(g2d);
-            }
-
-            generalController.getGraph().drawAll(g2d);
-
-            if (mouseInWorkspace) {
-                paintCopiedSubgraph(g2d);
+            List<GraphElement> allElements = generalController.getGraph().getAllElements();
+            allElements.addAll(mouseController.getCopiedSubgraph());
+            allElements.addAll(mouseController.getCurrentlyAddedElements());
+            GraphElement.sortByDrawingPriorities(allElements);
+            for (GraphElement element : allElements) {
+                element.draw(g2d);
             }
 
             paintSelectionArea(g2d);
+
+            Point iconLocation = mouseController.locationOfCannotCopyIcon();
+            if (iconLocation != null) {
+                g.drawImage(cannotCopyImage, iconLocation.x - cannotCopyImage.getWidth(null), iconLocation.y - cannotCopyImage.getHeight(null), null);
+            }
         }
     }
 
-    private void paintGrid(Graphics2D g, Graph graph) {
+    private void paintGrid(Graphics2D g) {
+        Graph graph = generalController.getGraph();
         if (graph.isGridOn()) {
             g.setColor(Const.GRID_COLOR);
 
@@ -116,10 +124,6 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
                 g.draw(selectionArea);
             }
         }
-    }
-
-    public void paintCopiedSubgraph(Graphics2D g) {
-        mouseController.drawCopiedSubgraph(g);
     }
 
 

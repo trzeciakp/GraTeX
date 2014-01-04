@@ -21,7 +21,7 @@ public class LabelEdgeDrawable implements Drawable {
     }
 
     @Override
-    public void draw(GraphElement graphElement, Graphics g2d, boolean dummy) {
+    public void draw(GraphElement graphElement, Graphics g2d) {
         LabelE labelE = (LabelE) graphElement;
         Graphics2D g = (Graphics2D) g2d.create();
 
@@ -33,7 +33,7 @@ public class LabelEdgeDrawable implements Drawable {
         }
 
         g.setColor(labelE.getFontColor());
-        if (dummy) {
+        if (graphElement.isDummy()) {
             g.setColor(DrawingTools.getDummyColor(labelE.getFontColor()));
         }
         g.setFont(Const.DEFAULT_FONT);

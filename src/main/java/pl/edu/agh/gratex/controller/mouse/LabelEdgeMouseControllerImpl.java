@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
 import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
@@ -14,6 +15,8 @@ import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 
 public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
@@ -47,7 +50,8 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public void drawCurrentlyAddedElement(Graphics2D g) {
+    public List<GraphElement> getCurrentlyAddedElements() {
+        List<GraphElement> result = new LinkedList<>();
         Edge owner = GraphUtils.getEdgeFromPosition(generalController.getGraph(), mouseX, mouseY);
         if (owner != null) {
             if (owner.getLabel() == null) {
@@ -59,9 +63,10 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
                 int position = LabelEUtils.getPositionFromCursorLocation(owner, mouseX, mouseY);
                 labelE.setPosition(Math.abs(position));
                 labelE.setTopPlacement(position >= 0);
-                labelE.draw(g, true);
+                result.add(labelE);
             }
         }
+        return result;
     }
 
     @Override
@@ -97,9 +102,9 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     public void moveSelection(int mouseX, int mouseY) {
         if (currentlyDraggedLabel == null) {
             currentlyDraggedLabel = getElementFromPosition(mouseX, mouseY);
-            generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedLabel, OperationType.MOVE_LABEL_EDGE, StringLiterals.INFO_LABEL_E_MOVE);
         } else {
+            generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);
             Edge owner = currentlyDraggedLabel.getOwner();
             if (shiftChangedWhileAdding) {
                 currentlyDraggedLabel.setHorizontalPlacement(shiftDown);

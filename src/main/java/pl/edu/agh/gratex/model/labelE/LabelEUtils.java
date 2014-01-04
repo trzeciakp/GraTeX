@@ -4,45 +4,12 @@ import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.properties.LabelRotation;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
-import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 
 public class LabelEUtils {
-    // Returns true if (x, y) is in the area occupied by the label
-    public static boolean intersects(LabelE labelE, int x, int y) {
-        return labelE.getOutline().contains(x, y);
-    }
-/*
-
-    public static void draw(LabelE labelE, Graphics2D g2d, boolean dummy) {
-        Graphics2D g = (Graphics2D) g2d.createEmptyModel();
-
-        updateLocation(labelE);
-
-        if (labelE.getGraph().getGeneralController().getSelectionController().selectionContains(labelE)) {
-            g.setColor(Const.SELECTION_COLOR);
-            g.fillPolygon(labelE.getOutline());
-        }
-
-        g.setColor(labelE.getFontColor());
-        if (dummy) {
-            g.setColor(DrawingTools.getDummyColor(labelE.getFontColor()));
-        }
-        g.setFont(labelE.getFont());
-        if (labelE.isHorizontalPlacement()) {
-            g.drawString(labelE.getText(), labelE.getDrawX(), labelE.getDrawY());
-        } else {
-            g.translate(labelE.getDrawX(), labelE.getDrawY());
-            g.rotate(Math.toRadians(360 - labelE.getAngle()), 0, 0);
-            g.drawString(labelE.getText(), 0, 0);
-        }
-
-        g.dispose();
-    }
-*/
-
     // Calculates the position of LabelE (in % of bias) according to vertex and cursor location
     // Will return (-1 * position) if the label was placed below the edge
     public static int getPositionFromCursorLocation(Edge owner, int mouseX, int mouseY) {
@@ -133,17 +100,22 @@ public class LabelEUtils {
             }
 
             double offsetRate = 0.75;
-            if (owner.getVertexA().getShape() == 2) {
-                offsetRate = 0.375;
-                if (owner.getRelativeEdgeAngle() == 270) {
-                    ellipseShortRadius /= 2;
-                }
-            } else if (owner.getVertexA().getShape() == 3) {
-                offsetRate = 0.5;
-            } else if (owner.getVertexA().getShape() == 4) {
-                offsetRate = 0.4375;
-            } else if (owner.getVertexA().getShape() == 5) {
-                offsetRate = 0.625;
+            switch(owner.getVertexA().getShape()) {
+                case TRIANGLE:
+                    offsetRate = 0.375;
+                    if (owner.getRelativeEdgeAngle() == 270) {
+                        ellipseShortRadius /= 2;
+                    }
+                    break;
+                case SQUARE:
+                    offsetRate = 0.5;
+                    break;
+                case PENTAGON:
+                    offsetRate = 0.4375;
+                    break;
+                case HEXAGON:
+                    offsetRate = 0.625;
+                    break;
             }
 
             int r = owner.getVertexA().getRadius() + owner.getVertexA().getLineWidth() / 2;
@@ -447,15 +419,15 @@ public class LabelEUtils {
 
                     Point middle = new Point(labelE.getPosX(), labelE.getPosY());
                     Point draw = new Point(labelE.getPosX() - width / 2, labelE.getPosY() + height / 2 - descent);
-                    draw = Geometry.rotatePoint(middle, draw, labelE.getAngle());
+                    draw = rotatePoint(middle, draw, labelE.getAngle());
                     Point p1 = new Point(labelE.getPosX() - width / 2, labelE.getPosY() - height / 2);
-                    p1 = Geometry.rotatePoint(middle, p1, labelE.getAngle());
+                    p1 =  rotatePoint(middle, p1, labelE.getAngle());
                     Point p2 = new Point(labelE.getPosX() + width / 2, labelE.getPosY() - height / 2);
-                    p2 = Geometry.rotatePoint(middle, p2, labelE.getAngle());
+                    p2 =  rotatePoint(middle, p2, labelE.getAngle());
                     Point p3 = new Point(labelE.getPosX() + width / 2, labelE.getPosY() + height / 2);
-                    p3 = Geometry.rotatePoint(middle, p3, labelE.getAngle());
+                    p3 =  rotatePoint(middle, p3, labelE.getAngle());
                     Point p4 = new Point(labelE.getPosX() - width / 2, labelE.getPosY() + height / 2);
-                    p4 = Geometry.rotatePoint(middle, p4, labelE.getAngle());
+                    p4 =  rotatePoint(middle, p4, labelE.getAngle());
 
                     labelE.setDrawX(draw.x);
                     labelE.setDrawY(draw.y);
@@ -465,5 +437,11 @@ public class LabelEUtils {
                 }
             }
         }
+    }
+
+    private static Point rotatePoint(Point center, Point p, double angle) {
+        double[] pt = {p.x, p.y};
+        AffineTransform.getRotateInstance(Math.toRadians(360 - angle), center.x, center.y).transform(pt, 0, pt, 0, 1);
+        return new Point((int) Math.round(pt[0]), (int) Math.round(pt[1]));
     }
 }

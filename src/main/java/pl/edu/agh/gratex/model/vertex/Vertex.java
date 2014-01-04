@@ -14,6 +14,7 @@ import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 
 import java.awt.*;
+import java.awt.geom.Area;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,12 +44,14 @@ public class Vertex extends GraphElement {
     public void addToGraph() {
         graph.getVertices().add(this);
         VertexUtils.setPartOfNumeration(this, true);
+        dummy = false;
     }
 
     @Override
     public void removeFromGraph() {
         graph.getVertices().remove(this);
         VertexUtils.setPartOfNumeration(this, false);
+        dummy = true;
     }
 
     @Override
@@ -63,10 +66,14 @@ public class Vertex extends GraphElement {
         return result;
     }
 
-    public void drawLabel(Graphics2D g, boolean dummy) {
-        if (getLabel() != null) {
-            getLabel().draw(g, dummy);
-        }
+    @Override
+    public Area getArea() {
+        return new Area(VertexUtils.getVertexShape(getShape(), getRadius(), posX, posY));
+    }
+
+    @Override
+    public int getDrawingPriority() {
+        return 2;
     }
 
     // ============================================
@@ -89,16 +96,11 @@ public class Vertex extends GraphElement {
         propertyModel.setRadius(radius);
     }
 
-    public int getShape() {
-        //TODO
-        return propertyModel.getShape().getValue();
-    }
-
     public void setShape(ShapeType shape) {
         propertyModel.setShape(shape);
     }
 
-    public ShapeType getShapeENUM() {
+    public ShapeType getShape() {
         return propertyModel.getShape();
     }
 

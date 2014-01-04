@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.ArrowType;
@@ -24,10 +25,10 @@ public class Parser {
         while (itv.hasNext()) {
             vtemp = itv.next();
             line = "\\node (" + vtemp.getNumber() + ") ";
-            if (vtemp.getShape() == 1) {
+            if (vtemp.getShape() == ShapeType.CIRCLE) {
                 line += "[circle"; //ksztalt
             } else {
-                line += "[regular polygon, regular polygon sides=" + (vtemp.getShape() + 1);
+                line += "[regular polygon, regular polygon sides=" + (vtemp.getShape().getValue() + 1);
             }
             line += ", minimum size=" + (1.25 * vtemp.getRadius()) + "pt"; //wielkosc
             if (vtemp.getVertexColor() != null)

@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.model.edge;
 
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
@@ -14,6 +15,8 @@ import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Area;
+import java.awt.geom.Path2D;
 import java.util.*;
 import java.util.List;
 
@@ -71,34 +74,22 @@ public class Edge extends GraphElement {
         return true;
     }
 
-    public int getNumber() {
-        int result = vertexA != null ? vertexA.getNumber() : 0;
-        result = 31 * result + (vertexB != null ? vertexB.getNumber() : 0);
-        result = 31 * result + inAngle;
-        result = 31 * result + outAngle;
-        return result;
-    }
-
     @Override
     public GraphElementType getType() {
         return GraphElementType.EDGE;
-    }
-
-    public void drawLabel(Graphics2D g, boolean dummy) {
-        if (getLabel() != null) {
-            getLabel().draw(g, dummy);
-        }
     }
 
     @Override
     public void addToGraph() {
         graph.getEdges().add(this);
         updateLocation();
+        dummy = false;
     }
 
     @Override
     public void removeFromGraph() {
         getGraph().getEdges().remove(this);
+        dummy = true;
     }
 
     @Override
@@ -107,6 +98,32 @@ public class Edge extends GraphElement {
         if (label != null) {
             result.add(label);
         }
+        return result;
+    }
+
+    @Override
+    public Area getArea() {
+        Shape edgePath = arc;
+        if (vertexA != vertexB && getRelativeEdgeAngle() == 0) {
+            Path2D path = new Path2D.Double();
+            path.moveTo(inPoint.x, inPoint.y);
+            path.lineTo(outPoint.x, outPoint.y);
+            edgePath = path;
+        }
+        return new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN).createStrokedShape(edgePath));
+    }
+
+    @Override
+    public int getDrawingPriority() {
+        return 1;
+    }
+
+
+    public int getNumber() {
+        int result = vertexA != null ? vertexA.getNumber() : 0;
+        result = 31 * result + (vertexB != null ? vertexB.getNumber() : 0);
+        result = 31 * result + inAngle;
+        result = 31 * result + outAngle;
         return result;
     }
 

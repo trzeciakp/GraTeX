@@ -9,7 +9,6 @@ import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 import pl.edu.agh.gratex.utils.DrawingTools;
-import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
 
@@ -25,14 +24,14 @@ public class VertexDrawable implements Drawable {
     }
 
     @Override
-    public void draw(GraphElement element, Graphics graphics, boolean dummy) {
-        Vertex vertex = (Vertex) element;
+    public void draw(GraphElement graphElement, Graphics graphics) {
+        Vertex vertex = (Vertex) graphElement;
         Graphics2D g = (Graphics2D) graphics.create();
         Graph graph = vertex.getGraph();
 
         int posX = vertex.getPosX();
         int posY = vertex.getPosY();
-        int shape = vertex.getShape();
+        ShapeType shapeType = vertex.getShape();
         int radius = vertex.getRadius();
         int lineWidth = vertex.getLineWidth();
         LineType lineType = vertex.getLineType();
@@ -41,7 +40,7 @@ public class VertexDrawable implements Drawable {
 
         int tempX = 0;
         int tempY = 0;
-        if (dummy && graph.isGridOn()) {
+        if (graphElement.isDummy() && graph.isGridOn()) {
             tempX = posX;
             tempY = posY;
             VertexUtils.adjustToGrid(vertex);
@@ -49,63 +48,63 @@ public class VertexDrawable implements Drawable {
 
         if (selectionController.selectionContains(vertex)) {
             g.setColor(Const.SELECTION_COLOR);
-            g.fill(Geometry.getVertexShape(shape + 1, radius + lineWidth / 2 + radius / 4, posX, posY));
+            g.fill(VertexUtils.getVertexShape(shapeType, radius + lineWidth / 2 + radius / 4, posX, posY));
         }
 
         if (lineWidth > 0 && lineType != LineType.NONE) {
             g.setColor(Color.white);
-            g.fill(Geometry.getVertexShape(shape + 1, radius + lineWidth / 2, posX, posY));
+            g.fill(VertexUtils.getVertexShape(shapeType, radius + lineWidth / 2, posX, posY));
             g.setColor(vertexColor);
-            if (dummy) {
+            if (graphElement.isDummy()) {
                 g.setColor(DrawingTools.getDummyColor(vertexColor));
             }
-            // TODO Tutaj chyba wystarczy najpierw namalowac na bialo gruba linie, a na tym podwojna, a nie tak kombonowac na jana ze srednica wierzcholka
-            // TODO Czyli przerobic metode CompositeStroke.createStrokenShape().
             if (lineType == LineType.DOUBLE) {
-                Shape innerOutline = Geometry.getVertexShape(shape + 1, radius - 2 - (lineWidth * 23) / 16, posX, posY);
-                if (shape == ShapeType.CIRCLE.getValue()) {
-                    innerOutline = Geometry.getVertexShape(shape + 1, radius - 2 - (lineWidth * 9) / 8, posX, posY);
+                Shape innerOutline = VertexUtils.getVertexShape(shapeType, radius - 2 - (lineWidth * 23) / 16, posX, posY);
+                if (shapeType == ShapeType.CIRCLE) {
+                    innerOutline = VertexUtils.getVertexShape(shapeType, radius - 2 - (lineWidth * 9) / 8, posX, posY);
                 }
-                if (shape == ShapeType.TRIANGLE.getValue()) {
-                    innerOutline = Geometry.getVertexShape(shape + 1, radius - 4 - (lineWidth * 11) / 5, posX, posY);
+                if (shapeType == ShapeType.TRIANGLE) {
+                    innerOutline = VertexUtils.getVertexShape(shapeType, radius - 4 - (lineWidth * 11) / 5, posX, posY);
                 }
-                if (shape == ShapeType.SQUARE.getValue()) {
-                    innerOutline = Geometry.getVertexShape(shape + 1, radius - 3 - (lineWidth * 13) / 8, posX, posY);
+                if (shapeType == ShapeType.SQUARE) {
+                    innerOutline = VertexUtils.getVertexShape(shapeType, radius - 3 - (lineWidth * 13) / 8, posX, posY);
                 }
 
                 g.fill(innerOutline);
 
                 g.setColor(lineColor);
-                if (dummy) {
+                if (graphElement.isDummy()) {
                     g.setColor(DrawingTools.getDummyColor(lineColor));
                 }
                 g.setStroke(DrawingTools.getStroke(lineWidth, LineType.SOLID, 0.0));
-                g.draw(Geometry.getVertexShape(shape + 1, radius, posX, posY));
+                g.draw(VertexUtils.getVertexShape(shapeType, radius, posX, posY));
                 g.draw(innerOutline);
             } else {
-                Shape vertexShape = Geometry.getVertexShape(shape + 1, radius, posX, posY);
+                Shape vertexShape = VertexUtils.getVertexShape(shapeType, radius, posX, posY);
                 g.fill(vertexShape);
 
                 g.setColor(lineColor);
-                if (dummy) {
+                if (graphElement.isDummy()) {
                     g.setColor(DrawingTools.getDummyColor(lineColor));
                 }
 
-                double girth = Math.PI * 2 * radius;
-                if (shape == 2) {
-                    girth = Math.sqrt(3) * radius;
-                }
-                if (shape == 3) {
-                    girth = Math.sqrt(2) * radius;
-                }
-                if (shape == 4) {
-                    girth = 2 * radius * Math.cos(Math.toRadians(54));
-                }
-                if (shape == 5) {
-                    girth = radius;
+                double perimeter = Math.PI * 2 * radius;
+                switch (shapeType) {
+                    case TRIANGLE:
+                        perimeter = Math.sqrt(3) * radius;
+                        break;
+                    case SQUARE:
+                        perimeter = Math.sqrt(2) * radius;
+                        break;
+                    case PENTAGON:
+                        perimeter = 5 * (2 * radius * Math.cos(Math.toRadians(54)));
+                        break;
+                    case HEXAGON:
+                        perimeter = 6 * radius;
+                        break;
                 }
 
-                g.setStroke(DrawingTools.getStroke(lineWidth, lineType, girth));
+                g.setStroke(DrawingTools.getStroke(lineWidth, lineType, perimeter));
                 g.draw(vertexShape);
             }
             g.setStroke(new BasicStroke());
@@ -113,7 +112,7 @@ public class VertexDrawable implements Drawable {
 
         if (vertex.isLabelInside()) {
             g.setColor(vertex.getFontColor());
-            if (dummy) {
+            if (graphElement.isDummy()) {
                 g.setColor(DrawingTools.getDummyColor(vertex.getFontColor()));
             }
             vertex.setNumber(vertex.getNumber());
@@ -124,7 +123,7 @@ public class VertexDrawable implements Drawable {
             }
         }
 
-        if (dummy && graph.isGridOn()) {
+        if (graphElement.isDummy() && graph.isGridOn()) {
             vertex.setPosX(tempX);
             vertex.setPosY(tempY);
         }

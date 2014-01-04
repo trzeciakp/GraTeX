@@ -2,10 +2,13 @@ package pl.edu.agh.gratex.view;
 
 
 import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class PanelPreview extends JPanel {
@@ -26,16 +29,20 @@ public class PanelPreview extends JPanel {
         rh.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setRenderingHints(rh);
 
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
 
-        graph.drawAll(g2d);
+        List<GraphElement> allElements = graph.getAllElements();
+        GraphElement.sortByDrawingPriorities(allElements);
+        for (GraphElement element : allElements) {
+            element.draw(g2d);
+        }
 
-        g.setColor(Color.BLACK);
-        g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
 
-        g.setColor(Color.gray);
-        g.setFont(new Font("Cambria", Font.ITALIC, 24));
-        g.drawString(StringLiterals.LABEL_PANEL_PREVIEW_TITLE, 5, 23);
+        g2d.setColor(Color.gray);
+        g2d.setFont(new Font("Cambria", Font.ITALIC, 24));
+        g2d.drawString(StringLiterals.LABEL_PANEL_PREVIEW_TITLE, 5, 23);
     }
 }

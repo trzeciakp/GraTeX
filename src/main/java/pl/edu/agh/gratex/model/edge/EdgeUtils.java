@@ -2,63 +2,13 @@ package pl.edu.agh.gratex.model.edge;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.properties.ArrowType;
+import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
-import java.awt.geom.Arc2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
+import java.awt.geom.*;
 
 public class EdgeUtils {
-    // Returns true if (x, y) is close enough to the edge
-    public static boolean intersects(Edge edge, int x, int y) {
-        Vertex vertexA = edge.getVertexA();
-        Vertex vertexB = edge.getVertexB();
-
-        Point2D va = new Point(vertexA.getPosX(), vertexA.getPosY());
-        Point2D vb = new Point(vertexB.getPosX(), vertexB.getPosY());
-        Point2D click = new Point(x, y);
-
-        if (vertexA == vertexB) {
-            int r = vertexA.getRadius() + vertexA.getLineWidth() / 2;
-            double dx = edge.getArcMiddle().x - x;
-            double dy = edge.getArcMiddle().y - y;
-            double a = r * 0.75;
-            double b = r * 0.375;
-            if (edge.getRelativeEdgeAngle() == 90 || edge.getRelativeEdgeAngle() == 270) {
-                a = r * 0.375;
-                b = r * 0.75;
-            }
-
-            double distance = (dx * dx) / (a * a) + (dy * dy) / (b * b);
-            return Math.abs(distance - 1) < 1;
-        } else {
-            if (edge.getRelativeEdgeAngle() != 0) {
-                if (Math.abs(click.distance(edge.getArcMiddle()) - edge.getArcRadius()) < 10 + edge.getLineWidth() / 2) {
-                    double clickAngle = (Math.toDegrees(Math.atan2(click.getX() - edge.getArcMiddle().x, click.getY() - edge.getArcMiddle().y)) + 270) % 360;
-                    if (edge.getArc().extent < 0) {
-                        double endAngle = (edge.getArc().start + edge.getArc().extent + 720) % 360;
-                        return (clickAngle - endAngle + 720) % 360 < (edge.getArc().start - endAngle + 720) % 360;
-                    } else {
-                        return (edge.getArc().extent) % 360 > (clickAngle - edge.getArc().start + 720) % 360;
-                    }
-                }
-            } else {
-                if ((Math.min(vertexA.getPosX(), vertexB.getPosX()) <= x && Math.max(vertexA.getPosX(), vertexB.getPosX()) >= x)
-                        || (Math.min(vertexA.getPosY(), vertexB.getPosY()) <= y && Math.max(vertexA.getPosY(), vertexB.getPosY()) >= y)) {
-                    if (click.distance(va) > vertexA.getRadius() && click.distance(vb) > vertexB.getRadius()) {
-                        double distance = Line2D.ptLineDist((double) vertexA.getPosX(), (double) vertexA.getPosY(), (double) vertexB.getPosX(),
-                                (double) vertexB.getPosY(), (double) x, (double) y);
-                        return distance < 12;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
     // Calculates the angle of edge (in degrees) according to cursor location and type of edge
     public static int getEdgeAngleFromCursorLocation(Edge edge, int mouseX, int mouseY) {
         int intAngle;
@@ -107,8 +57,8 @@ public class EdgeUtils {
         Vertex vertexB = edge.getVertexB();
 
         if (vertexA != vertexB) {
-            calculateInOutPoints(edge);
-            calculateArcParameters(edge);
+            updateInOutPoints(edge);
+            updateArcParameters(edge);
 
             if (edge.getRelativeEdgeAngle() != 0) {
                 int x1 = edge.getOutPoint().x;
@@ -148,7 +98,7 @@ public class EdgeUtils {
             double arrowPosHorizRate = 0.965;
             double arrowPosVertRate = 0.265;
 
-            if (vertexA.getShape() == 2) {
+            if (vertexA.getShape() == ShapeType.TRIANGLE) {
                 offsetRate = 0.375;
                 arrowPosHorizRate = 0.84;
                 arrowPosVertRate = 0.325;
@@ -165,11 +115,11 @@ public class EdgeUtils {
                     width /= 2;
                     height /= 2;
                 }
-            } else if (vertexA.getShape() == 3) {
+            } else if (vertexA.getShape() == ShapeType.SQUARE) {
                 offsetRate = 0.5;
                 arrowPosHorizRate = 0.72;
                 arrowPosVertRate = 0.265;
-            } else if (vertexA.getShape() == 4) {
+            } else if (vertexA.getShape() == ShapeType.PENTAGON) {
                 offsetRate = 0.4375;
                 arrowPosHorizRate = 0.755;
                 arrowPosVertRate = 0.295;
@@ -184,7 +134,7 @@ public class EdgeUtils {
                     arrowPosHorizRate = 0.815;
                     arrowPosVertRate = 0.335;
                 }
-            } else if (vertexA.getShape() == 5) {
+            } else if (vertexA.getShape() == ShapeType.HEXAGON) {
                 offsetRate = 0.625;
                 arrowPosHorizRate = 0.85;
                 arrowPosVertRate = 0.27;
@@ -237,18 +187,18 @@ public class EdgeUtils {
         }
     }
 
-    private static void calculateInOutPoints(Edge edge) {
+    private static void updateInOutPoints(Edge edge) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();
 
         double beta = (Math.toDegrees(Math.atan2(vertexB.getPosX() - vertexA.getPosX(), vertexB.getPosY() - vertexA.getPosY()))) + 270;
-        edge.setOutPoint(Geometry.calculateEdgeExitPoint(vertexA, edge.getRelativeEdgeAngle() + beta));
-        edge.setInPoint(Geometry.calculateEdgeExitPoint(vertexB, 180 - edge.getRelativeEdgeAngle() + beta));
+        edge.setOutPoint(calculateEdgeExitPoint(vertexA, edge.getRelativeEdgeAngle() + beta));
+        edge.setInPoint(calculateEdgeExitPoint(vertexB, 180 - edge.getRelativeEdgeAngle() + beta));
         edge.setOutAngle((int) Math.round(Math.toDegrees(Math.atan2(edge.getOutPoint().x - vertexA.getPosX(), edge.getOutPoint().y - vertexA.getPosY())) + 270) % 360);
         edge.setInAngle((int) Math.round(Math.toDegrees(Math.atan2(edge.getInPoint().x - vertexB.getPosX(), edge.getInPoint().y - vertexB.getPosY())) + 270) % 360);
     }
 
-    private static void calculateArcParameters(Edge edge) {
+    private static void updateArcParameters(Edge edge) {
         if (edge.getRelativeEdgeAngle() != 0) {
             double mx = (edge.getOutPoint().x + edge.getInPoint().x) / 2;
             double my = (edge.getOutPoint().y + edge.getInPoint().y) / 2;
@@ -312,141 +262,118 @@ public class EdgeUtils {
         edge.setArrowLine2(new int[]{p2[0], p2[1], bx, by});
     }
 
-    /*
-    private static void drawAngleVisualisation(Edge edge, Graphics2D g) {
-        Vertex vertexA = edge.getVertexA();
-        Vertex vertexB = edge.getVertexB();
+    public static Point calculateEdgeExitPoint(Vertex vertex, double angle) {
+        Point result = new Point();
 
-        g.setColor(Color.gray);
-        g.setStroke(DrawingTools.getStroke(2, LineType.DASHED, 0.0));
-        g.drawLine(vertexA.getPosX(), vertexA.getPosY(), vertexB.getPosX(), vertexB.getPosY());
-
-        Point m = new Point((vertexA.getPosX() + vertexB.getPosX()) / 2, (vertexA.getPosY() + vertexB.getPosY()) / 2);
-        double d = 2 * m.distance(vertexA.getPosX(), vertexB.getPosY());
-
-        Point p1 = new Point((int) Math.round(vertexA.getPosX() + (d / (2.5 * vertexA.getRadius())) * (edge.getOutPoint().x - vertexA.getPosX())),
-                (int) Math.round(vertexA.getPosY() + (d / (2.5 * vertexA.getRadius())) * (edge.getOutPoint().y - vertexA.getPosY())));
-        Point p2 = new Point((int) Math.round(vertexB.getPosX() + (d / (2.5 * vertexB.getRadius())) * (edge.getInPoint().x - vertexB.getPosX())),
-                (int) Math.round(vertexB.getPosY() + (d / (2.5 * vertexB.getRadius())) * (edge.getInPoint().y - vertexB.getPosY())));
-        g.drawLine(vertexA.getPosX(), vertexA.getPosY(), p1.x, p1.y);
-        g.drawLine(vertexB.getPosX(), vertexB.getPosY(), p2.x, p2.y);
-
-        g.setFont(new Font("Times New Roman", Font.PLAIN, 60));
-        FontMetrics fm = g.getFontMetrics();
-        String alphaText = Character.toString('\u03B1');
-
-        int arcAngle = edge.getRelativeEdgeAngle();
-        if (arcAngle > 180) {
-            arcAngle -= 360;
-            alphaText = '-' + Character.toString('\u03B1');
-        }
-        double angle = Math.toRadians(edge.getOutAngle() - arcAngle / 2);
-        int x = vertexA.getPosX() - fm.stringWidth(alphaText) / 2 + (int) Math.round((d / 4) * Math.cos(angle));
-        int y = vertexA.getPosY() + fm.getAscent() / 4 - (int) Math.round((d / 4) * Math.sin(angle));
-        g.drawString(alphaText, x, y);
-        angle = Math.toRadians(edge.getInAngle() + arcAngle / 2);
-        x = vertexB.getPosX() - fm.stringWidth(alphaText) / 2 + (int) Math.round((d / 4) * Math.cos(angle));
-        y = vertexB.getPosY() + fm.getAscent() / 4 - (int) Math.round((d / 4) * Math.sin(angle));
-        g.drawString(alphaText, x, y);
-        g.draw(new Arc2D.Double(vertexA.getPosX() - (d / 3), vertexA.getPosY() - (d / 3), d / 1.5, d / 1.5, edge.getOutAngle(), -arcAngle, Arc2D.OPEN));
-        g.draw(new Arc2D.Double(vertexB.getPosX() - (d / 3), vertexB.getPosY() - (d / 3), d / 1.5, d / 1.5, edge.getInAngle(), arcAngle, Arc2D.OPEN));
-    }
-
-    public static void draw(Edge edge, Graphics2D g2d, boolean dummy) {
-        Vertex vertexA = edge.getVertexA();
-        Vertex vertexB = edge.getVertexB();
-
-        Graphics2D g = (Graphics2D) g2d.createEmptyModel();
-
-        updateLocation(edge);
-
-        if (vertexA != vertexB) {
-            if (edge.getRelativeEdgeAngle() != 0) {
-                if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
-                    g.setColor(Const.SELECTION_COLOR);
-                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
-                    g.setStroke(drawingStroke);
-                    g.draw(edge.getArc());
-                }
-
-                g.setColor(edge.getLineColor());
-                if (dummy) {
-                    g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-                }
-                g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
-                g.draw(edge.getArc());
-            } else {
-                if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
-                    g.setColor(Const.SELECTION_COLOR);
-                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
-                    g.setStroke(drawingStroke);
-                    g.drawLine(vertexA.getPosX(), vertexA.getPosY(), vertexB.getPosX(), vertexB.getPosY());
-                }
-
-                g.setColor(edge.getLineColor());
-                if (dummy) {
-                    g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-                }
-                g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
-                g.drawLine(vertexA.getPosX(), vertexA.getPosY(), vertexB.getPosX(), vertexB.getPosY());
-            }
-            GeneralController generalController = edge.getGraph().getGeneralController();
-            if (((generalController.getSelectionController().selectionContains(edge) && generalController.getSelectionController().selectionSize() == 1) ||
-                    generalController.getMouseController().isEdgeCurrentlyAdded(edge)) && edge.getRelativeEdgeAngle() != 0) {
-               drawAngleVisualisation(edge, g);
-            }
+        if (vertex.getShape() == ShapeType.CIRCLE) {
+            result.x = vertex.getPosX() + (int) Math.round((vertex.getRadius() + vertex.getLineWidth() / 2) * Math.cos(Math.toRadians(-angle)));
+            result.y = vertex.getPosY() + (int) Math.round((vertex.getRadius() + vertex.getLineWidth() / 2) * Math.sin(Math.toRadians(-angle)));
         } else {
-            if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
-                g.setColor(Const.SELECTION_COLOR);
-                Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
-                g.setStroke(drawingStroke);
-                g.draw(edge.getArc());
+            double radius = vertex.getRadius() + vertex.getLineWidth() / 2;
+            angle = (angle + 1080) % 360;
+            double a1 = Math.cos(Math.toRadians(angle));
+            double b1 = -Math.sin(Math.toRadians(angle));
+            double c1 = 0.0;
+
+            double a2;
+            double b2;
+            double c2;
+
+            if (vertex.getShape() == ShapeType.TRIANGLE) {
+                a2 = 1;
+                b2 = Math.sqrt(3);
+                c2 = radius;
+
+                if (angle >= 90 && angle < 210) {
+                    b2 = -Math.sqrt(3);
+                    c2 = radius;
+                }
+                if (angle >= 210 && angle < 330) {
+                    b2 = 0.0;
+                    c2 = -radius / 2;
+                }
+            } else if (vertex.getShape() == ShapeType.SQUARE) {
+                a2 = 0.0;
+                b2 = 1;
+                c2 = radius / Math.sqrt(2);
+
+                if (angle >= 45 && angle < 135) {
+                    a2 = 1;
+                    b2 = 0.0;
+                    c2 = radius / Math.sqrt(2);
+                }
+                if (angle >= 135 && angle < 225) {
+                    a2 = 0.0;
+                    b2 = 1;
+                    c2 = -radius / Math.sqrt(2);
+                }
+                if (angle >= 225 && angle < 315) {
+                    a2 = 1;
+                    b2 = 0.0;
+                    c2 = -radius / Math.sqrt(2);
+                }
+
+            } else if (vertex.getShape() == ShapeType.PENTAGON) {
+                a2 = 1;
+                b2 = -Math.tan(Math.toRadians(36));
+                c2 = radius;
+
+                if (angle >= 162 && angle < 234) {
+                    a2 = 1;
+                    b2 = -Math.tan(Math.toRadians(108));
+                    c2 = -radius * Math.sin(Math.toRadians(54)) + Math.tan(Math.toRadians(108)) * radius * Math.cos(Math.toRadians(54));
+                }
+                if (angle >= 234 && angle < 306) {
+                    a2 = 1;
+                    b2 = 0.0;
+                    c2 = -radius * Math.sin(Math.toRadians(54));
+                }
+                if ((angle >= 306 && angle < 360) || (angle >= 0 && angle < 18)) {
+                    a2 = 1;
+                    b2 = Math.tan(Math.toRadians(108));
+                    c2 = -radius * Math.sin(Math.toRadians(54)) + Math.tan(Math.toRadians(108)) * radius * Math.cos(Math.toRadians(54));
+                }
+                if (angle >= 18 && angle < 90) {
+                    a2 = 1;
+                    b2 = Math.tan(Math.toRadians(36));
+                    c2 = radius;
+                }
+            } else { // vertex.getShape() == ShapeType.HEXAGON)
+                a2 = 1;
+                b2 = Math.sqrt(3);
+                c2 = radius * Math.sqrt(3);
+
+                if (angle >= 60 && angle < 120) {
+                    a2 = 1;
+                    b2 = 0.0;
+                    c2 = radius * Math.sqrt(3) / 2;
+                }
+                if (angle >= 120 && angle < 180) {
+                    a2 = 1;
+                    b2 = -Math.sqrt(3);
+                    c2 = radius * Math.sqrt(3);
+                }
+                if (angle >= 180 && angle < 240) {
+                    a2 = 1;
+                    b2 = Math.sqrt(3);
+                    c2 = -radius * Math.sqrt(3);
+                }
+                if (angle >= 240 && angle < 300) {
+                    a2 = 1;
+                    b2 = 0.0;
+                    c2 = -radius * Math.sqrt(3) / 2;
+                }
+                if (angle >= 300 && angle < 360) {
+                    a2 = 1;
+                    b2 = -Math.sqrt(3);
+                    c2 = -radius * Math.sqrt(3);
+                }
             }
 
-            g.setColor(edge.getLineColor());
-            if (dummy) {
-                g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-            }
-            g.setStroke(DrawingTools.getStroke(edge.getLineWidth(), edge.getLineType(), 0.0));
-            g.draw(edge.getArc());
+            result.x = vertex.getPosX() + (int) Math.round((a1 * c2 - a2 * c1) / (a1 * b2 - a2 * b1));
+            result.y = vertex.getPosY() - (int) Math.round((c1 * b2 - c2 * b1) / (a1 * b2 - a2 * b1));
         }
 
-        if (edge.isDirected()) {
-            if (edge.getArrowType() == ArrowType.BASIC) {
-                if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
-                    g.setColor(Const.SELECTION_COLOR);
-                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
-                    g.setStroke(drawingStroke);
-                    g.drawLine(edge.getArrowLine1()[0], edge.getArrowLine1()[1], edge.getArrowLine1()[2], edge.getArrowLine1()[3]);
-                    g.drawLine(edge.getArrowLine2()[0], edge.getArrowLine2()[1], edge.getArrowLine2()[2], edge.getArrowLine2()[3]);
-                }
-
-                g.setColor(edge.getLineColor());
-                if (dummy) {
-                    g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-                }
-                g.setStroke(new BasicStroke(edge.getLineWidth()));
-                g.drawLine(edge.getArrowLine1()[0], edge.getArrowLine1()[1], edge.getArrowLine1()[2], edge.getArrowLine1()[3]);
-                g.drawLine(edge.getArrowLine2()[0], edge.getArrowLine2()[1], edge.getArrowLine2()[2], edge.getArrowLine2()[3]);
-            } else {
-                if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
-                    g.setColor(Const.SELECTION_COLOR);
-                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
-                    g.setStroke(drawingStroke);
-                    g.fillPolygon(new Polygon(new int[]{edge.getArrowLine1()[0], edge.getArrowLine1()[2], edge.getArrowLine2()[0]},
-                            new int[]{edge.getArrowLine1()[1], edge.getArrowLine1()[3], edge.getArrowLine2()[1]}, 3));
-                }
-
-                g.setColor(edge.getLineColor());
-                if (dummy) {
-                    g.setColor(DrawingTools.getDummyColor(edge.getLineColor()));
-                }
-                g.setStroke(new BasicStroke(edge.getLineWidth()));
-                g.fillPolygon(new Polygon(new int[]{edge.getArrowLine1()[0], edge.getArrowLine1()[2], edge.getArrowLine2()[0]},
-                        new int[]{edge.getArrowLine1()[1], edge.getArrowLine1()[3], edge.getArrowLine2()[1]}, 3));
-            }
-        }
-
-        g.dispose();
-    }*/
+        return result;
+    }
 }

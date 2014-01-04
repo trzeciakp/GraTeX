@@ -30,7 +30,6 @@ public class DrawingTools {
             case DOUBLE:
                 return new CompositeStroke(new BasicStroke(lineWidth + 2), new BasicStroke(lineWidth));
             default:
-                //TODO  maybe exception? if empty
                 return null;
         }
     }

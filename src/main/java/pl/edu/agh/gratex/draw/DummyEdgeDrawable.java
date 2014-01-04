@@ -21,10 +21,9 @@ public class DummyEdgeDrawable implements Drawable {
     }
 
     @Override
-    public void draw(GraphElement graphElement, Graphics g, boolean dummy) {
-        delegatedDrawable.draw(graphElement, g, dummy);
+    public void draw(GraphElement graphElement, Graphics g) {
+        delegatedDrawable.draw(graphElement, g);
         drawAngleVisualisation((Edge) graphElement, g);
-
     }
 
     //TODO temporarily duplicated with EdgeDrawable method. Unifying could be considered

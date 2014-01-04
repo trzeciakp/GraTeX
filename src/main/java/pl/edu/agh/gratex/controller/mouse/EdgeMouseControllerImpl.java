@@ -18,6 +18,8 @@ import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 
 public class EdgeMouseControllerImpl extends GraphElementMouseController {
@@ -57,7 +59,8 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public void drawCurrentlyAddedElement(Graphics2D g) {
+    public List<GraphElement> getCurrentlyAddedElements() {
+        List<GraphElement> result = new LinkedList<>();
         if (currentlyAddedEdge != null) {
             Vertex vertex = GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY);
             if (vertex == null) {
@@ -84,8 +87,9 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             } else {
                 currentlyAddedEdge.setDrawable(getGraphElementFactory().getDrawableFactory().createDefaultDrawable(GraphElementType.EDGE));
             }
-            currentlyAddedEdge.draw(g, true);
+            result.add(currentlyAddedEdge);
         }
+        return result;
     }
 
     @Override
@@ -134,7 +138,6 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         Edge edge = getElementFromPosition(mouseX, mouseY);
         currentlyDraggedEdge = edge;
         initialLatexCodeOfDraggedEdge = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(currentlyDraggedEdge);
-        generalController.getSelectionController().addToSelection(edge, false);
 
         currentDragOperation = new AlterationOperation(generalController, currentlyDraggedEdge, OperationType.MOVE_EDGE, StringLiterals.INFO_EDGE_MOVE);
         if (edge.getVertexA() == edge.getVertexB()) {
@@ -194,6 +197,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     private void continueMoving(int mouseX, int mouseY) {
+        generalController.getSelectionController().addToSelection(currentlyDraggedEdge, false);
         if (changingEdgeAngle) {
             currentlyDraggedEdge.setRelativeEdgeAngle(EdgeUtils.getEdgeAngleFromCursorLocation(currentlyDraggedEdge, mouseX, mouseY));
         } else {

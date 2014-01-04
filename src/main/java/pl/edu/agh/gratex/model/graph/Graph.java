@@ -44,21 +44,6 @@ public class Graph {
         return graphNumeration;
     }
 
-    public void drawAll(Graphics2D g) {
-        for (Edge edge : getEdges()) {
-            edge.draw(g, false);
-        }
-        for (Vertex vertex : getVertices()) {
-            vertex.draw(g, false);
-        }
-        for (Edge edge : getEdges()) {
-            edge.drawLabel(g, false);
-        }
-        for (Vertex vertex : getVertices()) {
-            vertex.drawLabel(g, false);
-        }
-    }
-
     public List<Vertex> getVertices() {
         return (List<Vertex>) elements.get(GraphElementType.VERTEX);
     }
