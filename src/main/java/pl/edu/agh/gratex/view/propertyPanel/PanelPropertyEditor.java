@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.operation.*;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.boundary.BoundaryPropertyModel;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -61,6 +62,9 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
                 return new LabelVertexPropertyPanel();
             case LABEL_EDGE:
                 return new LabelEdgePropertyPanel();
+            case BOUNDARY:
+                return new BoundaryPropertyPanel();
+
             default:
                 return null;
         }

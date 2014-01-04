@@ -12,8 +12,8 @@ import java.util.List;
 public abstract class AbstractPropertyPanel extends JPanel {
     private static final long serialVersionUID = 235712066745109734L;
 
-    protected List<JComponent> labels;
-    protected List<JComponent> components;
+    protected List<JComponent> labels = new ArrayList<>();
+    protected List<JComponent> components = new ArrayList<>();
 
     public AbstractPropertyPanel() {
     }

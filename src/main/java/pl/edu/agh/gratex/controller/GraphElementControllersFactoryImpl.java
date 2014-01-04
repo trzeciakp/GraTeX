@@ -33,6 +33,8 @@ public class GraphElementControllersFactoryImpl implements GraphElementControlle
                 return new LabelVertexParser(colorMapper, graphElementFactory);
             case LABEL_EDGE:
                 return new LabelEdgeParser(colorMapper, graphElementFactory);
+            case BOUNDARY:
+                return new BoundaryParser(colorMapper, graphElementFactory);
         }
         return null;
     }
@@ -48,6 +50,8 @@ public class GraphElementControllersFactoryImpl implements GraphElementControlle
                 return new LabelVertexMouseControllerImpl(generalController, graphElementFactory);
             case LABEL_EDGE:
                 return new LabelEdgeMouseControllerImpl(generalController, graphElementFactory);
+            case BOUNDARY:
+                return new BoundaryMouseController(generalController, graphElementFactory);
         }
         return null;
     }

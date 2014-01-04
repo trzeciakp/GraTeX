@@ -2,6 +2,7 @@ package pl.edu.agh.gratex.model;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.draw.DrawableFactory;
+import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
@@ -38,6 +39,8 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
             case LABEL_EDGE:
                 result = new LabelE(null, graph, propertyModel);
                 break;
+            case BOUNDARY:
+                result = new Boundary(graph, propertyModel);
         }
         if(result != null) {
             //result.setModel(getPropertyModelFactory().createTemplateModel(result.getType()));

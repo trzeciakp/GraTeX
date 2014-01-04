@@ -4,7 +4,9 @@ public enum ModeType {
     VERTEX("VERTEX", GraphElementType.VERTEX),
     EDGE("EDGE", GraphElementType.EDGE),
     LABEL_VERTEX("LABEL (vertex)", GraphElementType.LABEL_VERTEX),
-    LABEL_EDGE("LABEL (edge)", GraphElementType.LABEL_EDGE);
+    LABEL_EDGE("LABEL (edge)", GraphElementType.LABEL_EDGE),
+    BOUNDARY("BOUNDARY", GraphElementType.BOUNDARY);
+
 
     private final String name;
     private final GraphElementType relatedElementType;

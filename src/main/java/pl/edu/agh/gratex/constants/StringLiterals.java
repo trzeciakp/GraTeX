@@ -192,9 +192,10 @@ public class StringLiterals {
     // MainWindow
     public static String INFO_MODE_AND_TOOL(ModeType mode, ToolType tool) {
         String tipPart1 = mode.toString() + " mode - ";
-        String tipPart3 = null;
-        String tipPart4a = null;
-        String tipPart4b = null;
+        //TODO add boundary
+        String tipPart3 = "";
+        String tipPart4a = "";
+        String tipPart4b = "";
 
         switch (mode) {
             case VERTEX: {

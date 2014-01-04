@@ -20,6 +20,7 @@ public class DrawableFactoryImpl implements DrawableFactory {
         defaultDrawable.put(GraphElementType.LABEL_VERTEX, new LabelVertexDrawable(selectionController));
         defaultDrawable.put(GraphElementType.EDGE, new EdgeDrawable(selectionController));
         defaultDrawable.put(GraphElementType.LABEL_EDGE, new LabelEdgeDrawable(selectionController));
+        defaultDrawable.put(GraphElementType.BOUNDARY, new BoundaryDrawable(selectionController));
 
         dummyEdgeDrawable = new DummyEdgeDrawable(defaultDrawable.get(GraphElementType.EDGE));
     }

@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.model;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.model.boundary.BoundaryPropertyModel;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
@@ -24,11 +25,13 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         emptyModelMap.put(GraphElementType.LABEL_VERTEX, new LabelVertexPropertyModel());
         emptyModelMap.put(GraphElementType.EDGE, new EdgePropertyModel());
         emptyModelMap.put(GraphElementType.LABEL_EDGE, new LabelEdgePropertyModel());
+        emptyModelMap.put(GraphElementType.BOUNDARY, new BoundaryPropertyModel());
 
         defaultModelMap.put(GraphElementType.VERTEX, new VertexPropertyModel());
         defaultModelMap.put(GraphElementType.LABEL_VERTEX, new LabelVertexPropertyModel());
         defaultModelMap.put(GraphElementType.EDGE, new EdgePropertyModel());
         defaultModelMap.put(GraphElementType.LABEL_EDGE, new LabelEdgePropertyModel());
+        defaultModelMap.put(GraphElementType.BOUNDARY, new BoundaryPropertyModel());
 
         initDefaultModels();
 
@@ -87,6 +90,11 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setSpacing(5);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setTopPlacement(LabelTopPlacement.ABOVE);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(LabelRotation.TANGENT);
+
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineColor(Color.blue);
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("cyan"));
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineType(LineType.SOLID);
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineWidth(1);
     }
 
 
