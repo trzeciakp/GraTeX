@@ -2,9 +2,8 @@ package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
+import pl.edu.agh.gratex.model.properties.LabelRotation;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
-import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
@@ -123,7 +122,7 @@ public class LabelEUtils {
         Edge owner = labelE.getOwner();
 
         if (owner.getVertexA() == owner.getVertexB()) {
-            labelE.setHorizontalPlacement(LabelHorizontalPlacement.LEVEL);
+            labelE.setHorizontalPlacement(LabelRotation.LEVEL);
             labelE.setTopPlacement(LabelTopPlacement.ABOVE);
             if (labelE.getPosition() < 34) {
                 labelE.setPosition(25);
@@ -362,9 +361,7 @@ public class LabelEUtils {
                     labelE.setPosY((stringStartBottom.y + stringEndTop.y) / 2);
 
                     double angle = Math.toDegrees(Math.asin((stringStartBottom.y - stringEndBottom.y) / stringStartBottom.distance(stringEndBottom)));
-                    if (labelE.getAngle() < 0) {
-                        angle += 360;
-                    }
+                    angle = (angle + 360) % 360;
 
                     labelE.setAngle((int) Math.round(angle));
                 }

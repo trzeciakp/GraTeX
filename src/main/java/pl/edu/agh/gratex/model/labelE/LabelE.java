@@ -3,10 +3,11 @@ package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.properties.IsLoop;
-import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
+import pl.edu.agh.gratex.model.properties.LabelRotation;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
@@ -120,19 +121,19 @@ public class LabelE extends GraphElement {
 
     public boolean isHorizontalPlacement() {
         //TODO?
-        return propertyModel.getHorizontalPlacement() == LabelHorizontalPlacement.LEVEL;
+        return propertyModel.getHorizontalPlacement() == LabelRotation.LEVEL;
     }
 
     public void setHorizontalPlacement(boolean horizontalPlacement) {
         //TODO?
-        propertyModel.setHorizontalPlacement(horizontalPlacement ? LabelHorizontalPlacement.LEVEL : LabelHorizontalPlacement.TANGENT);
+        propertyModel.setHorizontalPlacement(horizontalPlacement ? LabelRotation.LEVEL : LabelRotation.TANGENT);
     }
 
-    public void setHorizontalPlacement(LabelHorizontalPlacement horizontalPlacement) {
+    public void setHorizontalPlacement(LabelRotation horizontalPlacement) {
         propertyModel.setHorizontalPlacement(horizontalPlacement);
     }
 
-    public LabelHorizontalPlacement getHorizontalPlacement() {
+    public LabelRotation getHorizontalPlacement() {
         return propertyModel.getHorizontalPlacement();
     }
 

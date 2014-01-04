@@ -2,7 +2,7 @@ package pl.edu.agh.gratex.model.properties;
 
 import pl.edu.agh.gratex.model.PropertyModel;
 
-public enum LabelHorizontalPlacement implements Emptible {
+public enum LabelRotation implements Emptible {
     EMPTY {
         public String toString() {
             return " ";

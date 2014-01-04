@@ -188,7 +188,9 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 }
             }
         }
-        currentlyDraggedEdge.setRelativeEdgeAngle(0);
+        if (!changingEdgeAngle) {
+            currentlyDraggedEdge.setRelativeEdgeAngle(0);
+        }
     }
 
     private void continueMoving(int mouseX, int mouseY) {
@@ -252,6 +254,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             String existingLatexCode = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(graphElement);
             if (existingLatexCode.equals(latexCode) && graphElement != edge) {
                 result = true;
+                break;
             }
         }
         return result;

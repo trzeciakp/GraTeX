@@ -2,7 +2,7 @@ package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.IsLoop;
-import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
+import pl.edu.agh.gratex.model.properties.LabelRotation;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 
 import java.awt.*;
@@ -12,7 +12,7 @@ public class LabelEdgePropertyModel extends PropertyModel {
     private Color fontColor = null;
     private int position = PropertyModel.EMPTY;
     private int spacing = PropertyModel.EMPTY;
-    private LabelHorizontalPlacement horizontalPlacement = LabelHorizontalPlacement.EMPTY;
+    private LabelRotation horizontalPlacement = LabelRotation.EMPTY;
     private IsLoop isLoop = IsLoop.EMPTY;
     private LabelTopPlacement topPlacement = LabelTopPlacement.EMPTY;
 
@@ -91,7 +91,7 @@ public class LabelEdgePropertyModel extends PropertyModel {
         }
 
         if (model.horizontalPlacement != horizontalPlacement) {
-            horizontalPlacement = LabelHorizontalPlacement.EMPTY;
+            horizontalPlacement = LabelRotation.EMPTY;
         }
 
         if (model.isLoop != isLoop) {
@@ -139,11 +139,11 @@ public class LabelEdgePropertyModel extends PropertyModel {
         this.topPlacement = topPlacement;
     }
 
-    public void setHorizontalPlacement(LabelHorizontalPlacement horizontalPlacement) {
+    public void setHorizontalPlacement(LabelRotation horizontalPlacement) {
        this.horizontalPlacement = horizontalPlacement;
     }
 
-    public LabelHorizontalPlacement getHorizontalPlacement() {
+    public LabelRotation getHorizontalPlacement() {
         return horizontalPlacement;
 
     }
