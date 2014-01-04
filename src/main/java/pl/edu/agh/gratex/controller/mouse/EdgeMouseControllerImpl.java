@@ -134,7 +134,6 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         Edge edge = getElementFromPosition(mouseX, mouseY);
         currentlyDraggedEdge = edge;
         initialLatexCodeOfDraggedEdge = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(currentlyDraggedEdge);
-        generalController.getSelectionController().addToSelection(edge, false);
 
         currentDragOperation = new AlterationOperation(generalController, currentlyDraggedEdge, OperationType.MOVE_EDGE, StringLiterals.INFO_EDGE_MOVE);
         if (edge.getVertexA() == edge.getVertexB()) {
@@ -194,6 +193,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     private void continueMoving(int mouseX, int mouseY) {
+        generalController.getSelectionController().addToSelection(currentlyDraggedEdge, false);
         if (changingEdgeAngle) {
             currentlyDraggedEdge.setRelativeEdgeAngle(EdgeUtils.getEdgeAngleFromCursorLocation(currentlyDraggedEdge, mouseX, mouseY));
         } else {

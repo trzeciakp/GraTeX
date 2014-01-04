@@ -97,9 +97,9 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     public void moveSelection(int mouseX, int mouseY) {
         if (currentlyDraggedLabel == null) {
             currentlyDraggedLabel = getElementFromPosition(mouseX, mouseY);
-            generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedLabel, OperationType.MOVE_LABEL_EDGE, StringLiterals.INFO_LABEL_E_MOVE);
         } else {
+            generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);
             Edge owner = currentlyDraggedLabel.getOwner();
             if (shiftChangedWhileAdding) {
                 currentlyDraggedLabel.setHorizontalPlacement(shiftDown);

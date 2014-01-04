@@ -74,9 +74,9 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     public void moveSelection(int mouseX, int mouseY) {
         if (currentlyDraggedLabel == null) {
             currentlyDraggedLabel = getElementFromPosition(mouseX, mouseY);
-            generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedLabel, OperationType.MOVE_LABEL_VERTEX, StringLiterals.INFO_LABEL_V_MOVE);
         } else {
+            generalController.getSelectionController().addToSelection(currentlyDraggedLabel, false);
             Vertex vertex = currentlyDraggedLabel.getOwner();
             currentlyDraggedLabel.setPosition(LabelVUtils.getPositionFromCursorLocation(vertex, mouseX, mouseY));
         }
