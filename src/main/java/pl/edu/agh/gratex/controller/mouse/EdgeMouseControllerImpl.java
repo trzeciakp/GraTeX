@@ -131,7 +131,6 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
         Edge edge = getElementFromPosition(mouseX, mouseY);
         currentlyDraggedEdge = edge;
         initialLatexCodeOfDraggedEdge = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(currentlyDraggedEdge);
-        currentlyDraggedEdge.setRelativeEdgeAngle(0);
         generalController.getSelectionController().addToSelection(edge, false);
 
         currentDragOperation = new AlterationOperation(generalController, currentlyDraggedEdge, OperationType.MOVE_EDGE, StringLiterals.INFO_EDGE_MOVE);
@@ -144,13 +143,28 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 edgeDragDummy.setPosX(mouseX);
                 edgeDragDummy.setPosY(mouseY);
                 edgeDragDummy.setRadius(2);
-                if (c.distance(edge.getInPoint()) < c.distance(edge.getOutPoint())) {
-                    edge.setVertexB(edgeDragDummy);
-                    disconnectedVertexA = false;
-                } else {
-                    edge.setVertexA(edgeDragDummy);
-                    disconnectedVertexA = true;
+
+                switch (currentlyDraggedEdge.getRelativeEdgeAngle()) {
+                    case 0:
+                        disconnectedVertexA = mouseY < edge.getVertexA().getPosY();
+                        break;
+                    case 90:
+                        disconnectedVertexA = mouseX < edge.getVertexA().getPosX();
+                        break;
+                    case 180:
+                        disconnectedVertexA = mouseY > edge.getVertexA().getPosY();
+                        break;
+                    case 270:
+                        disconnectedVertexA = mouseX > edge.getVertexA().getPosX();
+                        break;
                 }
+
+                if (disconnectedVertexA) {
+                    edge.setVertexA(edgeDragDummy);
+                } else {
+                    edge.setVertexB(edgeDragDummy);
+                }
+
             }
         } else {
             Point c = new Point(mouseX, mouseY);
@@ -171,6 +185,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 }
             }
         }
+        currentlyDraggedEdge.setRelativeEdgeAngle(0);
     }
 
     private void continueMoving(int mouseX, int mouseY) {
