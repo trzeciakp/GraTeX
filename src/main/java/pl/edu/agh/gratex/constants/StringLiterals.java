@@ -186,8 +186,10 @@ public class StringLiterals {
     public final static String INFO_EDGE_ADDING_CANCELLED = "Adding edge cancelled";
     public final static String INFO_NOTHING_TO_REMOVE = "Nothing to remove";
     public final static String INFO_CHOOSE_VERTEX_FOR_LABEL = "Choose a vertex to attach label to";
-    public final static String INFO_CANNOT_CREATE_LABEL_V_EXISTS = "This vertex already has a label";
-    public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "This edge already has a label";
+    public final static String INFO_CANNOT_CREATE_LABEL_V_EXISTS = "Cannot create the label, as this vertex already has one";
+    public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "Cannot create the label, as this edge already has one";
+    public final static String INFO_CANNOT_CREATE_EDGE_EXISTS = "Cannot create the edge, such edge already exists";
+    public final static String INFO_CANNOT_MOVE_EDGE_EXISTS = "Cannot move the edge here, such edge already exists";
     public final static String INFO_CHOOSE_EDGE_FOR_LABEL = "Choose an edge to attach label to";
 
     // SaveFileDialog

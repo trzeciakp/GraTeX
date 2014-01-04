@@ -49,6 +49,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
         cancelCurrentOperation();
         mode = currentMode;
         operationController.reportOperationEvent(null);
+        controllers.get(mode).setMouseLocation(mouseX, mouseY);
     }
 
     @Override
