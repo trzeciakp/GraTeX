@@ -16,6 +16,7 @@ public abstract class GraphElementMouseController {
     protected int mouseX;
     protected int mouseY;
     protected boolean shiftDown;
+    protected boolean ctrlDown;
 
     private GeneralController generalController;
     private GraphElementFactory graphElementFactory;
@@ -40,6 +41,14 @@ public abstract class GraphElementMouseController {
     }
 
     public void shiftDownChanged() {
+    }
+
+    public void setCtrlDown(boolean flag) {
+        ctrlDown = flag;
+        ctrlDownChanged();
+    }
+
+    public void ctrlDownChanged() {
     }
 
     public abstract void reset();

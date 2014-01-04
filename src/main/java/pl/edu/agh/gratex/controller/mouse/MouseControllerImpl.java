@@ -157,6 +157,12 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
     }
 
     @Override
+    public void processCtrlPressing(boolean flag) {
+        controllers.get(mode).setCtrlDown(flag);
+        operationController.reportOperationEvent(null);
+    }
+
+    @Override
     public Rectangle getSelectionArea() {
         boolean isProperTool = (tool == ToolType.REMOVE || tool == ToolType.SELECT);
         if (!isElementMoving && isProperTool) {

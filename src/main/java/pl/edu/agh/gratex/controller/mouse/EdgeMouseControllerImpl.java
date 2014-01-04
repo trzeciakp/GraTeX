@@ -73,7 +73,10 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 currentlyAddedEdge.setVertexB(vertex);
             }
             if (GraphUtils.getVertexFromPosition(generalController.getGraph(), mouseX, mouseY) != null) {
-                int angle = EdgeUtils.getEdgeAngleFromCursorLocation(currentlyAddedEdge, mouseX, mouseY);
+                int angle = 0;
+                if (!ctrlDown || currentlyAddedEdge.isLoop()) {
+                    angle = EdgeUtils.getEdgeAngleFromCursorLocation(currentlyAddedEdge, mouseX, mouseY);
+                }
                 currentlyAddedEdge.setRelativeEdgeAngle(angle);
             }
             if (currentlyAddedEdge.getRelativeEdgeAngle() != 0) {

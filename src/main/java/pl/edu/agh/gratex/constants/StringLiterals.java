@@ -214,7 +214,7 @@ public class StringLiterals {
                 break;
             }
             case EDGE: {
-                tipPart4a = "an edge. Hold down SHIFT for directed edge.";
+                tipPart4a = "an edge. Hold down SHIFT for directed edge. Hold down CTRL for straight edge.";
                 tipPart4b = "an edge. ";
                 break;
             }

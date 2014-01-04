@@ -10,6 +10,7 @@ public interface MouseController {
     public void processMouseMoving(MouseEvent e);
     public void processMouseDragging(MouseEvent e);
     public void processShiftPressing(boolean flag);
+    public void processCtrlPressing(boolean flag);
 
     public Rectangle getSelectionArea();
 

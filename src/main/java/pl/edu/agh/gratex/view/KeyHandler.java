@@ -18,12 +18,16 @@ public class KeyHandler implements KeyEventDispatcher {
         if (e.getID() == KeyEvent.KEY_PRESSED) {
             if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
                 mouseController.processShiftPressing(true);
+            } else if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+                mouseController.processCtrlPressing(true);
             } else {
                 return false;
             }
         } else if (e.getID() == KeyEvent.KEY_RELEASED) {
             if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
                 mouseController.processShiftPressing(false);
+            } else if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+                mouseController.processCtrlPressing(false);
             } else {
                 return false;
             }
