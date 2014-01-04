@@ -31,14 +31,13 @@ public abstract class Operation {
     public GraphElement getElementByLatexCode(String code, Graph graph, ParseController parseController) {
         for (GraphElementType type : GraphElementType.values()) {
             for (GraphElement element : graph.getElements(type)) {
-                if (parseController.getParserByElementType(element.getType()).parseToLatex(element).equals(code)) {
+                if (getLatexCode(element, parseController).equals(code)) {
                     return element;
                 }
             }
         }
         return null;
     }
-
     public abstract void doOperation();
 
     public abstract void undoOperation();

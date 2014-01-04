@@ -3,7 +3,7 @@ package pl.edu.agh.gratex.parser.elements.labeledge;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
+import pl.edu.agh.gratex.model.properties.LabelRotation;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 
@@ -55,12 +55,12 @@ public class CommentedParametersLabelEdgeParser extends ParseElement {
         Edge owner = element.getGraph().getEdgeById(Integer.parseInt(matcher.group(OWNER_GROUP)));
         LabelTopPlacement labelTopPlacement = LabelTopPlacement.valueOf(matcher.group(TOP_PLACEMENT_GROUP));
         int position = Integer.parseInt(matcher.group(POSITION_GROUP));
-        LabelHorizontalPlacement labelHorizontalPlacement = LabelHorizontalPlacement.valueOf(matcher.group(HORIZONTAL_PLACEMENT_GROUP));
+        LabelRotation labelRotation = LabelRotation.valueOf(matcher.group(HORIZONTAL_PLACEMENT_GROUP));
         int spacing = Integer.parseInt(matcher.group(SPACING_GROUP));
         labelE.setOwner(owner);
         labelE.setTopPlacement(labelTopPlacement);
         labelE.setSpacing(spacing);
-        labelE.setHorizontalPlacement(labelHorizontalPlacement);
+        labelE.setHorizontalPlacement(labelRotation);
         labelE.setPosition(position);
     }
 
@@ -70,9 +70,9 @@ public class CommentedParametersLabelEdgeParser extends ParseElement {
         int ownerNumber = labelE.getOwner().getNumber();
         LabelTopPlacement labelTopPlacement = labelE.getTopPlacement();
         int position = labelE.getPosition();
-        LabelHorizontalPlacement labelHorizontalPlacement = labelE.getHorizontalPlacement();
+        LabelRotation labelRotation = labelE.getHorizontalPlacement();
         int spacing = labelE.getSpacing();
-        String result = String.format(RETURN_FORMAT, ownerNumber, labelTopPlacement.name(),position,labelHorizontalPlacement.name(), spacing);
+        String result = String.format(RETURN_FORMAT, ownerNumber, labelTopPlacement.name(),position, labelRotation.name(), spacing);
         return result;
     }
 }

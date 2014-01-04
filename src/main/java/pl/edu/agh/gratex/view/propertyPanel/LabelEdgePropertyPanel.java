@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Vector;
 
 
 @SuppressWarnings("serial")
@@ -33,7 +32,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
     private JLabel lblPlace;
     private JComboBox<LabelTopPlacement> comboBoxPlace;
     private JLabel lblRotation;
-    private JComboBox<LabelHorizontalPlacement> comboBoxRotation;
+    private JComboBox<LabelRotation> comboBoxRotation;
 
     private void changed() {
         if (changedByUser)
@@ -257,10 +256,10 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         lblRotation.setHorizontalAlignment(SwingConstants.LEFT);
         add(lblRotation);
 
-        comboBoxRotation = new JComboBox<LabelHorizontalPlacement>(LabelHorizontalPlacement.values());
+        comboBoxRotation = new JComboBox<LabelRotation>(LabelRotation.values());
         comboBoxRotation.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                LabelHorizontalPlacement newValue = ((LabelHorizontalPlacement) comboBoxRotation.getSelectedItem());
+                LabelRotation newValue = ((LabelRotation) comboBoxRotation.getSelectedItem());
                 if ((!newValue.isEmpty()) && (model.getHorizontalPlacement() != newValue) || (!changedByUser)) {
                     model.setHorizontalPlacement(newValue);
                     changed();

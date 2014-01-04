@@ -12,7 +12,7 @@ import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
-import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
+import pl.edu.agh.gratex.model.properties.LabelRotation;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
@@ -38,7 +38,7 @@ public class LabelEdgeParserTest {
     private static final double EXPECTED_TEXT_POS_Y = 88.125;
     public static final int EXPECTED_POS_Y = (int) (EXPECTED_TEXT_POS_Y / COEFFICIENT);
     public static final String EXPECTED_TEXT = "Label";
-    public static final LabelHorizontalPlacement EXPECTED_HORIZONTAL_PLACEMENT = LabelHorizontalPlacement.LEVEL;
+    public static final LabelRotation EXPECTED_HORIZONTAL_PLACEMENT = LabelRotation.LEVEL;
     private static final int EXPECTED_SPACING = 10;
     private static final LabelTopPlacement EXPECTED_TOP_PLACEMENT = LabelTopPlacement.BELOW;
     public static final int EXPECTED_POSITION = 50;
