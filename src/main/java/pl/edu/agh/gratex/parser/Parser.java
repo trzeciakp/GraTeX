@@ -64,7 +64,7 @@ public class Parser {
             line = "\\draw [line width=" + 0.625 * etemp.getLineWidth();
             if (etemp.isDirected()) {
                 line += ", ->";
-                if (etemp.getArrowTypeENUM() == ArrowType.FILLED) line += ", >=latex";
+                if (etemp.getArrowType() == ArrowType.FILLED) line += ", >=latex";
             }
             if (etemp.getLineType() == LineType.DASHED)
                 line += ", dashed";

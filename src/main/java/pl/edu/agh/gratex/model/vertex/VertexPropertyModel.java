@@ -42,15 +42,15 @@ public class VertexPropertyModel extends PropertyModel {
         VertexPropertyModel model = (VertexPropertyModel) pm;
 
         if (model.number != number) {
-            number = -1;
+            number = PropertyModel.EMPTY;
         }
 
         if (model.radius != radius) {
-            radius = -1;
+            radius = PropertyModel.EMPTY;
         }
 
         if (model.shape != shape) {
-            shape = -1;
+            shape = PropertyModel.EMPTY;
         }
 
         if (vertexColor != null) {
@@ -60,7 +60,7 @@ public class VertexPropertyModel extends PropertyModel {
         }
 
         if (model.lineWidth != lineWidth) {
-            lineWidth = -1;
+            lineWidth = PropertyModel.EMPTY;
         }
 
         if (model.lineType != lineType) {
@@ -80,7 +80,7 @@ public class VertexPropertyModel extends PropertyModel {
         }
 
         if (model.labelInside != labelInside) {
-            labelInside = -1;
+            labelInside = PropertyModel.EMPTY;
         }
     }
 
@@ -88,17 +88,17 @@ public class VertexPropertyModel extends PropertyModel {
     public void updateWithModel(PropertyModel pm) {
         VertexPropertyModel model = (VertexPropertyModel) pm;
 
-        if (model.number > -1) {
+        if (model.number != PropertyModel.EMPTY) {
             VertexUtils.setPartOfNumeration((Vertex) owner, false);
             number = model.number;
             VertexUtils.setPartOfNumeration((Vertex) owner, true);
         }
 
-        if (model.radius > -1) {
+        if (model.radius != PropertyModel.EMPTY) {
             radius = model.radius;
         }
 
-        if (model.shape > -1) {
+        if (model.shape != PropertyModel.EMPTY) {
             shape = model.shape;
         }
 
@@ -106,7 +106,7 @@ public class VertexPropertyModel extends PropertyModel {
             vertexColor = new Color(model.vertexColor.getRGB());
         }
 
-        if (model.lineWidth > -1) {
+        if (model.lineWidth != PropertyModel.EMPTY) {
             lineWidth = model.lineWidth;
         }
 
@@ -122,7 +122,7 @@ public class VertexPropertyModel extends PropertyModel {
             fontColor = new Color(model.fontColor.getRGB());
         }
 
-        if (model.labelInside > -1) {
+        if (model.labelInside != PropertyModel.EMPTY) {
             labelInside = model.labelInside;
         }
 

@@ -3,7 +3,7 @@ package pl.edu.agh.gratex.model.properties;
 /**
  *
  */
-public enum IsLoop implements Emptible {
+public enum IsDirected implements Emptible {
     EMPTY {
 
         @Override

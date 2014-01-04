@@ -1,8 +1,11 @@
 package pl.edu.agh.gratex.view.propertyPanel;
 
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.ArrowType;
+import pl.edu.agh.gratex.model.properties.IsDirected;
+import pl.edu.agh.gratex.model.properties.IsLoop;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import javax.swing.*;
@@ -26,9 +29,9 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
     private JLabel lblLineColor;
     private JComboBox<Color> comboBoxLineColor;
     private JLabel lblDirect;
-    private JComboBox<Option> comboBoxDirect;
+    private JComboBox<IsDirected> comboBoxDirect;
     private JLabel lblArrowType;
-    private JComboBox<Option> comboBoxArrowType;
+    private JComboBox<ArrowType> comboBoxArrowType;
     private JLabel lblAngle;
     private JSpinner spinnerAngle;
     private JComboBox<Option> comboBoxAngle;
@@ -49,37 +52,42 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
     public void setModel(PropertyModel pm) {
         changedByUser = false;
         model = (EdgePropertyModel) pm.getCopy();
-        if (model.getDirected() == PropertyModel.YES) {
+        if (model.getDirected() == IsDirected.YES) {
             lblArrowType.setEnabled(true);
             comboBoxArrowType.setEnabled(true);
-        } else if (model.getDirected() == PropertyModel.NO) {
+        } else if (model.getDirected() == IsDirected.NO) {
             lblArrowType.setEnabled(false);
             comboBoxArrowType.setEnabled(false);
         }
         comboBoxLineType.setSelectedItem(model.getLineType());
-        if (model.getLineWidth() == -1)
-            spinnerLineSize.setValue(" ");
-        else
-            spinnerLineSize.setValue(model.getLineWidth() + " px");
+        if (model.getLineWidth() == PropertyModel.EMPTY) {
+            spinnerLineSize.setValue(StringLiterals.EMPTY_VALUE);
+        } else {
+            spinnerLineSize.setValue(model.getLineWidth() + StringLiterals.PX_SUFFIX);
+        }
         comboBoxLineColor.setSelectedItem(model.getLineColor());
-        comboBoxDirect.setSelectedIndex(model.getDirected() + 1);
-        comboBoxArrowType.setSelectedIndex(model.getArrowType() + 1);
+        comboBoxDirect.setSelectedItem(model.getDirected());
+        //comboBoxDirect.setSelectedIndex(model.getDirected() + 1);
+        //comboBoxArrowType.setSelectedIndex(model.getArrowType() + 1);
+        comboBoxArrowType.setSelectedItem(model.getArrowType());
         spinnerAngle.setVisible(true);
         comboBoxAngle.setVisible(false);
-        if (model.getLoop() == PropertyModel.YES) {
+        if (model.getLoop() == IsLoop.YES) {
             spinnerAngle.setVisible(false);
             comboBoxAngle.setVisible(true);
-            if (model.getRelativeEdgeAngle() >= 0)
+            if (model.getRelativeEdgeAngle() >= 0) {
                 comboBoxAngle.setSelectedIndex(model.getRelativeEdgeAngle() / 90 + 1);
-            else
+            } else {
                 comboBoxAngle.setSelectedIndex(0);
+            }
         } else if (model.getRelativeEdgeAngle() == PropertyModel.EMPTY) {
-            spinnerAngle.setValue(" ");
-        } else if (model.getRelativeEdgeAngle() > 180)
-            spinnerAngle.setValue(model.getRelativeEdgeAngle() - 360 + " deg");
-        else
-            spinnerAngle.setValue(model.getRelativeEdgeAngle() + " deg");
-        if (model.getLoop() == PropertyModel.EMPTY) {
+            spinnerAngle.setValue(StringLiterals.EMPTY_VALUE);
+        } else if (model.getRelativeEdgeAngle() > 180) {
+            spinnerAngle.setValue(model.getRelativeEdgeAngle() - 360 + StringLiterals.DEG_SUFFIX);
+        } else {
+            spinnerAngle.setValue(model.getRelativeEdgeAngle() + StringLiterals.DEG_SUFFIX);
+        }
+        if (model.getLoop() == IsLoop.EMPTY) {
             spinnerAngle.setEnabled(false);
             lblAngle.setEnabled(false);
         }
@@ -103,14 +111,10 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         setLayout(null);
 
         /**************************** LINE TYPE COMBOBOX **************************/
-        lblLineType = new JLabel("Line type:");
+        lblLineType = new JLabel(StringLiterals.EDGE_LINE_TYPE);
         lblLineType.setHorizontalAlignment(SwingConstants.LEFT);
-        lblLineType.setBounds(26, 42, 64, 14);
         add(lblLineType);
 
-        //Option[] lineTypes = new Option[] { new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.NONE, "none"),
-        //		new Option(PropertyModel.SOLID, "solid"), new Option(PropertyModel.DASHED, "dashed"), new Option(PropertyModel.DOTTED, "dotted"),
-        //		new Option(PropertyModel.DOUBLE, "double") };
         List<LineType> lineTypes = new ArrayList<>();
         for (LineType lineType : LineType.values()) {
             if (lineType != LineType.NONE) {
@@ -118,14 +122,10 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
             }
         }
         comboBoxLineType = new JComboBox<LineType>(lineTypes.toArray(new LineType[0]));
-        //comboBoxLineType.setBounds(101, 39, 80, 20);
         comboBoxLineType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                //int newValue = ((Option) comboBoxLineType.getSelectedItem()).getValue();
                 LineType newValue = (LineType) comboBoxLineType.getSelectedItem();
-                //if ((newValue != -1) && (model.lineType != newValue) || (!changedByUser))
                 if(!newValue.isEmpty() && model.getLineType() != newValue || !changedByUser) {
-                //if (newValue != LineType.EMPTY && model.lineType != newValue || (!changedByUser)) {
                     model.setLineType(newValue);
                     changed();
                 } else {
@@ -137,7 +137,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE WIDTH SPINNER **************************/
-        lblLineSize = new JLabel("Line width:");
+        lblLineSize = new JLabel(StringLiterals.EDGE_LINE_WIDTH);
         lblLineSize.setHorizontalAlignment(SwingConstants.LEFT);
         lblLineSize.setBounds(6, 117, 64, 14);
         add(lblLineSize);
@@ -145,13 +145,13 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         MIN_SIZE = 1;
         MAX_SIZE = 10;
         String[] lineSizes = new String[MAX_SIZE - MIN_SIZE + 2];
-        lineSizes[0] = new String(" ");
-        for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++)
-            lineSizes[i - MIN_SIZE + 1] = new String(i + " px");
+        lineSizes[0] = StringLiterals.EMPTY_VALUE;
+        for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++) {
+            lineSizes[i - MIN_SIZE + 1] = i + StringLiterals.PX_SUFFIX;
+        }
 
         spinnerLineSize = new JSpinner();
         spinnerLineSize.setModel(new SpinnerListModel(lineSizes));
-        spinnerLineSize.setBounds(101, 38, 50, 22);
         spinnerLineSize.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 String value = (String) spinnerLineSize.getValue();
@@ -164,11 +164,12 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.getLineWidth() != -1)
-                            spinnerLineSize.setValue(model.getLineWidth() + " px");
+                        if (model.getLineWidth() != PropertyModel.EMPTY) {
+                            spinnerLineSize.setValue(model.getLineWidth() + StringLiterals.PX_SUFFIX);
+                        }
                     } else {
-                        spinnerLineSize.setValue(" ");
-                        model.setLineWidth(-1);
+                        spinnerLineSize.setValue(StringLiterals.EMPTY_VALUE);
+                        model.setLineWidth(PropertyModel.EMPTY);
                     }
                 }
             }
@@ -178,9 +179,8 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LINE COLOR COMBOBOX *************************/
-        lblLineColor = new JLabel("Line color:");
+        lblLineColor = new JLabel(StringLiterals.EDGE_LINE_COLOR);
         lblLineColor.setHorizontalAlignment(SwingConstants.LEFT);
-        lblLineColor.setBounds(6, 92, 84, 14);
         add(lblLineColor);
 
         comboBoxLineColor = new ColorComboBox();
@@ -204,23 +204,20 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** DIRECTED COMBOBOX **********************/
-        lblDirect = new JLabel("Directed:");
+        lblDirect = new JLabel(StringLiterals.EDGE_DIRECTED);
         lblDirect.setHorizontalAlignment(SwingConstants.LEFT);
         lblDirect.setBounds(6, 117, 84, 14);
         add(lblDirect);
 
-        Option[] labelsOutside = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(PropertyModel.NO, "no"),
-                new Option(PropertyModel.YES, "yes")};
-        comboBoxDirect = new JComboBox<Option>(labelsOutside);
-        comboBoxDirect.setBounds(101, 114, 80, 20);
+        comboBoxDirect = new JComboBox<IsDirected>(IsDirected.values());
         comboBoxDirect.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                int newValue = ((Option) comboBoxDirect.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.getDirected() != newValue) || (!changedByUser)) {
+                IsDirected newValue = ((IsDirected) comboBoxDirect.getSelectedItem());
+                if ((!newValue.isEmpty()) && (model.getDirected() != newValue) || (!changedByUser)) {
                     model.setDirected(newValue);
                     changed();
                 } else {
-                    comboBoxDirect.setSelectedIndex(model.getDirected() + 1);
+                    comboBoxDirect.setSelectedItem(model.getDirected());
                 }
             }
         });
@@ -228,23 +225,19 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** LABEL INSIDE COMBOBOX ***********************/
-        lblArrowType = new JLabel("Arrow type:");
+        lblArrowType = new JLabel(StringLiterals.EDGE_ARROW_TYPE);
         lblArrowType.setHorizontalAlignment(SwingConstants.LEFT);
-        lblArrowType.setBounds(6, 167, 75, 14);
         add(lblArrowType);
 
-        Option[] arrowTypes = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(ArrowType.BASIC.getValue(), "basic"),
-                new Option(ArrowType.FILLED.getValue(), "filled")};
-        comboBoxArrowType = new JComboBox<Option>(arrowTypes);
-        comboBoxArrowType.setBounds(101, 164, 81, 20);
+        comboBoxArrowType = new JComboBox<>(ArrowType.values());
         comboBoxArrowType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                int newValue = ((Option) comboBoxArrowType.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.getArrowType() != newValue) || (!changedByUser)) {
+                ArrowType newValue = ((ArrowType) comboBoxArrowType.getSelectedItem());
+                if ((!newValue.isEmpty()) && (model.getArrowType() != newValue) || (!changedByUser)) {
                     model.setArrowType(newValue);
                     changed();
                 } else {
-                    comboBoxArrowType.setSelectedIndex(model.getArrowType() + 1);
+                    comboBoxArrowType.setSelectedItem(model.getArrowType());
                 }
             }
         });
@@ -252,21 +245,20 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** ANGLE SPINNER *******************************/
-        lblAngle = new JLabel("Angle:");
+        lblAngle = new JLabel(StringLiterals.EDGE_ANGLE);
         lblAngle.setHorizontalAlignment(SwingConstants.LEFT);
-        lblAngle.setBounds(26, 142, 64, 14);
         add(lblAngle);
 
         RANGE = 60;
         STEP = 5;
         String[] angles = new String[RANGE / STEP * 2 + 2];
-        angles[0] = new String(" ");
-        for (int i = 0; i < RANGE / STEP * 2 + 1; i++)
-            angles[i + 1] = new String((i * STEP - RANGE) + " deg");
+        angles[0] = StringLiterals.EMPTY_VALUE;
+        for (int i = 0; i < RANGE / STEP * 2 + 1; i++) {
+            angles[i + 1] = (i * STEP - RANGE) + StringLiterals.DEG_SUFFIX;
+        }
 
         spinnerAngle = new JSpinner();
         spinnerAngle.setModel(new SpinnerListModel(angles));
-        spinnerAngle.setBounds(101, 138, 80, 26);
         spinnerAngle.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 String value = (String) spinnerAngle.getValue();
@@ -281,11 +273,11 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.getRelativeEdgeAngle() != -1)
-                            spinnerAngle.setValue((model.getRelativeEdgeAngle() >= 0 ? model.getRelativeEdgeAngle() : model.getRelativeEdgeAngle() + 360) + " deg");
+                        if (model.getRelativeEdgeAngle() != PropertyModel.EMPTY)
+                            spinnerAngle.setValue((model.getRelativeEdgeAngle() >= 0 ? model.getRelativeEdgeAngle() : model.getRelativeEdgeAngle() + 360) + StringLiterals.DEG_SUFFIX);
                     } else {
-                        spinnerAngle.setValue(" ");
-                        model.setRelativeEdgeAngle(-1);
+                        spinnerAngle.setValue(StringLiterals.EMPTY_VALUE);
+                        model.setRelativeEdgeAngle(PropertyModel.EMPTY);
                     }
                 }
 
@@ -293,6 +285,7 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
         });
         add(spinnerAngle);
 
+        //TODO
         Option[] loopAngles = new Option[]{new Option(-1, " "), new Option(0, "0 deg"), new Option(90, "90 deg"), new Option(180, "180 deg"),
                 new Option(270, "270 deg")};
         comboBoxAngle = new JComboBox<Option>(loopAngles);

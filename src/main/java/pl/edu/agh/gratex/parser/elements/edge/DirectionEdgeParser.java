@@ -56,7 +56,7 @@ public class DirectionEdgeParser extends ParseElement {
         Edge edge = (Edge) element;
         String result = "";
         if(edge.isDirected()) {
-            result += ", ->" + (edge.getArrowTypeENUM() == ArrowType.FILLED?", >=latex":"");
+            result += ", ->" + (edge.getArrowType() == ArrowType.FILLED?", >=latex":"");
         }
         return result;
     }

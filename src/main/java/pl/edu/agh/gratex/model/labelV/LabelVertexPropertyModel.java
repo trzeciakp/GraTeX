@@ -43,7 +43,7 @@ public class LabelVertexPropertyModel extends PropertyModel {
         }
 
         if (model.spacing != spacing) {
-            spacing = -1;
+            spacing = PropertyModel.EMPTY;
         }
     }
 
@@ -63,7 +63,7 @@ public class LabelVertexPropertyModel extends PropertyModel {
             labelPosition = model.labelPosition;
         }
 
-        if (model.spacing > -1) {
+        if (model.spacing != PropertyModel.EMPTY) {
             spacing = model.spacing;
         }
     }

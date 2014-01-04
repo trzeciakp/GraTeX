@@ -1,7 +1,9 @@
 package pl.edu.agh.gratex.model.properties;
 
+import pl.edu.agh.gratex.model.PropertyModel;
+
 public enum ShapeType implements Emptible {
-    EMPTY(-1) {
+    EMPTY(PropertyModel.EMPTY) {
         @Override
         public boolean isEmpty() {
             return true;

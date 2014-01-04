@@ -71,8 +71,8 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
 
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineType(LineType.SOLID);
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineWidth(1);
-        ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setDirected(PropertyModel.NO);
-        ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setArrowType(ArrowType.BASIC.getValue());
+        ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setDirected(IsDirected.NO);
+        ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setArrowType(ArrowType.BASIC);
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setLineColor(Color.black);
         ((EdgePropertyModel) createDefaultModel(GraphElementType.EDGE)).setRelativeEdgeAngle(PropertyModel.EMPTY);
 

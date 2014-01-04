@@ -1,11 +1,8 @@
 package pl.edu.agh.gratex.model.edge;
 
 import pl.edu.agh.gratex.constants.Const;
-import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.model.properties.ArrowType;
-import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
@@ -297,7 +294,7 @@ public class EdgeUtils {
         int[] p1 = new int[]{ax - dy, ay + dx};
         int[] p2 = new int[]{ax + dy, ay - dx};
 
-        if (edge.getArrowTypeENUM() == ArrowType.FILLED) {
+        if (edge.getArrowType() == ArrowType.FILLED) {
 
             p1 = new int[]{ax - dy / 2, ay + dx / 2};
             p2 = new int[]{ax + dy / 2, ay - dx / 2};
@@ -415,7 +412,7 @@ public class EdgeUtils {
         }
 
         if (edge.isDirected()) {
-            if (edge.getArrowTypeENUM() == ArrowType.BASIC) {
+            if (edge.getArrowType() == ArrowType.BASIC) {
                 if (edge.getGraph().getGeneralController().getSelectionController().selectionContains(edge)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);

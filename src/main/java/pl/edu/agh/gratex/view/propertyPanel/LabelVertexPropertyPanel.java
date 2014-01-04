@@ -46,10 +46,11 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         textField.setText(model.getText());
         comboBoxFontColor.setSelectedItem(model.getFontColor());
         comboBoxPosition.setSelectedItem(model.getLabelPosition());
-        if (model.getSpacing() == -1)
+        if (model.getSpacing() == PropertyModel.EMPTY) {
             spinnerDistance.setValue(StringLiterals.EMPTY_VALUE);
-        else
+        } else {
             spinnerDistance.setValue(model.getSpacing() + StringLiterals.PX_SUFFIX);
+        }
 
         changedByUser = true;
     }
@@ -172,11 +173,12 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
                     }
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
-                        if (model.getSpacing() != -1)
+                        if (model.getSpacing() != PropertyModel.EMPTY) {
                             spinnerDistance.setValue(model.getSpacing() + StringLiterals.PX_SUFFIX);
+                        }
                     } else {
                         spinnerDistance.setValue(StringLiterals.EMPTY_VALUE);
-                        model.setSpacing(-1);
+                        model.setSpacing(PropertyModel.EMPTY);
                     }
                 }
             }

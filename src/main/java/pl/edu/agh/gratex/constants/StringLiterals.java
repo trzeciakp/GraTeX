@@ -132,6 +132,14 @@ public class StringLiterals {
     public static final String LABEL_EDGE_PLACEMENT = "Placement:";
     public static final String LABEL_EDGE_TEXT = "Text:";
     public static final String LABEL_EDGE_POSITION = "Position:";
+    public static final String LABEL_EDGE_DISTANCE = "Distance:";
+    public static final String DEG_SUFFIX = " deg";
+    public static final String EDGE_LINE_TYPE = "Line type:";
+    public static final String EDGE_LINE_WIDTH = "Line width:";
+    public static final String EDGE_LINE_COLOR = "Line color:";
+    public static final String EDGE_DIRECTED = "Directed:";
+    public static final String EDGE_ARROW_TYPE = "Arrow type:";
+    public static final String EDGE_ANGLE = "Angle:";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;

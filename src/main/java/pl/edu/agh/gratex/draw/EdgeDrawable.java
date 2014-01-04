@@ -5,9 +5,7 @@ import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.properties.ArrowType;
-import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.utils.DrawingTools;
 
@@ -85,7 +83,7 @@ public class EdgeDrawable implements Drawable {
         }
 
         if (edge.isDirected()) {
-            if (edge.getArrowTypeENUM() == ArrowType.BASIC) {
+            if (edge.getArrowType() == ArrowType.BASIC) {
                 if (selectionController.selectionContains(edge)) {
                     g.setColor(Const.SELECTION_COLOR);
                     Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);

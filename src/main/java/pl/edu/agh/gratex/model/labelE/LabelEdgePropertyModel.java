@@ -47,11 +47,11 @@ public class LabelEdgePropertyModel extends PropertyModel {
             fontColor = new Color(model.getFontColor().getRGB());
         }
 
-        if (model.getPosition() > -1) {
+        if (model.getPosition() != PropertyModel.EMPTY) {
             position = model.getPosition();
         }
 
-        if (model.getSpacing() > -1) {
+        if (model.getSpacing() != PropertyModel.EMPTY) {
             spacing = model.getSpacing();
         }
 
@@ -79,11 +79,11 @@ public class LabelEdgePropertyModel extends PropertyModel {
         }
 
         if (model.position != position) {
-            position = -1;
+            position = PropertyModel.EMPTY;
         }
 
         if (model.spacing != spacing) {
-            spacing = -1;
+            spacing = PropertyModel.EMPTY;
         }
 
         if (model.topPlacement != topPlacement) {

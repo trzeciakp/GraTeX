@@ -1,6 +1,9 @@
 package pl.edu.agh.gratex.model.edge;
 
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.ArrowType;
+import pl.edu.agh.gratex.model.properties.IsDirected;
+import pl.edu.agh.gratex.model.properties.IsLoop;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
@@ -9,11 +12,11 @@ import java.awt.*;
 public class EdgePropertyModel extends PropertyModel {
     private LineType lineType = LineType.EMPTY;
     private int lineWidth = PropertyModel.EMPTY;
-    private int directed = PropertyModel.EMPTY;
     private Color lineColor = null;
     private int relativeEdgeAngle = PropertyModel.EMPTY;
-    private int isLoop = PropertyModel.NO;
-    private int arrowType = PropertyModel.EMPTY;
+    private IsLoop isLoop = IsLoop.EMPTY;
+    private ArrowType arrowType = ArrowType.EMPTY;
+    private IsDirected directed = IsDirected.EMPTY;
 
     @Override
     public PropertyModel getCopy() {
@@ -38,11 +41,11 @@ public class EdgePropertyModel extends PropertyModel {
             lineType = model.getLineType();
         }
 
-        if (model.getLineWidth() > -1) {
+        if (model.getLineWidth() != PropertyModel.EMPTY) {
             lineWidth = model.getLineWidth();
         }
 
-        if (model.getDirected() > -1) {
+        if (model.getDirected() != IsDirected.EMPTY) {
             directed = model.getDirected();
         }
 
@@ -50,11 +53,11 @@ public class EdgePropertyModel extends PropertyModel {
             lineColor = new Color(model.getLineColor().getRGB());
         }
 
-        if (model.getRelativeEdgeAngle() > -1) {
+        if (model.getRelativeEdgeAngle() != PropertyModel.EMPTY) {
             relativeEdgeAngle = model.getRelativeEdgeAngle();
         }
 
-        if (model.getArrowType() > -1) {
+        if (model.getArrowType() != ArrowType.EMPTY) {
             arrowType = model.getArrowType();
         }
     }
@@ -68,11 +71,11 @@ public class EdgePropertyModel extends PropertyModel {
         }
 
         if (model.lineWidth != lineWidth) {
-            lineWidth = -1;
+            lineWidth = PropertyModel.EMPTY;
         }
 
         if (model.directed != directed) {
-            directed = -1;
+            directed = IsDirected.EMPTY;
         }
 
         if (lineColor != null) {
@@ -82,15 +85,15 @@ public class EdgePropertyModel extends PropertyModel {
         }
 
         if (model.relativeEdgeAngle != relativeEdgeAngle) {
-            relativeEdgeAngle = -1;
+            relativeEdgeAngle = PropertyModel.EMPTY;
         }
 
         if (model.isLoop != isLoop) {
-            isLoop = -1;
+            isLoop = IsLoop.EMPTY;
         }
 
         if (model.arrowType != arrowType) {
-            arrowType = -1;
+            arrowType = ArrowType.EMPTY;
         }
     }
 
@@ -110,14 +113,6 @@ public class EdgePropertyModel extends PropertyModel {
         this.lineWidth = lineWidth;
     }
 
-    public int getDirected() {
-        return directed;
-    }
-
-    public void setDirected(int directed) {
-        this.directed = directed;
-    }
-
     public Color getLineColor() {
         return lineColor;
     }
@@ -134,19 +129,27 @@ public class EdgePropertyModel extends PropertyModel {
         this.relativeEdgeAngle = relativeEdgeAngle;
     }
 
-    public int getLoop() {
+    public IsLoop getLoop() {
         return isLoop;
     }
 
-    public void setLoop(int loop) {
-        isLoop = loop;
+    public void setLoop(IsLoop isLoop) {
+        this.isLoop = isLoop;
     }
 
-    public int getArrowType() {
+    public ArrowType getArrowType() {
         return arrowType;
     }
 
-    public void setArrowType(int arrowType) {
+    public void setArrowType(ArrowType arrowType) {
         this.arrowType = arrowType;
+    }
+
+    public IsDirected getDirected() {
+        return directed;
+    }
+
+    public void setDirected(IsDirected directed) {
+        this.directed = directed;
     }
 }

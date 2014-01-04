@@ -5,6 +5,8 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.labelE.LabelE;
+import pl.edu.agh.gratex.model.properties.IsDirected;
+import pl.edu.agh.gratex.model.properties.IsLoop;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.properties.ArrowType;
@@ -44,7 +46,7 @@ public class Edge extends GraphElement {
     @Override
     public PropertyModel getModel() {
         EdgePropertyModel pm = (EdgePropertyModel) propertyModel.getCopy();
-        pm.setLoop(isLoop() ? PropertyModel.YES : PropertyModel.NO);
+        pm.setLoop(isLoop() ? IsLoop.YES : IsLoop.NO);
         return pm;
     }
 
@@ -125,27 +127,19 @@ public class Edge extends GraphElement {
     }
 
     public boolean isDirected() {
-        return propertyModel.getDirected() == PropertyModel.YES;
+        return propertyModel.getDirected() == IsDirected.YES;
     }
 
     public void setDirected(boolean directed) {
-        propertyModel.setDirected(directed ? PropertyModel.YES : PropertyModel.NO);
-    }
-
-    public int getArrowType() {
-        return propertyModel.getArrowType();
-    }
-
-    public void setArrowType(int arrowType) {
-        propertyModel.setArrowType(arrowType);
+        propertyModel.setDirected(directed ? IsDirected.YES : IsDirected.NO);
     }
 
     public void setArrowType(ArrowType arrowType) {
-        propertyModel.setArrowType(arrowType.getValue());
+        propertyModel.setArrowType(arrowType);
     }
 
-    public ArrowType getArrowTypeENUM() {
-        return ArrowType.values()[propertyModel.getArrowType() + 1];
+    public ArrowType getArrowType() {
+        return propertyModel.getArrowType();
     }
 
     public Color getLineColor() {
