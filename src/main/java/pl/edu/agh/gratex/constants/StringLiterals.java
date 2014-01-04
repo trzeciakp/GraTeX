@@ -127,6 +127,11 @@ public class StringLiterals {
     public static final String PX_SUFFIX = " px";
     public static final String LABEL_VERTEX_TEXT = "Text:";
     public static final String LABEL_VERTEX_TEXT_COLOR = "Text color:";
+    public static final String LABEL_EDGE_ROTATION = "Rotation";
+    public static final String PERCENT_SUFFIX = " %";
+    public static final String LABEL_EDGE_PLACEMENT = "Placement:";
+    public static final String LABEL_EDGE_TEXT = "Text:";
+    public static final String LABEL_EDGE_POSITION = "Position:";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;

@@ -1,8 +1,9 @@
 package pl.edu.agh.gratex.view.propertyPanel;
 
-import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
+import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.IsLoop;
 import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 
@@ -18,6 +19,7 @@ import java.util.Vector;
 @SuppressWarnings("serial")
 public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
 
+    public static final String LABEL_EDGE_TEXT_COLOR = "Text color:";
     private LabelEdgePropertyModel model;
     private JLabel labelText;
     private JTextField textField;
@@ -31,9 +33,9 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
     private static int MIN_SIZE = 0;
     private static int MAX_SIZE = 99;
     private JLabel lblPlace;
-    private JComboBox<Option> comboBoxPlace;
+    private JComboBox<LabelTopPlacement> comboBoxPlace;
     private JLabel lblRotation;
-    private JComboBox<Option> comboBoxRotation;
+    private JComboBox<LabelHorizontalPlacement> comboBoxRotation;
 
     private void changed() {
         if (changedByUser)
@@ -52,12 +54,12 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         spinnerPosition.setVisible(true);
         comboBoxPosition.setVisible(false);
         comboBoxFontColor.setSelectedItem(model.getFontColor());
-        if (model.getLoop() < PropertyModel.YES) {
+        if (model.getLoop().isEmpty() || model.getLoop() == IsLoop.NO) {
             if (model.getPosition() == -1)
-                spinnerPosition.setValue(" ");
+                spinnerPosition.setValue(StringLiterals.EMPTY_VALUE);
             else
-                spinnerPosition.setValue(model.getPosition() + " %");
-        } else if (model.getLoop() == PropertyModel.YES) {
+                spinnerPosition.setValue(model.getPosition() + StringLiterals.PERCENT_SUFFIX);
+        } else if (model.getLoop() == IsLoop.YES) {
             lblPlace.setEnabled(false);
             comboBoxPlace.setEnabled(false);
             lblRotation.setEnabled(false);
@@ -70,9 +72,9 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         if (model.getSpacing() == -1)
             spinnerDistance.setValue(" ");
         else
-            spinnerDistance.setValue(model.getSpacing() + " px");
-        comboBoxPlace.setSelectedIndex(model.getTopPlacement() + 1);
-        comboBoxRotation.setSelectedIndex(model.getHorizontalPlacement() + 1);
+            spinnerDistance.setValue(model.getSpacing() + StringLiterals.PX_SUFFIX);
+        comboBoxPlace.setSelectedItem(model.getTopPlacement());
+        comboBoxRotation.setSelectedItem(model.getHorizontalPlacement());
 
         changedByUser = true;
     }
@@ -95,9 +97,8 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
     private void initialize() {
         setLayout(null);
         /**************************** TEXT TEXTFIELD ******************************/
-        labelText = new JLabel("Text:");
+        labelText = new JLabel(StringLiterals.LABEL_EDGE_TEXT);
         labelText.setHorizontalAlignment(SwingConstants.LEFT);
-        labelText.setBounds(26, 42, 64, 14);
         add(labelText);
 
         textField = new JTextField();
@@ -109,15 +110,13 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
                 }
             }
         });
-        textField.setBounds(102, 35, 122, 28);
         add(textField);
         textField.setColumns(10);
         /**************************************************************************/
 
         /**************************** COLOR COMBOBOX ******************************/
-        lblColor = new JLabel("Text color:");
+        lblColor = new JLabel(LABEL_EDGE_TEXT_COLOR);
         lblColor.setHorizontalAlignment(SwingConstants.LEFT);
-        lblColor.setBounds(6, 67, 84, 14);
         add(lblColor);
 
         comboBoxFontColor = new ColorComboBox();
@@ -141,17 +140,16 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** POSITION SPINNER ****************************/
-        lblPosition = new JLabel("Position:");
+        lblPosition = new JLabel(StringLiterals.LABEL_EDGE_POSITION);
         lblPosition.setHorizontalAlignment(SwingConstants.LEFT);
-        lblPosition.setBounds(26, 92, 64, 14);
         add(lblPosition);
 
         MIN_SIZE = 0;
         MAX_SIZE = 99;
         String[] positions = new String[MAX_SIZE - MIN_SIZE + 2];
-        positions[0] = new String(" ");
+        positions[0] = StringLiterals.EMPTY_VALUE;
         for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++)
-            positions[i - MIN_SIZE + 1] = new String(i + " %");
+            positions[i - MIN_SIZE + 1] = i + StringLiterals.PERCENT_SUFFIX;
 
         spinnerPosition = new JSpinner();
         spinnerPosition.setModel(new SpinnerListModel(positions));
@@ -159,7 +157,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         spinnerPosition.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 String value = (String) spinnerPosition.getValue();
-                value = value.substring(0, value.indexOf(" "));
+                value = value.substring(0, value.indexOf(StringLiterals.EMPTY_VALUE));
                 try {
                     int newValue = Integer.parseInt(value);
                     if (model.getPosition() != newValue) {
@@ -169,7 +167,7 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
                         if (model.getPosition() != -1)
-                            spinnerPosition.setValue(model.getPosition() + " px");
+                            spinnerPosition.setValue(model.getPosition() + StringLiterals.PX_SUFFIX);
                     } else {
                         spinnerPosition.setValue(" ");
                         model.setPosition(-1);
@@ -205,17 +203,16 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         MIN_SIZE = 0;
         MAX_SIZE = 99;
         String[] distances = new String[MAX_SIZE - MIN_SIZE + 2];
-        distances[0] = new String(" ");
+        distances[0] = StringLiterals.EMPTY_VALUE;
         for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++)
-            distances[i - MIN_SIZE + 1] = new String(i + " px");
+            distances[i - MIN_SIZE + 1] = i + StringLiterals.PX_SUFFIX;
 
         spinnerDistance = new JSpinner();
         spinnerDistance.setModel(new SpinnerListModel(distances));
-        spinnerDistance.setBounds(101, 38, 50, 22);
         spinnerDistance.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 String value = (String) spinnerDistance.getValue();
-                value = value.substring(0, value.indexOf(" "));
+                value = value.substring(0, value.indexOf(StringLiterals.EMPTY_VALUE));
                 try {
                     int newValue = Integer.parseInt(value);
                     if (model.getSpacing() != newValue) {
@@ -225,9 +222,9 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
                 } catch (NumberFormatException e) {
                     if (changedByUser) {
                         if (model.getSpacing() != -1)
-                            spinnerDistance.setValue(model.getSpacing() + " px");
+                            spinnerDistance.setValue(model.getSpacing() + StringLiterals.PX_SUFFIX);
                     } else {
-                        spinnerDistance.setValue(" ");
+                        spinnerDistance.setValue(StringLiterals.EMPTY_VALUE);
                         model.setSpacing(-1);
                     }
                 }
@@ -237,23 +234,19 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** PLACEMENT COMBOBOX **************************/
-        lblPlace = new JLabel("Placement:");
+        lblPlace = new JLabel(StringLiterals.LABEL_EDGE_PLACEMENT);
         lblPlace.setHorizontalAlignment(SwingConstants.LEFT);
-        lblPlace.setBounds(15, 142, 75, 14);
         add(lblPlace);
 
-        Option[] labelTypes = new Option[]{new Option(PropertyModel.EMPTY, " "), new Option(LabelTopPlacement.BELOW.getValue(), "below"),
-                new Option(LabelTopPlacement.ABOVE.getValue(), "above")};
-        comboBoxPlace = new JComboBox<Option>(labelTypes);
-        comboBoxPlace.setBounds(101, 139, 81, 20);
+        comboBoxPlace = new JComboBox<>(LabelTopPlacement.values());
         comboBoxPlace.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                int newValue = ((Option) comboBoxPlace.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.getTopPlacement() != newValue) || (!changedByUser)) {
+                LabelTopPlacement newValue = ((LabelTopPlacement) comboBoxPlace.getSelectedItem());
+                if ((!newValue.isEmpty()) && (model.getTopPlacement() != newValue) || (!changedByUser)) {
                     model.setTopPlacement(newValue);
                     changed();
                 } else {
-                    comboBoxPlace.setSelectedIndex(model.getTopPlacement() + 1);
+                    comboBoxPlace.setSelectedItem(model.getTopPlacement());
                 }
             }
         });
@@ -261,23 +254,19 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
         /**************************** ROTATION COMBOBOX ***************************/
-        lblRotation = new JLabel("Rotation");
+        lblRotation = new JLabel(StringLiterals.LABEL_EDGE_ROTATION);
         lblRotation.setHorizontalAlignment(SwingConstants.LEFT);
-        lblRotation.setBounds(6, 167, 84, 14);
         add(lblRotation);
 
-        labelTypes[1] = new Option(LabelHorizontalPlacement.TANGENT.getValue(), "tangent");
-        labelTypes[2] = new Option(LabelHorizontalPlacement.LEVEL.getValue(), "level");
-        comboBoxRotation = new JComboBox<Option>(labelTypes);
-        comboBoxRotation.setBounds(101, 164, 80, 20);
+        comboBoxRotation = new JComboBox<LabelHorizontalPlacement>(LabelHorizontalPlacement.values());
         comboBoxRotation.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                int newValue = ((Option) comboBoxRotation.getSelectedItem()).getValue();
-                if ((newValue != -1) && (model.getHorizontalPlacement() != newValue) || (!changedByUser)) {
+                LabelHorizontalPlacement newValue = ((LabelHorizontalPlacement) comboBoxRotation.getSelectedItem());
+                if ((!newValue.isEmpty()) && (model.getHorizontalPlacement() != newValue) || (!changedByUser)) {
                     model.setHorizontalPlacement(newValue);
                     changed();
                 } else {
-                    comboBoxRotation.setSelectedIndex(model.getHorizontalPlacement() + 1);
+                    comboBoxRotation.setSelectedItem(model.getHorizontalPlacement());
                 }
             }
         });

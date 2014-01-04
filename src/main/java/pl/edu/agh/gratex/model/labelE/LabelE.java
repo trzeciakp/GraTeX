@@ -3,9 +3,9 @@ package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.properties.IsLoop;
 import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
 import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -36,7 +36,7 @@ public class LabelE extends GraphElement {
     @Override
     public PropertyModel getModel() {
         LabelEdgePropertyModel pm = (LabelEdgePropertyModel) propertyModel.getCopy();
-        pm.setLoop(owner.isLoop() ? PropertyModel.YES : PropertyModel.NO);
+        pm.setLoop(owner.isLoop() ? IsLoop.YES : IsLoop.NO);
         return pm;
     }
 
@@ -101,35 +101,39 @@ public class LabelE extends GraphElement {
     }
 
     public boolean isTopPlacement() {
-        return propertyModel.getTopPlacement() == 1;
+        //TODO?
+        return propertyModel.getTopPlacement() == LabelTopPlacement.ABOVE;
     }
 
     public void setTopPlacement(boolean topPlacement) {
-        propertyModel.setTopPlacement(topPlacement ? 1 : 0);
+        //TODO?
+        propertyModel.setTopPlacement(topPlacement ? LabelTopPlacement.ABOVE : LabelTopPlacement.BELOW);
     }
 
     public void setTopPlacement(LabelTopPlacement topPlacement) {
-        propertyModel.setTopPlacement((topPlacement == LabelTopPlacement.ABOVE) ? 1 : 0);
+        propertyModel.setTopPlacement(topPlacement);
     }
 
     public LabelTopPlacement getTopPlacement() {
-        return (propertyModel.getTopPlacement() == 1 ? LabelTopPlacement.ABOVE: LabelTopPlacement.BELOW);
+        return propertyModel.getTopPlacement();
     }
 
     public boolean isHorizontalPlacement() {
-        return propertyModel.getHorizontalPlacement() == 1;
+        //TODO?
+        return propertyModel.getHorizontalPlacement() == LabelHorizontalPlacement.LEVEL;
     }
 
     public void setHorizontalPlacement(boolean horizontalPlacement) {
-        propertyModel.setHorizontalPlacement(horizontalPlacement ? 1 : 0);
+        //TODO?
+        propertyModel.setHorizontalPlacement(horizontalPlacement ? LabelHorizontalPlacement.LEVEL : LabelHorizontalPlacement.TANGENT);
     }
 
     public void setHorizontalPlacement(LabelHorizontalPlacement horizontalPlacement) {
-        propertyModel.setHorizontalPlacement((horizontalPlacement == LabelHorizontalPlacement.LEVEL) ? 1 : 0);
+        propertyModel.setHorizontalPlacement(horizontalPlacement);
     }
 
     public LabelHorizontalPlacement getHorizontalPlacement() {
-        return (propertyModel.getHorizontalPlacement() == 1 ? LabelHorizontalPlacement.LEVEL: LabelHorizontalPlacement.TANGENT);
+        return propertyModel.getHorizontalPlacement();
     }
 
     public int getPosX() {

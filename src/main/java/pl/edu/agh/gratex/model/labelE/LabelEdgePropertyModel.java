@@ -1,25 +1,27 @@
 package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.IsLoop;
+import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
+import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 
 import java.awt.*;
-import java.util.LinkedList;
 
 public class LabelEdgePropertyModel extends PropertyModel {
     private String text = "";
     private Color fontColor = null;
     private int position = PropertyModel.EMPTY;
     private int spacing = PropertyModel.EMPTY;
-    private int topPlacement = PropertyModel.EMPTY;
-    private int horizontalPlacement = PropertyModel.EMPTY;
-    private int isLoop = PropertyModel.EMPTY;
+    private LabelHorizontalPlacement horizontalPlacement = LabelHorizontalPlacement.EMPTY;
+    private IsLoop isLoop = IsLoop.EMPTY;
+    private LabelTopPlacement topPlacement = LabelTopPlacement.EMPTY;
 
     @Override
     public PropertyModel getCopy() {
         LabelEdgePropertyModel result = new LabelEdgePropertyModel();
 
         if (text != null) {
-            result.setText(new String(text));
+            result.setText(text);
         }
         if (fontColor != null) {
             result.setFontColor(new Color(fontColor.getRGB()));
@@ -38,7 +40,7 @@ public class LabelEdgePropertyModel extends PropertyModel {
         LabelEdgePropertyModel model = (LabelEdgePropertyModel) pm;
 
         if (model.getText() != null) {
-            text = new String(model.getText());
+            text = model.getText();
         }
 
         if (model.getFontColor() != null) {
@@ -53,11 +55,11 @@ public class LabelEdgePropertyModel extends PropertyModel {
             spacing = model.getSpacing();
         }
 
-        if (model.getTopPlacement() > -1) {
+        if (!model.getTopPlacement().isEmpty()) {
             topPlacement = model.getTopPlacement();
         }
 
-        if (model.getHorizontalPlacement() > -1) {
+        if (!model.getHorizontalPlacement().isEmpty()) {
             horizontalPlacement = model.getHorizontalPlacement();
         }
     }
@@ -85,15 +87,15 @@ public class LabelEdgePropertyModel extends PropertyModel {
         }
 
         if (model.topPlacement != topPlacement) {
-            topPlacement = -1;
+            topPlacement = LabelTopPlacement.EMPTY;
         }
 
         if (model.horizontalPlacement != horizontalPlacement) {
-            horizontalPlacement = -1;
+            horizontalPlacement = LabelHorizontalPlacement.EMPTY;
         }
 
         if (model.isLoop != isLoop) {
-            isLoop = -1;
+            isLoop = IsLoop.EMPTY;
         }
     }
 
@@ -129,27 +131,28 @@ public class LabelEdgePropertyModel extends PropertyModel {
         this.spacing = spacing;
     }
 
-    public int getTopPlacement() {
+    public LabelTopPlacement getTopPlacement() {
         return topPlacement;
     }
 
-    public void setTopPlacement(int topPlacement) {
+    public void setTopPlacement(LabelTopPlacement topPlacement) {
         this.topPlacement = topPlacement;
     }
 
-    public int getHorizontalPlacement() {
+    public void setHorizontalPlacement(LabelHorizontalPlacement horizontalPlacement) {
+       this.horizontalPlacement = horizontalPlacement;
+    }
+
+    public LabelHorizontalPlacement getHorizontalPlacement() {
         return horizontalPlacement;
+
     }
 
-    public void setHorizontalPlacement(int horizontalPlacement) {
-        this.horizontalPlacement = horizontalPlacement;
-    }
-
-    public int getLoop() {
+    public IsLoop getLoop() {
         return isLoop;
     }
 
-    public void setLoop(int loop) {
-        isLoop = loop;
+    public void setLoop(IsLoop isLoop) {
+        this.isLoop = isLoop;
     }
 }

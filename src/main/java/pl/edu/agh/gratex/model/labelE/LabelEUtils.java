@@ -2,6 +2,8 @@ package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.properties.LabelHorizontalPlacement;
+import pl.edu.agh.gratex.model.properties.LabelTopPlacement;
 import pl.edu.agh.gratex.utils.DrawingTools;
 import pl.edu.agh.gratex.utils.Geometry;
 
@@ -121,8 +123,8 @@ public class LabelEUtils {
         Edge owner = labelE.getOwner();
 
         if (owner.getVertexA() == owner.getVertexB()) {
-            labelE.setHorizontalPlacement(true);
-            labelE.setTopPlacement(true);
+            labelE.setHorizontalPlacement(LabelHorizontalPlacement.LEVEL);
+            labelE.setTopPlacement(LabelTopPlacement.ABOVE);
             if (labelE.getPosition() < 34) {
                 labelE.setPosition(25);
             } else if (labelE.getPosition() < 67) {

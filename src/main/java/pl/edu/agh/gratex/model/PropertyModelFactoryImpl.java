@@ -4,9 +4,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
-import pl.edu.agh.gratex.model.properties.ArrowType;
-import pl.edu.agh.gratex.model.properties.LabelPosition;
-import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.model.properties.*;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
 import java.awt.*;
@@ -87,8 +85,8 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setFontColor(Color.black);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setPosition(PropertyModel.EMPTY);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setSpacing(5);
-        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setTopPlacement(1);
-        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(0);
+        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setTopPlacement(LabelTopPlacement.ABOVE);
+        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(LabelHorizontalPlacement.TANGENT);
     }
 
 
