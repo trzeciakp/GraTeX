@@ -64,7 +64,7 @@ public class VertexParserTest {
     @Test
     public void testToLatexFull() throws Exception {
         Mockito.when(MOCKED_VERTEX.getNumber()).thenReturn(EXPECTED_NUMBER_FULL);
-        Mockito.when(MOCKED_VERTEX.getShapeENUM()).thenReturn(EXPECTED_SHAPE_TYPE_FULL);
+        Mockito.when(MOCKED_VERTEX.getShape()).thenReturn(EXPECTED_SHAPE_TYPE_FULL);
         Mockito.when(MOCKED_VERTEX.getRadius()).thenReturn(getIntFromPt(EXPECTED_SIZE_IN_PT_FULL/2));
         Mockito.when(MOCKED_VERTEX.getVertexColor()).thenReturn(EXPECTED_COLOR);
         Mockito.when(MOCKED_VERTEX.getLineWidth()).thenReturn(EXPECTED_LINE_WIDTH_FULL);
@@ -89,7 +89,7 @@ public class VertexParserTest {
         Vertex vertex = (Vertex) testObject.parseToGraph(TEST_STRING_FULL, MOCKED_GRAPH);
 
         assertEquals(EXPECTED_NUMBER_FULL, vertex.getNumber());
-        assertEquals(EXPECTED_SHAPE_TYPE_FULL, vertex.getShapeENUM());
+        assertEquals(EXPECTED_SHAPE_TYPE_FULL, vertex.getShape());
         assertEquals(getIntFromPt(EXPECTED_SIZE_IN_PT_FULL/2), vertex.getRadius());
         assertEquals(getIntFromPt(EXPECTED_POS_X_IN_PT_FULL), vertex.getPosX());
         assertEquals(getIntFromPt(EXPECTED_POS_Y_IN_PT_FULL), vertex.getPosY());

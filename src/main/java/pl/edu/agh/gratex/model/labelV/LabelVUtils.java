@@ -1,9 +1,8 @@
 package pl.edu.agh.gratex.model.labelV;
 
 import pl.edu.agh.gratex.constants.Const;
+import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.utils.DrawingTools;
-import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -33,7 +32,7 @@ public class LabelVUtils {
         int descent = fm.getDescent();
         int spacing = labelV.getSpacing();
 
-        Point exitPoint = Geometry.calculateEdgeExitPoint(labelV.getOwner(), (450 - 45 * labelV.getLabelPosition().getValue()) % 360);
+        Point exitPoint = EdgeUtils.calculateEdgeExitPoint(labelV.getOwner(), (450 - 45 * labelV.getLabelPosition().getValue()) % 360);
 
         double drawPosX = 0.0;
         double drawPosY = 0.0;

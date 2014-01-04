@@ -52,7 +52,7 @@ public class ShapeVertexParser extends ParseElement {
     @Override
     public String getProperty(GraphElement element) {
         Vertex vertex = (Vertex) element;
-        ShapeType shape = vertex.getShapeENUM();
+        ShapeType shape = vertex.getShape();
         return (shape == ShapeType.CIRCLE?"circle":"regular polygon, regular polygon sides="+shape.getSides());
     }
 }
