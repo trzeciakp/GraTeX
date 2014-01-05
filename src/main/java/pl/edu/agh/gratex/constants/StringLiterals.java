@@ -207,19 +207,17 @@ public class StringLiterals {
     public final static String INFO_CANNOT_CREATE_VERTEX_BOUNDARY = "cannot createEmptyModel a vertex here - too close to page edge";
     public final static String INFO_CANNOT_CREATE_VERTEX_COLLISION = "cannot createEmptyModel a vertex here - too close to another vertex";
 
-    public final static String INFO_CHOOSE_EDGE_START = "Choose a starting vertex for the edge (click)";
-    public final static String INFO_CHOOSE_EDGE_END = "Now choose the target vertex (click)";
-    public final static String INFO_EDGE_ADDING_CANCELLED = "Adding edge cancelled";
+    public final static String INFO_CHOOSE_EDGE_START = "choose a starting vertex for the edge (click)";
+    public final static String INFO_CHOOSE_EDGE_END = "now choose the target vertex (click)";
+    public final static String INFO_EDGE_ADDING_CANCELLED = "adding edge cancelled";
 
-    public final static String INFO_NOTHING_TO_REMOVE = "Nothing to remove";
-    public final static String INFO_CHOOSE_VERTEX_FOR_LABEL = "Choose a vertex to attach label to";
-    public final static String INFO_CANNOT_CREATE_LABEL_V_EXISTS = "Cannot create the label, as this vertex already has one";
-    public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "Cannot create the label, as this edge already has one";
-    public final static String INFO_CANNOT_CREATE_EDGE_EXISTS = "Cannot create the edge, such edge already exists";
-    public final static String INFO_CANNOT_MOVE_EDGE_EXISTS = "Cannot move the edge here, such edge already exists";
-    public final static String INFO_CHOOSE_EDGE_FOR_LABEL = "Choose an edge to attach label to";
+    public final static String INFO_NOTHING_TO_REMOVE = "nothing to remove";
+    public final static String INFO_CHOOSE_VERTEX_FOR_LABEL = "choose a vertex to attach label to";
+    public final static String INFO_CANNOT_CREATE_LABEL_V_EXISTS = "cannot create the label, as this vertex already has one";
+    public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "cannot create the label, as this edge already has one";
+    public final static String INFO_CHOOSE_EDGE_FOR_LABEL = "choose an edge to attach label to";
 
-    public final static String INFO_CHOOSE_BOUNDARY_END = "Choose opposite corner for the boundary";
+    public final static String INFO_CHOOSE_BOUNDARY_END = "choose opposite corner for the boundary";
 
     // SaveFileDialog
     public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";
@@ -272,12 +270,12 @@ public class StringLiterals {
                 break;
             }
             case REMOVE: {
-                tipPart3 = " Left-click to removeFromGraph " + tipPart4b + " Click and drag to remove all items in the area.";
+                tipPart3 = " Left-click to remove " + tipPart4b + " Click and drag to remove all items in the area.";
                 break;
             }
             case SELECT: {
                 tipPart3 = " Left-click to select " + tipPart4b
-                        + " Click and drag to select all items in the area. CTRL + click/drag to extend selection.";
+                        + " Drag to select all items in the area. CTRL + click/drag to extend selection. Move selected items by dragging them.";
                 break;
             }
         }

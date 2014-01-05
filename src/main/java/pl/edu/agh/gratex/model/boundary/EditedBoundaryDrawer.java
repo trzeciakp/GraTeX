@@ -53,11 +53,11 @@ public class EditedBoundaryDrawer implements Drawer {
         int y = Math.min(outsideY, outsideY + height);
         g.fillRect(x, y, Math.abs(width), Math.abs(height));
 
-        int arrowTipX = (int) (outsideX + width * (1 - Const.BOUNDARY_CORNER_ARROW_SIZE_FACTOR) / 2.0);
-        int arrowTipY = (int) (outsideY + height * (1 - Const.BOUNDARY_CORNER_ARROW_SIZE_FACTOR) / 2.0);
+        int arrowTipX = (int) (outsideX + width * (1 - Const.BOUNDARY_ARROW_SIZE_FACTOR) / 2.0);
+        int arrowTipY = (int) (outsideY + height * (1 - Const.BOUNDARY_ARROW_SIZE_FACTOR) / 2.0);
 
-        int arrowEndX = (int) (outsideX + width * (1 + Const.BOUNDARY_CORNER_ARROW_SIZE_FACTOR) / 2.0);
-        int arrowEndY = (int) (outsideY + height * (1 + Const.BOUNDARY_CORNER_ARROW_SIZE_FACTOR) / 2.0);
+        int arrowEndX = (int) (outsideX + width * (1 + Const.BOUNDARY_ARROW_SIZE_FACTOR) / 2.0);
+        int arrowEndY = (int) (outsideY + height * (1 + Const.BOUNDARY_ARROW_SIZE_FACTOR) / 2.0);
 
         g.setColor(arrowColor);
         int lineWidth = (2500 + Math.abs(width * height)) / 2500;

@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.utils;
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
@@ -13,8 +14,14 @@ public class DrawingTools {
         }
     }
 
-    public static Color getReverseColor(Color color) {
-        return new Color(255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue());
+    public static Color getBoundaryCornerColor(Color color) {
+        float hsb[] = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+
+        float newBrightness = hsb[2] < 0.5f ?
+                hsb[2] + Const.BOUNDARY_COLOR_BRIGHTNESS_DIFFERENCE :
+                hsb[2] - Const.BOUNDARY_COLOR_BRIGHTNESS_DIFFERENCE;
+
+        return Color.getHSBColor(hsb[0], hsb[1], newBrightness);
     }
 
     public static Stroke getStroke(LineType lineType, int lineWidth, double perimeter) {

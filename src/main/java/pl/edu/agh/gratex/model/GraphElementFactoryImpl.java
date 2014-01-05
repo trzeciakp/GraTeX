@@ -41,7 +41,7 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
             case BOUNDARY:
                 result = new Boundary(graph, propertyModel);
         }
-        result.setDrawer(drawerFactory.createDefaultDrawable(type));
+        result.setDrawer(drawerFactory.createDefaultDrawer(type));
         return result;
     }
 

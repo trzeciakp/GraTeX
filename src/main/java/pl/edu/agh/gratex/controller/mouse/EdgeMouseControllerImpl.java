@@ -15,8 +15,6 @@ import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 
 public class EdgeMouseControllerImpl extends GraphElementMouseController {
@@ -76,9 +74,9 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 currentlyAddedEdge.setRelativeEdgeAngle(angle);
             }
             if (currentlyAddedEdge.getRelativeEdgeAngle() != 0) {
-                currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDummyEdgeDrawable());
+                currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDummyEdgeDrawer());
             } else {
-                currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDefaultDrawable(GraphElementType.EDGE));
+                currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDefaultDrawer(GraphElementType.EDGE));
             }
             return currentlyAddedEdge;
         }
@@ -102,7 +100,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_END));
             } else {
                 currentlyAddedEdge.setVertexB(vertex);
-                currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDefaultDrawable(GraphElementType.EDGE));
+                currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDefaultDrawer(GraphElementType.EDGE));
                 new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
                 currentlyAddedEdge = null;
             }
@@ -209,19 +207,10 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void finishMoving() {
         if (currentlyDraggedEdge != null) {
-            boolean restoreState = false;
-            //if (checkIfEdgeExists(currentlyDraggedEdge)) {
-            //    generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_MOVE_EDGE_EXISTS));
-            //    restoreState = true;
-            //} else {
-                if (currentlyDraggedEdge.getVertexA() != edgeDragDummy && currentlyDraggedEdge.getVertexB() != edgeDragDummy) {
-                    currentDragOperation.finish();
-                } else {
-                    restoreState = true;
-                }
-            //}
-            if (restoreState) {
-                // Restore original edge state (it was dropped in mid air or moving was not permitted)
+            if (currentlyDraggedEdge.getVertexA() != edgeDragDummy && currentlyDraggedEdge.getVertexB() != edgeDragDummy) {
+                currentDragOperation.finish();
+            } else {
+                // Restore original edge state (it was dropped in mid air)
                 try {
                     generalController.getParseController().getEdgeParser().updateElementWithCode(currentlyDraggedEdge, initialLatexCodeOfDraggedEdge);
                 } catch (Exception e) {
@@ -232,19 +221,5 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             changingEdgeAngle = false;
             currentlyDraggedEdge = null;
         }
-    }
-
-    private boolean checkIfEdgeExists(Edge edge) {
-        edge.updateLocation();
-        String latexCode = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(edge);
-        boolean result = false;
-        for (GraphElement graphElement : generalController.getGraph().getElements(GraphElementType.EDGE)) {
-            String existingLatexCode = generalController.getParseController().getParserByElementType(GraphElementType.EDGE).parseToLatex(graphElement);
-            if (existingLatexCode.equals(latexCode) && graphElement != edge) {
-                result = true;
-                break;
-            }
-        }
-        return result;
     }
 }

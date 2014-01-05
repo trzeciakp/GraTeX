@@ -37,6 +37,8 @@ public enum OperationType {
                 return REMOVE_LABEL_VERTEX;
             case LABEL_EDGE:
                 return REMOVE_LABEL_EDGE;
+            case BOUNDARY:
+                return REMOVE_BOUNDARY;
             default:
                 return null;
         }
