@@ -12,16 +12,8 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.boundary.BoundaryUtils;
-import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.edge.EdgeUtils;
-import pl.edu.agh.gratex.model.graph.GraphUtils;
-import pl.edu.agh.gratex.model.vertex.Vertex;
-import pl.edu.agh.gratex.model.vertex.VertexUtils;
-import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
 
 
 public class BoundaryMouseController extends GraphElementMouseController {
@@ -54,8 +46,8 @@ public class BoundaryMouseController extends GraphElementMouseController {
     @Override
     public GraphElement getCurrentlyAddedElement() {
         if (currentlyAddedBoundary != null) {
-            currentlyAddedBoundary.setLeftCornerX(Math.min(mouseX, startPointX));
-            currentlyAddedBoundary.setLeftCornerY(Math.min(mouseY, startPointY));
+            currentlyAddedBoundary.setTopLeftX(Math.min(mouseX, startPointX));
+            currentlyAddedBoundary.setTopLeftY(Math.min(mouseY, startPointY));
             currentlyAddedBoundary.setWidth(Math.abs(mouseX - startPointX));
             currentlyAddedBoundary.setHeight(Math.abs(mouseY - startPointY));
             return currentlyAddedBoundary;
@@ -69,14 +61,14 @@ public class BoundaryMouseController extends GraphElementMouseController {
             currentlyAddedBoundary = (Boundary) getGraphElementFactory().create(GraphElementType.BOUNDARY, generalController.getGraph());
             // TODO To jest tutaj do testow
             currentlyAddedBoundary.setDrawer(getGraphElementFactory().getDrawerFactory().createEditedBoundaryDrawable());
-            currentlyAddedBoundary.setLeftCornerX(mouseX);
-            currentlyAddedBoundary.setLeftCornerY(mouseY);
+            currentlyAddedBoundary.setTopLeftX(mouseX);
+            currentlyAddedBoundary.setTopLeftY(mouseY);
             startPointX = mouseX;
             startPointY = mouseY;
             generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_BOUNDARY_END));
         } else {
-            currentlyAddedBoundary.setLeftCornerX(Math.min(mouseX, startPointX));
-            currentlyAddedBoundary.setLeftCornerY(Math.min(mouseY, startPointY));
+            currentlyAddedBoundary.setTopLeftX(Math.min(mouseX, startPointX));
+            currentlyAddedBoundary.setTopLeftY(Math.min(mouseY, startPointY));
             currentlyAddedBoundary.setWidth(Math.abs(mouseX - startPointX));
             currentlyAddedBoundary.setHeight(Math.abs(mouseY - startPointY));
             new CreationRemovalOperation(generalController, currentlyAddedBoundary, OperationType.ADD_BOUNDARY, StringLiterals.INFO_BOUNDARY_ADD, true);
@@ -97,8 +89,8 @@ public class BoundaryMouseController extends GraphElementMouseController {
         currentlyDraggedBoundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, mouseX, mouseY);
         currentDragOperation = new AlterationOperation(generalController, currentlyDraggedBoundary, OperationType.MOVE_BOUNDARY, StringLiterals.INFO_BOUNDARY_MOVE);
 
-        int topLeftX = currentlyDraggedBoundary.getLeftCornerX();
-        int topLeftY = currentlyDraggedBoundary.getLeftCornerY();
+        int topLeftX = currentlyDraggedBoundary.getTopLeftX();
+        int topLeftY = currentlyDraggedBoundary.getTopLeftY();
         int width = currentlyDraggedBoundary.getWidth();
         int height = currentlyDraggedBoundary.getHeight();
         int cornerWidth = (int) (width * Const.BOUNDARY_CORNER_LENGTH_FACTOR);
@@ -124,21 +116,21 @@ public class BoundaryMouseController extends GraphElementMouseController {
             draggedCorner = DraggedCorner.NONE;
             startPointX = mouseX;
             startPointY = mouseY;
-            initialTopLeftCornerX = currentlyDraggedBoundary.getLeftCornerX();
-            initialTopLeftCornerY = currentlyDraggedBoundary.getLeftCornerY();
+            initialTopLeftCornerX = currentlyDraggedBoundary.getTopLeftX();
+            initialTopLeftCornerY = currentlyDraggedBoundary.getTopLeftY();
         }
     }
 
     private void continueMoving() {
         switch (draggedCorner) {
             case NONE: {
-                int oldTopLeftCornerX = currentlyDraggedBoundary.getLeftCornerX();
-                int oldTopLeftCornerY = currentlyDraggedBoundary.getLeftCornerX();
-                currentlyDraggedBoundary.setLeftCornerX(initialTopLeftCornerX + mouseX - startPointX);
-                currentlyDraggedBoundary.setLeftCornerY(initialTopLeftCornerY + mouseY - startPointY);
+                int oldTopLeftCornerX = currentlyDraggedBoundary.getTopLeftX();
+                int oldTopLeftCornerY = currentlyDraggedBoundary.getTopLeftX();
+                currentlyDraggedBoundary.setTopLeftX(initialTopLeftCornerX + mouseX - startPointX);
+                currentlyDraggedBoundary.setTopLeftY(initialTopLeftCornerY + mouseY - startPointY);
                 if (!BoundaryUtils.fitsIntoPage(currentlyDraggedBoundary)) {
-                    currentlyDraggedBoundary.setLeftCornerX(oldTopLeftCornerX);
-                    currentlyDraggedBoundary.setLeftCornerY(oldTopLeftCornerY);
+                    currentlyDraggedBoundary.setTopLeftX(oldTopLeftCornerX);
+                    currentlyDraggedBoundary.setTopLeftY(oldTopLeftCornerY);
                 }
                 break;
             }

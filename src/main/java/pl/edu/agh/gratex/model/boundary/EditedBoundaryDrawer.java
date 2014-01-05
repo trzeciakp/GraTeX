@@ -1,7 +1,6 @@
 package pl.edu.agh.gratex.model.boundary;
 
 import pl.edu.agh.gratex.constants.Const;
-import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -17,8 +16,8 @@ public class EditedBoundaryDrawer implements Drawer {
     public void draw(GraphElement graphElement, Graphics graphics) {
         Boundary boundary = (Boundary) graphElement;
         Graphics2D g = (Graphics2D) graphics.create();
-        int topLeftX = boundary.getLeftCornerX();
-        int topLeftY = boundary.getLeftCornerY();
+        int topLeftX = boundary.getTopLeftX();
+        int topLeftY = boundary.getTopLeftY();
         int width = boundary.getWidth();
         int height = boundary.getHeight();
 

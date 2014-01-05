@@ -5,8 +5,6 @@ import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.properties.LineType;
-import pl.edu.agh.gratex.model.properties.ShapeType;
-import pl.edu.agh.gratex.model.vertex.VertexUtils;
 import pl.edu.agh.gratex.utils.DrawingTools;
 
 import java.awt.*;
@@ -25,8 +23,8 @@ public class BoundaryDrawer implements Drawer {
     public void draw(GraphElement graphElement, Graphics graphics) {
         Boundary boundary = (Boundary) graphElement;
         Graphics2D g = (Graphics2D) graphics.create();
-        int topLeftX = boundary.getLeftCornerX();
-        int topLeftY = boundary.getLeftCornerY();
+        int topLeftX = boundary.getTopLeftX();
+        int topLeftY = boundary.getTopLeftY();
         int width = boundary.getWidth();
         int height = boundary.getHeight();
 

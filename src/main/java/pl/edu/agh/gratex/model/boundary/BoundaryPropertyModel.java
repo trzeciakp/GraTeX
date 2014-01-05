@@ -20,7 +20,7 @@ public class BoundaryPropertyModel extends PropertyModel {
         if(getFillColor() == null || !getFillColor().equals(boundaryModel.getFillColor())) {
             setFillColor(null);
         }
-        if(getLineColor() == null || !getFillColor().equals(boundaryModel.getLineColor())) {
+        if(getLineColor() == null || !getLineColor().equals(boundaryModel.getLineColor())) {
             setLineColor(null);
         }
         if(getLineWidth() != boundaryModel.getLineWidth()) {
