@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.model.hyperedge;
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
@@ -39,10 +40,21 @@ public class HyperedgeDrawer implements Drawer {
         int jointRadius = hyperedge.getJointSize();
         Color jointColor = hyperedge.getJointColor();
 
+        if (selectionController.selectionContains(hyperedge)) {
+            g.setColor(Const.SELECTION_COLOR);
+            g.setStroke(new BasicStroke(lineWidth * 2 + 5));
+            for (Vertex vertex : hyperedge.getConnectedVertices()) {
+                g.drawLine(vertex.getPosX(), vertex.getPosY(), middleX, middleY);
+            }
 
+            g.setStroke(new BasicStroke(1));
+            Shape joint = VertexUtils.getVertexShape(jointShape, jointRadius + 1 + jointRadius / 4, middleX, middleY);
+            g.fill(joint);
+        }
+
+        g.setColor(DrawingTools.getDrawingColor(lineColor, hyperedge.isDummy()));
+        g.setStroke(DrawingTools.getStroke(lineType, lineWidth, 0.0));
         for (Vertex vertex : hyperedge.getConnectedVertices()) {
-            g.setColor(DrawingTools.getDrawingColor(lineColor, hyperedge.isDummy()));
-            g.setStroke(DrawingTools.getStroke(lineType, lineWidth, 0.0));
             g.drawLine(vertex.getPosX(), vertex.getPosY(), middleX, middleY);
         }
 
