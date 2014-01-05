@@ -22,13 +22,15 @@ public class BoundaryLineWidthParseElement extends LineWidthParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         Boundary boundary = (Boundary) element;
-        boundary.setLineWidth((match == null ? 0 : getX(match)));
+        //boundary.setLineWidth((match == null ? 0 : getX(match)));
+        boundary.setLineWidth(getX(match));
     }
 
     @Override
     public String getProperty(GraphElement element) {
         Boundary boundary = (Boundary) element;
         int lineWidth = boundary.getLineWidth();
-        return (lineWidth == 0 ? "":", " + getProperty(lineWidth));
+        //return (lineWidth == 0 ? "":", " + getProperty(lineWidth));
+        return ", " + getProperty(lineWidth);
     }
 }

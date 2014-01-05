@@ -229,11 +229,11 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
                 LineType oldLineType = model.getLineType();
                 if ((newValue != LineType.EMPTY) && (oldLineType != newValue) || (!changedByUser)) {
                     model.setLineType(newValue);
-                    if(newValue == LineType.NONE) {
+                    /*if(newValue == LineType.NONE) {
                         model.setLineWidth(0);
                     } else if (oldLineType == LineType.NONE) {
                         model.setLineWidth(1);
-                    }
+                    }*/
                     changed();
                 } else {
                     comboBoxLineType.setSelectedItem(oldLineType);

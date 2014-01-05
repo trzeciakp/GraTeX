@@ -25,6 +25,7 @@ public class BoundaryParser extends GraphElementParser {
     @Override
     public List<ParseElement> createParseList() {
         List<ParseElement> parseList = new ArrayList<>();
+        parseList.add(new StaticParseElement("\\begin{scope}[on background layer] ", false));
         parseList.add(new StaticParseElement("\\node [", false));
         parseList.add(new BoundaryResolutionParseElement());
         parseList.add(new BoundaryLineWidthParseElement());
@@ -32,7 +33,7 @@ public class BoundaryParser extends GraphElementParser {
         parseList.add(new BoundaryFillColorParseElement(colorMapper));
         parseList.add(new StaticParseElement("] at ", false));
         parseList.add(new BoundaryPositionParseElement());
-        parseList.add(new StaticParseElement(";", false));
+        parseList.add(new StaticParseElement("{};\\end{scope}", false));
         return parseList;
     }
 

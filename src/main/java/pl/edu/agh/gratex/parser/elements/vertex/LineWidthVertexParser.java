@@ -15,21 +15,25 @@ public class LineWidthVertexParser extends LineWidthParseElement {
         return ", " + super.regex();
     }
 
+/*
     @Override
     public boolean isOptional() {
         return true;
     }
+*/
 
     @Override
     public void setProperty(String match, GraphElement element) {
         Vertex vertex = (Vertex) element;
-        vertex.setLineWidth((match == null ? 0 : getX(match)));
+        vertex.setLineWidth(getX(match));
+        //vertex.setLineWidth((match == null ? 0 : getX(match)));
     }
 
     @Override
     public String getProperty(GraphElement element) {
         Vertex vertex = (Vertex) element;
         int lineWidth = vertex.getLineWidth();
-        return (lineWidth == 0 ? "":", " + getProperty(lineWidth));
+        return ", " + getProperty(lineWidth);
+        //return (lineWidth == 0 ? "":", " + getProperty(lineWidth));
     }
 }
