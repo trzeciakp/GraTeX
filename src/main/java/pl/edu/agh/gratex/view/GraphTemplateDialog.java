@@ -177,55 +177,55 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         VertexUtils.setPartOfNumeration(vertex1, true);
         vertex1.setPosX(180);
         vertex1.setPosY(240);
-        graph.getVertices().add(vertex1);
+        graph.addElement(vertex1);
 
         Vertex vertex2 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
         vertex2.setNumber(2);
         VertexUtils.setPartOfNumeration(vertex2, true);
         vertex2.setPosX(350);
         vertex2.setPosY(240);
-        graph.getVertices().add(vertex2);
+        graph.addElement(vertex2);
 
         Edge edge1 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
         edge1.setVertexA(vertex2);
         edge1.setVertexB(vertex1);
         edge1.setRelativeEdgeAngle(300);
-        graph.getEdges().add(edge1);
+        graph.addElement(edge1);
 
         Edge edge2 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
         edge2.setVertexA(vertex1);
         edge2.setVertexB(vertex1);
         edge2.setRelativeEdgeAngle(180);
-        graph.getEdges().add(edge2);
+        graph.addElement(edge2);
 
         Edge edge3 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
         edge3.setVertexA(vertex1);
         edge3.setVertexB(vertex2);
         edge3.setRelativeEdgeAngle(0);
-        graph.getEdges().add(edge3);
+        graph.addElement(edge3);
 
         LabelV labelV1 = (LabelV) graphElementFactory.create(GraphElementType.LABEL_VERTEX, graph);
         labelV1.setOwner(vertex2);
         labelV1.setLabelPosition(LabelPosition.SE);
         vertex1.setLabel(labelV1);
-        graph.getLabelsV().add(labelV1);
+        graph.addElement(labelV1);
 
         LabelE labelE1 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
         labelE1.setOwner(edge1);
         labelE1.setPosition(35);
         edge1.setLabel(labelE1);
-        graph.getLabelsE().add(labelE1);
+        graph.addElement(labelE1);
 
         LabelE labelE2 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
         labelE2.setOwner(edge2);
         edge2.setLabel(labelE2);
-        graph.getLabelsE().add(labelE2);
+        graph.addElement(labelE2);
 
         LabelE labelE3 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
         labelE3.setOwner(edge3);
         labelE3.setPosition(35);
         edge3.setLabel(labelE3);
-        graph.getLabelsE().add(labelE3);
+        graph.addElement(labelE3);
 
         setTemplateModelsToAllGraphElements();
     }

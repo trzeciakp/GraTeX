@@ -51,7 +51,7 @@ public class BoundaryPropertyModel extends PropertyModel {
     @Override
     public PropertyModel getCopy() {
         BoundaryPropertyModel result = new BoundaryPropertyModel();
-        result.setLineColor(getLineColor());
+        result.setLineWidth(getLineWidth());
         result.setLineType(getLineType());
         result.setLineColor(getLineColor());
         result.setFillColor(getFillColor());

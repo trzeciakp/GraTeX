@@ -1,7 +1,8 @@
-package pl.edu.agh.gratex.draw;
+package pl.edu.agh.gratex.model.edge;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.StringLiterals;
+import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -12,21 +13,21 @@ import java.awt.geom.Arc2D;
 /**
  *
  */
-public class DummyEdgeDrawable implements Drawable {
+public class DummyEdgeDrawer implements Drawer {
 
-    private Drawable delegatedDrawable;
+    private Drawer delegatedDrawer;
 
-    public DummyEdgeDrawable(Drawable drawable) {
-        delegatedDrawable = drawable;
+    public DummyEdgeDrawer(Drawer drawer) {
+        delegatedDrawer = drawer;
     }
 
     @Override
     public void draw(GraphElement graphElement, Graphics g) {
-        delegatedDrawable.draw(graphElement, g);
+        delegatedDrawer.draw(graphElement, g);
         drawAngleVisualisation((Edge) graphElement, g);
     }
 
-    //TODO temporarily duplicated with EdgeDrawable method. Unifying could be considered
+    //TODO temporarily duplicated with EdgeDrawer method. Unifying could be considered
     private void drawAngleVisualisation(Edge edge, Graphics g2d) {
         Vertex vertexA = edge.getVertexA();
         Vertex vertexB = edge.getVertexB();

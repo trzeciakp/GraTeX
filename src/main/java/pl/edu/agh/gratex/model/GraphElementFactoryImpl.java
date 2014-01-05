@@ -1,7 +1,6 @@
 package pl.edu.agh.gratex.model;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.draw.DrawableFactory;
 import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
@@ -14,11 +13,11 @@ import pl.edu.agh.gratex.model.vertex.Vertex;
  */
 public class GraphElementFactoryImpl implements GraphElementFactory {
 
-    private DrawableFactory drawableFactory;
+    private DrawerFactory drawerFactory;
     private PropertyModelFactory propertyModelFactory;
 
-    public GraphElementFactoryImpl(DrawableFactory drawableFactory, PropertyModelFactory propertyModelFactory) {
-        this.drawableFactory = drawableFactory;
+    public GraphElementFactoryImpl(DrawerFactory drawerFactory, PropertyModelFactory propertyModelFactory) {
+        this.drawerFactory = drawerFactory;
         this.propertyModelFactory = propertyModelFactory;
     }
 
@@ -42,16 +41,13 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
             case BOUNDARY:
                 result = new Boundary(graph, propertyModel);
         }
-        if(result != null) {
-            //result.setModel(getPropertyModelFactory().createTemplateModel(result.getType()));
-            result.setDrawable(drawableFactory.createDefaultDrawable(type));
-        }
+        result.setDrawer(drawerFactory.createDefaultDrawable(type));
         return result;
     }
 
     @Override
-    public DrawableFactory getDrawableFactory() {
-        return drawableFactory;
+    public DrawerFactory getDrawerFactory() {
+        return drawerFactory;
     }
 
     @Override

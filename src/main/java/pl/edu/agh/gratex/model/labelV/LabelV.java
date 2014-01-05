@@ -34,18 +34,13 @@ public class LabelV extends GraphElement  {
     }
 
     @Override
-    public void addToGraph() {
-        graph.getLabelsV().add(this);
+    public void finalizeAddingToGraph() {
         getOwner().setLabel(this);
-        updateLocation();
-        dummy = false;
     }
 
     @Override
-    public void removeFromGraph() {
-        graph.getLabelsV().remove(this);
+    public void finalizeRemovingFromGraph() {
         getOwner().setLabel(null);
-        dummy = true;
     }
 
     @Override

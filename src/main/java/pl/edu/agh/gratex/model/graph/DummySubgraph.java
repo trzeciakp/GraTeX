@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.model.graph;
 
+import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
@@ -111,15 +112,14 @@ public class DummySubgraph {
             if (!VertexUtils.fitsIntoPage(dummyVertex)) {
                 return false;
             }
-            for (Vertex originalVertex : graph.getVertices()) {
-                if (VertexUtils.collides(dummyVertex, originalVertex)) {
+            for (GraphElement originalVertex : graph.getElements(GraphElementType.VERTEX)) {
+                if (VertexUtils.collides(dummyVertex, (Vertex) originalVertex)) {
                     return false;
                 }
             }
         }
         return true;
     }
-
 
     private GraphElement getCopy(GraphElement graphElement) {
         try {

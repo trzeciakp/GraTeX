@@ -115,151 +115,7 @@ public class StringLiterals {
     // PanelToolbox
     public final static String COMBOBOX_PANEL_TOOLBOX_MODE = "Edition mode";
 
-
-    //==================================================
-    // Messages that go to label_info in MainWindow
-
-    // This should go before message when undoing changes
-    private final static String UNDO_PREFIX = "[UNDONE] ";
-
-    public static String INFO_UNDO(String literal) {
-        return UNDO_PREFIX + literal;
-    }
-
-    // This should go before message when redoing changes
-    private final static String REDO_PREFIX = "[REDONE] ";
-
-    public static String INFO_REDO(String literal) {
-        return REDO_PREFIX + literal;
-    }
-
-    // AddOperation
-    public final static String INFO_VERTEX_ADD = "vertex added";
-    public final static String INFO_EDGE_ADD = "edge added";
-    public final static String INFO_LABEL_V_ADD = "label added to a vertex";
-    public final static String INFO_LABEL_E_ADD = "label added to an edge";
-
-
-    // DragOperation
-    public final static String INFO_VERTEX_MOVE = "vertex moved";
-    public final static String INFO_EDGE_MOVE = "edge moved";
-    public final static String INFO_LABEL_V_MOVE = "label (vertex) moved";
-    public final static String INFO_LABEL_E_MOVE = "label (edge) moved";
-
-    // OldOperationList
-    public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
-    public final static String INFO_NOTHING_TO_REDO = "nothing to redo";
-
-    // PropertyChangeOperation
-    public final static String INFO_PROPERTY_CHANGE = "property changed";
-
-    // RemoveOperation
-    public static String INFO_REMOVE_ELEMENT(ModeType type, int number) {
-        String elementName = number > 1 ? type.getRelatedElementType().getPluralName() : type.getRelatedElementType().getSingularName();
-        String amount = number > 1 ? number + " " : "";
-        return amount + elementName + " removed";
-    }
-
-    // TemplateChangeOperation
-    public final static String INFO_TEMPLATE_APPLIED_GLOBALLY = "template applied globally";
-    public final static String INFO_TEMPLATE_CHANGE = "template changed";
-
-    // ControlManager
-    public final static String INFO_SUBGRAPH_DUPLICATE = "supgraph duplicated";
-    public final static String INFO_SUBGRAPH_WHERE_TO_PASTE = "choose location for the copy of subgraph";
-    public final static String INFO_SUBGRAPH_CANNOT_PASTE = "cannot insert this subgraph here - vertices collide with existing ones or are out of bounds";
-    public final static String INFO_CANNOT_CREATE_VERTEX_BOUNDARY = "cannot createEmptyModel a vertex here - too close to page edge";
-    public final static String INFO_CANNOT_CREATE_VERTEX_COLLISION = "cannot createEmptyModel a vertex here - too close to another vertex";
-    public final static String INFO_CHOOSE_EDGE_START = "Choose a starting vertex for the edge (click)";
-    public final static String INFO_CHOOSE_EDGE_END = "Now choose the target vertex (click)";
-    public final static String INFO_EDGE_ADDING_CANCELLED = "Adding edge cancelled";
-    public final static String INFO_NOTHING_TO_REMOVE = "Nothing to remove";
-    public final static String INFO_CHOOSE_VERTEX_FOR_LABEL = "Choose a vertex to attach label to";
-    public final static String INFO_CANNOT_CREATE_LABEL_V_EXISTS = "Cannot create the label, as this vertex already has one";
-    public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "Cannot create the label, as this edge already has one";
-    public final static String INFO_CANNOT_CREATE_EDGE_EXISTS = "Cannot create the edge, such edge already exists";
-    public final static String INFO_CANNOT_MOVE_EDGE_EXISTS = "Cannot move the edge here, such edge already exists";
-    public final static String INFO_CHOOSE_EDGE_FOR_LABEL = "Choose an edge to attach label to";
-
-    // SaveFileDialog
-    public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";
-    public final static String INFO_GRAPH_SAVE_FAIL = "saving graph failed. Make sure you have write permissions in the target location.";
-
-    // OpenFileDialog
-    public final static String INFO_GRAPH_OPEN_OK = "graph loaded successfully";
-    public final static String INFO_GRAPH_OPEN_FAIL = "loading graph failed!";
-
-    // MainWindow
-    public static String INFO_MODE_AND_TOOL(ModeType mode, ToolType tool) {
-        String tipPart1 = mode.toString() + " mode - ";
-        //TODO add boundary
-        String tipPart3 = "";
-        String tipPart4a = "";
-        String tipPart4b = "";
-
-        switch (mode) {
-            case VERTEX: {
-                tipPart4a = "a vertex. ";
-                tipPart4b = "a vertex. ";
-                break;
-            }
-            case EDGE: {
-                tipPart4a = "an edge. Hold down SHIFT for directed edge. Hold down CTRL for straight edge.";
-                tipPart4b = "an edge. ";
-                break;
-            }
-            case LABEL_VERTEX: {
-                tipPart4a = "a label to a vertex. ";
-                tipPart4b = "a label of a vertex. ";
-                break;
-            }
-            case LABEL_EDGE: {
-                tipPart4a = "a label to an edge. Hold down SHIFT for horizontal label.";
-                tipPart4b = "a label of an edge. ";
-                break;
-            }
-        }
-
-
-        String tipPart2 = tool.toString() + " tool. ";
-        switch (tool) {
-            case ADD: {
-                tipPart3 = "Left-click to add " + tipPart4a;
-                break;
-            }
-            case REMOVE: {
-                tipPart3 = "Left-click to removeFromGraph " + tipPart4b + "Click and drag to removeFromGraph all items in the area.";
-                break;
-            }
-            case SELECT: {
-                tipPart3 = "Left-click to select " + tipPart4b
-                        + "Click and drag to select all items in the area. CTRL + click/drag to extend selection.";
-                break;
-            }
-        }
-
-        return tipPart1 + tipPart2 + tipPart3;
-    }
-
-    public static String INFO_GENERIC_GRID(boolean gridOn, int gridResolutionX, int gridResolutionY) {
-        if (gridOn) {
-            return String.format("%dx%d grid enabled", gridResolutionX, gridResolutionY);
-        } else {
-            return "grid disabled";
-        }
-    }
-
-    public static String INFO_GENERIC_NUMERATION(boolean digital, int startingNumber) {
-        String numerationType = digital ? "digital" : "alphabetical";
-        String startingNumString = digital ? Integer.toString(startingNumber) : GraphNumeration.digitalToAlphabetical(startingNumber);
-        return String.format("%s numeration enabled (starting with '%s')", numerationType, startingNumString);
-    }
-
-    public static String INFO_GENERIC_SELECT_ALL(ModeType mode){
-        return "all " + mode.getRelatedElementType().getPluralName() + " selected";
-    }
-
-    //PROPERTY PANEL
+    // PropertyPanels
     public static final String LABEL_VERTEX_POSITION = "Position:";
     public static final String LABEL_VERTEX_DISTANCE = "Distance:";
     public static final String EMPTY_VALUE = " ";
@@ -289,4 +145,159 @@ public class StringLiterals {
     public static final String VERTEX_NUMBER = "Number:";
     public static final String VERTEX_LINE_WIDTH = "Line width:";
     public static final String VERTEX_FONT_COLOR = "Font color:";
+
+
+    //==================================================
+    // Messages that go to label_info in MainWindow
+
+    // This should go before message when undoing changes
+    private final static String UNDO_PREFIX = "[UNDONE] ";
+
+    public static String INFO_UNDO(String literal) {
+        return UNDO_PREFIX + literal;
+    }
+
+    // This should go before message when redoing changes
+    private final static String REDO_PREFIX = "[REDONE] ";
+
+    public static String INFO_REDO(String literal) {
+        return REDO_PREFIX + literal;
+    }
+
+    // AddOperation
+    public final static String INFO_VERTEX_ADD = "vertex added";
+    public final static String INFO_EDGE_ADD = "edge added";
+    public final static String INFO_LABEL_V_ADD = "label added to a vertex";
+    public final static String INFO_LABEL_E_ADD = "label added to an edge";
+    public final static String INFO_BOUNDARY_ADD = "boundary added";
+
+
+    // DragOperation
+    public final static String INFO_VERTEX_MOVE = "vertex moved";
+    public final static String INFO_EDGE_MOVE = "edge moved";
+    public final static String INFO_LABEL_V_MOVE = "label (vertex) moved";
+    public final static String INFO_LABEL_E_MOVE = "label (edge) moved";
+    public final static String INFO_BOUNDARY_MOVE = "boundary moved";
+
+    // OldOperationList
+    public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
+    public final static String INFO_NOTHING_TO_REDO = "nothing to redo";
+
+    // PropertyChangeOperation
+    public final static String INFO_PROPERTY_CHANGE = "property changed";
+
+    // RemoveOperation
+    public static String INFO_REMOVE_ELEMENT(ModeType type, int number) {
+        String elementName = number > 1 ? type.getRelatedElementType().getPluralName() : type.getRelatedElementType().getSingularName();
+        String amount = number > 1 ? number + " " : "";
+        return amount + elementName + " removed";
+    }
+
+    // TemplateChangeOperation
+    public final static String INFO_TEMPLATE_APPLIED_GLOBALLY = "template applied globally";
+    public final static String INFO_TEMPLATE_CHANGE = "template changed";
+
+    // ControlManager
+    public final static String INFO_SUBGRAPH_DUPLICATE = "supgraph duplicated";
+    public final static String INFO_SUBGRAPH_WHERE_TO_PASTE = "choose location for the copy of subgraph";
+    public final static String INFO_SUBGRAPH_CANNOT_PASTE = "cannot insert this subgraph here - vertices collide with existing ones or are out of bounds";
+
+    public final static String INFO_CANNOT_CREATE_VERTEX_BOUNDARY = "cannot createEmptyModel a vertex here - too close to page edge";
+    public final static String INFO_CANNOT_CREATE_VERTEX_COLLISION = "cannot createEmptyModel a vertex here - too close to another vertex";
+
+    public final static String INFO_CHOOSE_EDGE_START = "Choose a starting vertex for the edge (click)";
+    public final static String INFO_CHOOSE_EDGE_END = "Now choose the target vertex (click)";
+    public final static String INFO_EDGE_ADDING_CANCELLED = "Adding edge cancelled";
+
+    public final static String INFO_NOTHING_TO_REMOVE = "Nothing to remove";
+    public final static String INFO_CHOOSE_VERTEX_FOR_LABEL = "Choose a vertex to attach label to";
+    public final static String INFO_CANNOT_CREATE_LABEL_V_EXISTS = "Cannot create the label, as this vertex already has one";
+    public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "Cannot create the label, as this edge already has one";
+    public final static String INFO_CANNOT_CREATE_EDGE_EXISTS = "Cannot create the edge, such edge already exists";
+    public final static String INFO_CANNOT_MOVE_EDGE_EXISTS = "Cannot move the edge here, such edge already exists";
+    public final static String INFO_CHOOSE_EDGE_FOR_LABEL = "Choose an edge to attach label to";
+
+    public final static String INFO_CHOOSE_BOUNDARY_END = "Choose opposite corner for the boundary";
+
+    // SaveFileDialog
+    public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";
+    public final static String INFO_GRAPH_SAVE_FAIL = "saving graph failed. Make sure you have write permissions in the target location.";
+
+    // OpenFileDialog
+    public final static String INFO_GRAPH_OPEN_OK = "graph loaded successfully";
+    public final static String INFO_GRAPH_OPEN_FAIL = "loading graph failed!";
+
+    // MainWindow
+    public static String INFO_MODE_AND_TOOL(ModeType mode, ToolType tool) {
+        String tipPart1 = mode.toString() + " mode - ";
+        String tipPart3 = "";
+        String tipPart4a = "";
+        String tipPart4b = "";
+
+        switch (mode) {
+            case VERTEX: {
+                tipPart4a = "a vertex.";
+                tipPart4b = "a vertex.";
+                break;
+            }
+            case EDGE: {
+                tipPart4a = "an edge. Hold down SHIFT for directed edge. Hold down CTRL for straight edge.";
+                tipPart4b = "an edge.";
+                break;
+            }
+            case LABEL_VERTEX: {
+                tipPart4a = "a label to a vertex.";
+                tipPart4b = "a label of a vertex.";
+                break;
+            }
+            case LABEL_EDGE: {
+                tipPart4a = "a label to an edge. Hold down SHIFT for horizontal label.";
+                tipPart4b = "a label of an edge.";
+                break;
+            }
+            case BOUNDARY: {
+                tipPart4a = "a boundary.";
+                tipPart4b = "a boundary.";
+                break;
+            }
+        }
+
+
+        String tipPart2 = tool.toString() + " tool.";
+        switch (tool) {
+            case ADD: {
+                tipPart3 = " Left-click to add " + tipPart4a;
+                break;
+            }
+            case REMOVE: {
+                tipPart3 = " Left-click to removeFromGraph " + tipPart4b + " Click and drag to remove all items in the area.";
+                break;
+            }
+            case SELECT: {
+                tipPart3 = " Left-click to select " + tipPart4b
+                        + " Click and drag to select all items in the area. CTRL + click/drag to extend selection.";
+                break;
+            }
+        }
+
+        return tipPart1 + tipPart2 + tipPart3;
+    }
+
+    public static String INFO_GENERIC_GRID(boolean gridOn, int gridResolutionX, int gridResolutionY) {
+        if (gridOn) {
+            return String.format("%dx%d grid enabled", gridResolutionX, gridResolutionY);
+        } else {
+            return "grid disabled";
+        }
+    }
+
+    public static String INFO_GENERIC_NUMERATION(boolean digital, int startingNumber) {
+        String numerationType = digital ? "digital" : "alphabetical";
+        String startingNumString = digital ? Integer.toString(startingNumber) : GraphNumeration.digitalToAlphabetical(startingNumber);
+        return String.format("%s numeration enabled (starting with '%s')", numerationType, startingNumString);
+    }
+
+    public static String INFO_GENERIC_SELECT_ALL(ModeType mode){
+        return "all " + mode.getRelatedElementType().getPluralName() + " selected";
+    }
 }

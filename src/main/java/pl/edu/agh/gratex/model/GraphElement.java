@@ -1,12 +1,10 @@
 package pl.edu.agh.gratex.model;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.draw.Drawable;
 import pl.edu.agh.gratex.model.graph.Graph;
 
 import java.awt.*;
 import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.List;
 
 public abstract class GraphElement {
     protected Graph graph;
-    protected Drawable drawable;
+    protected Drawer drawer;
     protected PropertyModel propertyModel;
     protected boolean dummy = true;
 
@@ -22,8 +20,21 @@ public abstract class GraphElement {
         return graph;
     }
 
-    public void setDrawable(Drawable drawable) {
-        this.drawable = drawable;
+    public void addToGraph() {
+        graph.addElement(this);
+        updateLocation();
+        dummy = false;
+        finalizeAddingToGraph();
+    }
+
+    public void removeFromGraph() {
+        graph.removeElement(this);
+        dummy = true;
+        finalizeRemovingFromGraph();
+    }
+
+    public void setDrawer(Drawer drawer) {
+        this.drawer = drawer;
     }
 
     protected GraphElement(Graph graph, PropertyModel propertyModel) {
@@ -44,7 +55,7 @@ public abstract class GraphElement {
     }
 
     public void draw(Graphics2D g) {
-        drawable.draw(this, g);
+        drawer.draw(this, g);
     }
 
     public boolean isDummy() {
@@ -59,15 +70,15 @@ public abstract class GraphElement {
         return getArea().intersects(selectionArea);
     }
 
+    public abstract void finalizeAddingToGraph();
+
+    public abstract void finalizeRemovingFromGraph();
+
     public abstract Area getArea();
 
     public abstract GraphElementType getType();
 
     public abstract int getDrawingPriority();
-
-    public abstract void addToGraph();
-
-    public abstract void removeFromGraph();
 
     public abstract List<? extends GraphElement> getConnectedElements();
 

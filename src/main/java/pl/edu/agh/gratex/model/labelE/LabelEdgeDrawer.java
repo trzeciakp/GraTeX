@@ -1,10 +1,10 @@
-package pl.edu.agh.gratex.draw;
+package pl.edu.agh.gratex.model.labelE;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.controller.SelectionController;
+import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.utils.DrawingTools;
 
 import java.awt.*;
@@ -12,11 +12,11 @@ import java.awt.*;
 /**
  *
  */
-public class LabelEdgeDrawable implements Drawable {
+public class LabelEdgeDrawer implements Drawer {
 
     private SelectionController selectionController;
 
-    public LabelEdgeDrawable(SelectionController selectionController) {
+    public LabelEdgeDrawer(SelectionController selectionController) {
         this.selectionController = selectionController;
     }
 
@@ -32,10 +32,7 @@ public class LabelEdgeDrawable implements Drawable {
             g.fillPolygon(labelE.getOutline());
         }
 
-        g.setColor(labelE.getFontColor());
-        if (graphElement.isDummy()) {
-            g.setColor(DrawingTools.getDummyColor(labelE.getFontColor()));
-        }
+        g.setColor(DrawingTools.getDrawingColor(labelE.getFontColor(), labelE.isDummy()));
         g.setFont(Const.DEFAULT_FONT);
         if (labelE.isHorizontalPlacement()) {
             g.drawString(labelE.getText(), labelE.getDrawX(), labelE.getDrawY());

@@ -55,7 +55,13 @@ public class Const {
     public final static int EDGE_SELECTION_MARGIN = 10;
 
     // Stroke used to draw angle visualization
-    public final static Stroke ANGLE_VISUALIZATION_STROKE = DrawingTools.getStroke(2, LineType.DASHED, 0.0);
+    public final static Stroke ANGLE_VISUALIZATION_STROKE = DrawingTools.getStroke(LineType.DASHED, 2, 0.0);
     // Color used to draw angle visualization
     public final static Color ANGLE_VISUALIZATION_COLOR = Color.gray;
+
+    // Ratio of corner width/height to full width/height
+    public final static double BOUNDARY_CORNER_LENGTH_FACTOR = 0.3;
+
+    // Ratio of arrow size to corner size
+    public final static double BOUNDARY_CORNER_ARROW_SIZE_FACTOR = 0.6;
 }

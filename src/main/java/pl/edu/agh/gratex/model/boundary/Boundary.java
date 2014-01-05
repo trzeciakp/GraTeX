@@ -4,7 +4,9 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.properties.LineType;
 
+import java.awt.*;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.List;
  *
  */
 public class Boundary extends GraphElement {
-
+    // TODO zmienilbym na topLeftX
     private int leftCornerX;
     private int leftCornerY;
     private int width;
@@ -27,7 +29,7 @@ public class Boundary extends GraphElement {
 
     @Override
     public Area getArea() {
-        return null;
+        return new Area(new Rectangle(leftCornerX, leftCornerY, width, height));
     }
 
     @Override
@@ -41,13 +43,11 @@ public class Boundary extends GraphElement {
     }
 
     @Override
-    public void addToGraph() {
-        ((List<Boundary>) getGraph().getElements(getType())).add(this);
+    public void finalizeAddingToGraph() {
     }
 
     @Override
-    public void removeFromGraph() {
-        getGraph().getElements(getType()).remove(this);
+    public void finalizeRemovingFromGraph() {
     }
 
     @Override
@@ -85,5 +85,37 @@ public class Boundary extends GraphElement {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public void setFillColor(Color fillColor) {
+        propertyModel.setFillColor(fillColor);
+    }
+
+    public LineType getLineType() {
+        return propertyModel.getLineType();
+    }
+
+    public void setLineType(LineType lineType) {
+        propertyModel.setLineType(lineType);
+    }
+
+    public int getLineWidth() {
+        return propertyModel.getLineWidth();
+    }
+
+    public void setLineWidth(int lineWidth) {
+        propertyModel.setLineWidth(lineWidth);
+    }
+
+    public Color getLineColor() {
+        return propertyModel.getLineColor();
+    }
+
+    public void setLineColor(Color lineColor) {
+        propertyModel.setLineColor(lineColor);
+    }
+
+    public Color getFillColor() {
+        return propertyModel.getFillColor();
     }
 }

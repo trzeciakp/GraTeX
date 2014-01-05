@@ -81,7 +81,10 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
 
             List<GraphElement> allElements = generalController.getGraph().getAllElements();
             allElements.addAll(mouseController.getCopiedSubgraph());
-            allElements.addAll(mouseController.getCurrentlyAddedElements());
+            GraphElement currentlyAddedElement = mouseController.getCurrentlyAddedElement();
+            if (currentlyAddedElement != null) {
+                allElements.add(currentlyAddedElement);
+            }
             GraphElement.sortByDrawingPriorities(allElements);
             for (GraphElement element : allElements) {
                 element.draw(g2d);

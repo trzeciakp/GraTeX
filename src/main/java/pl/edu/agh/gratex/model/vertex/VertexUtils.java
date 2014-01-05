@@ -3,7 +3,6 @@ package pl.edu.agh.gratex.model.vertex;
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.properties.ShapeType;
-import pl.edu.agh.gratex.utils.Geometry;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -25,7 +24,6 @@ public class VertexUtils {
         area.intersect(vertex2.getArea());
         return !area.isEmpty();
     }
-
 
     public static boolean fitsIntoPage(Vertex vertex) {
         return !((vertex.getPosX() - vertex.getRadius() - vertex.getLineWidth() / 2 < 0) ||

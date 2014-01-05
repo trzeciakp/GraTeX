@@ -4,8 +4,8 @@ import pl.edu.agh.gratex.constants.*;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
 import pl.edu.agh.gratex.controller.mouse.MouseControllerImpl;
 import pl.edu.agh.gratex.controller.operation.*;
-import pl.edu.agh.gratex.draw.DrawableFactory;
-import pl.edu.agh.gratex.draw.DrawableFactoryImpl;
+import pl.edu.agh.gratex.model.DrawerFactory;
+import pl.edu.agh.gratex.model.DrawerFactoryImpl;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
@@ -37,9 +37,9 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         toolController = new ToolControllerImpl(this);
         operationController = new OperationControllerImpl(this);
         selectionController = new SelectionControllerImpl(this, modeController, toolController);
-        DrawableFactory drawableFactory = new DrawableFactoryImpl(selectionController);
+        DrawerFactory drawerFactory = new DrawerFactoryImpl(selectionController);
         PropertyModelFactory propertyModelFactory = new PropertyModelFactoryImpl();
-        graphElementFactory = new GraphElementFactoryImpl(drawableFactory, propertyModelFactory);
+        graphElementFactory = new GraphElementFactoryImpl(drawerFactory, propertyModelFactory);
 
         GraphElementControllersFactory elementControllersFactory = new GraphElementControllersFactoryImpl(this, new ColorMapperTmpImpl(), graphElementFactory);
         parseController = new ParseControllerImpl(elementControllersFactory);
@@ -141,7 +141,6 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             if (file != null) {
                 Graph newGraph;
                 if ((newGraph = fileManager.openFile(file)) != null) {
-                    GraphUtils.deleteUnusedLabels(newGraph);
                     graph = newGraph;
                     resetWorkspace();
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_OK));
