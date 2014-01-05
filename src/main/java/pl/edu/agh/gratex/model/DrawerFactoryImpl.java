@@ -3,7 +3,6 @@ package pl.edu.agh.gratex.model;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.boundary.BoundaryDrawer;
-import pl.edu.agh.gratex.model.boundary.EditedBoundaryDrawer;
 import pl.edu.agh.gratex.model.edge.DummyEdgeDrawer;
 import pl.edu.agh.gratex.model.edge.EdgeDrawer;
 import pl.edu.agh.gratex.model.hyperedge.HyperedgeDrawer;

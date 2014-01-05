@@ -252,6 +252,13 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Sel
                         modeController.setMode(ModeType.BOUNDARY);
                     }
                 };
+            case HYPEREDGE_MODE:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        modeController.setMode(ModeType.HYPEREDGE);
+                    }
+                };
             case ADD_TOOL:
                 return new ActionListener() {
                     @Override

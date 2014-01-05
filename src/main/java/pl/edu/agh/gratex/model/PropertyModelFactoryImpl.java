@@ -99,5 +99,12 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setFillColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineType(LineType.SOLID);
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineWidth(1);
+
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineWidth(1);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineType(LineType.SOLID);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineColor(PropertyModel.REVERSE_COLORS.get("black"));
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointShape(ShapeType.CIRCLE);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointSize(8);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
     }
 }

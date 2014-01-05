@@ -172,6 +172,7 @@ public class StringLiterals {
     public final static String INFO_LABEL_V_ADD = "label added to a vertex";
     public final static String INFO_LABEL_E_ADD = "label added to an edge";
     public final static String INFO_BOUNDARY_ADD = "boundary added";
+    public final static String INFO_HYPEREDGE_ADD = "hyperedge added";
 
 
     // DragOperation
@@ -180,6 +181,7 @@ public class StringLiterals {
     public final static String INFO_LABEL_V_MOVE = "label (vertex) moved";
     public final static String INFO_LABEL_E_MOVE = "label (edge) moved";
     public final static String INFO_BOUNDARY_MOVE = "boundary moved";
+    public final static String INFO_HYPEREDGE_MOVE = "hyperedge moved";
 
     // OldOperationList
     public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
@@ -194,6 +196,8 @@ public class StringLiterals {
         String amount = number > 1 ? number + " " : "";
         return amount + elementName + " removed";
     }
+
+    public final static String INFO_NOTHING_TO_REMOVE = "nothing to remove";
 
     // TemplateChangeOperation
     public final static String INFO_TEMPLATE_APPLIED_GLOBALLY = "template applied globally";
@@ -211,13 +215,15 @@ public class StringLiterals {
     public final static String INFO_CHOOSE_EDGE_END = "now choose the target vertex (click)";
     public final static String INFO_EDGE_ADDING_CANCELLED = "adding edge cancelled";
 
-    public final static String INFO_NOTHING_TO_REMOVE = "nothing to remove";
     public final static String INFO_CHOOSE_VERTEX_FOR_LABEL = "choose a vertex to attach label to";
     public final static String INFO_CANNOT_CREATE_LABEL_V_EXISTS = "cannot create the label, as this vertex already has one";
-    public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "cannot create the label, as this edge already has one";
+
     public final static String INFO_CHOOSE_EDGE_FOR_LABEL = "choose an edge to attach label to";
+    public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "cannot create the label, as this edge already has one";
 
     public final static String INFO_CHOOSE_BOUNDARY_END = "choose opposite corner for the boundary";
+
+    public final static String INFO_HYPEREDGE_EXPAND = "CTRL + click on a vertex to add/remove from hyperedge.";
 
     // SaveFileDialog
     public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";
@@ -258,6 +264,11 @@ public class StringLiterals {
             case BOUNDARY: {
                 tipPart4a = "a boundary.";
                 tipPart4b = "a boundary.";
+                break;
+            }
+            case HYPEREDGE: {
+                tipPart4a = "a hyperedge. Hold down CTRL and click to add/remove vertices. Hold down SHIFT to auto-center the joint while dragging.";
+                tipPart4b = "a hyperedge.";
                 break;
             }
         }

@@ -3,6 +3,8 @@ package pl.edu.agh.gratex.model.graph;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.model.*;
+import pl.edu.agh.gratex.model.boundary.Boundary;
+import pl.edu.agh.gratex.model.boundary.BoundaryUtils;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
@@ -54,9 +56,12 @@ public class GraphUtils {
         return result;
     }
 
-    public static void adjustVerticesToGrid(Graph graph) {
+    public static void adjustElementsToGrid(Graph graph) {
         for (GraphElement vertex : graph.getElements(GraphElementType.VERTEX)) {
             VertexUtils.adjustToGrid((Vertex) vertex);
+        }
+        for (GraphElement boundary : graph.getElements(GraphElementType.BOUNDARY)) {
+            BoundaryUtils.adjustToGrid((Boundary) boundary);
         }
     }
 }

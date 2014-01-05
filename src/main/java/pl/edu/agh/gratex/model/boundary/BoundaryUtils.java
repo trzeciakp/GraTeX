@@ -3,7 +3,6 @@ package pl.edu.agh.gratex.model.boundary;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.vertex.Vertex;
 
 public class BoundaryUtils {
     public static boolean fitsIntoPage(Boundary boundary) {
@@ -17,7 +16,7 @@ public class BoundaryUtils {
         Graph graph = boundary.getGraph();
         boundary.setTopLeftX(((boundary.getTopLeftX() + (graph.getGridResolutionX() / 2)) / graph.getGridResolutionX()) * graph.getGridResolutionX());
         boundary.setTopLeftY(((boundary.getTopLeftY() + (graph.getGridResolutionY() / 2)) / graph.getGridResolutionY()) * graph.getGridResolutionY());
-        boundary.setWidth(((boundary.getWidth() + (graph.getGridResolutionY() / 2)) / graph.getGridResolutionY()) * graph.getGridResolutionY());
-        boundary.setHeight(((boundary.getHeight() + (graph.getGridResolutionY() / 2)) / graph.getGridResolutionY()) * graph.getGridResolutionY());
+        boundary.setWidth(((boundary.getWidth() + ((graph.getGridResolutionY() - 1) / 2)) / graph.getGridResolutionY()) * graph.getGridResolutionY());
+        boundary.setHeight(((boundary.getHeight() + ((graph.getGridResolutionY() - 1) / 2)) / graph.getGridResolutionY()) * graph.getGridResolutionY());
     }
 }
