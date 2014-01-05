@@ -36,6 +36,10 @@ public class Hyperedge extends GraphElement {
         return 1;
     }
 
+    public void setNumber(int number) {
+
+    }
+
     @Override
     public void finalizeAddingToGraph() {
 

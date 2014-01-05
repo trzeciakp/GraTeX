@@ -34,15 +34,24 @@ public class SizeVertexParser extends ParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         Vertex vertex = (Vertex) element;
+        vertex.setRadius(getRadius(match));
+    }
+
+    protected int getRadius(String match) {
         Matcher matcher = PATTERN.matcher(match);
         matcher.matches();
         int size = getIntFromDoublePt(matcher.group(SIZE_GROUP))/2;
-        vertex.setRadius(size);
+        return size;
     }
 
     @Override
     public String getProperty(GraphElement element) {
         Vertex vertex = (Vertex) element;
-        return ", minimum size="+getDoublePt(2*vertex.getRadius());
+        int radius = vertex.getRadius();
+        return getProperty(radius);
+    }
+
+    protected String getProperty(int radius) {
+        return ", minimum size="+getDoublePt(2* radius);
     }
 }
