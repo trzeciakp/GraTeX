@@ -17,8 +17,8 @@ import java.util.EnumMap;
  */
 public class DrawerFactoryImpl implements DrawerFactory {
     private EnumMap<GraphElementType, Drawer> defaultDrawable = new EnumMap<>(GraphElementType.class);
-    private DummyEdgeDrawer dummyEdgeDrawable = new DummyEdgeDrawer(defaultDrawable.get(GraphElementType.EDGE));
-    private EditedBoundaryDrawer editedBoundaryDrawer = new EditedBoundaryDrawer();
+    private DummyEdgeDrawer dummyEdgeDrawable;
+    private EditedBoundaryDrawer editedBoundaryDrawer;
 
     public DrawerFactoryImpl(SelectionController selectionController) {
         defaultDrawable.put(GraphElementType.VERTEX, new VertexDrawer(selectionController));
@@ -26,6 +26,8 @@ public class DrawerFactoryImpl implements DrawerFactory {
         defaultDrawable.put(GraphElementType.EDGE, new EdgeDrawer(selectionController));
         defaultDrawable.put(GraphElementType.LABEL_EDGE, new LabelEdgeDrawer(selectionController));
         defaultDrawable.put(GraphElementType.BOUNDARY, new BoundaryDrawer(selectionController));
+        dummyEdgeDrawable = new DummyEdgeDrawer(defaultDrawable.get(GraphElementType.EDGE));
+        editedBoundaryDrawer = new EditedBoundaryDrawer();
     }
 
     @Override
