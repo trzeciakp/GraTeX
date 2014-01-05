@@ -86,16 +86,18 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
 
         JPanel checkboxesPanel = new JPanel();
         final JCheckBox showCommentsCheckBox = new JCheckBox("Show comments");
-        showCommentsCheckBox.setSelected(true);
+        showCommentsCheckBox.setToolTipText("Show comments that allow to parse LaTeX code back to GraTeX");
+        showCommentsCheckBox.setSelected(false);
         showCommentsCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textArea_code.setText(listToString(codeWithPicture, showCommentsCheckBox.isSelected()));
+                textArea_code.setText(listToString(codeWithPicture, !showCommentsCheckBox.isSelected()));
             }
         });
         //getContentPane().add(showCommentsCheckBox, BorderLayout.NORTH);
         checkboxesPanel.add(showCommentsCheckBox);
         final JCheckBox showDocumentHeaderCheckBox = new JCheckBox("Show document header");
+        showCommentsCheckBox.setToolTipText("Show commands that import packages required to use TikZ in LaTeX documents");
         showDocumentHeaderCheckBox.setSelected(false);
         showDocumentHeaderCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -115,7 +117,7 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
         textArea_code = new JTextArea();
         textArea_code.setWrapStyleWord(true);
         textArea_code.setLineWrap(true);
-        textArea_code.setText(listToString(codeWithPicture, false));
+        textArea_code.setText(listToString(codeWithPicture, true));
         textArea_code.setCaretPosition(0);
 
         popupMenu = new JPopupMenu();

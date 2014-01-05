@@ -16,15 +16,15 @@ public class BoundaryPositionParseElement extends PositionParseElement {
 
         int centerX = getX(match);
         int centerY = getY(match);
-        //int width = boundary.getWidth();
-        //int height = boundary.getHeight();
-        boundary.setTopLeftX(centerX);
-        boundary.setTopLeftY(centerY);
+        int width = boundary.getWidth();
+        int height = boundary.getHeight();
+        boundary.setTopLeftX(centerX - width/2);
+        boundary.setTopLeftY(centerY - height/2);
     }
 
     @Override
     public String getProperty(GraphElement element) {
         Boundary boundary = (Boundary) element;
-        return getProperty(boundary.getTopLeftX(), boundary.getTopLeftY());
+        return getProperty(boundary.getTopLeftX()+boundary.getWidth()/2, boundary.getTopLeftY()+boundary.getHeight()/2);
     }
 }
