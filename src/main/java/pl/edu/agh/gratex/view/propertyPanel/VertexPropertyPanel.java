@@ -51,8 +51,9 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
     private static int MAX_SIZE;
 
     private void changed() {
-        if (changedByUser)
+        if (changedByUser) {
             ((PanelPropertyEditor) getParent()).valueChanged(model);
+        }
     }
 
     public void updateNumeration() {
@@ -109,7 +110,14 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         comboBoxVertexColor.setSelectedItem(model.getVertexColor());
         comboBoxFontColor.setSelectedItem(model.getFontColor());
         comboBoxLineType.setSelectedItem(model.getLineType());
-        if (model.getLineWidth() == PropertyModel.EMPTY) {
+        if(model.getLineType() == LineType.NONE || model.getLineType().isEmpty()) {
+            spinnerLineSize.setEnabled(false);
+            lblLineSize.setEnabled(false);
+        } else {
+            spinnerLineSize.setEnabled(true);
+            lblLineSize.setEnabled(true);
+        }
+        if (model.getLineWidth() == PropertyModel.EMPTY || model.getLineWidth() == 0) {
             spinnerLineSize.setValue(StringLiterals.EMPTY_VALUE);
         } else {
             spinnerLineSize.setValue(model.getLineWidth() + StringLiterals.PX_SUFFIX);
@@ -211,15 +219,20 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         lblLineType = createJLabel(StringLiterals.VERTEX_LINE_TYPE);
 
         comboBoxLineType = new JComboBox<>(LineType.values());
-        comboBoxLineType.setBounds(101, 89, 80, 20);
         comboBoxLineType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 LineType newValue = ((LineType) comboBoxLineType.getSelectedItem());
-                if ((newValue != LineType.EMPTY) && (model.getLineType() != newValue) || (!changedByUser)) {
+                LineType oldLineType = model.getLineType();
+                if ((newValue != LineType.EMPTY) && (oldLineType != newValue) || (!changedByUser)) {
                     model.setLineType(newValue);
+                    if(newValue == LineType.NONE) {
+                        model.setLineWidth(0);
+                    } else if (oldLineType == LineType.NONE) {
+                        model.setLineWidth(1);
+                    }
                     changed();
                 } else {
-                    comboBoxLineType.setSelectedItem(model.getLineType());
+                    comboBoxLineType.setSelectedItem(oldLineType);
                 }
             }
         });
@@ -349,13 +362,17 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             }
         };
 
-        if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
+        //TODO
+        /*if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setModel(listModels[1]);
             ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else {
             spinnerNumber.setModel(listModels[0]);
             ((ListEditor) spinnerNumber.getEditor()).getTextField().setFormatterFactory(new DefaultFormatterFactory(new MyListFormatter()));
-        }
+        }*/
+
+        spinnerNumber.setModel(listModels[1]);
+        ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         spinnerNumber.addChangeListener(new ChangeListener() {
             private int previous = 0;
 

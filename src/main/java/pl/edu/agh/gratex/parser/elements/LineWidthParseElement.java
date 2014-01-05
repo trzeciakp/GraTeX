@@ -10,7 +10,6 @@ public abstract class LineWidthParseElement extends ParseElement {
     protected static final double COEFFICIENT = 0.625;
 
     private static final String REGEX_NUMBER = "(\\d+\\.?\\d*)";
-    private static final String REGEX_MIDFIX = "pt, ";
     private static final String REGEX = "line width=" + REGEX_NUMBER + "pt";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
     public static final int GROUPS = 1;
@@ -18,7 +17,7 @@ public abstract class LineWidthParseElement extends ParseElement {
 
     @Override
     public boolean isOptional() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
@@ -36,7 +35,7 @@ public abstract class LineWidthParseElement extends ParseElement {
     }
 
     private int getGroupFromMatch(String match, int group) {
-        Matcher matcher = PATTERN.matcher(match);
+        Matcher matcher = Pattern.compile(regex()).matcher(match);
         matcher.matches();
         //TODO
         return (int) (Double.parseDouble(matcher.group(group))/COEFFICIENT);

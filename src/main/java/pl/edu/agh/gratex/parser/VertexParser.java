@@ -37,7 +37,7 @@ public class VertexParser extends GraphElementParser {
         parseList.add(new ShapeVertexParser());
         parseList.add(new SizeVertexParser());
         parseList.add(new ColorVertexParser(colorMapper));
-        parseList.add(new StaticParseElement(", ", false));
+        //parseList.add(new StaticParseElement(", ", false));
         parseList.add(new LineWidthVertexParser());
         parseList.add(new LineColorTypeVertexParser(colorMapper));
         parseList.add(new StaticParseElement("] at ", false));

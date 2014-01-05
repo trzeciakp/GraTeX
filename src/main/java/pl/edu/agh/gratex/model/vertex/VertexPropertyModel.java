@@ -56,7 +56,7 @@ public class VertexPropertyModel extends PropertyModel {
             shape = ShapeType.EMPTY;
         }
 
-        if (vertexColor != null) {
+        if (model.vertexColor != null) {
             if (!model.vertexColor.equals(vertexColor)) {
                 vertexColor = null;
             }
@@ -70,13 +70,13 @@ public class VertexPropertyModel extends PropertyModel {
             lineType = LineType.EMPTY;
         }
 
-        if (lineColor != null) {
+        if (model.lineColor != null) {
             if (!model.lineColor.equals(lineColor)) {
                 lineColor = null;
             }
         }
 
-        if (fontColor != null) {
+        if (model.fontColor != null) {
             if (!model.fontColor.equals(fontColor)) {
                 fontColor = null;
             }
