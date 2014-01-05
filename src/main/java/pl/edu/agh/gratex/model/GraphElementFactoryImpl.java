@@ -46,7 +46,7 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
                 result = new Hyperedge(graph, propertyModel);
                 break;
         }
-        result.setDrawer(drawerFactory.createDefaultDrawable(type));
+        result.setDrawer(drawerFactory.createDefaultDrawer(type));
         return result;
     }
 

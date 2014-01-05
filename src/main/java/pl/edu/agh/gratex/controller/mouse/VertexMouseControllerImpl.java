@@ -71,12 +71,10 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     public void moveSelection(int mouseX, int mouseY) {
         if(currentlyDraggedVertex == null) {
             currentlyDraggedVertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
-
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedVertex, OperationType.MOVE_VERTEX, StringLiterals.INFO_VERTEX_MOVE);
         } else {
             generalController.getSelectionController().addToSelection(currentlyDraggedVertex, false);
             Vertex vertex = currentlyDraggedVertex;
-            generalController.getGraph().removeElement(vertex);
             int oldPosX = vertex.getPosX();
             int oldPosY = vertex.getPosY();
 
@@ -91,7 +89,6 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
                 vertex.setPosX(oldPosX);
                 vertex.setPosY(oldPosY);
             }
-            generalController.getGraph().removeElement(vertex);
         }
     }
 

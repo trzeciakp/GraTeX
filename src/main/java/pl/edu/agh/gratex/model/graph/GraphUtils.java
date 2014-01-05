@@ -24,7 +24,7 @@ public class GraphUtils {
     
     public static boolean checkVertexCollision(Graph graph, Vertex vertex) {
         for (GraphElement vertex2 : graph.getElements(GraphElementType.VERTEX)) {
-            if (VertexUtils.collides((Vertex) vertex2, vertex)) {
+            if (vertex != vertex2 && VertexUtils.collides((Vertex) vertex2, vertex)) {
                 return true;
             }
         }

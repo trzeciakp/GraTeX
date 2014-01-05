@@ -9,7 +9,7 @@ public class Const {
     // MainWindow size constraints
     public final static int MAIN_WINDOW_MIN_WIDTH = 800;
     public final static int MAIN_WINDOW_MIN_HEIGHT = 600;
-    public final static int MAIN_WINDOW_DEFAULT_WIDTH = 1038;
+    public final static int MAIN_WINDOW_DEFAULT_WIDTH = 1010;
     public final static int MAIN_WINDOW_DEFAULT_HEIGHT = 768;
 
     // Extension of GraTeX graph files
@@ -63,5 +63,11 @@ public class Const {
     public final static double BOUNDARY_CORNER_LENGTH_FACTOR = 0.3;
 
     // Ratio of arrow size to corner size
-    public final static double BOUNDARY_CORNER_ARROW_SIZE_FACTOR = 0.6;
+    public final static double BOUNDARY_ARROW_SIZE_FACTOR = 0.6;
+
+    // Ratio of arrow head size to corner size
+    public final static double BOUNDARY_ARROW_HEAD_SIZE_FACTOR = 0.25;
+
+    // Ratio of arrow head size to corner size
+    public final static float BOUNDARY_COLOR_BRIGHTNESS_DIFFERENCE = 0.4f;
 }
