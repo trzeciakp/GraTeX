@@ -5,7 +5,9 @@ import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 import pl.edu.agh.gratex.parser.elements.StaticParseElement;
-import pl.edu.agh.gratex.parser.elements.vertex.NumberVertexParser;
+import pl.edu.agh.gratex.parser.elements.hyperedge.HyperedgeNumberParseElement;
+import pl.edu.agh.gratex.parser.elements.hyperedge.HyperedgeShapeParseElement;
+import pl.edu.agh.gratex.parser.elements.vertex.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +26,15 @@ public class HyperedgeParser extends GraphElementParser {
     @Override
     public List<ParseElement> createParseList() {
         List<ParseElement> parseList = new ArrayList<>();
-        parseList.add(new StaticParseElement("\\node ", false));
-        parseList.add(new NumberVertexParser());
+/*        parseList.add(new StaticParseElement("\\node ", false));
+        parseList.add(new HyperedgeNumberParseElement());
+        parseList.add(new StaticParseElement(" [", false));
+        parseList.add(new HyperedgeShapeParseElement());
+        parseList.add(new SizeVertexParser());
+        parseList.add(new ColorVertexParser(colorMapper));
+        parseList.add(new StaticParseElement("] at ", false));
+        parseList.add(new PositionVertexParser());
+        parseList.add(new StaticParseElement(";", false));*/
         return parseList;
     }
 

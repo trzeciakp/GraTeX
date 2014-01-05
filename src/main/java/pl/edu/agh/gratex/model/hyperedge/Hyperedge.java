@@ -5,8 +5,6 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.labelE.LabelEUtils;
-import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -26,10 +24,9 @@ public class Hyperedge extends GraphElement {
     private HyperedgePropertyModel propertyModel = (HyperedgePropertyModel) super.propertyModel;
 
     private List<Vertex> connectedVertices = new LinkedList<>();
-    private int centroidX;
-    private int centroidY;
-    private int jointBiasX;
-    private int jointBiasY;
+    private int jointCenterX;
+    private int jointCenterY;
+    private int radius;
 
     public Hyperedge(Graph graph, PropertyModel propertyModel) {
         super(graph, propertyModel);
@@ -58,7 +55,7 @@ public class Hyperedge extends GraphElement {
 
     @Override
     public void updateLocation() {
-        int centroidX = 0;
+        /*int centroidX = 0;
         int centroidY = 0;
         for (Vertex vertex : getConnectedVertices()) {
             centroidX += vertex.getPosX();
@@ -67,18 +64,18 @@ public class Hyperedge extends GraphElement {
         centroidX /= Math.min(1, getConnectedVertices().size());
         centroidY /= Math.min(1, getConnectedVertices().size());
         setCentroidX(centroidX);
-        setCentroidY(centroidY);
+        setCentroidY(centroidY);*/
     }
 
     @Override
     public Area getArea() {
         Path2D path = new Path2D.Double();
         for (Vertex vertex : connectedVertices) {
-            path.moveTo(centroidX + jointBiasX, centroidY + jointBiasY);
+            path.moveTo(jointCenterX, jointCenterY);
             path.lineTo(vertex.getPosX(), vertex.getPosY());
         }
         Area edgesArea = new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(path));
-        Area jointArea = new Area(VertexUtils.getVertexShape(getJointShape(), getJointSize() + 2, centroidX + jointBiasX, centroidY + jointBiasY));
+        Area jointArea = new Area(VertexUtils.getVertexShape(getJointShape(), getJointSize() + 2, jointCenterX, jointCenterY));
         edgesArea.add(jointArea);
         return edgesArea;
     }
@@ -106,36 +103,28 @@ public class Hyperedge extends GraphElement {
         this.connectedVertices = connectedVertices;
     }
 
-    public int getCentroidX() {
-        return centroidX;
+    public int getJointCenterX() {
+        return jointCenterX;
     }
 
-    public void setCentroidX(int centroidX) {
-        this.centroidX = centroidX;
+    public void setJointCenterX(int jointCenterX) {
+        this.jointCenterX = jointCenterX;
     }
 
-    public int getCentroidY() {
-        return centroidY;
+    public int getJointCenterY() {
+        return jointCenterY;
     }
 
-    public void setCentroidY(int centroidY) {
-        this.centroidY = centroidY;
+    public void setJointCenterY(int jointCenterY) {
+        this.jointCenterY = jointCenterY;
     }
 
-    public int getJointBiasX() {
-        return jointBiasX;
+    public int getRadius() {
+        return radius;
     }
 
-    public void setJointBiasX(int jointBiasX) {
-        this.jointBiasX = jointBiasX;
-    }
-
-    public int getJointBiasY() {
-        return jointBiasY;
-    }
-
-    public void setJointBiasY(int jointBiasY) {
-        this.jointBiasY = jointBiasY;
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 
     public Color getLineColor() {

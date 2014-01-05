@@ -26,8 +26,8 @@ public class HyperedgeDrawer implements Drawer {
         Hyperedge hyperedge = (Hyperedge) graphElement;
         Graphics2D g = (Graphics2D) graphics.create();
 
-        int middleX = hyperedge.getCentroidX() + hyperedge.getJointBiasX();
-        int middleY = hyperedge.getCentroidY() + hyperedge.getJointBiasY();
+        int middleX = hyperedge.getJointCenterX();
+        int middleY = hyperedge.getJointCenterY();
 
         int lineWidth = hyperedge.getLineWidth();
         LineType lineType = hyperedge.getLineType();
