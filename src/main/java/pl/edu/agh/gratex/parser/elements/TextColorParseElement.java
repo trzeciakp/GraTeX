@@ -44,7 +44,7 @@ public abstract class TextColorParseElement extends ParseElement {
         if(color != null) {
             return colorMapper.getColor(color);
         } else {
-            return null;
+            return colorMapper.getTemplateColor();
         }
     }
 
@@ -63,19 +63,5 @@ public abstract class TextColorParseElement extends ParseElement {
         } else {
             return "{" + text + "}";
         }
-    }
-
-    public static void main(String[] args) {
-        Pattern pa = Pattern.compile("(dupa)(t(e)st)?(dupa)");
-        Matcher matcher = pa.matcher("dupatestdupa");
-        Matcher matcher2 = pa.matcher("dupadupa");
-        matcher.find();
-        matcher2.find();
-        for(int i = 1; i < 5; i++) {
-            System.out.println(matcher.group(i) + " | " + matcher2.group(i));
-        }
-        //System.out.println(String.format("%s %s %s %s | %s %s %s %s", matcher.group(1), matcher.group(2), matcher.group(3), matcher2.group(1), matcher2.group(2), matcher2.group(3)));
-
-
     }
 }

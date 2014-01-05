@@ -113,9 +113,13 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         if(model.getLineType() == LineType.NONE || model.getLineType().isEmpty()) {
             spinnerLineSize.setEnabled(false);
             lblLineSize.setEnabled(false);
+            lblLineColor.setEnabled(false);
+            comboBoxLineColor.setEnabled(false);
         } else {
             spinnerLineSize.setEnabled(true);
             lblLineSize.setEnabled(true);
+            lblLineColor.setEnabled(true);
+            comboBoxLineColor.setEnabled(true);
         }
         if (model.getLineWidth() == PropertyModel.EMPTY || model.getLineWidth() == 0) {
             spinnerLineSize.setValue(StringLiterals.EMPTY_VALUE);

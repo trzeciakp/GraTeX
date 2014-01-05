@@ -41,7 +41,7 @@ public class LineColorEdgeParser extends ParseElement {
     public void setProperty(String match, GraphElement element) {
         Edge edge = (Edge) element;
         if(match == null) {
-            return;
+            colorMapper.getTemplateColor();
         }
         Matcher matcher = PATTERN.matcher(match);
         matcher.matches();

@@ -5,7 +5,6 @@ import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.LineColorTypeParser;
-import pl.edu.agh.gratex.parser.elements.ParseElement;
 
 import java.awt.*;
 
@@ -22,7 +21,7 @@ public class BoundaryLineColorTypeParseElement extends LineColorTypeParser {
         Boundary boundary = (Boundary) element;
         if(match == null) {
             boundary.setLineType(LineType.NONE);
-            boundary.setLineColor(null);
+            boundary.setLineColor(colorMapper.getTemplateColor());
             return;
         }
         Color color = getColorPropertyValue(match);

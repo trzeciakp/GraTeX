@@ -22,7 +22,7 @@ public class LineColorTypeVertexParser extends LineColorTypeParser {
         Vertex vertex = (Vertex) element;
         if(match == null) {
             vertex.setLineType(LineType.NONE);
-            vertex.setLineColor(null);
+            vertex.setLineColor(colorMapper.getTemplateColor());
             return;
         }
         Color color = getColorPropertyValue(match);

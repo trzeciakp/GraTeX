@@ -273,7 +273,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void parseToTeX() {
-        new LatexCodeDialog(mainWindow, Parser.parse(graph));
+        new LatexCodeDialog(mainWindow, parseController.parseGraphToLatexCode(graph));
     }
 
     @Override

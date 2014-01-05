@@ -9,6 +9,8 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class LatexCodeDialog extends JDialog implements ClipboardOwner {
@@ -18,6 +20,7 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
     private JButton button_copyToClipboard;
     private JPopupMenu popupMenu;
     private JMenuItem menuItem;
+    private final List<String> codeWithPicture;
 
     protected JRootPane createRootPane() {
         ActionListener actionListener = new ActionListener() {
@@ -32,17 +35,87 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
         return rootPane;
     }
 
-    public LatexCodeDialog(MainWindow parent, String code) {
+    private String listToString(List<String> code, boolean removeComments) {
+        StringBuilder result = new StringBuilder();
+        for (String line : code) {
+            result.append((removeComments ? removeComment(line) : line)).append("\n");
+        }
+        return result.toString();
+    }
+
+    private String removeComment(String line) {
+        //TODO what if % in latex code?
+        int commentStart = line.indexOf("%");
+        if (commentStart > -1) {
+            return line.substring(0,commentStart);
+        }
+        return line;
+    }
+
+    private void addDocumentHeader(List<String> documentHeader) {
+        documentHeader.add(0, "\\documentclass[]{article}");
+        documentHeader.add(1, "\\usepackage{tikz}");
+        documentHeader.add(2, "\\usetikzlibrary{backgrounds,shapes.geometric}");
+        documentHeader.add(3, "\\begin{document}\n");
+
+        documentHeader.add("\n\\end{document}");
+    }
+
+    private void removeDocumentHeader(List<String> documentHeader) {
+        documentHeader.remove(0);
+        documentHeader.remove(0);
+        documentHeader.remove(0);
+        documentHeader.remove(0);
+        documentHeader.remove(documentHeader.size()-1);
+    }
+
+
+    public LatexCodeDialog(MainWindow parent, List<String> code) {
         super(parent, StringLiterals.TITLE_LATEX_CODE_DIALOG, true);
+        codeWithPicture = new LinkedList<>();
+        codeWithPicture.add("\\begin{tikzpicture}");
+        codeWithPicture.add("[every node/.style={inner sep=0pt}]");
+        codeWithPicture.addAll(code);
+        codeWithPicture.add("\\end{tikzpicture}");
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(768, 768);
         setMinimumSize(new Dimension(200, 200));
         setLocationRelativeTo(null);
         getContentPane().setLayout(new BorderLayout(0, 0));
+
+        JPanel checkboxesPanel = new JPanel();
+        final JCheckBox showCommentsCheckBox = new JCheckBox("Show comments");
+        showCommentsCheckBox.setSelected(true);
+        showCommentsCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textArea_code.setText(listToString(codeWithPicture, showCommentsCheckBox.isSelected()));
+            }
+        });
+        //getContentPane().add(showCommentsCheckBox, BorderLayout.NORTH);
+        checkboxesPanel.add(showCommentsCheckBox);
+        final JCheckBox showDocumentHeaderCheckBox = new JCheckBox("Show document header");
+        showDocumentHeaderCheckBox.setSelected(false);
+        showDocumentHeaderCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(showDocumentHeaderCheckBox.isSelected()) {
+                    addDocumentHeader(codeWithPicture);
+                } else {
+                    removeDocumentHeader(codeWithPicture);
+                }
+                textArea_code.setText(listToString(codeWithPicture, showCommentsCheckBox.isSelected()));
+            }
+        });
+        checkboxesPanel.add(showDocumentHeaderCheckBox);
+        //getContentPane().add(showDocumentHeaderCheckBox, BorderLayout.NORTH);
+        getContentPane().add(checkboxesPanel, BorderLayout.NORTH);
+
         textArea_code = new JTextArea();
         textArea_code.setWrapStyleWord(true);
         textArea_code.setLineWrap(true);
-        textArea_code.setText(code);
+        textArea_code.setText(listToString(codeWithPicture, false));
         textArea_code.setCaretPosition(0);
 
         popupMenu = new JPopupMenu();

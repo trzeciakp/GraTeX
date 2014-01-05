@@ -9,4 +9,5 @@ public interface ColorMapper {
 
     public Color getColor(String colorText);
     public String getColorText(Color color);
+    public Color getTemplateColor();
 }

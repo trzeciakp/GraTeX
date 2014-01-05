@@ -17,4 +17,9 @@ public class ColorMapperTmpImpl implements ColorMapper {
     public String getColorText(Color color) {
         return PropertyModel.COLORS.get(color);
     }
+
+    @Override
+    public Color getTemplateColor() {
+        return Color.black;
+    }
 }
