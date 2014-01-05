@@ -1,16 +1,20 @@
 package pl.edu.agh.gratex.model.hyperedge;
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
+import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
 import java.awt.*;
 import java.awt.geom.Area;
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +26,8 @@ public class Hyperedge extends GraphElement {
     private HyperedgePropertyModel propertyModel = (HyperedgePropertyModel) super.propertyModel;
 
     private List<Vertex> connectedVertices = new LinkedList<>();
+    private int centroidX;
+    private int centroidY;
     private int jointBiasX;
     private int jointBiasY;
 
@@ -51,8 +57,30 @@ public class Hyperedge extends GraphElement {
     }
 
     @Override
+    public void updateLocation() {
+        int centroidX = 0;
+        int centroidY = 0;
+        for (Vertex vertex : getConnectedVertices()) {
+            centroidX += vertex.getPosX();
+            centroidY += vertex.getPosY();
+        }
+        centroidX /= Math.min(1, getConnectedVertices().size());
+        centroidY /= Math.min(1, getConnectedVertices().size());
+        setCentroidX(centroidX);
+        setCentroidY(centroidY);
+    }
+
+    @Override
     public Area getArea() {
-        return new Area();
+        Path2D path = new Path2D.Double();
+        for (Vertex vertex : connectedVertices) {
+            path.moveTo(centroidX + jointBiasX, centroidY + jointBiasY);
+            path.lineTo(vertex.getPosX(), vertex.getPosY());
+        }
+        Area edgesArea = new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(path));
+        Area jointArea = new Area(VertexUtils.getVertexShape(getJointShape(), getJointSize() + 2, centroidX + jointBiasX, centroidY + jointBiasY));
+        edgesArea.add(jointArea);
+        return edgesArea;
     }
 
     @Override
@@ -76,6 +104,22 @@ public class Hyperedge extends GraphElement {
 
     public void setConnectedVertices(List<Vertex> connectedVertices) {
         this.connectedVertices = connectedVertices;
+    }
+
+    public int getCentroidX() {
+        return centroidX;
+    }
+
+    public void setCentroidX(int centroidX) {
+        this.centroidX = centroidX;
+    }
+
+    public int getCentroidY() {
+        return centroidY;
+    }
+
+    public void setCentroidY(int centroidY) {
+        this.centroidY = centroidY;
     }
 
     public int getJointBiasX() {

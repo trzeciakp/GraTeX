@@ -105,7 +105,7 @@ public class Edge extends GraphElement {
             path.lineTo(outPoint.x, outPoint.y);
             edgePath = path;
         }
-        return new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN).createStrokedShape(edgePath));
+        return new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(edgePath));
     }
 
     @Override

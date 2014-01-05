@@ -8,5 +8,5 @@ import java.awt.*;
  *
  */
 public interface Drawer {
-    void draw(GraphElement graphElement, Graphics g);
+    void draw(GraphElement graphElement, Graphics graphics);
 }
