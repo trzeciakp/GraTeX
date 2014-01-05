@@ -102,12 +102,8 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_EDGE_END));
             } else {
                 currentlyAddedEdge.setVertexB(vertex);
-                if (!checkIfEdgeExists(currentlyAddedEdge)) {
-                    currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDefaultDrawable(GraphElementType.EDGE));
-                    new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
-                } else {
-                    generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_CREATE_EDGE_EXISTS));
-                }
+                currentlyAddedEdge.setDrawer(getGraphElementFactory().getDrawerFactory().createDefaultDrawable(GraphElementType.EDGE));
+                new CreationRemovalOperation(generalController, currentlyAddedEdge, OperationType.ADD_EDGE, StringLiterals.INFO_EDGE_ADD, true);
                 currentlyAddedEdge = null;
             }
         }
@@ -214,16 +210,16 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     public void finishMoving() {
         if (currentlyDraggedEdge != null) {
             boolean restoreState = false;
-            if (checkIfEdgeExists(currentlyDraggedEdge)) {
-                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_MOVE_EDGE_EXISTS));
-                restoreState = true;
-            } else {
+            //if (checkIfEdgeExists(currentlyDraggedEdge)) {
+            //    generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CANNOT_MOVE_EDGE_EXISTS));
+            //    restoreState = true;
+            //} else {
                 if (currentlyDraggedEdge.getVertexA() != edgeDragDummy && currentlyDraggedEdge.getVertexB() != edgeDragDummy) {
                     currentDragOperation.finish();
                 } else {
                     restoreState = true;
                 }
-            }
+            //}
             if (restoreState) {
                 // Restore original edge state (it was dropped in mid air or moving was not permitted)
                 try {

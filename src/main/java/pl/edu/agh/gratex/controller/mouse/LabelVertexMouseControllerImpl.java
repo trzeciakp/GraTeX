@@ -37,7 +37,7 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
 
     @Override
     public GraphElement getCurrentlyAddedElement() {
-        Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);;
+        Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);;
         if (vertex != null) {
             if (vertex.getLabel() == null) {
                 LabelV labelV = (LabelV) getGraphElementFactory().create(GraphElementType.LABEL_VERTEX, generalController.getGraph());
@@ -51,7 +51,7 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
 
     @Override
     public void addNewElement(int mouseX, int mouseY) {
-        Vertex owner = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.EDGE, mouseX, mouseY);
+        Vertex owner = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
         if (owner != null) {
             if (owner.getLabel() == null) {
                 LabelV labelV = (LabelV) getGraphElementFactory().create(GraphElementType.LABEL_VERTEX, generalController.getGraph());

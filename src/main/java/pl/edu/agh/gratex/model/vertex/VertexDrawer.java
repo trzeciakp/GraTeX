@@ -30,6 +30,9 @@ public class VertexDrawer implements Drawer {
         int radius = vertex.getRadius();
         int lineWidth = vertex.getLineWidth();
         LineType lineType = vertex.getLineType();
+        if (lineType == LineType.NONE) {
+            lineWidth = 0;
+        }
 
         int tempX = 0;
         int tempY = 0;
