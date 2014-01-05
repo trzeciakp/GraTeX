@@ -75,7 +75,9 @@ public class BoundaryMouseController extends GraphElementMouseController {
             if (generalController.getGraph().isGridOn()) {
                 BoundaryUtils.adjustToGrid(currentlyAddedBoundary);
             }
-            new CreationRemovalOperation(generalController, currentlyAddedBoundary, OperationType.ADD_BOUNDARY, StringLiterals.INFO_BOUNDARY_ADD, true);
+            if (currentlyAddedBoundary.getWidth() * currentlyAddedBoundary.getHeight() > 0) {
+                new CreationRemovalOperation(generalController, currentlyAddedBoundary, OperationType.ADD_BOUNDARY, StringLiterals.INFO_BOUNDARY_ADD, true);
+            }
             currentlyAddedBoundary = null;
         }
     }

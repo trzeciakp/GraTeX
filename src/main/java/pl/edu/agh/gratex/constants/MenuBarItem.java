@@ -32,6 +32,7 @@ public enum MenuBarItem {
     LABELV_MODE("Edit labels of vertices", 'L', KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), MenuBarSubmenu.MODE, false, true),
     LABELE_MODE("Edit labels of edges", 'A', KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), MenuBarSubmenu.MODE, false, true),
     BOUNDARY_MODE("Edit boundaries", 'B', KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), MenuBarSubmenu.MODE, false, true),
+    HYPEREDGE_MODE("Edit hyperedges", 'H', KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0), MenuBarSubmenu.MODE, false, true),
 
     ADD_TOOL("Add tool", 'A', KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.ALT_MASK), MenuBarSubmenu.TOOLS, true, true),
     REMOVE_TOOL("Remove tool", 'R', KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK), MenuBarSubmenu.TOOLS, false, true),

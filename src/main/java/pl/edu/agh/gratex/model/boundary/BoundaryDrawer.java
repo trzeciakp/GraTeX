@@ -25,7 +25,6 @@ public class BoundaryDrawer implements Drawer {
         Boundary boundary = (Boundary) graphElement;
         Graphics2D g = (Graphics2D) graphics.create();
 
-
         int tempX = 0;
         int tempY = 0;
         int tempWidth = 0;

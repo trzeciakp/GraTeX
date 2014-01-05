@@ -65,7 +65,7 @@ public class LabelV extends GraphElement  {
 
     @Override
     public int getDrawingPriority() {
-        return 3;
+        return 4;
     }
 
     public String getText() {

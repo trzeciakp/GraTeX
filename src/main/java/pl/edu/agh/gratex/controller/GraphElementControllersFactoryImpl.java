@@ -6,7 +6,6 @@ import pl.edu.agh.gratex.controller.mouse.*;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.parser.*;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
-import pl.edu.agh.gratex.parser.elements.ColorMapperTmpImpl;
 
 /**
  *

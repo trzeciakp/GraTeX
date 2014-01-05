@@ -9,7 +9,6 @@ import pl.edu.agh.gratex.model.DrawerFactoryImpl;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
-import pl.edu.agh.gratex.parser.Parser;
 import pl.edu.agh.gratex.parser.elements.ColorMapperTmpImpl;
 import pl.edu.agh.gratex.utils.FileManager;
 import pl.edu.agh.gratex.view.*;
@@ -181,44 +180,20 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void editGraphTemplate() {
         GraphTemplateDialog gdd = new GraphTemplateDialog(mainWindow, this, graphElementFactory);
-        //Graph templateGraph = gdd.displayDialog();
-        boolean shouldTemplateBeSetToAllElements = gdd.displayDialog();
+        boolean applyToAll = gdd.displayDialog();
 
-        /*if (templateGraph != null) {
-            graph.setVertexDefaultModel(templateGraph.getVertexDefaultModel());
-            graph.setEdgeDefaultModel(templateGraph.getEdgeDefaultModel());
-            graph.setLabelVDefaultModel(templateGraph.getLabelVDefaultModel());
-            graph.setLabelEDefaultModel(templateGraph.getLabelEDefaultModel());*/
-
-        //if (templateGraph.gridOn) {
-        if(shouldTemplateBeSetToAllElements) {
+        if(applyToAll) {
             List<GraphElement> elements = graph.getAllElements();
             AlterationOperation operation = new AlterationOperation(this, elements, OperationType.TEMPLATE_GLOBAL_APPLY, StringLiterals.INFO_TEMPLATE_APPLIED_GLOBALLY);
             PropertyModelFactory propertyModelFactory = graphElementFactory.getPropertyModelFactory();
             for (GraphElement element : elements) {
                 element.setModel(propertyModelFactory.createTemplateModel(element.getType()));
             }
-            /*for (GraphElement graphElement : elements) {
-                switch (graphElement.getType()) {
-                    case VERTEX:
-                        graphElement.setModel(templateGraph.getVertexDefaultModel());
-                        break;
-                    case EDGE:
-                        graphElement.setModel(templateGraph.getEdgeDefaultModel());
-                        break;
-                    case LABEL_VERTEX:
-                        graphElement.setModel(templateGraph.getLabelVDefaultModel());
-                        break;
-                    case LABEL_EDGE:
-                        graphElement.setModel(templateGraph.getLabelEDefaultModel());
-                        break;
-                }
-            }*/
             operation.finish();
         } else {
             operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_TEMPLATE_CHANGE));
         }
-        //}
+        resetWorkspace();
     }
 
     @Override
@@ -228,13 +203,13 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     @Override
     public void undo() {
-        selectionController.clearSelection();
+        resetWorkspace();
         operationController.undo();
     }
 
     @Override
     public void redo() {
-        selectionController.clearSelection();
+        resetWorkspace();
         operationController.redo();
     }
 
@@ -249,16 +224,16 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                 graph.setGridOn(true);
                 graph.setGridResolutionX(result[0]);
                 graph.setGridResolutionY(result[1]);
-                GraphUtils.adjustVerticesToGrid(graph);
+                GraphUtils.adjustElementsToGrid(graph);
             }
         }
         operationController.reportOperationEvent(new GenericOperation(
                 StringLiterals.INFO_GENERIC_GRID(graph.isGridOn(), graph.getGridResolutionX(), graph.getGridResolutionY())));
+        resetWorkspace();
     }
 
     @Override
     public void setNumeration() {
-        selectionController.clearSelection();
         NumerationDialog nd = new NumerationDialog(mainWindow, graph.getGraphNumeration().isNumerationDigital(),
                 graph.getGraphNumeration().getStartingNumber(), Const.MAX_VERTEX_NUMBER);
         int[] result = nd.showDialog();
@@ -269,10 +244,12 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             operationController.reportOperationEvent(new GenericOperation(
                     StringLiterals.INFO_GENERIC_NUMERATION(result[0] == 0, result[1])));
         }
+        resetWorkspace();
     }
 
     @Override
     public void parseToTeX() {
+        resetWorkspace();
         new LatexCodeDialog(mainWindow, parseController.parseGraphToLatexCode(graph));
     }
 
@@ -329,6 +306,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
     private void resetWorkspace() {
         selectionController.clearSelection();
+        mouseController.cancelCurrentOperation();
         operationController.reportOperationEvent(null);
     }
 }

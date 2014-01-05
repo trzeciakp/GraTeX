@@ -10,8 +10,10 @@ import java.awt.*;
  *
  */
 public class HyperedgeDrawer implements Drawer {
-    public HyperedgeDrawer(SelectionController selectionController) {
+    private SelectionController selectionController;
 
+    public HyperedgeDrawer(SelectionController selectionController) {
+        this.selectionController = selectionController;
     }
 
     @Override

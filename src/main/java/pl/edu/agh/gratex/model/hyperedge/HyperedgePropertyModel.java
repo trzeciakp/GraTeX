@@ -10,7 +10,6 @@ import java.awt.*;
  *
  */
 public class HyperedgePropertyModel extends PropertyModel {
-
     private LineType lineType = LineType.EMPTY;
     private int lineWidth = PropertyModel.EMPTY;
     private Color lineColor = null;
