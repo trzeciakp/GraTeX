@@ -152,6 +152,8 @@ public class StringLiterals {
 
     // This should go before message when undoing changes
     private final static String UNDO_PREFIX = "[UNDONE] ";
+    public static final String BOUNDARY_FILL_COLOR = "Fill color:";
+    public static final String BOUNDARY_LINE_TYPE = "Line type:";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;
