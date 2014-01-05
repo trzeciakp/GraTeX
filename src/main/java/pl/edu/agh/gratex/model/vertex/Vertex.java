@@ -69,7 +69,7 @@ public class Vertex extends GraphElement {
 
     @Override
     public int getDrawingPriority() {
-        return 2;
+        return 3;
     }
 
     // ============================================

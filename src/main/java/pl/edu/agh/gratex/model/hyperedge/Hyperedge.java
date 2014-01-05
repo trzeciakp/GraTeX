@@ -56,15 +56,15 @@ public class Hyperedge extends GraphElement {
     public void updateLocation() {
     }
 
-    public void calculateJoinPosition() {
+    public void calculateJointPosition() {
         int centroidX = 0;
         int centroidY = 0;
         for (Vertex vertex : getConnectedVertices()) {
             centroidX += vertex.getPosX();
             centroidY += vertex.getPosY();
         }
-        centroidX /= Math.min(1, getConnectedVertices().size());
-        centroidY /= Math.min(1, getConnectedVertices().size());
+        centroidX /= Math.max(1, getConnectedVertices().size());
+        centroidY /= Math.max(1, getConnectedVertices().size());
         setJointCenterX(centroidX);
         setJointCenterY(centroidY);
     }
@@ -168,6 +168,4 @@ public class Hyperedge extends GraphElement {
     public void setLineColor(Color lineColor) {
         propertyModel.setLineColor(lineColor);
     }
-}
-
 }

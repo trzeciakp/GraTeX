@@ -41,6 +41,7 @@ public abstract class ShapeParseElement extends ParseElement {
         if(matcher.group(CIRCLE_POLYGON_GROUP) != null) {
             return ShapeType.CIRCLE;
         }
+        return null;
     }
 
     protected String getProperty(ShapeType shape) {
