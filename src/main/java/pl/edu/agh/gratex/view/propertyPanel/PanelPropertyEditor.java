@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.controller.operation.*;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.boundary.BoundaryPropertyModel;
+import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -64,7 +65,8 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
                 return new LabelEdgePropertyPanel();
             case BOUNDARY:
                 return new BoundaryPropertyPanel();
-
+            case HYPEREDGE:
+                return new HyperedgePropertyPanel();
             default:
                 return null;
         }

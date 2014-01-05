@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -40,6 +41,10 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
                 break;
             case BOUNDARY:
                 result = new Boundary(graph, propertyModel);
+                break;
+            case HYPEREDGE:
+                result = new Hyperedge(graph, propertyModel);
+                break;
         }
         result.setDrawer(drawerFactory.createDefaultDrawable(type));
         return result;

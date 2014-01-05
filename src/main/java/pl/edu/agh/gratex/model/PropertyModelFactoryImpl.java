@@ -3,6 +3,8 @@ package pl.edu.agh.gratex.model;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.boundary.BoundaryPropertyModel;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
+import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
+import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.properties.*;
@@ -26,12 +28,14 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         emptyModelMap.put(GraphElementType.EDGE, new EdgePropertyModel());
         emptyModelMap.put(GraphElementType.LABEL_EDGE, new LabelEdgePropertyModel());
         emptyModelMap.put(GraphElementType.BOUNDARY, new BoundaryPropertyModel());
+        emptyModelMap.put(GraphElementType.HYPEREDGE, new HyperedgePropertyModel());
 
         defaultModelMap.put(GraphElementType.VERTEX, new VertexPropertyModel());
         defaultModelMap.put(GraphElementType.LABEL_VERTEX, new LabelVertexPropertyModel());
         defaultModelMap.put(GraphElementType.EDGE, new EdgePropertyModel());
         defaultModelMap.put(GraphElementType.LABEL_EDGE, new LabelEdgePropertyModel());
         defaultModelMap.put(GraphElementType.BOUNDARY, new BoundaryPropertyModel());
+        defaultModelMap.put(GraphElementType.HYPEREDGE, new HyperedgePropertyModel());
 
         initDefaultModels();
 

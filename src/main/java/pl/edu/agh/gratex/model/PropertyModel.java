@@ -10,13 +10,9 @@ import java.util.Vector;
 public abstract class PropertyModel {
 
     public final static int EMPTY = -1;
-    public final static int NONE = 0;
 
-    public final static int NUMBERS = 1;
-    public final static int ALPHA = 2;
-
-    public final static int NO = 0;
-    public final static int YES = 1;
+    //public final static int NUMBERS = 1;
+    //public final static int ALPHA = 2;
 
 
     public static Vector<Color> ColorList = new Vector<Color>();

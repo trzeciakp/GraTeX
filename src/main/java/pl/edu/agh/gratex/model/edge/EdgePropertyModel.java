@@ -78,7 +78,7 @@ public class EdgePropertyModel extends PropertyModel {
             directed = IsDirected.EMPTY;
         }
 
-        if (lineColor != null) {
+        if (model.lineColor != null) {
             if (!model.lineColor.equals(lineColor)) {
                 lineColor = null;
             }

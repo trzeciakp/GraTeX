@@ -5,7 +5,8 @@ public enum GraphElementType {
     EDGE("edge", "edges"),
     LABEL_VERTEX("label (vertex)", "labels (vertex)"),
     LABEL_EDGE("label (edge)", "labels (edge)"),
-    BOUNDARY("boundary","boundaries");
+    BOUNDARY("boundary","boundaries"),
+    HYPEREDGE("hyperedge", "hyperedges");
 
     private final String singularName;
     private final String pluralName;

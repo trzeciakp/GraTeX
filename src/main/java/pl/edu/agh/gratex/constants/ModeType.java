@@ -5,8 +5,8 @@ public enum ModeType {
     EDGE("EDGE", GraphElementType.EDGE),
     LABEL_VERTEX("LABEL (vertex)", GraphElementType.LABEL_VERTEX),
     LABEL_EDGE("LABEL (edge)", GraphElementType.LABEL_EDGE),
-    BOUNDARY("BOUNDARY", GraphElementType.BOUNDARY);
-
+    BOUNDARY("BOUNDARY", GraphElementType.BOUNDARY),
+    HYPEREDGE("HYPEREDGE", GraphElementType.HYPEREDGE);
 
     private final String name;
     private final GraphElementType relatedElementType;

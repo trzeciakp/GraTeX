@@ -6,6 +6,7 @@ import pl.edu.agh.gratex.model.boundary.BoundaryDrawer;
 import pl.edu.agh.gratex.model.boundary.EditedBoundaryDrawer;
 import pl.edu.agh.gratex.model.edge.DummyEdgeDrawer;
 import pl.edu.agh.gratex.model.edge.EdgeDrawer;
+import pl.edu.agh.gratex.model.hyperedge.HyperedgeDrawer;
 import pl.edu.agh.gratex.model.labelE.LabelEdgeDrawer;
 import pl.edu.agh.gratex.model.labelV.LabelVertexDrawer;
 import pl.edu.agh.gratex.model.vertex.VertexDrawer;
@@ -26,6 +27,7 @@ public class DrawerFactoryImpl implements DrawerFactory {
         defaultDrawable.put(GraphElementType.EDGE, new EdgeDrawer(selectionController));
         defaultDrawable.put(GraphElementType.LABEL_EDGE, new LabelEdgeDrawer(selectionController));
         defaultDrawable.put(GraphElementType.BOUNDARY, new BoundaryDrawer(selectionController));
+        defaultDrawable.put(GraphElementType.BOUNDARY, new HyperedgeDrawer(selectionController));
         dummyEdgeDrawable = new DummyEdgeDrawer(defaultDrawable.get(GraphElementType.EDGE));
         editedBoundaryDrawer = new EditedBoundaryDrawer();
     }
@@ -42,7 +44,6 @@ public class DrawerFactoryImpl implements DrawerFactory {
 
     @Override
     public Drawer createEditedBoundaryDrawable() {
-        System.out.println(editedBoundaryDrawer);
         return editedBoundaryDrawer;
     }
 }

@@ -35,6 +35,8 @@ public class GraphElementControllersFactoryImpl implements GraphElementControlle
                 return new LabelEdgeParser(colorMapper, graphElementFactory);
             case BOUNDARY:
                 return new BoundaryParser(colorMapper, graphElementFactory);
+            case HYPEREDGE:
+                return new HyperedgeParser(colorMapper, graphElementFactory);
         }
         return null;
     }
@@ -52,6 +54,8 @@ public class GraphElementControllersFactoryImpl implements GraphElementControlle
                 return new LabelEdgeMouseControllerImpl(generalController, graphElementFactory);
             case BOUNDARY:
                 return new BoundaryMouseController(generalController, graphElementFactory);
+            case HYPEREDGE:
+                return new HyperedgeMouseControllerImpl(generalController, graphElementFactory);
         }
         return null;
     }
