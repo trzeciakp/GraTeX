@@ -6,6 +6,7 @@ import pl.edu.agh.gratex.model.boundary.BoundaryDrawer;
 import pl.edu.agh.gratex.model.boundary.EditedBoundaryDrawer;
 import pl.edu.agh.gratex.model.edge.DummyEdgeDrawer;
 import pl.edu.agh.gratex.model.edge.EdgeDrawer;
+import pl.edu.agh.gratex.model.hyperedge.HyperedgeDrawer;
 import pl.edu.agh.gratex.model.labelE.LabelEdgeDrawer;
 import pl.edu.agh.gratex.model.labelV.LabelVertexDrawer;
 import pl.edu.agh.gratex.model.vertex.VertexDrawer;
@@ -30,12 +31,12 @@ public class DrawerFactoryImpl implements DrawerFactory {
     }
 
     @Override
-    public Drawer createDefaultDrawable(GraphElementType type) {
+    public Drawer createDefaultDrawer(GraphElementType type) {
         return defaultDrawable.get(type);
     }
 
     @Override
-    public Drawer createDummyEdgeDrawable() {
+    public Drawer createDummyEdgeDrawer() {
         return dummyEdgeDrawable;
     }
 }
