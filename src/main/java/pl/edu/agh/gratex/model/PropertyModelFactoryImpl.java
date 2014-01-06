@@ -107,6 +107,6 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineColor(PropertyModel.REVERSE_COLORS.get("black"));
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointShape(ShapeType.CIRCLE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointSize(8);
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointColor(PropertyModel.REVERSE_COLORS.get("darkgray"));
     }
 }
