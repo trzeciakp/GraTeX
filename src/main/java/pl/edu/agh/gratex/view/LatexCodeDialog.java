@@ -79,7 +79,7 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
         codeWithPicture.add("\\end{tikzpicture}");
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(768, 768);
+        setSize(768, 700);
         setMinimumSize(new Dimension(200, 200));
         setLocationRelativeTo(null);
         getContentPane().setLayout(new BorderLayout(0, 0));
