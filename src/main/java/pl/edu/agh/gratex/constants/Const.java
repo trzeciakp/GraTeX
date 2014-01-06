@@ -10,7 +10,7 @@ public class Const {
     public final static int MAIN_WINDOW_MIN_WIDTH = 800;
     public final static int MAIN_WINDOW_MIN_HEIGHT = 600;
     public final static int MAIN_WINDOW_DEFAULT_WIDTH = 1030;
-    public final static int MAIN_WINDOW_DEFAULT_HEIGHT = 768;
+    public final static int MAIN_WINDOW_DEFAULT_HEIGHT = 700;
 
     // Extension of GraTeX graph files
     public final static String GRAPH_FILES_EXTENSION = ".gph";

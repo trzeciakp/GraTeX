@@ -145,13 +145,6 @@ public class StringLiterals {
     public static final String VERTEX_NUMBER = "Number:";
     public static final String VERTEX_LINE_WIDTH = "Line width:";
     public static final String VERTEX_FONT_COLOR = "Font color:";
-
-
-    //==================================================
-    // Messages that go to label_info in MainWindow
-
-    // This should go before message when undoing changes
-    private final static String UNDO_PREFIX = "[UNDONE] ";
     public static final String BOUNDARY_FILL_COLOR = "Fill color:";
     public static final String BOUNDARY_LINE_TYPE = "Line type:";
     public static final String HYPEREDGE_JOINT_SHAPE_TYPE = "Joint type:";
@@ -160,6 +153,13 @@ public class StringLiterals {
     public static final String HYPEREDGE_LINE_TYPE = "Line type:";
     public static final String HYPEREDGE_LINE_WIDTH = "Line width:";
     public static final String HYPEREDGE_LINE_COLOR = "Line color:";
+
+
+    //==================================================
+    // Messages that go to label_info in MainWindow
+
+    // This should go before message when undoing changes
+    private final static String UNDO_PREFIX = "[UNDONE] ";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;
@@ -188,9 +188,8 @@ public class StringLiterals {
     public final static String INFO_LABEL_E_MOVE = "label (edge) moved";
     public final static String INFO_BOUNDARY_MOVE = "boundary moved";
     public final static String INFO_HYPEREDGE_JOINT_MOVE = "hyperedge's joint moved";
-
-    public static final String INFO_HYPEREDGE_SHRINK = "Vertex detached from hyperedge";
-    public static final String INFO_HYPEREDGE_EXTEND = "Vertex added to hyperedge";
+    public static final String INFO_HYPEREDGE_EDIT = "hyperedge edited";
+    public static final String INFO_HYPEREDGE_EXTEND = "vertex added to a hyperedge";
 
     // OldOperationList
     public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
@@ -235,8 +234,8 @@ public class StringLiterals {
     public static final String INFO_CHOOSE_HYPEREDGE_START = "choose a starting vertex for the hyperedge (click)";
     public static final String INFO_CHOOSE_HYPEREDGE_END = "now choose the second vertex (click)";
     public static final String INFO_HYPEREDGE_ADDING_CANCELLED = "adding hyperedge cancelled";
-    public final static String INFO_HYPEREDGE_HOW_TO_EXPAND = "CTRL + drag joint to add a vertex. CTRL + click a vertex to detach from hyperedge. " +
-            "Move joint by dragging. SHIFT for auto-center.";
+    public final static String INFO_HYPEREDGE_HOW_TO_EXPAND = "CTRL + drag joint to add a vertex. Drag an edge to edit. " +
+            "Move joint around by dragging. SHIFT for auto-center.";
 
     // SaveFileDialog
     public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";
@@ -280,7 +279,7 @@ public class StringLiterals {
                 break;
             }
             case HYPEREDGE: {
-                tipPart4a = "a hyperedge. CTRL + drag the joint to add a vertex. CTRL + click to remove a vertex. SHIFT to auto-center the joint while dragging.";
+                tipPart4a = "a hyperedge. " + INFO_HYPEREDGE_HOW_TO_EXPAND;
                 tipPart4b = "a hyperedge.";
                 break;
             }
