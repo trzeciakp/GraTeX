@@ -1,9 +1,11 @@
 package pl.edu.agh.gratex.controller.mouse;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
+import pl.edu.agh.gratex.constants.OperationType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.operation.AlterationOperation;
+import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
@@ -45,34 +47,41 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
                 edgeDragDummy.setPosX(vertex.getPosX());
                 edgeDragDummy.setPosY(vertex.getPosY());
             }
-            currentlyAddedHyperedge.getConnectedVertices().remove(edgeDragDummy);
-            if (ctrlDown || currentlyAddedHyperedge.getConnectedVertices().size() < 2) {
-                currentlyAddedHyperedge.getConnectedVertices().add(edgeDragDummy);
-            }
             currentlyAddedHyperedge.calculateJointPosition();
             return currentlyAddedHyperedge;
-
         }
         return null;
     }
 
     @Override
     public void addNewElement(int mouseX, int mouseY) {
-        Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
-        if (vertex == null) {
-            if (currentlyAddedHyperedge == null) {
+        if (currentlyAddedHyperedge == null) {
+            Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
+            if (vertex == null) {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_HYPEREDGE_START));
             } else {
-                currentlyAddedHyperedge = null;
-                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_HYPEREDGE_ADDING_CANCELLED));
-            }
-        } else {
-            if (currentlyAddedHyperedge == null) {
-                currentlyAddedHyperedge = (Hyperedge) graphElementFactory.create(GraphElementType.HYPEREDGE, generalController.getGraph());
+                currentlyAddedHyperedge = (Hyperedge) getGraphElementFactory().create(GraphElementType.HYPEREDGE, generalController.getGraph());
+                System.out.println("vertex = [" + vertex + "]");
                 currentlyAddedHyperedge.getConnectedVertices().add(vertex);
                 currentlyAddedHyperedge.getConnectedVertices().add(edgeDragDummy);
-            } else if (!currentlyAddedHyperedge.getConnectedVertices().contains(vertex)) {
+                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_HYPEREDGE_END));
+            }
+        } else {
+            Vertex vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
+            if (vertex == null) {
+                currentlyAddedHyperedge = null;
+                generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_HYPEREDGE_ADDING_CANCELLED));
+            } else {
+                currentlyAddedHyperedge.getConnectedVertices().remove(edgeDragDummy);
                 currentlyAddedHyperedge.getConnectedVertices().add(vertex);
+                for (Vertex vertex3 : currentlyAddedHyperedge.getConnectedVertices()) {
+                    System.out.println("przed przeparsowaniem = [" + vertex3 + "]");
+                }
+                new CreationRemovalOperation(generalController, currentlyAddedHyperedge, OperationType.ADD_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_ADD, true);
+                currentlyAddedHyperedge = null;
+                for (Vertex vertex3 : ((Hyperedge) generalController.getGraph().getElements(GraphElementType.HYPEREDGE).get(0)).getConnectedVertices()) {
+                    System.out.println("po przeparsowaniu = [" + vertex3 + "]");
+                }
             }
         }
     }

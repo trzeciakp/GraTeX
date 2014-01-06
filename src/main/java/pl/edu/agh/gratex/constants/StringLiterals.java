@@ -230,6 +230,7 @@ public class StringLiterals {
     public final static String INFO_CHOOSE_BOUNDARY_END = "choose opposite corner for the boundary";
 
     public static final String INFO_CHOOSE_HYPEREDGE_START = "choose a starting vertex for the hyperedge (click)";
+    public static final String INFO_CHOOSE_HYPEREDGE_END = "now choose the second vertex (click)";
     public static final String INFO_HYPEREDGE_ADDING_CANCELLED = "adding hyperedge cancelled";
     public final static String INFO_HYPEREDGE_EXPAND = "CTRL + click on a vertex to add/remove from hyperedge.";
 
