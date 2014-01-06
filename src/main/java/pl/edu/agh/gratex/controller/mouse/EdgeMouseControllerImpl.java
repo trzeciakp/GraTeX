@@ -9,12 +9,15 @@ import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
+import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 
 public class EdgeMouseControllerImpl extends GraphElementMouseController {
@@ -26,8 +29,8 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     private Vertex edgeDragDummy;
     private String initialLatexCodeOfDraggedEdge;
 
-    public EdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
-        super(generalController, graphElementFactory);
+    public EdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory, GraphElementType handledGraphElementType) {
+        super(generalController, graphElementFactory, handledGraphElementType);
         edgeDragDummy = (Vertex) getGraphElementFactory().create(GraphElementType.VERTEX, null);
     }
 

@@ -21,8 +21,11 @@ import java.util.List;
  *
  */
 public class Hyperedge extends GraphElement {
+    private static int jointNumberCounter = Const.MAX_VERTEX_NUMBER + 1;
+
     private HyperedgePropertyModel propertyModel = (HyperedgePropertyModel) super.propertyModel;
 
+    private int number = jointNumberCounter++;
     private List<Vertex> connectedVertices = new LinkedList<>();
     private int jointCenterX;
     private int jointCenterY;
@@ -34,12 +37,14 @@ public class Hyperedge extends GraphElement {
     //it should contain unique number to identify joint, any vertex cannot have the same number
     //it can be string, not necessary number
     public int getNumber() {
-        //TODO
-        return 1;
+        return number;
     }
 
     public void setNumber(int number) {
-
+        this.number = number;
+        if (number > jointNumberCounter) {
+            jointNumberCounter = number + 1;
+        }
     }
 
     @Override
@@ -56,7 +61,7 @@ public class Hyperedge extends GraphElement {
     public void updateLocation() {
     }
 
-    public void calculateJointPosition() {
+    public void autoCenterJoint() {
         int centroidX = 0;
         int centroidY = 0;
         for (Vertex vertex : getConnectedVertices()) {
@@ -77,9 +82,12 @@ public class Hyperedge extends GraphElement {
             path.lineTo(vertex.getPosX(), vertex.getPosY());
         }
         Area edgesArea = new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(path));
-        Area jointArea = new Area(VertexUtils.getVertexShape(getJointShape(), getJointSize() + 2, jointCenterX, jointCenterY));
-        edgesArea.add(jointArea);
+        edgesArea.add(getJointArea());
         return edgesArea;
+    }
+
+    public Area getJointArea() {
+        return new Area(VertexUtils.getVertexShape(getJointShape(), getJointSize(), jointCenterX, jointCenterY));
     }
 
     @Override

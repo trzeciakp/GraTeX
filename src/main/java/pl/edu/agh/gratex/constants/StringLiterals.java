@@ -187,7 +187,10 @@ public class StringLiterals {
     public final static String INFO_LABEL_V_MOVE = "label (vertex) moved";
     public final static String INFO_LABEL_E_MOVE = "label (edge) moved";
     public final static String INFO_BOUNDARY_MOVE = "boundary moved";
-    public final static String INFO_HYPEREDGE_MOVE = "hyperedge moved";
+    public final static String INFO_HYPEREDGE_JOINT_MOVE = "hyperedge's joint moved";
+
+    public static final String INFO_HYPEREDGE_SHRINK = "Vertex detached from hyperedge";
+    public static final String INFO_HYPEREDGE_EXTEND = "Vertex added to hyperedge";
 
     // OldOperationList
     public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
@@ -232,7 +235,9 @@ public class StringLiterals {
     public static final String INFO_CHOOSE_HYPEREDGE_START = "choose a starting vertex for the hyperedge (click)";
     public static final String INFO_CHOOSE_HYPEREDGE_END = "now choose the second vertex (click)";
     public static final String INFO_HYPEREDGE_ADDING_CANCELLED = "adding hyperedge cancelled";
-    public final static String INFO_HYPEREDGE_EXPAND = "CTRL + click on a vertex to add/remove from hyperedge.";
+    public static final String INFO_HYPEREDGE_CANNOT_DETACH = "cannot detach this vertex - a hyperedge must connect at least two vertices.";
+    public final static String INFO_HYPEREDGE_HOW_TO_EXPAND = "CTRL + drag joint to add a vertex. CTRL + click a vertex to detach from hyperedge. " +
+            "Move joint by dragging. SHIFT for auto-center.";
 
     // SaveFileDialog
     public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";
@@ -276,7 +281,7 @@ public class StringLiterals {
                 break;
             }
             case HYPEREDGE: {
-                tipPart4a = "a hyperedge. Hold down CTRL and click to add/remove vertices. Hold down SHIFT to auto-center the joint while dragging.";
+                tipPart4a = "a hyperedge. CTRL + drag the joint to add a vertex. CTRL + click to remove a vertex. SHIFT to auto-center the joint while dragging.";
                 tipPart4b = "a hyperedge.";
                 break;
             }
@@ -286,15 +291,15 @@ public class StringLiterals {
         String tipPart2 = tool.toString() + " tool.";
         switch (tool) {
             case ADD: {
-                tipPart3 = " Left-click to add " + tipPart4a;
+                tipPart3 = " Click to add " + tipPart4a;
                 break;
             }
             case REMOVE: {
-                tipPart3 = " Left-click to remove " + tipPart4b + " Click and drag to remove all items in the area.";
+                tipPart3 = " Click to remove " + tipPart4b + " Click and drag to remove all items in the area.";
                 break;
             }
             case SELECT: {
-                tipPart3 = " Left-click to select " + tipPart4b
+                tipPart3 = " Click to select " + tipPart4b
                         + " Drag to select all items in the area. CTRL + click/drag to extend selection. Move selected items by dragging them.";
                 break;
             }

@@ -9,6 +9,7 @@ import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
+import pl.edu.agh.gratex.model.boundary.Boundary;
 
 import java.awt.*;
 import java.util.*;
@@ -23,11 +24,15 @@ public abstract class GraphElementMouseController {
 
     protected GeneralController generalController;
     protected GraphElementFactory graphElementFactory;
+    protected GraphElementType handledGraphElementType;
 
-    protected GraphElementMouseController(GeneralController generalController, GraphElementFactory graphElementFactory) {
+    protected GraphElementMouseController(GeneralController generalController, GraphElementFactory graphElementFactory, GraphElementType handledGraphElementType) {
         this.generalController = generalController;
         this.graphElementFactory = graphElementFactory;
+        this.handledGraphElementType = handledGraphElementType;
     }
+
+
 
     public GraphElementFactory getGraphElementFactory() {
         return graphElementFactory;
@@ -72,7 +77,13 @@ public abstract class GraphElementMouseController {
         }
     }
 
+    public boolean shouldMoveSelection(List<GraphElement> selection) {
+        GraphElement graphElement = generalController.getGraph().getElementFromPosition(handledGraphElementType, mouseX, mouseY);
+        return selection.contains(graphElement);
+    };
+
     public abstract void moveSelection(int mouseX, int mouseY);
 
     public abstract void finishMoving();
+
 }

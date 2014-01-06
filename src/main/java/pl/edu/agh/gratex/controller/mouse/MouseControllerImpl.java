@@ -104,9 +104,9 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
         mousePressed = true;
         mousePressX = e.getX();
         mousePressY = e.getY();
-        GraphElement element = generalController.getGraph().getElementFromPosition(mode.getRelatedElementType(), mouseX, mouseY);
+        boolean shouldMoveSelection = controllers.get(mode).shouldMoveSelection(selectionController.getSelection());
         boolean isProperTool = (tool == ToolType.ADD || tool == ToolType.SELECT);
-        if (isProperTool && element != null && selectionController.selectionContains(element)) {
+        if (isProperTool && shouldMoveSelection) {
             controllers.get(mode).moveSelection(mouseX, mouseY);
             isElementMoving = true;
         }

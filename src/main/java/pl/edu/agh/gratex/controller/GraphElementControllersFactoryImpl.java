@@ -44,17 +44,17 @@ public class GraphElementControllersFactoryImpl implements GraphElementControlle
     public GraphElementMouseController createGraphElementMouseController(ModeType type) {
         switch (type) {
             case VERTEX:
-                return new VertexMouseControllerImpl(generalController, graphElementFactory);
+                return new VertexMouseControllerImpl(generalController, graphElementFactory, type.getRelatedElementType());
             case EDGE:
-                return new EdgeMouseControllerImpl(generalController, graphElementFactory);
+                return new EdgeMouseControllerImpl(generalController, graphElementFactory, type.getRelatedElementType());
             case LABEL_VERTEX:
-                return new LabelVertexMouseControllerImpl(generalController, graphElementFactory);
+                return new LabelVertexMouseControllerImpl(generalController, graphElementFactory, type.getRelatedElementType());
             case LABEL_EDGE:
-                return new LabelEdgeMouseControllerImpl(generalController, graphElementFactory);
+                return new LabelEdgeMouseControllerImpl(generalController, graphElementFactory, type.getRelatedElementType());
             case BOUNDARY:
-                return new BoundaryMouseController(generalController, graphElementFactory);
+                return new BoundaryMouseController(generalController, graphElementFactory, type.getRelatedElementType());
             case HYPEREDGE:
-                return new HyperedgeMouseControllerImpl(generalController, graphElementFactory);
+                return new HyperedgeMouseControllerImpl(generalController, graphElementFactory, type.getRelatedElementType());
         }
         return null;
     }

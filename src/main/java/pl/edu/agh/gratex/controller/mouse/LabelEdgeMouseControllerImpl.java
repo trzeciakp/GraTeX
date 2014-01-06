@@ -24,10 +24,9 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     private AlterationOperation currentDragOperation;
     private boolean shiftChangedWhileAdding;
 
-    public LabelEdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
-        super(generalController, graphElementFactory);
+    public LabelEdgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory, GraphElementType handledGraphElementType) {
+        super(generalController, graphElementFactory, handledGraphElementType);
     }
-
 
     @Override
     public void shiftDownChanged() {

@@ -14,6 +14,8 @@ import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.boundary.BoundaryUtils;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 
 public class BoundaryMouseController extends GraphElementMouseController {
@@ -31,8 +33,8 @@ public class BoundaryMouseController extends GraphElementMouseController {
     private int refCornerY;
     private DraggedCorner draggedCorner = DraggedCorner.NONE;
 
-    public BoundaryMouseController(GeneralController generalController, GraphElementFactory graphElementFactory) {
-        super(generalController, graphElementFactory);
+    public BoundaryMouseController(GeneralController generalController, GraphElementFactory graphElementFactory, GraphElementType handledGraphElementType) {
+        super(generalController, graphElementFactory, handledGraphElementType);
     }
 
     @Override

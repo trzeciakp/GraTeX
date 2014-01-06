@@ -185,7 +185,9 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
             mouseDragX = mouseX;
             mouseDragY = mouseY;
         } else {
-            mouseController.processMouseDragging(e);
+            if (mouseInWorkspace) {
+                mouseController.processMouseDragging(e);
+            }
         }
     }
 

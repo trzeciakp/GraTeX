@@ -11,6 +11,7 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
+import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.labelV.LabelVUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -24,8 +25,8 @@ public class LabelVertexMouseControllerImpl extends GraphElementMouseController 
     private LabelV currentlyDraggedLabel;
     private AlterationOperation currentDragOperation;
 
-    public LabelVertexMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory) {
-        super(generalController, graphElementFactory);
+    public LabelVertexMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory, GraphElementType handledGraphElementType) {
+        super(generalController, graphElementFactory, handledGraphElementType);
     }
 
     @Override
