@@ -31,7 +31,6 @@ public class PanelToolbox extends JPanel implements ModeListener {
         comboBox_mode.setToolTipText(StringLiterals.COMBOBOX_PANEL_TOOLBOX_MODE);
         comboBox_mode.setFocusable(false);
         comboBox_mode.setFont(new Font("Tahoma", Font.PLAIN, 11 ));
-        ((JLabel)comboBox_mode.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
         comboBox_mode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
