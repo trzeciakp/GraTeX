@@ -80,7 +80,7 @@ public abstract class GraphElementMouseController {
     public boolean shouldMoveSelection(List<GraphElement> selection) {
         GraphElement graphElement = generalController.getGraph().getElementFromPosition(handledGraphElementType, mouseX, mouseY);
         return selection.contains(graphElement);
-    };
+    }
 
     public abstract void moveSelection(int mouseX, int mouseY);
 

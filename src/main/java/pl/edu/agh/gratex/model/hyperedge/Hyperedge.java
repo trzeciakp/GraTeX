@@ -90,14 +90,27 @@ public class Hyperedge extends GraphElement {
         return new Area(VertexUtils.getVertexShape(getJointShape(), getJointSize(), jointCenterX, jointCenterY));
     }
 
+    public Vertex getVertexByEdge(int x, int y) {
+        for (Vertex vertex : getConnectedVertices()) {
+            Path2D path = new Path2D.Double();
+            path.moveTo(jointCenterX, jointCenterY);
+            path.lineTo(vertex.getPosX(), vertex.getPosY());
+            Area edgeArea = new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(path));
+            if (edgeArea.contains(x, y)) {
+                return vertex;
+            }
+        }
+        return null;
+    }
+
     @Override
     public GraphElementType getType() {
         return GraphElementType.HYPEREDGE;
     }
 
     @Override
-    public int getDrawingPriority() {
-        return 2;
+    public int getTypeDrawingPriority() {
+        return 200000000;
     }
 
     @Override

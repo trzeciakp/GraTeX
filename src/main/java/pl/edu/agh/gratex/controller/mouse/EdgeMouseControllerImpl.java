@@ -215,7 +215,8 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
             } else {
                 // Restore original edge state (it was dropped in mid air)
                 try {
-                    generalController.getParseController().getEdgeParser().updateElementWithCode(currentlyDraggedEdge, initialLatexCodeOfDraggedEdge);
+                    generalController.getParseController().getParserByElementType(GraphElementType.EDGE).
+                            updateElementWithCode(currentlyDraggedEdge, initialLatexCodeOfDraggedEdge);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Application.criticalError("Parser error", e);

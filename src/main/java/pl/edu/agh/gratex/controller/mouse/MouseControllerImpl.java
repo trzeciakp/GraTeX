@@ -217,6 +217,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
         isElementMoving = false;
         mousePressed = false;
         dummySubgraph = null;
+        operationController.reportOperationEvent(null);
     }
 
     @Override

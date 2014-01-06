@@ -44,7 +44,7 @@ public class Graph {
     }
 
     public void addElement(GraphElement graphElement) {
-        elements.get(graphElement.getType()).add(graphElement);
+        elements.get(graphElement.getType()).add(0, graphElement);
     }
 
     public void removeElement(GraphElement graphElement) {

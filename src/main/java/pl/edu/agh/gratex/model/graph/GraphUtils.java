@@ -6,6 +6,7 @@ import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.boundary.BoundaryUtils;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
@@ -63,5 +64,28 @@ public class GraphUtils {
         for (GraphElement boundary : graph.getElements(GraphElementType.BOUNDARY)) {
             BoundaryUtils.adjustToGrid((Boundary) boundary);
         }
+    }
+
+    public static List<Hyperedge> getAdjacentHyperedges(Graph graph, Vertex vertex) {
+        LinkedList<Hyperedge> result = new LinkedList<>();
+        for (GraphElement graphElement : graph.getElements(GraphElementType.HYPEREDGE)) {
+            Hyperedge hyperedge = (Hyperedge) graphElement;
+            if (hyperedge.getConnectedVertices().contains(vertex)) {
+                result.add(hyperedge);
+            }
+        }
+        return result;
+    }
+
+    public static LinkedList<Hyperedge> getCommonHyperedges(Graph graph, List<Vertex> vertices) {
+        LinkedList<Hyperedge> result = new LinkedList<>();
+        for (GraphElement graphElement : graph.getElements(GraphElementType.HYPEREDGE)) {
+            Hyperedge hyperedge = (Hyperedge) graphElement;
+            if (vertices.containsAll(hyperedge.getConnectedVertices())) {
+                result.add(hyperedge);
+            }
+        }
+
+        return result;
     }
 }

@@ -10,11 +10,6 @@ public interface ParseController {
 
     public GraphElementParser getParserByElementType(GraphElementType graphElementType);
 
-    public VertexParser getVertexParser();
-    public EdgeParser getEdgeParser();
-    public LabelVertexParser getLabelVertexParser();
-    public LabelEdgeParser getLabelEdgeParser();
-
     public List<String> parseGraphToLatexCode(Graph graph);
 
     public Graph parseLatexCodeToGraph(List<String> code);

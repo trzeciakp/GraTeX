@@ -38,7 +38,7 @@ public class Boundary extends GraphElement {
     }
 
     @Override
-    public int getDrawingPriority() {
+    public int getTypeDrawingPriority() {
         return 0;
     }
 

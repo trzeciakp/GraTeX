@@ -73,8 +73,8 @@ public class LabelE extends GraphElement {
     }
 
     @Override
-    public int getDrawingPriority() {
-        return 4;
+    public int getTypeDrawingPriority() {
+        return 400000000;
     }
 
     public String getText() {

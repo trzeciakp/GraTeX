@@ -235,7 +235,6 @@ public class StringLiterals {
     public static final String INFO_CHOOSE_HYPEREDGE_START = "choose a starting vertex for the hyperedge (click)";
     public static final String INFO_CHOOSE_HYPEREDGE_END = "now choose the second vertex (click)";
     public static final String INFO_HYPEREDGE_ADDING_CANCELLED = "adding hyperedge cancelled";
-    public static final String INFO_HYPEREDGE_CANNOT_DETACH = "cannot detach this vertex - a hyperedge must connect at least two vertices.";
     public final static String INFO_HYPEREDGE_HOW_TO_EXPAND = "CTRL + drag joint to add a vertex. CTRL + click a vertex to detach from hyperedge. " +
             "Move joint by dragging. SHIFT for auto-center.";
 

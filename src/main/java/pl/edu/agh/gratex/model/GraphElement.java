@@ -11,10 +11,13 @@ import java.util.List;
 
 
 public abstract class GraphElement {
+    private static int elementIdCounter = 0;
+
     protected Graph graph;
     protected Drawer drawer;
     protected PropertyModel propertyModel;
     protected boolean dummy = true;
+    protected int elementID;
 
     public Graph getGraph() {
         return graph;
@@ -41,6 +44,7 @@ public abstract class GraphElement {
         this.graph = graph;
         this.propertyModel = propertyModel;
         this.propertyModel.setOwner(this);
+        this.elementID = elementIdCounter++;
     }
 
     public void updateLocation() {
@@ -70,6 +74,10 @@ public abstract class GraphElement {
         return getArea().intersects(selectionArea);
     }
 
+    public int getDrawingPriority() {
+        return getTypeDrawingPriority() + elementID;
+    }
+
     public abstract void finalizeAddingToGraph();
 
     public abstract void finalizeRemovingFromGraph();
@@ -78,7 +86,7 @@ public abstract class GraphElement {
 
     public abstract GraphElementType getType();
 
-    public abstract int getDrawingPriority();
+    public abstract int getTypeDrawingPriority();
 
     public abstract List<? extends GraphElement> getConnectedElements();
 

@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
+import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -23,6 +24,7 @@ public class DummySubgraph {
     public LinkedList<Edge> edges = new LinkedList<>();
     public LinkedList<LabelV> labelsV = new LinkedList<>();
     public LinkedList<LabelE> labelsE = new LinkedList<>();
+    public LinkedList<Hyperedge> hyperedges = new LinkedList<>();
 
     public int minX = 10000;
     public int minY = 10000;
@@ -87,6 +89,16 @@ public class DummySubgraph {
                 labelsE.add(labelCopy);
             }
         }
+
+        for (Hyperedge hyperedge : GraphUtils.getCommonHyperedges(graph, originalVertices)) {
+            Hyperedge hyperedgeCopy = (Hyperedge) getCopy(hyperedge);
+            List<Vertex> newConnectedVertices = new LinkedList<>();
+            for (Vertex vertex : hyperedge.getConnectedVertices()) {
+                newConnectedVertices.add(originalToDuplicate.get(vertex));
+            }
+            hyperedgeCopy.setConnectedVertices(newConnectedVertices);
+            hyperedges.add(hyperedgeCopy);
+        }
     }
 
     public List<GraphElement> getElements() {
@@ -95,6 +107,7 @@ public class DummySubgraph {
         result.addAll(edges);
         result.addAll(labelsV);
         result.addAll(labelsE);
+        result.addAll(hyperedges);
         return result;
     }
 
@@ -102,6 +115,10 @@ public class DummySubgraph {
         for (Vertex vertex : vertices) {
             vertex.setPosX(vertex.getPosX() - biasX + targetX - minX);
             vertex.setPosY(vertex.getPosY() - biasY + targetY - minY);
+        }
+        for (Hyperedge hyperedge : hyperedges) {
+            hyperedge.setJointCenterX(hyperedge.getJointCenterX() - biasX + targetX - minX);
+            hyperedge.setJointCenterY(hyperedge.getJointCenterY() - biasY + targetY - minY);
         }
         biasX = targetX - minX;
         biasY = targetY - minY;

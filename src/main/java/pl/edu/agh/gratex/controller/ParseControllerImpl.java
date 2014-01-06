@@ -24,26 +24,6 @@ public class ParseControllerImpl implements ParseController {
     }
 
     @Override
-    public VertexParser getVertexParser() {
-        return (VertexParser) parsers.get(GraphElementType.VERTEX);
-    }
-
-    @Override
-    public EdgeParser getEdgeParser() {
-        return (EdgeParser) parsers.get(GraphElementType.EDGE);
-    }
-
-    @Override
-    public LabelVertexParser getLabelVertexParser() {
-        return (LabelVertexParser) parsers.get(GraphElementType.LABEL_VERTEX);
-    }
-
-    @Override
-    public LabelEdgeParser getLabelEdgeParser() {
-        return (LabelEdgeParser) parsers.get(GraphElementType.LABEL_EDGE);
-    }
-
-    @Override
     public List<String> parseGraphToLatexCode(Graph graph) {
         List<String> result = new ArrayList<>();
         for (GraphElementType graphElementType : GraphElementType.values()) {

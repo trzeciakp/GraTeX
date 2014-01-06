@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphNumeration;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
+import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.properties.IsLabelInside;
 import pl.edu.agh.gratex.model.properties.LineType;
@@ -56,9 +57,8 @@ public class Vertex extends GraphElement {
         if (label != null) {
             result.add(label);
         }
-        for (Edge edge : GraphUtils.getAdjacentEdges(graph, this)) {
-            result.add(edge);
-        }
+        result.addAll(GraphUtils.getAdjacentEdges(graph, this));
+        result.addAll(GraphUtils.getAdjacentHyperedges(graph, this));
         return result;
     }
 
@@ -68,8 +68,8 @@ public class Vertex extends GraphElement {
     }
 
     @Override
-    public int getDrawingPriority() {
-        return 3;
+    public int getTypeDrawingPriority() {
+        return 300000000;
     }
 
     // ============================================

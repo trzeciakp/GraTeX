@@ -12,8 +12,7 @@ import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.hyperedge.HyperedgeUtils;
 import pl.edu.agh.gratex.model.vertex.Vertex;
-
-import java.util.List;
+import pl.edu.agh.gratex.view.Application;
 
 /**
  *
@@ -24,6 +23,7 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
     private AlterationOperation currentDragOperation;
     private Vertex edgeDragDummy;
     private boolean movingJoint;
+    private String tempLatexCode;
 
     public HyperedgeMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory, GraphElementType handledGraphElementType) {
         super(generalController, graphElementFactory, handledGraphElementType);
@@ -33,7 +33,7 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void shiftDownChanged() {
-        if (currentlyDraggedHyperedge != null) {
+        if (movingJoint && currentlyDraggedHyperedge != null) {
             if (shiftDown) {
                 currentlyDraggedHyperedge.autoCenterJoint();
             } else {
@@ -55,6 +55,7 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
         currentlyAddedHyperedge = null;
         currentlyDraggedHyperedge = null;
         currentDragOperation = null;
+        tempLatexCode = null;
     }
 
     @Override
@@ -107,13 +108,6 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     @Override
-    public boolean shouldMoveSelection(List<GraphElement> selection) {
-        // TODO Uwzglednic rozlaczanie wierzcholkow...
-        Hyperedge clickedHyperedge = (Hyperedge) generalController.getGraph().getElementFromPosition(GraphElementType.HYPEREDGE, mouseX, mouseY);
-        return selection.contains(clickedHyperedge);
-    }
-
-    @Override
     public void moveSelection(int mouseX, int mouseY) {
         if (currentlyDraggedHyperedge == null) {
             currentlyDraggedHyperedge = (Hyperedge) generalController.getGraph().getElementFromPosition(GraphElementType.HYPEREDGE, mouseX, mouseY);
@@ -126,31 +120,29 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     private void startMoving() {
+        tempLatexCode = null;
+        movingJoint = false;
         if (ctrlDown) {
-            movingJoint = false;
-            Vertex vertex;
             if (currentlyDraggedHyperedge.getJointArea().contains(mouseX, mouseY)) {
                 currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.SHRINK_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_EXTEND);
                 edgeDragDummy.setPosX(mouseX);
                 edgeDragDummy.setPosY(mouseY);
                 currentlyDraggedHyperedge.getConnectedVertices().add(edgeDragDummy);
-            } else if ((vertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY)) != null) {
-                if (currentlyDraggedHyperedge.getConnectedVertices().size() > 2) {
-                    currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.SHRINK_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_SHRINK);
-                    currentlyDraggedHyperedge.getConnectedVertices().remove(vertex);
-                    currentlyDraggedHyperedge.autoCenterJoint();
-                    currentDragOperation.finish();
-                } else { // size == 2
-                    generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_HYPEREDGE_CANNOT_DETACH));
-                }
-                currentlyDraggedHyperedge = null;
-            } else { // nothing was selected to drag
+            } else { // only joint works with Ctrl
                 currentlyDraggedHyperedge = null;
             }
         } else { // !ctrlDown
+            Vertex vertex;
             if (currentlyDraggedHyperedge.getJointArea().contains(mouseX, mouseY)) {
                 movingJoint = true;
                 currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.MOVE_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_JOINT_MOVE);
+            } else if ((vertex = currentlyDraggedHyperedge.getVertexByEdge(mouseX, mouseY)) != null) {
+                if (currentlyDraggedHyperedge.getConnectedVertices().size() == 2) {
+                    tempLatexCode = generalController.getParseController().getParserByElementType(GraphElementType.HYPEREDGE).parseToLatex(currentlyDraggedHyperedge);
+                }
+                currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.SHRINK_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_SHRINK);
+                currentlyDraggedHyperedge.getConnectedVertices().remove(vertex);
+                currentlyDraggedHyperedge.getConnectedVertices().add(edgeDragDummy);
             } else {
                 currentlyDraggedHyperedge = null;
             }
@@ -187,6 +179,16 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
                     }
                 }
                 currentlyDraggedHyperedge.autoCenterJoint();
+                if (currentlyDraggedHyperedge.getConnectedVertices().size() == 1) {
+                    // Restore hyeredge state (because there is only one vertex left)
+                    try {
+                        generalController.getParseController().getParserByElementType(GraphElementType.HYPEREDGE).
+                                updateElementWithCode(currentlyDraggedHyperedge, tempLatexCode);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Application.criticalError("Parser error", e);
+                    }
+                }
             }
             currentDragOperation.finish();
             currentlyDraggedHyperedge = null;

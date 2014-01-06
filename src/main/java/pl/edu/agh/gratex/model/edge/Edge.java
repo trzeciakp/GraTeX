@@ -109,8 +109,8 @@ public class Edge extends GraphElement {
     }
 
     @Override
-    public int getDrawingPriority() {
-        return 1;
+    public int getTypeDrawingPriority() {
+        return 100000000;
     }
 
 
