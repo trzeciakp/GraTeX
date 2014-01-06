@@ -11,6 +11,7 @@ import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.PropertyModelFactory;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.model.properties.LabelPosition;
@@ -27,6 +28,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.EnumMap;
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class GraphTemplateDialog extends JDialog implements ModeListener {
@@ -175,27 +178,34 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         Vertex vertex1 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
         vertex1.setNumber(1);
         VertexUtils.setPartOfNumeration(vertex1, true);
-        vertex1.setPosX(180);
+        vertex1.setPosX(120);
         vertex1.setPosY(240);
         graph.addElement(vertex1);
 
         Vertex vertex2 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
         vertex2.setNumber(2);
         VertexUtils.setPartOfNumeration(vertex2, true);
-        vertex2.setPosX(350);
+        vertex2.setPosX(400);
         vertex2.setPosY(240);
         graph.addElement(vertex2);
 
+        Vertex vertex3 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
+        vertex3.setNumber(3);
+        VertexUtils.setPartOfNumeration(vertex3, true);
+        vertex3.setPosX(260);
+        vertex3.setPosY(80);
+        graph.addElement(vertex3);
+
         Edge edge1 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
         edge1.setVertexA(vertex2);
-        edge1.setVertexB(vertex1);
-        edge1.setRelativeEdgeAngle(300);
+        edge1.setVertexB(vertex3);
+        edge1.setRelativeEdgeAngle(330);
         graph.addElement(edge1);
 
         Edge edge2 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
         edge2.setVertexA(vertex1);
         edge2.setVertexB(vertex1);
-        edge2.setRelativeEdgeAngle(180);
+        edge2.setRelativeEdgeAngle(90);
         graph.addElement(edge2);
 
         Edge edge3 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
@@ -227,6 +237,18 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         edge3.setLabel(labelE3);
         graph.addElement(labelE3);
 
+        Hyperedge hyperedge = (Hyperedge) graphElementFactory.create(GraphElementType.HYPEREDGE, graph);
+        List<Vertex> connectedVertices = new LinkedList<>();
+        connectedVertices.add(vertex1);
+        connectedVertices.add(vertex2);
+        connectedVertices.add(vertex3);
+        hyperedge.setConnectedVertices(connectedVertices);
+        hyperedge.autoCenterJoint();
+        graph.addElement(hyperedge);
+
+        for (GraphElement graphElement : graph.getAllElements()) {
+            graphElement.setDummy(false);
+        }
         setTemplateModelsToAllGraphElements();
     }
 
@@ -254,26 +276,11 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         panel_propertyEditor.disableUnnecessaryFields();
         panel_propertyEditor.setModel(currentModels.get(GraphElementType.VERTEX));
 
-
-        JPanel vertexPanel = new JPanel();
-        vertexPanel.setLayout(null);
-        tabbedPane.addTab("Vertex", null, vertexPanel, null);
-
-        vertexPanel.add(panel_propertyEditor);
-        vertexPanel.add(label_hint);
-        vertexPanel.add(panel_preview);
-
-        JPanel edgePanel = new JPanel();
-        edgePanel.setLayout(null);
-        tabbedPane.addTab("Edge", null, edgePanel, null);
-
-        JPanel labelVPanel = new JPanel();
-        labelVPanel.setLayout(null);
-        tabbedPane.addTab("Label (V)", null, labelVPanel, null);
-
-        JPanel labelEPanel = new JPanel();
-        labelEPanel.setLayout(null);
-        tabbedPane.addTab("Label (E)", null, labelEPanel, null);
+        for (ModeType modeType : ModeType.values()) {
+            JPanel panel = new JPanel();
+            panel.setLayout(null);
+            tabbedPane.addTab(modeType.toString(), null, panel, null);
+        }
 
         button_discard = new JButton(StringLiterals.BUTTON_TEMPLATE_EDITOR_DISCARD);
         button_discard.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_DISCARD);
@@ -294,6 +301,11 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         checkBox_applyToAll.setBounds(393, 433, 149, 34);
         checkBox_applyToAll.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_GLOBAL_APPLY);
         getContentPane().add(checkBox_applyToAll);
+
+        ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_preview);
+        ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(label_hint);
+        ((JPanel) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).add(panel_propertyEditor);
+        modeController.setMode(ModeType.values()[tabbedPane.getSelectedIndex()]);
     }
 
     @Override

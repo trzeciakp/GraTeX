@@ -66,6 +66,10 @@ public abstract class GraphElement {
         return dummy;
     }
 
+    public void setDummy(boolean dummy) {
+        this.dummy = dummy;
+    }
+
     public boolean contains(int x, int y) {
         return getArea().contains(x, y);
     }
