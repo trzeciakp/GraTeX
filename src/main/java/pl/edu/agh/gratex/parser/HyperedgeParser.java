@@ -41,6 +41,7 @@ public class HyperedgeParser extends GraphElementParser {
         parseList.add(new StaticParseElement("]", false));
         parseList.add(new HyperedgeVerticesParseElement());
         parseList.add(new StaticParseElement("\\end{scope}", false));
+        parseList.add(new HyperedgeCommentedParametersParseElement());
         return parseList;
     }
 

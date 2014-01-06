@@ -70,4 +70,7 @@ public class Const {
 
     // Ratio of arrow head size to corner size
     public final static float BOUNDARY_COLOR_BRIGHTNESS_DIFFERENCE = 0.4f;
+
+    // Selection margin in hyperedges' joints
+    public static final int HYPEREDGE_JOINT_SELECTION_SIZE = 20;
 }

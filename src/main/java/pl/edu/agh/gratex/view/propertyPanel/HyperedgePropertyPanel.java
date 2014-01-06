@@ -102,18 +102,19 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         comboBoxIsJointDisplayType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 IsJointDisplay newValue = ((IsJointDisplay) comboBoxIsJointDisplayType.getSelectedItem());
-                if ((!newValue.isEmpty()) && (model.getIsJointDisplay() != newValue) || (!changedByUser)) {
+                IsJointDisplay oldValue = model.getIsJointDisplay();
+                if ((!newValue.isEmpty()) && (oldValue != newValue) || (!changedByUser)) {
                     model.setIsJointDisplay(newValue);
                     if(newValue == IsJointDisplay.HIDDEN) {
                         model.setJointSize(1);
                         model.setJointShape(ShapeType.CIRCLE);
                         model.setJointColor(model.getLineColor());
-                    } else if(newValue == IsJointDisplay.VISIBLE) {
+                    } else if(oldValue == IsJointDisplay.HIDDEN && newValue == IsJointDisplay.VISIBLE) {
                         model.setJointSize(3);
                     }
                     changed();
                 } else {
-                    comboBoxIsJointDisplayType.setSelectedItem(model.getIsJointDisplay());
+                    comboBoxIsJointDisplayType.setSelectedItem(oldValue);
                 }
             }
         });
