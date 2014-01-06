@@ -28,7 +28,9 @@ public class ParseControllerImpl implements ParseController {
         List<String> result = new ArrayList<>();
         for (GraphElementType graphElementType : GraphElementType.values()) {
             GraphElementParser parser = parsers.get(graphElementType);
-            for (GraphElement graphElement : graph.getElements(graphElementType)) {
+            List<GraphElement> elements = graph.getElements(graphElementType);
+            GraphElement.sortByDrawingPriorities(elements);
+            for (GraphElement graphElement : elements) {
                 result.add(parser.parseToLatex(graphElement));
             }
         }

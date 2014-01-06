@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.properties.*;
+import pl.edu.agh.gratex.model.properties.IsJointDisplay.IsJointDisplay;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
 import java.awt.*;
@@ -100,6 +101,7 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineType(LineType.SOLID);
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineWidth(1);
 
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setIsJointDisplay(IsJointDisplay.VISIBLE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineWidth(1);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineType(LineType.SOLID);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineColor(PropertyModel.REVERSE_COLORS.get("black"));

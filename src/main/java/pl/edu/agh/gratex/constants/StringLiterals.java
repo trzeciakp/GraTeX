@@ -160,6 +160,7 @@ public class StringLiterals {
     public static final String HYPEREDGE_LINE_TYPE = "Line type:";
     public static final String HYPEREDGE_LINE_WIDTH = "Line width:";
     public static final String HYPEREDGE_LINE_COLOR = "Line color:";
+    public static final String HYPEREDGE_JOINT_DISPLAY = "Joint display:";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;

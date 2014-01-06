@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.model.hyperedge;
 
 import pl.edu.agh.gratex.model.PropertyModel;
+import pl.edu.agh.gratex.model.properties.IsJointDisplay.IsJointDisplay;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 
@@ -16,6 +17,7 @@ public class HyperedgePropertyModel extends PropertyModel {
     private Color jointColor = null;
     private ShapeType jointShape = ShapeType.EMPTY;
     private int jointSize = PropertyModel.EMPTY;
+    private IsJointDisplay isJointDisplay = IsJointDisplay.EMPTY;
 
     @Override
     public void andOperator(PropertyModel pm) {
@@ -37,6 +39,9 @@ public class HyperedgePropertyModel extends PropertyModel {
         }
         if (getJointSize() != model.getJointSize()) {
             setJointSize(PropertyModel.EMPTY);
+        }
+        if (getIsJointDisplay() != model.getIsJointDisplay()) {
+            setIsJointDisplay(IsJointDisplay.EMPTY);
         }
     }
 
@@ -61,6 +66,9 @@ public class HyperedgePropertyModel extends PropertyModel {
         if (model.getJointSize() != PropertyModel.EMPTY) {
             setJointSize(model.getJointSize());
         }
+        if (model.getIsJointDisplay() != IsJointDisplay.EMPTY) {
+            setIsJointDisplay(model.getIsJointDisplay());
+        }
     }
 
     @Override
@@ -72,6 +80,7 @@ public class HyperedgePropertyModel extends PropertyModel {
         result.setJointColor(getJointColor());
         result.setLineType(getLineType());
         result.setLineWidth(getLineWidth());
+        result.setIsJointDisplay(getIsJointDisplay());
         return result;
     }
 
@@ -121,5 +130,13 @@ public class HyperedgePropertyModel extends PropertyModel {
 
     public void setJointSize(int jointSize) {
         this.jointSize = jointSize;
+    }
+
+    public IsJointDisplay getIsJointDisplay() {
+        return isJointDisplay;
+    }
+
+    public void setIsJointDisplay(IsJointDisplay isJointDisplay) {
+        this.isJointDisplay = isJointDisplay;
     }
 }

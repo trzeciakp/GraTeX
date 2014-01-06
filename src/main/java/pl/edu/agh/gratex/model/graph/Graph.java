@@ -51,7 +51,7 @@ public class Graph {
         elements.get(graphElement.getType()).remove(graphElement);
     }
 
-    public List<? extends GraphElement> getElements(GraphElementType type) {
+    public List<GraphElement> getElements(GraphElementType type) {
         return elements.get(type);
     }
 

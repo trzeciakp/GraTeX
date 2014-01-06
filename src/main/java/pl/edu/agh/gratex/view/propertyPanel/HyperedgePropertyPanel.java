@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.view.propertyPanel;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
+import pl.edu.agh.gratex.model.properties.IsJointDisplay.IsJointDisplay;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 
@@ -35,6 +36,8 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
     private JLabel lblLineType;
     private JLabel lblLineSize;
     private JLabel lblLineColor;
+    private JComboBox<IsJointDisplay> comboBoxIsJointDisplayType;
+    private JLabel lblIsJointDisplay;
 
     private void changed() {
         if (changedByUser) {
@@ -53,8 +56,9 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         model = (HyperedgePropertyModel) pm.getCopy();
 
         changedByUser = false;
+        comboBoxIsJointDisplayType.setSelectedItem(model.getIsJointDisplay());
         comboBoxJointShapeType.setSelectedItem(model.getJointShape());
-        if (model.getJointSize() == PropertyModel.EMPTY) {
+        if (model.getJointSize() == PropertyModel.EMPTY || model.getJointSize() == 1) {
             spinnerJointSize.setValue(StringLiterals.EMPTY_VALUE);
         } else {
             spinnerJointSize.setValue(model.getJointSize() + StringLiterals.PX_SUFFIX);
@@ -68,12 +72,54 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
             spinnerLineSize.setValue(model.getLineWidth() + StringLiterals.PX_SUFFIX);
         }
         comboBoxLineColor.setSelectedItem(model.getLineColor());
+        if(model.getIsJointDisplay().isEmpty() || model.getIsJointDisplay() == IsJointDisplay.HIDDEN) {
+            setJointPropertyEnabled(false);
+        } else {
+            setJointPropertyEnabled(true);
+        }
         changedByUser = true;
+    }
+
+    private void setJointPropertyEnabled(boolean b) {
+        comboBoxJointColor.setEnabled(b);
+        comboBoxJointShapeType.setEnabled(b);
+        lblJointColor.setEnabled(b);
+        lblJointShapeType.setEnabled(b);
+        spinnerJointSize.setEnabled(b);
+        lblJointSize.setEnabled(b);
+        if(!b) {
+            //lblJointShapeType.set
+        }
     }
 
     @Override
     protected void initialize() {
         setLayout(null);
+
+        /**************************** JOINT DISPLAY COMBOBOX **************************/
+
+        comboBoxIsJointDisplayType = new JComboBox<>(IsJointDisplay.values());
+        comboBoxIsJointDisplayType.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                IsJointDisplay newValue = ((IsJointDisplay) comboBoxIsJointDisplayType.getSelectedItem());
+                if ((!newValue.isEmpty()) && (model.getIsJointDisplay() != newValue) || (!changedByUser)) {
+                    model.setIsJointDisplay(newValue);
+                    if(newValue == IsJointDisplay.HIDDEN) {
+                        model.setJointSize(1);
+                        model.setJointShape(ShapeType.CIRCLE);
+                        model.setJointColor(model.getLineColor());
+                    } else if(newValue == IsJointDisplay.VISIBLE) {
+                        model.setJointSize(3);
+                    }
+                    changed();
+                } else {
+                    comboBoxIsJointDisplayType.setSelectedItem(model.getIsJointDisplay());
+                }
+            }
+        });
+        add(comboBoxIsJointDisplayType);
+        /**************************************************************************/
+
         /**************************** JOINT TYPE COMBOBOX **************************/
 
         comboBoxJointShapeType = new JComboBox<>(ShapeType.values());
@@ -93,8 +139,8 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
 
         /**************************** VERTEX SIZE SPINNER *************************/
 
-        MIN_SIZE = 1;
-        MAX_SIZE = 10;
+        MIN_SIZE = 3;
+        MAX_SIZE = 20;
         String[] vertexSizes = new String[MAX_SIZE - MIN_SIZE + 2];
         vertexSizes[0] = StringLiterals.EMPTY_VALUE;
         for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++) {
@@ -223,6 +269,9 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
                     if (newValue != null) {
                         if (!newValue.equals(model.getLineColor())) {
                             model.setLineColor(newValue);
+                            if(model.getIsJointDisplay() == IsJointDisplay.HIDDEN) {
+                                model.setJointColor(newValue);
+                            }
                             changed();
                         }
                     } else {
@@ -235,6 +284,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         add(comboBoxLineColor);
         /**************************************************************************/
 
+        lblIsJointDisplay = createJLabel(StringLiterals.HYPEREDGE_JOINT_DISPLAY);
         lblJointShapeType = createJLabel(StringLiterals.HYPEREDGE_JOINT_SHAPE_TYPE);
         lblJointSize = createJLabel(StringLiterals.HYPEREDGE_JOINT_SIZE);
         lblJointColor = createJLabel(StringLiterals.HYPEREDGE_JOINT_COLOR);
@@ -242,6 +292,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         lblLineSize = createJLabel(StringLiterals.HYPEREDGE_LINE_WIDTH);
         lblLineColor = createJLabel(StringLiterals.HYPEREDGE_LINE_COLOR);
 
+        components.add(comboBoxIsJointDisplayType);
         components.add(comboBoxJointShapeType);
         components.add(spinnerJointSize);
         components.add(comboBoxJointColor);
