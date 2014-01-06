@@ -154,6 +154,12 @@ public class StringLiterals {
     private final static String UNDO_PREFIX = "[UNDONE] ";
     public static final String BOUNDARY_FILL_COLOR = "Fill color:";
     public static final String BOUNDARY_LINE_TYPE = "Line type:";
+    public static final String HYPEREDGE_JOINT_SHAPE_TYPE = "Joint type:";
+    public static final String HYPEREDGE_JOINT_SIZE = "Joint size:";
+    public static final String HYPEREDGE_JOINT_COLOR = "Joint color:";
+    public static final String HYPEREDGE_LINE_TYPE = "Line type:";
+    public static final String HYPEREDGE_LINE_WIDTH = "Line width:";
+    public static final String HYPEREDGE_LINE_COLOR = "Line color:";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;
