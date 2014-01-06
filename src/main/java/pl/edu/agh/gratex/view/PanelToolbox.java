@@ -18,9 +18,6 @@ public class PanelToolbox extends JPanel implements ModeListener {
 
     private JComboBox<ModeType> comboBox_mode;
 
-    // TODO wyglada na to, ze nie bedziemy potrzebowali wyciagac tych guzikow, wiec nie ma potrzeby pakowac ich do mapy
-    //private final EnumMap<ToolButtonType, ToolButton> toolButtons;
-
     public PanelToolbox(ToolController toolController, ModeController modeController) {
         super();
 
@@ -35,7 +32,6 @@ public class PanelToolbox extends JPanel implements ModeListener {
         comboBox_mode.setFocusable(false);
         comboBox_mode.setFont(new Font("Tahoma", Font.PLAIN, 11 ));
         ((JLabel)comboBox_mode.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-        //toolButtons = new EnumMap<>(ToolButtonType.class);
 
         comboBox_mode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
@@ -53,7 +49,6 @@ public class PanelToolbox extends JPanel implements ModeListener {
             toolButton.setToolTipText(toolButtonType.getTooltip());
             toolButton.setFocusable(false);
             toolButton.setBounds(35, y, 50, 50);
-            //toolButtons.put(toolButtonType, toolButton);
             add(toolButton);
             y += 60;
         }

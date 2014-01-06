@@ -150,6 +150,7 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     private void continueMoving() {
+        generalController.getSelectionController().addToSelection(currentlyDraggedHyperedge, false);
         if (movingJoint) {
             // No need to duplicate code
             shiftDownChanged();
