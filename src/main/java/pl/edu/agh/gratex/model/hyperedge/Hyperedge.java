@@ -26,7 +26,6 @@ public class Hyperedge extends GraphElement {
     private List<Vertex> connectedVertices = new LinkedList<>();
     private int jointCenterX;
     private int jointCenterY;
-    private int radius;
 
     public Hyperedge(Graph graph, PropertyModel propertyModel) {
         super(graph, propertyModel);
@@ -55,16 +54,19 @@ public class Hyperedge extends GraphElement {
 
     @Override
     public void updateLocation() {
-        /*int centroidX = 0;
+    }
+
+    public void calculateJointPosition() {
+        int centroidX = 0;
         int centroidY = 0;
         for (Vertex vertex : getConnectedVertices()) {
             centroidX += vertex.getPosX();
             centroidY += vertex.getPosY();
         }
-        centroidX /= Math.min(1, getConnectedVertices().size());
-        centroidY /= Math.min(1, getConnectedVertices().size());
-        setCentroidX(centroidX);
-        setCentroidY(centroidY);*/
+        centroidX /= Math.max(1, getConnectedVertices().size());
+        centroidY /= Math.max(1, getConnectedVertices().size());
+        setJointCenterX(centroidX);
+        setJointCenterY(centroidY);
     }
 
     @Override
@@ -117,14 +119,6 @@ public class Hyperedge extends GraphElement {
 
     public void setJointCenterY(int jointCenterY) {
         this.jointCenterY = jointCenterY;
-    }
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
     }
 
     public Color getLineColor() {
