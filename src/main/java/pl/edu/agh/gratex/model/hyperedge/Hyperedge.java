@@ -88,7 +88,7 @@ public class Hyperedge extends GraphElement {
     }
 
     public Area getJointArea() {
-        return new Area(VertexUtils.getVertexShape(getJointShape(), getJointSize(), jointCenterX, jointCenterY));
+        return new Area(VertexUtils.getVertexShape(getJointShape(), Const.HYPEREDGE_JOINT_SELECTION_SIZE, jointCenterX, jointCenterY));
     }
 
     public Vertex getVertexByEdge(int x, int y) {
