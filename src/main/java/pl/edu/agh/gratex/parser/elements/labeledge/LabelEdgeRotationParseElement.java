@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public class LabelEdgeRotationParser extends ParseElement {
+public class LabelEdgeRotationParseElement extends ParseElement {
     private static final String REGEX = "\\[rotate=(\\d+)\\] ";
     public static final String ROTATE_FORMAT = "[rotate=%s] ";
     public static final Pattern PATTERN = Pattern.compile(REGEX);

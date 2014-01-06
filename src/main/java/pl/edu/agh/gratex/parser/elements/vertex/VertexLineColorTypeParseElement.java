@@ -4,16 +4,16 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
-import pl.edu.agh.gratex.parser.elements.LineColorTypeParser;
+import pl.edu.agh.gratex.parser.elements.LineColorTypeParseElement;
 
 import java.awt.*;
 
 /**
  *
  */
-public class LineColorTypeVertexParser extends LineColorTypeParser {
+public class VertexLineColorTypeParseElement extends LineColorTypeParseElement {
 
-    public LineColorTypeVertexParser(ColorMapper colorMapper) {
+    public VertexLineColorTypeParseElement(ColorMapper colorMapper) {
         super(colorMapper);
     }
 

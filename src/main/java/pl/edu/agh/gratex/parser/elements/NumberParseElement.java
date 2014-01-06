@@ -6,12 +6,12 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public abstract class NumberParser extends ParseElement {
+public abstract class NumberParseElement extends ParseElement {
     public static final int GROUPS = 1;
     public static final int NUMBER_GROUP = 1;
     public static final String STRING_FORMAT = "(%d)";
     private static final String REGEX = "\\((\\d+)\\)";
-    private static final Pattern PATTERN = Pattern.compile(NumberParser.REGEX);
+    private static final Pattern PATTERN = Pattern.compile(NumberParseElement.REGEX);
 
     @Override
     public boolean isOptional() {
@@ -21,6 +21,11 @@ public abstract class NumberParser extends ParseElement {
     @Override
     public String regex() {
         return REGEX;
+    }
+
+    @Override
+    public int groups() {
+        return super.groups() + GROUPS;
     }
 
     protected int getNumber(String match) {

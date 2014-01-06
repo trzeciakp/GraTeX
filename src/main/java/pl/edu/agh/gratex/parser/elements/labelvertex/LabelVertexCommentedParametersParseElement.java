@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public class CommentedParametersLabelVertexParser extends ParseElement {
+public class LabelVertexCommentedParametersParseElement extends ParseElement {
     private final static String SEPARATED_PARAMETER_REGEX = "([^,]+),";
     private static final String RETURN_FORMAT = "%%%d,%s,%d,";
     private final static String REGEX = "%" +

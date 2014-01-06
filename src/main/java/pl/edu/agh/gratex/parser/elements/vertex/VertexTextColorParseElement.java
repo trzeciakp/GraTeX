@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public class TextColorVertexParser extends ParseElement {
+public class VertexTextColorParseElement extends ParseElement {
     public static final int COLOR_GROUP = 2;
     private static final String REGEX = " ?\\{(\\\\textcolor\\{([^}]+)\\})?(\\{([^}]+)\\})?\\}";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
@@ -20,7 +20,7 @@ public class TextColorVertexParser extends ParseElement {
     public static final int GROUPS = 4;
     private ColorMapper colorMapper;
 
-    public TextColorVertexParser(ColorMapper colorMapper) {
+    public VertexTextColorParseElement(ColorMapper colorMapper) {
         this.colorMapper = colorMapper;
     }
 

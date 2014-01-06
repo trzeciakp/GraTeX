@@ -8,7 +8,7 @@ import pl.edu.agh.gratex.parser.elements.ParseElement;
 /**
  *
  */
-public class LineWidthVertexParser extends LineWidthParseElement {
+public class VertexLineWidthParseElement extends LineWidthParseElement {
 
     @Override
     public String regex() {

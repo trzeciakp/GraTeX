@@ -2,7 +2,7 @@ package pl.edu.agh.gratex.parser.elements.edge;
 
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.parser.elements.ColorMapper;
+import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 
 import java.util.regex.Matcher;
@@ -11,16 +11,12 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public class LineColorEdgeParser extends ParseElement {
-    public static final int GROUPS = 1;
-    public static final int COLOR_GROUP = 1;
-    private ColorMapper colorMapper;
-    private static final String REGEX = ", color=([a-zA-z]+)";
-    protected static final Pattern PATTERN = Pattern.compile(REGEX);
+public class EdgeDirectionParseElement extends ParseElement {
 
-    public LineColorEdgeParser(ColorMapper colorMapper) {
-        this.colorMapper = colorMapper;
-    }
+    private static final String REGEX = ", ->(, >=latex)?";
+    private static final Pattern PATTERN = Pattern.compile(REGEX);
+    public static final int GROUPS = 1;
+    public static final int ARROW_GROUP = 1;
 
     @Override
     public boolean isOptional() {
@@ -32,7 +28,6 @@ public class LineColorEdgeParser extends ParseElement {
         return REGEX;
     }
 
-    @Override
     public int groups() {
         return super.groups() + GROUPS;
     }
@@ -41,19 +36,28 @@ public class LineColorEdgeParser extends ParseElement {
     public void setProperty(String match, GraphElement element) {
         Edge edge = (Edge) element;
         if(match == null) {
-            colorMapper.getTemplateColor();
+            edge.setDirected(false);
+            return;
         }
         Matcher matcher = PATTERN.matcher(match);
         matcher.matches();
-        edge.setLineColor(colorMapper.getColor(matcher.group(COLOR_GROUP)));
+        edge.setDirected(true);
+        String group = matcher.group(ARROW_GROUP);
+        if(group == null) {
+            edge.setArrowType(ArrowType.BASIC);
+        } else {
+            edge.setArrowType(ArrowType.FILLED);
+        }
+
     }
 
     @Override
     public String getProperty(GraphElement element) {
         Edge edge = (Edge) element;
-        if(edge.getLineColor() == null) {
-            return "";
+        String result = "";
+        if(edge.isDirected()) {
+            result += ", ->" + (edge.getArrowType() == ArrowType.FILLED?", >=latex":"");
         }
-        return ", color="+colorMapper.getColorText(edge.getLineColor());
+        return result;
     }
 }

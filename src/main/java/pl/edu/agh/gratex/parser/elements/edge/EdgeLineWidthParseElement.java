@@ -8,7 +8,7 @@ import pl.edu.agh.gratex.parser.elements.ParseElement;
 /**
  *
  */
-public class LineWidthEdgeParser extends LineWidthParseElement {
+public class EdgeLineWidthParseElement extends LineWidthParseElement {
 
     @Override
     public void setProperty(String match, GraphElement element) {

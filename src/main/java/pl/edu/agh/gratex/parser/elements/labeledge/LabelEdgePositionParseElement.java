@@ -8,7 +8,7 @@ import pl.edu.agh.gratex.parser.elements.PositionParseElement;
 /**
  *
  */
-public class LabelEdgePositionParser extends PositionParseElement {
+public class LabelEdgePositionParseElement extends PositionParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         LabelE labelE = (LabelE) element;

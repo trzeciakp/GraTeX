@@ -1,7 +1,6 @@
 package pl.edu.agh.gratex.model.properties;
 
 import pl.edu.agh.gratex.model.PropertyModel;
-import pl.edu.agh.gratex.parser.elements.edge.LoopEdgeParser;
 
 /**
 *

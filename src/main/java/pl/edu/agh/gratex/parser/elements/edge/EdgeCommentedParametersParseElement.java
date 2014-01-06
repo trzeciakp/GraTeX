@@ -2,7 +2,6 @@ package pl.edu.agh.gratex.parser.elements.edge;
 
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 
 import java.util.regex.Matcher;
@@ -11,12 +10,13 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public class DirectionEdgeParser extends ParseElement {
+public class EdgeCommentedParametersParseElement extends ParseElement {
 
-    private static final String REGEX = ", ->(, >=latex)?";
-    private static final Pattern PATTERN = Pattern.compile(REGEX);
+    private static final String REGEX = "%(-?\\d+)";
     public static final int GROUPS = 1;
-    public static final int ARROW_GROUP = 1;
+    public static final int ANGLE_GROUP = 1;
+    public static final String STRING_FORMAT = "%%%d";
+    private static final Pattern PATTERN = Pattern.compile(REGEX);
 
     @Override
     public boolean isOptional() {
@@ -28,6 +28,7 @@ public class DirectionEdgeParser extends ParseElement {
         return REGEX;
     }
 
+    @Override
     public int groups() {
         return super.groups() + GROUPS;
     }
@@ -36,28 +37,21 @@ public class DirectionEdgeParser extends ParseElement {
     public void setProperty(String match, GraphElement element) {
         Edge edge = (Edge) element;
         if(match == null) {
-            edge.setDirected(false);
+            edge.setRelativeEdgeAngle(0);
             return;
         }
         Matcher matcher = PATTERN.matcher(match);
         matcher.matches();
-        edge.setDirected(true);
-        String group = matcher.group(ARROW_GROUP);
-        if(group == null) {
-            edge.setArrowType(ArrowType.BASIC);
-        } else {
-            edge.setArrowType(ArrowType.FILLED);
-        }
-
+        int angle = Integer.parseInt(matcher.group(ANGLE_GROUP));
+        edge.setRelativeEdgeAngle(angle);
     }
 
     @Override
     public String getProperty(GraphElement element) {
         Edge edge = (Edge) element;
-        String result = "";
-        if(edge.isDirected()) {
-            result += ", ->" + (edge.getArrowType() == ArrowType.FILLED?", >=latex":"");
+        if(edge.getRelativeEdgeAngle() == 0) {
+            return "";
         }
-        return result;
+        return String.format(STRING_FORMAT, edge.getRelativeEdgeAngle());
     }
 }

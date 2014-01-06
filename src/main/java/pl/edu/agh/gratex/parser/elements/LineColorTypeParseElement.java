@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public abstract class LineColorTypeParser extends ParseElement {
+public abstract class LineColorTypeParseElement extends ParseElement {
     public static final int COLOR_GROUP = 2;
     public static final int GROUPS = 4;
     public static final int LINE_GROUP = 4;
@@ -19,7 +19,7 @@ public abstract class LineColorTypeParser extends ParseElement {
     private static final Pattern PATTERN = Pattern.compile(REGEX);
     protected ColorMapper colorMapper;
 
-    public LineColorTypeParser(ColorMapper colorMapper) {
+    public LineColorTypeParseElement(ColorMapper colorMapper) {
         this.colorMapper = colorMapper;
     }
 

@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public class ShapeVertexParser extends pl.edu.agh.gratex.parser.elements.ShapeParseElement {
+public class VertexShapeParseElement extends pl.edu.agh.gratex.parser.elements.ShapeParseElement {
 
     @Override
     public void setProperty(String match, GraphElement element) {

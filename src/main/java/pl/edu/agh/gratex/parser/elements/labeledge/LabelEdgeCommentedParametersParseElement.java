@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public class CommentedParametersLabelEdgeParser extends ParseElement {
+public class LabelEdgeCommentedParametersParseElement extends ParseElement {
     private final static String SEPARATED_PARAMETER_REGEX = "([^,]+),";
     private static final String RETURN_FORMAT = "%%%d,%s,%d,%s,%d,";
     private final static String REGEX = "%" +

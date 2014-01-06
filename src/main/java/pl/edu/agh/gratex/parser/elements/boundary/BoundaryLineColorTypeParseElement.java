@@ -4,14 +4,14 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
-import pl.edu.agh.gratex.parser.elements.LineColorTypeParser;
+import pl.edu.agh.gratex.parser.elements.LineColorTypeParseElement;
 
 import java.awt.*;
 
 /**
  *
  */
-public class BoundaryLineColorTypeParseElement extends LineColorTypeParser {
+public class BoundaryLineColorTypeParseElement extends LineColorTypeParseElement {
     public BoundaryLineColorTypeParseElement(ColorMapper colorMapper) {
         super(colorMapper);
     }

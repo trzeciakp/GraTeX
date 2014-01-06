@@ -1,24 +1,17 @@
 package pl.edu.agh.gratex.parser;
 
 import pl.edu.agh.gratex.constants.GraphElementType;
-import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
-import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.edge.EdgeUtils;
-import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.labelE.LabelE;
-import pl.edu.agh.gratex.model.labelE.LabelEUtils;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 import pl.edu.agh.gratex.parser.elements.StaticParseElement;
-import pl.edu.agh.gratex.parser.elements.labeledge.CommentedParametersLabelEdgeParser;
-import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgePositionParser;
-import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgeRotationParser;
+import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgeCommentedParametersParseElement;
+import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgePositionParseElement;
+import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgeRotationParseElement;
 import pl.edu.agh.gratex.parser.elements.labeledge.LabelEdgeTextColorParseElement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -36,11 +29,11 @@ public class LabelEdgeParser extends GraphElementParser {
     public List<ParseElement> createParseList() {
         List<ParseElement> parseList = new ArrayList<>();
         parseList.add(new StaticParseElement("\\node at ", false));
-        parseList.add(new LabelEdgePositionParser());
-        parseList.add(new LabelEdgeRotationParser());
+        parseList.add(new LabelEdgePositionParseElement());
+        parseList.add(new LabelEdgeRotationParseElement());
         parseList.add(new LabelEdgeTextColorParseElement(colorMapper));
         parseList.add(new StaticParseElement(";", false));
-        parseList.add(new CommentedParametersLabelEdgeParser());
+        parseList.add(new LabelEdgeCommentedParametersParseElement());
         return parseList;
     }
 
