@@ -99,5 +99,7 @@ public class MainWindow extends JFrame {
 
         menuBar = new MenuBar(generalController, generalController.getModeController(), generalController.getToolController(), generalController.getSelectionController());
         setJMenuBar(menuBar);
+
+        setVisible(true);
     }
 }

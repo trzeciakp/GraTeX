@@ -298,7 +298,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         getContentPane().add(button_restoreDefaultSettings);
 
         checkBox_applyToAll = new JCheckBox(StringLiterals.CHECKBOX_TEMPLATE_EDITOR_GLOBAL_APPLY);
-        checkBox_applyToAll.setBounds(393, 433, 149, 34);
+        checkBox_applyToAll.setBounds(363, 433, 179, 34);
         checkBox_applyToAll.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_GLOBAL_APPLY);
         getContentPane().add(checkBox_applyToAll);
 

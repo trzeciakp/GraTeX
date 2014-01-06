@@ -19,7 +19,7 @@ public class Application {
                             break;
                         }
                     }
-                    new MainWindow().setVisible(true);
+                    new MainWindow();
                 } catch (Exception e) {
                     e.printStackTrace();
                     criticalError("Error while creating main window", e);
