@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.controller.ModeListener;
 import pl.edu.agh.gratex.controller.ToolController;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,9 +30,11 @@ public class PanelToolbox extends JPanel implements ModeListener {
         setLayout(null);
         comboBox_mode = new JComboBox<>(ModeType.values());
         comboBox_mode.setSelectedIndex(0);
-        comboBox_mode.setBounds(5, 11, 90, 30);
+        comboBox_mode.setBounds(5, 11, 110, 30);
         comboBox_mode.setToolTipText(StringLiterals.COMBOBOX_PANEL_TOOLBOX_MODE);
         comboBox_mode.setFocusable(false);
+        comboBox_mode.setFont(new Font("Tahoma", Font.PLAIN, 11 ));
+        ((JLabel)comboBox_mode.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
         //toolButtons = new EnumMap<>(ToolButtonType.class);
 
         comboBox_mode.addActionListener(new ActionListener() {
@@ -49,7 +52,7 @@ public class PanelToolbox extends JPanel implements ModeListener {
             ToolButton toolButton = new ToolButton(toolButtonType.getImageActiveName(), toolButtonType.getImagePassiveName(), toolController, toolButtonType.getToolType());
             toolButton.setToolTipText(toolButtonType.getTooltip());
             toolButton.setFocusable(false);
-            toolButton.setBounds(25, y, 50, 50);
+            toolButton.setBounds(35, y, 50, 50);
             //toolButtons.put(toolButtonType, toolButton);
             add(toolButton);
             y += 60;

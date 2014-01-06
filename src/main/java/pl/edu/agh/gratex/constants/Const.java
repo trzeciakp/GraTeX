@@ -9,7 +9,7 @@ public class Const {
     // MainWindow size constraints
     public final static int MAIN_WINDOW_MIN_WIDTH = 800;
     public final static int MAIN_WINDOW_MIN_HEIGHT = 600;
-    public final static int MAIN_WINDOW_DEFAULT_WIDTH = 1010;
+    public final static int MAIN_WINDOW_DEFAULT_WIDTH = 1030;
     public final static int MAIN_WINDOW_DEFAULT_HEIGHT = 768;
 
     // Extension of GraTeX graph files

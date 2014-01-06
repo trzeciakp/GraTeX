@@ -94,7 +94,7 @@ public class MainWindow extends JFrame {
 
         panel_toolbox = new PanelToolbox(generalController.getToolController(), generalController.getModeController());
         panel_toolbox.setBorder(null);
-        panel_toolbox.setPreferredSize(new Dimension(100, 0));
+        panel_toolbox.setPreferredSize(new Dimension(120, 0));
         getContentPane().add(panel_toolbox, BorderLayout.WEST);
 
         menuBar = new MenuBar(generalController, generalController.getModeController(), generalController.getToolController(), generalController.getSelectionController());
