@@ -140,7 +140,7 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
                 if (currentlyDraggedHyperedge.getConnectedVertices().size() == 2) {
                     tempLatexCode = generalController.getParseController().getParserByElementType(GraphElementType.HYPEREDGE).parseToLatex(currentlyDraggedHyperedge);
                 }
-                currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.SHRINK_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_SHRINK);
+                currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.SHRINK_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_EDIT);
                 currentlyDraggedHyperedge.getConnectedVertices().remove(vertex);
                 currentlyDraggedHyperedge.getConnectedVertices().add(edgeDragDummy);
             } else {
@@ -150,6 +150,7 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
     }
 
     private void continueMoving() {
+        generalController.getSelectionController().addToSelection(currentlyDraggedHyperedge, false);
         if (movingJoint) {
             // No need to duplicate code
             shiftDownChanged();

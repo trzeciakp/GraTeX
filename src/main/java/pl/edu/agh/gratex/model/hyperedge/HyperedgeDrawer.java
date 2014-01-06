@@ -63,9 +63,6 @@ public class HyperedgeDrawer implements Drawer {
         g.fill(joint);
         g.setColor(DrawingTools.getDrawingColor(jointColor, hyperedge.isDummy()));
         g.fill(joint);
-        g.setColor(DrawingTools.getDrawingColor(Color.black, hyperedge.isDummy()));
-        g.setStroke(new BasicStroke(1));
-        g.draw(joint);
 
         g.dispose();
     }

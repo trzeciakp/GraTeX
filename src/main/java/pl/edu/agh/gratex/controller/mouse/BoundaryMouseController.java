@@ -138,6 +138,7 @@ public class BoundaryMouseController extends GraphElementMouseController {
     }
 
     private void continueMoving() {
+        generalController.getSelectionController().addToSelection(currentlyDraggedBoundary, false);
         int oldTopLeftCornerX = currentlyDraggedBoundary.getTopLeftX();
         int oldTopLeftCornerY = currentlyDraggedBoundary.getTopLeftY();
         int oldWidth = currentlyDraggedBoundary.getWidth();

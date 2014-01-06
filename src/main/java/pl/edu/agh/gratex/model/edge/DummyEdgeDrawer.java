@@ -24,7 +24,10 @@ public class DummyEdgeDrawer implements Drawer {
     @Override
     public void draw(GraphElement graphElement, Graphics g) {
         delegatedDrawer.draw(graphElement, g);
-        drawAngleVisualisation((Edge) graphElement, g);
+        Edge edge = (Edge) graphElement;
+        if (!edge.isLoop() && edge.getRelativeEdgeAngle() != 0) {
+            drawAngleVisualisation(edge, g);
+        }
     }
 
     //TODO temporarily duplicated with EdgeDrawer method. Unifying could be considered

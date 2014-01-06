@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.controller.ModeListener;
 import pl.edu.agh.gratex.controller.ToolController;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,9 +17,6 @@ public class PanelToolbox extends JPanel implements ModeListener {
     private ModeController modeController;
 
     private JComboBox<ModeType> comboBox_mode;
-
-    // TODO wyglada na to, ze nie bedziemy potrzebowali wyciagac tych guzikow, wiec nie ma potrzeby pakowac ich do mapy
-    //private final EnumMap<ToolButtonType, ToolButton> toolButtons;
 
     public PanelToolbox(ToolController toolController, ModeController modeController) {
         super();
@@ -29,10 +27,10 @@ public class PanelToolbox extends JPanel implements ModeListener {
         setLayout(null);
         comboBox_mode = new JComboBox<>(ModeType.values());
         comboBox_mode.setSelectedIndex(0);
-        comboBox_mode.setBounds(5, 11, 90, 30);
+        comboBox_mode.setBounds(5, 11, 110, 30);
         comboBox_mode.setToolTipText(StringLiterals.COMBOBOX_PANEL_TOOLBOX_MODE);
         comboBox_mode.setFocusable(false);
-        //toolButtons = new EnumMap<>(ToolButtonType.class);
+        comboBox_mode.setFont(new Font("Tahoma", Font.PLAIN, 11 ));
 
         comboBox_mode.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
@@ -49,8 +47,7 @@ public class PanelToolbox extends JPanel implements ModeListener {
             ToolButton toolButton = new ToolButton(toolButtonType.getImageActiveName(), toolButtonType.getImagePassiveName(), toolController, toolButtonType.getToolType());
             toolButton.setToolTipText(toolButtonType.getTooltip());
             toolButton.setFocusable(false);
-            toolButton.setBounds(25, y, 50, 50);
-            //toolButtons.put(toolButtonType, toolButton);
+            toolButton.setBounds(35, y, 50, 50);
             add(toolButton);
             y += 60;
         }

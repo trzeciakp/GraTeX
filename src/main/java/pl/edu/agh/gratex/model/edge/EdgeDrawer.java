@@ -108,7 +108,10 @@ public class EdgeDrawer implements Drawer {
     }
 
     private boolean shouldVisualizeAngle(Edge edge) {
-        return (selectionController.selectionContains(edge) && selectionController.selectionSize() == 1) && edge.getRelativeEdgeAngle() != 0;
+        return selectionController.selectionContains(edge) &&
+                selectionController.selectionSize() == 1 &&
+                edge.getRelativeEdgeAngle() != 0 &&
+                !edge.isLoop();
     }
 
 
