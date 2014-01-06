@@ -97,7 +97,7 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
         //getContentPane().add(showCommentsCheckBox, BorderLayout.NORTH);
         checkboxesPanel.add(showCommentsCheckBox);
         final JCheckBox showDocumentHeaderCheckBox = new JCheckBox("Show document header");
-        showCommentsCheckBox.setToolTipText("Show commands that import packages required to use TikZ in LaTeX documents");
+        showDocumentHeaderCheckBox.setToolTipText("Show commands that import packages required to use TikZ in LaTeX documents");
         showDocumentHeaderCheckBox.setSelected(false);
         showDocumentHeaderCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -107,7 +107,7 @@ public class LatexCodeDialog extends JDialog implements ClipboardOwner {
                 } else {
                     removeDocumentHeader(codeWithPicture);
                 }
-                textArea_code.setText(listToString(codeWithPicture, showCommentsCheckBox.isSelected()));
+                textArea_code.setText(listToString(codeWithPicture, !showCommentsCheckBox.isSelected()));
             }
         });
         checkboxesPanel.add(showDocumentHeaderCheckBox);

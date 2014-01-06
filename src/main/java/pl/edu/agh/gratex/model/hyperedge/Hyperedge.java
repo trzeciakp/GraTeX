@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.properties.IsJointDisplay.IsJointDisplay;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -188,5 +189,13 @@ public class Hyperedge extends GraphElement {
 
     public void setLineColor(Color lineColor) {
         propertyModel.setLineColor(lineColor);
+    }
+
+    public void setIsJointDisplay(IsJointDisplay isJointDisplay) {
+        propertyModel.setIsJointDisplay(isJointDisplay);
+    }
+
+    public IsJointDisplay getIsJointDisplay() {
+        return propertyModel.getIsJointDisplay();
     }
 }
