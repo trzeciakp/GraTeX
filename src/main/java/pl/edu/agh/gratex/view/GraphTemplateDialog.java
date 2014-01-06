@@ -247,7 +247,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         hyperedge.autoCenterJoint();
         graph.addElement(hyperedge);
 
-        Boundary boundary =(Boundary) graphElementFactory.create(GraphElementType.BOUNDARY, graph);
+        Boundary boundary = (Boundary) graphElementFactory.create(GraphElementType.BOUNDARY, graph);
         boundary.setTopLeftX(40);
         boundary.setTopLeftY(30);
         boundary.setWidth(440);
