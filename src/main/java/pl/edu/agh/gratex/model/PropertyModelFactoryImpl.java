@@ -3,12 +3,11 @@ package pl.edu.agh.gratex.model;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.boundary.BoundaryPropertyModel;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
-import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
 import pl.edu.agh.gratex.model.properties.*;
-import pl.edu.agh.gratex.model.properties.IsJointDisplay.IsJointDisplay;
+import pl.edu.agh.gratex.model.properties.JointDisplay;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
 
 import java.awt.*;
@@ -101,12 +100,21 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineType(LineType.SOLID);
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineWidth(1);
 
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setIsJointDisplay(IsJointDisplay.VISIBLE);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setIsJointDisplay(JointDisplay.VISIBLE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineWidth(1);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineType(LineType.SOLID);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineColor(PropertyModel.REVERSE_COLORS.get("black"));
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointShape(ShapeType.CIRCLE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointSize(8);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointColor(PropertyModel.REVERSE_COLORS.get("darkgray"));
+        // TODO To ustaiwone tylko do testów
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineType(LineType.DASHED);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineWidth(2);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineColor(PropertyModel.REVERSE_COLORS.get("magenta"));
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointHasLabel(IsLabelInside.YES);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setText("PENIS");
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelPosition(JointLabelPosition.INSIDE);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelColor(PropertyModel.REVERSE_COLORS.get("red"));
+
     }
 }

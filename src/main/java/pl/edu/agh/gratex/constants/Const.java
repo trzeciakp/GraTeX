@@ -73,4 +73,9 @@ public class Const {
 
     // Selection margin in hyperedges' joints
     public static final int HYPEREDGE_JOINT_SELECTION_SIZE = 20;
+
+    // (px) margin of label from joint border
+    public static final int HYPEREDGE_JOINT_LABEL_MARGIN = 5;
+
+
 }

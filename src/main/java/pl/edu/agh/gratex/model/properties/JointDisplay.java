@@ -1,11 +1,11 @@
-package pl.edu.agh.gratex.model.properties.IsJointDisplay;
+package pl.edu.agh.gratex.model.properties;
 
 import pl.edu.agh.gratex.model.properties.Emptible;
 
 /**
  *
  */
-public enum IsJointDisplay implements Emptible{
+public enum JointDisplay implements Emptible{
     EMPTY {
         @Override
         public String toString() {
