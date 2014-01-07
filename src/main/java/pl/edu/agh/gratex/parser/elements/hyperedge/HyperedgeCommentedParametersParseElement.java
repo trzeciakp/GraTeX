@@ -1,13 +1,10 @@
 package pl.edu.agh.gratex.parser.elements.hyperedge;
 
 import pl.edu.agh.gratex.model.GraphElement;
-import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
-import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
-import pl.edu.agh.gratex.model.properties.IsJointDisplay.IsJointDisplay;
+import pl.edu.agh.gratex.model.properties.JointDisplay;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -40,15 +37,15 @@ public class HyperedgeCommentedParametersParseElement extends ParseElement {
     public void setProperty(String match, GraphElement element) {
         Hyperedge hyperedge = (Hyperedge) element;
         if(match == null) {
-            hyperedge.setIsJointDisplay(IsJointDisplay.VISIBLE);
+            hyperedge.setIsJointDisplay(JointDisplay.VISIBLE);
         } else {
-            hyperedge.setIsJointDisplay(IsJointDisplay.HIDDEN);
+            hyperedge.setIsJointDisplay(JointDisplay.HIDDEN);
         }
     }
 
     @Override
     public String getProperty(GraphElement element) {
         Hyperedge hyperedge = (Hyperedge) element;
-        return hyperedge.getIsJointDisplay() == IsJointDisplay.HIDDEN ? STRING_FORMAT : "";
+        return hyperedge.getIsJointDisplay() == JointDisplay.HIDDEN ? STRING_FORMAT : "";
     }
 }

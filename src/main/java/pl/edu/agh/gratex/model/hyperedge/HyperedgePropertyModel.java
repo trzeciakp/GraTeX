@@ -1,9 +1,7 @@
 package pl.edu.agh.gratex.model.hyperedge;
 
 import pl.edu.agh.gratex.model.PropertyModel;
-import pl.edu.agh.gratex.model.properties.IsJointDisplay.IsJointDisplay;
-import pl.edu.agh.gratex.model.properties.LineType;
-import pl.edu.agh.gratex.model.properties.ShapeType;
+import pl.edu.agh.gratex.model.properties.*;
 
 import java.awt.*;
 
@@ -14,10 +12,21 @@ public class HyperedgePropertyModel extends PropertyModel {
     private LineType lineType = LineType.EMPTY;
     private int lineWidth = PropertyModel.EMPTY;
     private Color lineColor = null;
-    private Color jointColor = null;
+
+    private JointDisplay jointDisplay = JointDisplay.EMPTY;
     private ShapeType jointShape = ShapeType.EMPTY;
     private int jointSize = PropertyModel.EMPTY;
-    private IsJointDisplay isJointDisplay = IsJointDisplay.EMPTY;
+    private Color jointColor = null;
+
+    private LineType jointLineType = LineType.EMPTY;
+    private int jointLineWidth = PropertyModel.EMPTY;
+    private Color jointLineColor = null;
+
+    private IsLabelInside jointHasLabel = IsLabelInside.EMPTY;
+    private String text = null;
+    private JointLabelPosition jointLabelPosition = JointLabelPosition.EMPTY;
+    private Color jointLabelColor = null;
+
 
     @Override
     public void andOperator(PropertyModel pm) {
@@ -41,7 +50,28 @@ public class HyperedgePropertyModel extends PropertyModel {
             setJointSize(PropertyModel.EMPTY);
         }
         if (getIsJointDisplay() != model.getIsJointDisplay()) {
-            setIsJointDisplay(IsJointDisplay.EMPTY);
+            setIsJointDisplay(JointDisplay.EMPTY);
+        }
+        if (getJointLineType() != model.getJointLineType()) {
+            setJointLineType(LineType.EMPTY);
+        }
+        if (getJointLineWidth() != model.getJointLineWidth()) {
+            setJointLineWidth(PropertyModel.EMPTY);
+        }
+        if (getJointLineColor() != null && !getJointLineColor().equals(model.getJointLineColor())) {
+            setJointLineColor(null);
+        }
+        if (getJointHasLabel() != model.getJointHasLabel()) {
+            setJointHasLabel(IsLabelInside.EMPTY);
+        }
+        if (getText() != null && !getText().equals(model.getText())) {
+            setText(null);
+        }
+        if (getJointLabelPosition() != model.getJointLabelPosition()) {
+            setJointLabelPosition(JointLabelPosition.EMPTY);
+        }
+        if (getJointLabelColor() != null && !getJointLabelColor().equals(model.getJointLabelColor())) {
+            setJointLabelColor(null);
         }
     }
 
@@ -66,8 +96,30 @@ public class HyperedgePropertyModel extends PropertyModel {
         if (model.getJointSize() != PropertyModel.EMPTY) {
             setJointSize(model.getJointSize());
         }
-        if (model.getIsJointDisplay() != IsJointDisplay.EMPTY) {
+        if (model.getIsJointDisplay() != JointDisplay.EMPTY) {
             setIsJointDisplay(model.getIsJointDisplay());
+        }
+
+        if (model.getJointLineType() != LineType.EMPTY) {
+            setJointLineType(model.getJointLineType());
+        }
+        if (model.getJointLineWidth() != PropertyModel.EMPTY) {
+            setJointLineWidth(model.getJointLineWidth());
+        }
+        if (model.getJointLineColor() != null) {
+            setJointLineColor(model.getJointLineColor());
+        }
+        if (model.getJointHasLabel() != IsLabelInside.EMPTY) {
+            setJointHasLabel(model.getJointHasLabel());
+        }
+        if (model.getText() != null) {
+            setText(model.getText());
+        }
+        if (model.getJointLabelPosition() != JointLabelPosition.EMPTY) {
+            setJointLabelPosition(model.getJointLabelPosition());
+        }
+        if (model.getJointLabelColor() != null) {
+            setJointLabelColor(model.getJointLabelColor());
         }
     }
 
@@ -81,6 +133,13 @@ public class HyperedgePropertyModel extends PropertyModel {
         result.setLineType(getLineType());
         result.setLineWidth(getLineWidth());
         result.setIsJointDisplay(getIsJointDisplay());
+        result.setJointLineType(getJointLineType());
+        result.setJointLineWidth(getJointLineWidth());
+        result.setJointLineColor(getJointLineColor());
+        result.setJointHasLabel(getJointHasLabel());
+        result.setText(getText());
+        result.setJointLabelPosition(getJointLabelPosition());
+        result.setJointLabelColor(getJointLabelColor());
         return result;
     }
 
@@ -132,11 +191,75 @@ public class HyperedgePropertyModel extends PropertyModel {
         this.jointSize = jointSize;
     }
 
-    public IsJointDisplay getIsJointDisplay() {
-        return isJointDisplay;
+    public JointDisplay getIsJointDisplay() {
+        return jointDisplay;
     }
 
-    public void setIsJointDisplay(IsJointDisplay isJointDisplay) {
-        this.isJointDisplay = isJointDisplay;
+    public void setIsJointDisplay(JointDisplay jointDisplay) {
+        this.jointDisplay = jointDisplay;
+    }
+
+    public JointDisplay getJointDisplay() {
+        return jointDisplay;
+    }
+
+    public void setJointDisplay(JointDisplay jointDisplay) {
+        this.jointDisplay = jointDisplay;
+    }
+
+    public LineType getJointLineType() {
+        return jointLineType;
+    }
+
+    public void setJointLineType(LineType jointLineType) {
+        this.jointLineType = jointLineType;
+    }
+
+    public int getJointLineWidth() {
+        return jointLineWidth;
+    }
+
+    public void setJointLineWidth(int jointLineWidth) {
+        this.jointLineWidth = jointLineWidth;
+    }
+
+    public Color getJointLineColor() {
+        return jointLineColor;
+    }
+
+    public void setJointLineColor(Color jointLineColor) {
+        this.jointLineColor = jointLineColor;
+    }
+
+    public IsLabelInside getJointHasLabel() {
+        return jointHasLabel;
+    }
+
+    public void setJointHasLabel(IsLabelInside jointHasLabel) {
+        this.jointHasLabel = jointHasLabel;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public JointLabelPosition getJointLabelPosition() {
+        return jointLabelPosition;
+    }
+
+    public void setJointLabelPosition(JointLabelPosition jointLabelPosition) {
+        this.jointLabelPosition = jointLabelPosition;
+    }
+
+    public Color getJointLabelColor() {
+        return jointLabelColor;
+    }
+
+    public void setJointLabelColor(Color jointLabelColor) {
+        this.jointLabelColor = jointLabelColor;
     }
 }

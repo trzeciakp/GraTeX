@@ -3,7 +3,7 @@ package pl.edu.agh.gratex.view.propertyPanel;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
-import pl.edu.agh.gratex.model.properties.IsJointDisplay.IsJointDisplay;
+import pl.edu.agh.gratex.model.properties.JointDisplay;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 
@@ -36,7 +36,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
     private JLabel lblLineType;
     private JLabel lblLineSize;
     private JLabel lblLineColor;
-    private JComboBox<IsJointDisplay> comboBoxIsJointDisplayType;
+    private JComboBox<JointDisplay> comboBoxIsJointDisplayType;
     private JLabel lblIsJointDisplay;
 
     private void changed() {
@@ -72,7 +72,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
             spinnerLineSize.setValue(model.getLineWidth() + StringLiterals.PX_SUFFIX);
         }
         comboBoxLineColor.setSelectedItem(model.getLineColor());
-        if(model.getIsJointDisplay().isEmpty() || model.getIsJointDisplay() == IsJointDisplay.HIDDEN) {
+        if(model.getIsJointDisplay().isEmpty() || model.getIsJointDisplay() == JointDisplay.HIDDEN) {
             setJointPropertyEnabled(false);
         } else {
             setJointPropertyEnabled(true);
@@ -98,18 +98,18 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
 
         /**************************** JOINT DISPLAY COMBOBOX **************************/
 
-        comboBoxIsJointDisplayType = new JComboBox<>(IsJointDisplay.values());
+        comboBoxIsJointDisplayType = new JComboBox<>(JointDisplay.values());
         comboBoxIsJointDisplayType.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                IsJointDisplay newValue = ((IsJointDisplay) comboBoxIsJointDisplayType.getSelectedItem());
-                IsJointDisplay oldValue = model.getIsJointDisplay();
+                JointDisplay newValue = ((JointDisplay) comboBoxIsJointDisplayType.getSelectedItem());
+                JointDisplay oldValue = model.getIsJointDisplay();
                 if ((!newValue.isEmpty()) && (oldValue != newValue) || (!changedByUser)) {
                     model.setIsJointDisplay(newValue);
-                    if(newValue == IsJointDisplay.HIDDEN) {
+                    if(newValue == JointDisplay.HIDDEN) {
                         model.setJointSize(1);
                         model.setJointShape(ShapeType.CIRCLE);
                         model.setJointColor(model.getLineColor());
-                    } else if(oldValue == IsJointDisplay.HIDDEN && newValue == IsJointDisplay.VISIBLE) {
+                    } else if(oldValue == JointDisplay.HIDDEN && newValue == JointDisplay.VISIBLE) {
                         model.setJointSize(3);
                     }
                     changed();
@@ -270,7 +270,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
                     if (newValue != null) {
                         if (!newValue.equals(model.getLineColor())) {
                             model.setLineColor(newValue);
-                            if(model.getIsJointDisplay() == IsJointDisplay.HIDDEN) {
+                            if(model.getIsJointDisplay() == JointDisplay.HIDDEN) {
                                 model.setJointColor(newValue);
                             }
                             changed();

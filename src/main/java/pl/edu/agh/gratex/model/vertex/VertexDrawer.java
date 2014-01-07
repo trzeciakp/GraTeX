@@ -26,13 +26,6 @@ public class VertexDrawer implements Drawer {
 
         int posX = vertex.getPosX();
         int posY = vertex.getPosY();
-        ShapeType shapeType = vertex.getShape();
-        int radius = vertex.getRadius();
-        int lineWidth = vertex.getLineWidth();
-        LineType lineType = vertex.getLineType();
-        if (lineType == LineType.NONE) {
-            lineWidth = 0;
-        }
 
         int tempX = 0;
         int tempY = 0;
@@ -42,7 +35,35 @@ public class VertexDrawer implements Drawer {
             VertexUtils.adjustToGrid(vertex);
         }
 
-        if (selectionController.selectionContains(vertex)) {
+        drawVertex(g, posX, posY, vertex.getShape(), vertex.getRadius(), vertex.getVertexColor(),
+                vertex.getLineType(), vertex.getLineWidth(), vertex.getLineColor(), selectionController.selectionContains(vertex), vertex.isDummy());
+        g.setStroke(new BasicStroke());
+
+        if (vertex.isLabelInside()) {
+            g.setColor(DrawingTools.getDrawingColor(vertex.getFontColor(), vertex.isDummy()));
+            vertex.setNumber(vertex.getNumber());
+            if (vertex.getLabelInside() != null) {
+                g.setFont(Const.DEFAULT_FONT);
+                FontMetrics fm = g.getFontMetrics();
+                g.drawString(vertex.getLabelInside(), posX - fm.stringWidth(vertex.getLabelInside()) / 2, posY + (fm.getAscent() - fm.getDescent()) / 2);
+            }
+        }
+
+        if (vertex.isDummy() && vertex.getGraph().isGridOn()) {
+            vertex.setPosX(tempX);
+            vertex.setPosY(tempY);
+        }
+
+        g.dispose();
+    }
+
+    public static void drawVertex(Graphics2D g, int posX, int posY, ShapeType shapeType, int radius, Color vertexColor,
+                                  LineType lineType, int lineWidth, Color lineColor, boolean isSelected, boolean isDummy) {
+        if (lineType == LineType.NONE) {
+            lineWidth = 0;
+        }
+
+        if (isSelected) {
             g.setColor(Const.SELECTION_COLOR);
             g.fill(VertexUtils.getVertexShape(shapeType, radius + lineWidth / 2 + radius / 4, posX, posY));
         }
@@ -50,7 +71,7 @@ public class VertexDrawer implements Drawer {
         g.setColor(Color.white);
         g.fill(VertexUtils.getVertexShape(shapeType, radius + lineWidth / 2, posX, posY));
 
-        g.setColor(DrawingTools.getDrawingColor(vertex.getVertexColor(), vertex.isDummy()));
+        g.setColor(DrawingTools.getDrawingColor(vertexColor, isDummy));
         g.fill(VertexUtils.getVertexShape(shapeType, radius + lineWidth / 2, posX, posY));
 
         if (lineType != LineType.NONE) {
@@ -75,27 +96,9 @@ public class VertexDrawer implements Drawer {
                     perimeter = 6 * radius;
                     break;
             }
-            g.setColor(DrawingTools.getDrawingColor(vertex.getLineColor(), vertex.isDummy()));
+            g.setColor(DrawingTools.getDrawingColor(lineColor, isDummy));
             g.setStroke(DrawingTools.getStroke(lineType, lineWidth, perimeter));
             g.draw(VertexUtils.getVertexShape(shapeType, radius, posX, posY));
         }
-        g.setStroke(new BasicStroke());
-
-        if (vertex.isLabelInside()) {
-            g.setColor(DrawingTools.getDrawingColor(vertex.getFontColor(), vertex.isDummy()));
-            vertex.setNumber(vertex.getNumber());
-            if (vertex.getLabelInside() != null) {
-                g.setFont(Const.DEFAULT_FONT);
-                FontMetrics fm = g.getFontMetrics();
-                g.drawString(vertex.getLabelInside(), posX - fm.stringWidth(vertex.getLabelInside()) / 2, posY + (fm.getAscent() - fm.getDescent()) / 2);
-            }
-        }
-
-        if (vertex.isDummy() && vertex.getGraph().isGridOn()) {
-            vertex.setPosX(tempX);
-            vertex.setPosY(tempY);
-        }
-
-        g.dispose();
     }
 }

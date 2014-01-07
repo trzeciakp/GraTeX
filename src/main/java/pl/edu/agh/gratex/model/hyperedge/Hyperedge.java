@@ -5,9 +5,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
-import pl.edu.agh.gratex.model.properties.IsJointDisplay.IsJointDisplay;
-import pl.edu.agh.gratex.model.properties.LineType;
-import pl.edu.agh.gratex.model.properties.ShapeType;
+import pl.edu.agh.gratex.model.properties.*;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
@@ -30,6 +28,11 @@ public class Hyperedge extends GraphElement {
     private List<Vertex> connectedVertices = new LinkedList<>();
     private int jointCenterX;
     private int jointCenterY;
+
+    private int labelPosX;
+    private int labelPosY;
+    private int labelDrawX;
+    private int labelDrawY;
 
     public Hyperedge(Graph graph, PropertyModel propertyModel) {
         super(graph, propertyModel);
@@ -60,6 +63,7 @@ public class Hyperedge extends GraphElement {
 
     @Override
     public void updateLocation() {
+        HyperedgeUtils.updateLocation(this);
     }
 
     public void autoCenterJoint() {
@@ -191,11 +195,107 @@ public class Hyperedge extends GraphElement {
         propertyModel.setLineColor(lineColor);
     }
 
-    public void setIsJointDisplay(IsJointDisplay isJointDisplay) {
-        propertyModel.setIsJointDisplay(isJointDisplay);
+    public void setIsJointDisplay(JointDisplay jointDisplay) {
+        propertyModel.setIsJointDisplay(jointDisplay);
     }
 
-    public IsJointDisplay getIsJointDisplay() {
+    public JointDisplay getIsJointDisplay() {
         return propertyModel.getIsJointDisplay();
+    }
+
+    public LineType getJointLineType() {
+        return propertyModel.getJointLineType();
+    }
+
+    public JointDisplay getJointDisplay() {
+        return propertyModel.getJointDisplay();
+    }
+
+    public void setJointLabelColor(Color jointLabelColor) {
+        propertyModel.setJointLabelColor(jointLabelColor);
+    }
+
+    public int getJointLineWidth() {
+        return propertyModel.getJointLineWidth();
+    }
+
+    public void setJointLabelPosition(JointLabelPosition jointLabelPosition) {
+        propertyModel.setJointLabelPosition(jointLabelPosition);
+    }
+
+    public String getText() {
+        return propertyModel.getText();
+    }
+
+    public void setJointLineType(LineType jointLineType) {
+        propertyModel.setJointLineType(jointLineType);
+    }
+
+    public Color getJointLineColor() {
+        return propertyModel.getJointLineColor();
+    }
+
+    public JointLabelPosition getJointLabelPosition() {
+        return propertyModel.getJointLabelPosition();
+    }
+
+    public void setText(String text) {
+        propertyModel.setText(text);
+    }
+
+    public void setJointLineColor(Color jointLineColor) {
+        propertyModel.setJointLineColor(jointLineColor);
+    }
+
+    public void setJointLineWidth(int jointLineWidth) {
+        propertyModel.setJointLineWidth(jointLineWidth);
+    }
+
+    public Color getJointLabelColor() {
+        return propertyModel.getJointLabelColor();
+    }
+
+    public void setJointHasLabel(IsLabelInside jointHasLabel) {
+        propertyModel.setJointHasLabel(jointHasLabel);
+    }
+
+    public void setJointDisplay(JointDisplay jointDisplay) {
+        propertyModel.setJointDisplay(jointDisplay);
+    }
+
+    public IsLabelInside getJointHasLabel() {
+        return propertyModel.getJointHasLabel();
+    }
+
+    public int getLabelPosX() {
+        return labelPosX;
+    }
+
+    public void setLabelPosX(int labelPosX) {
+        this.labelPosX = labelPosX;
+    }
+
+    public int getLabelPosY() {
+        return labelPosY;
+    }
+
+    public void setLabelPosY(int labelPosY) {
+        this.labelPosY = labelPosY;
+    }
+
+    public int getLabelDrawX() {
+        return labelDrawX;
+    }
+
+    public void setLabelDrawX(int labelDrawX) {
+        this.labelDrawX = labelDrawX;
+    }
+
+    public int getLabelDrawY() {
+        return labelDrawY;
+    }
+
+    public void setLabelDrawY(int labelDrawY) {
+        this.labelDrawY = labelDrawY;
     }
 }
