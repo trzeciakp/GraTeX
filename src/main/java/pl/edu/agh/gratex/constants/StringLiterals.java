@@ -235,8 +235,8 @@ public class StringLiterals {
     public static final String INFO_CHOOSE_HYPEREDGE_START = "choose a starting vertex for the hyperedge (click)";
     public static final String INFO_CHOOSE_HYPEREDGE_END = "now choose the second vertex (click)";
     public static final String INFO_HYPEREDGE_ADDING_CANCELLED = "adding hyperedge cancelled";
-    public final static String INFO_HYPEREDGE_HOW_TO_EXPAND = "CTRL + drag joint to add a vertex. Drag an edge to edit. " +
-            "Move joint around by dragging. SHIFT for auto-center.";
+    public final static String INFO_HYPEREDGE_HOW_TO_EXPAND = "Drag joint to add a vertex. Drag an edge to edit. " +
+            "CTRL + drag to move joint around - SHIFT for auto-center.";
 
     // SaveFileDialog
     public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";

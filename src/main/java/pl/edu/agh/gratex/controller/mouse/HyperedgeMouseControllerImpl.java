@@ -124,18 +124,18 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
         movingJoint = false;
         if (ctrlDown) {
             if (currentlyDraggedHyperedge.getJointArea().contains(mouseX, mouseY)) {
-                currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.SHRINK_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_EXTEND);
-                edgeDragDummy.setPosX(mouseX);
-                edgeDragDummy.setPosY(mouseY);
-                currentlyDraggedHyperedge.getConnectedVertices().add(edgeDragDummy);
+                movingJoint = true;
+                currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.MOVE_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_JOINT_MOVE);
             } else { // only joint works with Ctrl
                 currentlyDraggedHyperedge = null;
             }
         } else { // !ctrlDown
             Vertex vertex;
             if (currentlyDraggedHyperedge.getJointArea().contains(mouseX, mouseY)) {
-                movingJoint = true;
-                currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.MOVE_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_JOINT_MOVE);
+                currentDragOperation = new AlterationOperation(generalController, currentlyDraggedHyperedge, OperationType.SHRINK_HYPEREDGE, StringLiterals.INFO_HYPEREDGE_EXTEND);
+                edgeDragDummy.setPosX(mouseX);
+                edgeDragDummy.setPosY(mouseY);
+                currentlyDraggedHyperedge.getConnectedVertices().add(edgeDragDummy);
             } else if ((vertex = currentlyDraggedHyperedge.getVertexByEdge(mouseX, mouseY)) != null) {
                 if (currentlyDraggedHyperedge.getConnectedVertices().size() == 2) {
                     tempLatexCode = generalController.getParseController().getParserByElementType(GraphElementType.HYPEREDGE).parseToLatex(currentlyDraggedHyperedge);
