@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.parser.*;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ParseControllerImpl implements ParseController {
@@ -28,7 +29,7 @@ public class ParseControllerImpl implements ParseController {
         List<String> result = new ArrayList<>();
         for (GraphElementType graphElementType : GraphElementType.values()) {
             GraphElementParser parser = parsers.get(graphElementType);
-            List<GraphElement> elements = graph.getElements(graphElementType);
+            List<GraphElement> elements = new LinkedList<>(graph.getElements(graphElementType));
             GraphElement.sortByDrawingPriorities(elements);
             for (GraphElement graphElement : elements) {
                 result.add(parser.parseToLatex(graphElement));
