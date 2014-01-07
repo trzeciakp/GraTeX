@@ -1,15 +1,11 @@
 package pl.edu.agh.gratex.utils;
 
 
-import pl.edu.agh.gratex.controller.GeneralController;
 import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.model.graph.Graph;
-import sun.plugin2.gluegen.runtime.BufferFactory;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FileManager {
