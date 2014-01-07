@@ -52,6 +52,7 @@ public class HyperedgeDrawer implements Drawer {
                 hyperedge.getJointLineWidth(), hyperedge.getJointLineColor(), selectionController.selectionContains(hyperedge), hyperedge.isDummy());
 
         if (hyperedge.getJointHasLabel() == IsLabelInside.YES) {
+            g.setFont(Const.DEFAULT_FONT);
             g.setColor(hyperedge.getJointLabelColor());
             g.drawString(hyperedge.getText(), hyperedge.getLabelDrawX(), hyperedge.getLabelDrawY());
         }

@@ -106,15 +106,14 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineColor(PropertyModel.REVERSE_COLORS.get("black"));
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointShape(ShapeType.CIRCLE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointSize(8);
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointColor(PropertyModel.REVERSE_COLORS.get("darkgray"));
-        // TODO To ustaiwone tylko do testów
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineType(LineType.DASHED);
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineWidth(2);
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineColor(PropertyModel.REVERSE_COLORS.get("magenta"));
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointColor(PropertyModel.REVERSE_COLORS.get("gray"));
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineType(LineType.SOLID);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineWidth(1);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineColor(PropertyModel.REVERSE_COLORS.get("black"));
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointHasLabel(IsLabelInside.YES);
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setText("PENIS");
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelPosition(JointLabelPosition.INSIDE);
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelColor(PropertyModel.REVERSE_COLORS.get("red"));
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setText("Label");
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelPosition(JointLabelPosition.ABOVE);
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelColor(PropertyModel.REVERSE_COLORS.get("black"));
 
     }
 }

@@ -22,9 +22,49 @@ public class HyperedgeUtils {
             int height = fm.getAscent();
             int descent = fm.getDescent();
 
-            hyperedge.setLabelDrawX(hyperedge.getJointCenterX() + 10);
-            hyperedge.setLabelDrawY(hyperedge.getJointCenterY() + 10);
+            int middleX = hyperedge.getJointCenterX();
+            int middleY = hyperedge.getJointCenterY();
 
+            int spacing = Const.HYPEREDGE_JOINT_LABEL_MARGIN;
+            spacing = 0 + hyperedge.getJointSize() + hyperedge.getJointLineWidth() / 2;
+
+            switch (hyperedge.getJointLabelPosition()) {
+                case ABOVE: {
+                    hyperedge.setLabelPosX(middleX);
+                    hyperedge.setLabelPosY(middleY - spacing - height / 2);
+                    hyperedge.setLabelDrawX(middleX - width / 2);
+                    hyperedge.setLabelDrawY(middleY - spacing - descent);
+                    break;
+                }
+                case RIGHT: {
+                    hyperedge.setLabelPosX(middleX + spacing + width / 2);
+                    hyperedge.setLabelPosY(middleY);
+                    hyperedge.setLabelDrawX(middleX + spacing);
+                    hyperedge.setLabelDrawY(middleY - descent + height / 2);
+                    break;
+                }
+                case BELOW: {
+                    hyperedge.setLabelPosX(middleX);
+                    hyperedge.setLabelPosY(middleY + spacing + height / 2);
+                    hyperedge.setLabelDrawX(middleX - width / 2);
+                    hyperedge.setLabelDrawY(middleY - descent + spacing + height);
+                    break;
+                }
+                case LEFT: {
+                    hyperedge.setLabelPosX(middleX - spacing - width /2);
+                    hyperedge.setLabelPosY(middleY);
+                    hyperedge.setLabelDrawX(middleX - spacing - width);
+                    hyperedge.setLabelDrawY(middleY - descent + height / 2);
+                    break;
+                }
+                case INSIDE: {
+                    hyperedge.setLabelPosX(middleX);
+                    hyperedge.setLabelPosY(middleY);
+                    hyperedge.setLabelDrawX(middleX - width / 2);
+                    hyperedge.setLabelDrawY(middleY - descent + height / 2);
+                    break;
+                }
+            }
         }
     }
 }
