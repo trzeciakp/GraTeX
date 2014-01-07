@@ -25,8 +25,7 @@ public class HyperedgeUtils {
             int middleX = hyperedge.getJointCenterX();
             int middleY = hyperedge.getJointCenterY();
 
-            int spacing = Const.HYPEREDGE_JOINT_LABEL_MARGIN;
-            spacing = 0 + hyperedge.getJointSize() + hyperedge.getJointLineWidth() / 2;
+            int spacing = Const.HYPEREDGE_JOINT_LABEL_MARGIN + hyperedge.getJointSize() + hyperedge.getJointLineWidth() / 2;
 
             switch (hyperedge.getJointLabelPosition()) {
                 case ABOVE: {
