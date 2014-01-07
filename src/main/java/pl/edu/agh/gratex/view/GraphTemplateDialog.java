@@ -9,6 +9,7 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.PropertyModelFactory;
+import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
@@ -179,21 +180,21 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         vertex1.setNumber(1);
         VertexUtils.setPartOfNumeration(vertex1, true);
         vertex1.setPosX(120);
-        vertex1.setPosY(240);
+        vertex1.setPosY(255);
         graph.addElement(vertex1);
 
         Vertex vertex2 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
         vertex2.setNumber(2);
         VertexUtils.setPartOfNumeration(vertex2, true);
         vertex2.setPosX(400);
-        vertex2.setPosY(240);
+        vertex2.setPosY(255);
         graph.addElement(vertex2);
 
         Vertex vertex3 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
         vertex3.setNumber(3);
         VertexUtils.setPartOfNumeration(vertex3, true);
         vertex3.setPosX(260);
-        vertex3.setPosY(80);
+        vertex3.setPosY(90);
         graph.addElement(vertex3);
 
         Edge edge1 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
@@ -245,6 +246,13 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         hyperedge.setConnectedVertices(connectedVertices);
         hyperedge.autoCenterJoint();
         graph.addElement(hyperedge);
+
+        Boundary boundary = (Boundary) graphElementFactory.create(GraphElementType.BOUNDARY, graph);
+        boundary.setTopLeftX(40);
+        boundary.setTopLeftY(30);
+        boundary.setWidth(440);
+        boundary.setHeight(283);
+        graph.addElement(boundary);
 
         for (GraphElement graphElement : graph.getAllElements()) {
             graphElement.setDummy(false);

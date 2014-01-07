@@ -93,8 +93,8 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setFontColor(Color.black);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setPosition(PropertyModel.EMPTY);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setSpacing(5);
-        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setTopPlacement(LabelTopPlacement.ABOVE);
-        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(LabelRotation.TANGENT);
+        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setTopPlacement(LabelTopPlacement.EMPTY);
+        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(LabelRotation.EMPTY);
 
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("darkgray"));
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setFillColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
@@ -107,6 +107,6 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineColor(PropertyModel.REVERSE_COLORS.get("black"));
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointShape(ShapeType.CIRCLE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointSize(8);
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
+        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointColor(PropertyModel.REVERSE_COLORS.get("darkgray"));
     }
 }
