@@ -30,20 +30,21 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     private GraphElementFactory graphElementFactory;
     private final FileManager fileManager;
 
-    public GeneralControllerImpl(MainWindow mainWindow) {
+    public GeneralControllerImpl(MainWindow mainWindow, ModeController modeController1, ToolController toolController1,
+                                 OperationController operationController, SelectionController selectionController) {
         this.mainWindow = mainWindow;
-        modeController = new ModeControllerImpl(this);
-        toolController = new ToolControllerImpl(this);
-        operationController = new OperationControllerImpl(this);
-        selectionController = new SelectionControllerImpl(this, modeController, toolController);
-        DrawerFactory drawerFactory = new DrawerFactoryImpl(selectionController);
+        modeController = modeController1;
+        toolController = toolController1;
+        this.operationController = operationController;
+        this.selectionController = selectionController;
+        DrawerFactory drawerFactory = new DrawerFactoryImpl(this.selectionController);
         PropertyModelFactory propertyModelFactory = new PropertyModelFactoryImpl();
         graphElementFactory = new GraphElementFactoryImpl(drawerFactory, propertyModelFactory);
 
         GraphElementControllersFactory elementControllersFactory = new GraphElementControllersFactoryImpl(this, new ColorMapperTmpImpl(), graphElementFactory);
         parseController = new ParseControllerImpl(elementControllersFactory);
         fileManager = new FileManager(parseController);
-        mouseController = new MouseControllerImpl(this, modeController, toolController, selectionController, operationController, elementControllersFactory);
+        mouseController = new MouseControllerImpl(this, modeController, toolController, this.selectionController, this.operationController, elementControllersFactory);
 
         modeController.addModeListener(this);
         toolController.addToolListener(this);
@@ -260,7 +261,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void selectAll() {
         toolController.setTool(ToolType.SELECT);
-        selectionController.selectAll();
+        selectionController.selectAll(graph);
         operationController.reportOperationEvent(new GenericOperation(
                 StringLiterals.INFO_GENERIC_SELECT_ALL(modeController.getMode())));
     }

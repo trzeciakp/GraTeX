@@ -5,9 +5,7 @@ import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -19,12 +17,10 @@ import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.constants.ToolType;
-import pl.edu.agh.gratex.controller.GeneralController;
-import pl.edu.agh.gratex.controller.GeneralControllerImpl;
+import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.operation.OperationController;
+import pl.edu.agh.gratex.controller.operation.OperationControllerImpl;
 import pl.edu.agh.gratex.view.propertyPanel.PanelPropertyEditor;
-
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
@@ -43,7 +39,11 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         super(StringLiterals.TITLE_MAIN_WINDOW);
 
-        generalController = new GeneralControllerImpl(this);
+        ModeController modeController1 = new ModeControllerImpl();
+        ToolController toolController1 = new ToolControllerImpl();
+        OperationController operationController = new OperationControllerImpl();
+        SelectionController selectionController = new SelectionControllerImpl(modeController1, toolController1, operationController);
+        generalController = new GeneralControllerImpl(this, modeController1, toolController1, operationController, selectionController);
 
         setIconImage(Application.loadImage("icon.png"));
 

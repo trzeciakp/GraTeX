@@ -3,7 +3,6 @@ package pl.edu.agh.gratex.controller;
 import pl.edu.agh.gratex.constants.ModeType;
 
 public interface ModeController {
-    public GeneralController getGeneralController();
 
     public ModeType getMode();
     public void setMode(ModeType graphElementType);

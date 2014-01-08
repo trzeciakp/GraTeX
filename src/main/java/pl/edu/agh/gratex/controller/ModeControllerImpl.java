@@ -8,18 +8,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ModeControllerImpl implements ModeController {
-    private GeneralController generalController;
 
     private ModeType mode = ModeType.VERTEX;
     private List<ModeListener> listeners = new ArrayList<>();
 
-    public ModeControllerImpl(GeneralController generalController) {
-        this.generalController = generalController;
-    }
-
-    @Override
-    public GeneralController getGeneralController() {
-        return generalController;
+    public ModeControllerImpl() {
     }
 
     @Override

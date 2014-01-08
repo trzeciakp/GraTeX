@@ -73,7 +73,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         this.generalController = generalController;
 
         this.graphElementFactory = graphElementFactory;
-        modeController = new ModeControllerImpl(generalController);
+        modeController = new ModeControllerImpl();
         modeController.addModeListener(this);
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

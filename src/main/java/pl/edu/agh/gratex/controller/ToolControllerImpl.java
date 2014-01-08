@@ -8,18 +8,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ToolControllerImpl implements ToolController {
-    private GeneralController generalController;
 
     private ToolType tool = ToolType.ADD;
     private List<ToolListener> listeners = new ArrayList<>();
 
-    public ToolControllerImpl(GeneralController generalController) {
-        this.generalController = generalController;
-    }
-
-    @Override
-    public GeneralController getGeneralController() {
-        return generalController;
+    public ToolControllerImpl() {
     }
 
     @Override

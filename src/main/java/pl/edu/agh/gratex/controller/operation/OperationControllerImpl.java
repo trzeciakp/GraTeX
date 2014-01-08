@@ -5,18 +5,11 @@ import pl.edu.agh.gratex.controller.GeneralController;
 import java.util.ArrayList;
 
 public class OperationControllerImpl implements OperationController {
-    private GeneralController generalController;
     private ArrayList<OperationListener> listeners = new ArrayList<>();
 
     OperationList operationList = new OperationList();
 
-    public OperationControllerImpl(GeneralController generalController) {
-        this.generalController = generalController;
-    }
-
-    @Override
-    public GeneralController getGeneralController() {
-        return generalController;
+    public OperationControllerImpl() {
     }
 
     @Override

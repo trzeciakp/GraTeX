@@ -2,7 +2,9 @@ package pl.edu.agh.gratex.controller;
 
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.ToolType;
+import pl.edu.agh.gratex.controller.operation.OperationController;
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.graph.Graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,15 +12,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SelectionControllerImpl implements SelectionController, ToolListener, ModeListener {
-    private GeneralController generalController;
+    private OperationController operationController;
 
     private List<GraphElement> selection = new LinkedList<>();
     private List<SelectionListener> listeners = new ArrayList<>();
     private ModeType mode = ModeType.VERTEX;
     private ToolType tool = ToolType.ADD;
 
-    public SelectionControllerImpl(GeneralController generalController, ModeController modeController, ToolController toolController) {
-        this.generalController = generalController;
+    public SelectionControllerImpl(ModeController modeController, ToolController toolController, OperationController operationController) {
+        this.operationController = operationController;
         modeController.addModeListener(this);
         toolController.addToolListener(this);
     }
@@ -73,8 +75,8 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
     }
 
     @Override
-    public void selectAll() {
-        addToSelection(generalController.getGraph().getElements(mode.getRelatedElementType()), false);
+    public void selectAll(Graph graph) {
+        addToSelection(graph.getElements(mode.getRelatedElementType()), false);
     }
 
     @Override
@@ -90,7 +92,7 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
                 clearSelection();
             }
         }
-        generalController.getOperationController().reportOperationEvent(null);
+        operationController.reportOperationEvent(null);
     }
 
     @Override
@@ -107,7 +109,7 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
             selection.clear();
             selection.addAll(elements);
         }
-        generalController.getOperationController().reportOperationEvent(null);
+        operationController.reportOperationEvent(null);
         informListeners();
     }
 

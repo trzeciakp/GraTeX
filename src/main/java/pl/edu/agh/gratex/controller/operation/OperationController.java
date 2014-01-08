@@ -8,7 +8,6 @@ import java.util.List;
 
 
 public interface OperationController {
-    public GeneralController getGeneralController();
 
     // This method will register an undo-redo operation
     // Should be called internally from Operation extending class
