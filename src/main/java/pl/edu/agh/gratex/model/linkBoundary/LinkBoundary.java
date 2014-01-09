@@ -19,14 +19,17 @@ public class LinkBoundary extends GraphElement {
     private LinkBoundaryPropertyModel propertyModel = (LinkBoundaryPropertyModel) super.propertyModel;
 
     private Boundary boundaryA;
-    private int outAngle;
+    private double outAngle;
     private int outPointX;
     private int outPointY;
 
     private Boundary boundaryB;
-    private int inAngle;
+    private double inAngle;
     private int inPointX;
     private int inPointY;
+
+    private int[] arrowLine1 = null;
+    private int[] arrowLine2 = null;
 
 
     public LinkBoundary(Graph graph, PropertyModel propertyModel) {
@@ -40,7 +43,7 @@ public class LinkBoundary extends GraphElement {
 
     @Override
     public int getTypeDrawingPriority() {
-        return 0;
+        return -100000000;
     }
 
     @Override
@@ -51,6 +54,11 @@ public class LinkBoundary extends GraphElement {
         return new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(path));
     }
 
+    @Override
+    public void updateLocation() {
+        LinkBoundaryUtils.updateLocation(this);
+    }
+
     public Boundary getBoundaryA() {
         return boundaryA;
     }
@@ -59,11 +67,11 @@ public class LinkBoundary extends GraphElement {
         this.boundaryA = boundaryA;
     }
 
-    public int getOutAngle() {
+    public double getOutAngle() {
         return outAngle;
     }
 
-    public void setOutAngle(int outAngle) {
+    public void setOutAngle(double outAngle) {
         this.outAngle = outAngle;
     }
 
@@ -91,11 +99,11 @@ public class LinkBoundary extends GraphElement {
         this.boundaryB = boundaryB;
     }
 
-    public int getInAngle() {
+    public double getInAngle() {
         return inAngle;
     }
 
-    public void setInAngle(int inAngle) {
+    public void setInAngle(double inAngle) {
         this.inAngle = inAngle;
     }
 
@@ -111,8 +119,24 @@ public class LinkBoundary extends GraphElement {
         return inPointY;
     }
 
+    public int[] getArrowLine1() {
+        return arrowLine1;
+    }
+
     public void setInPointY(int inPointY) {
         this.inPointY = inPointY;
+    }
+
+    public void setArrowLine1(int[] arrowLine1) {
+        this.arrowLine1 = arrowLine1;
+    }
+
+    public int[] getArrowLine2() {
+        return arrowLine2;
+    }
+
+    public void setArrowLine2(int[] arrowLine2) {
+        this.arrowLine2 = arrowLine2;
     }
 
     public void setLineType(LineType lineType) {
@@ -135,12 +159,12 @@ public class LinkBoundary extends GraphElement {
         return propertyModel.getLineType();
     }
 
-    public void setDirected(IsDirected directed) {
-        propertyModel.setDirected(directed);
+    public boolean isDirected() {
+        return propertyModel.getDirected() == IsDirected.YES;
     }
 
-    public IsDirected getDirected() {
-        return propertyModel.getDirected();
+    public void setDirected(boolean directed) {
+        propertyModel.setDirected(directed ? IsDirected.YES : IsDirected.NO);
     }
 
     public ArrowType getArrowType() {

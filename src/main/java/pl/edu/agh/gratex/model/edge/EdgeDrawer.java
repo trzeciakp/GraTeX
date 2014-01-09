@@ -49,7 +49,7 @@ public class EdgeDrawer implements Drawer {
             } else {
                 if (selectionController.selectionContains(edge)) {
                     g.setColor(Const.SELECTION_COLOR);
-                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
+                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() + 2 * Const.EDGE_SELECTION_MARGIN);
                     g.setStroke(drawingStroke);
                     g.drawLine(edge.getOutPoint().x, edge.getOutPoint().y, edge.getInPoint().x, edge.getInPoint().y);
                 }
@@ -64,7 +64,7 @@ public class EdgeDrawer implements Drawer {
         } else {
             if (selectionController.selectionContains(edge)) {
                 g.setColor(Const.SELECTION_COLOR);
-                Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
+                Stroke drawingStroke = new BasicStroke(edge.getLineWidth() + 2 * Const.EDGE_SELECTION_MARGIN);
                 g.setStroke(drawingStroke);
                 g.draw(edge.getArc());
             }

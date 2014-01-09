@@ -15,6 +15,8 @@ import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.linkBoundary.LinkBoundary;
+import pl.edu.agh.gratex.model.linkBoundary.LinkBoundaryUtils;
 import pl.edu.agh.gratex.model.properties.LabelPosition;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
@@ -247,12 +249,31 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         hyperedge.autoCenterJoint();
         graph.addElement(hyperedge);
 
-        Boundary boundary = (Boundary) graphElementFactory.create(GraphElementType.BOUNDARY, graph);
-        boundary.setTopLeftX(40);
-        boundary.setTopLeftY(30);
-        boundary.setWidth(440);
-        boundary.setHeight(283);
-        graph.addElement(boundary);
+                Boundary boundary1 = (Boundary) graphElementFactory.create(GraphElementType.BOUNDARY, graph);
+        boundary1.setTopLeftX(40);
+        boundary1.setTopLeftY(140);
+        boundary1.setWidth(440);
+        boundary1.setHeight(173);
+        graph.addElement(boundary1);
+
+        Boundary boundary2 = (Boundary) graphElementFactory.create(GraphElementType.BOUNDARY, graph);
+        boundary2.setTopLeftX(40);
+        boundary2.setTopLeftY(30);
+        boundary2.setWidth(140);
+        boundary2.setHeight(60);
+        graph.addElement(boundary2);
+
+        System.out.println(LinkBoundaryUtils.getExitPointFromBoundary(boundary2, 0));
+        System.out.println(LinkBoundaryUtils.getExitPointFromBoundary(boundary2, 90));
+        System.out.println(LinkBoundaryUtils.getExitPointFromBoundary(boundary2, 180));
+        System.out.println(LinkBoundaryUtils.getExitPointFromBoundary(boundary2, 270));
+
+        LinkBoundary linkBoundary = (LinkBoundary) graphElementFactory.create(GraphElementType.LINK_BOUNDARY, graph);
+        linkBoundary.setBoundaryA(boundary1);
+        linkBoundary.setOutAngle(305);
+        linkBoundary.setBoundaryB(boundary2);
+        linkBoundary.setInAngle(180);
+        graph.addElement(linkBoundary);
 
         for (GraphElement graphElement : graph.getAllElements()) {
             graphElement.setDummy(false);

@@ -52,7 +52,7 @@ public class Vertex extends GraphElement {
     }
 
     @Override
-    public List<? extends GraphElement> getConnectedElements() {
+    public List<GraphElement> getConnectedElements() {
         List<GraphElement> result = new LinkedList<>();
         if (label != null) {
             result.add(label);

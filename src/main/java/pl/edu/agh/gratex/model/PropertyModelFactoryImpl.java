@@ -113,11 +113,15 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelPosition(JointLabelPosition.ABOVE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelColor(PropertyModel.REVERSE_COLORS.get("black"));
 
-        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("darkgray"));
-        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setFillColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineType(LineType.SOLID);
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineWidth(1);
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("darkgray"));
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setFillColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
 
-        // TODO LINK_BOUNDARY
+        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLineType(LineType.SOLID);
+        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLineWidth(3);
+        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("red"));
+        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setDirected(IsDirected.YES);
+        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setArrowType(ArrowType.FILLED);
     }
 }
