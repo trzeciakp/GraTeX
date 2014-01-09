@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.linkBoundary.LinkBoundary;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 
 /**
@@ -39,11 +40,14 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
             case LABEL_EDGE:
                 result = new LabelE(null, graph, propertyModel);
                 break;
+            case HYPEREDGE:
+                result = new Hyperedge(graph, propertyModel);
+                break;
             case BOUNDARY:
                 result = new Boundary(graph, propertyModel);
                 break;
-            case HYPEREDGE:
-                result = new Hyperedge(graph, propertyModel);
+            case LINK_BOUNDARY:
+                result = new LinkBoundary(graph, propertyModel);
                 break;
         }
         result.setDrawer(drawerFactory.createDefaultDrawer(type));

@@ -178,8 +178,9 @@ public class StringLiterals {
     public final static String INFO_EDGE_ADD = "edge added";
     public final static String INFO_LABEL_V_ADD = "label added to a vertex";
     public final static String INFO_LABEL_E_ADD = "label added to an edge";
-    public final static String INFO_BOUNDARY_ADD = "boundary added";
     public final static String INFO_HYPEREDGE_ADD = "hyperedge added";
+    public final static String INFO_BOUNDARY_ADD = "boundary added";
+    public final static String INFO_LINK_BOUNDARY_ADD = "link (boundary) added";
 
 
     // DragOperation
@@ -187,10 +188,11 @@ public class StringLiterals {
     public final static String INFO_EDGE_MOVE = "edge moved";
     public final static String INFO_LABEL_V_MOVE = "label (vertex) moved";
     public final static String INFO_LABEL_E_MOVE = "label (edge) moved";
-    public final static String INFO_BOUNDARY_MOVE = "boundary moved";
     public final static String INFO_HYPEREDGE_JOINT_MOVE = "hyperedge's joint moved";
     public static final String INFO_HYPEREDGE_EDIT = "hyperedge edited";
     public static final String INFO_HYPEREDGE_EXTEND = "vertex added to a hyperedge";
+    public final static String INFO_BOUNDARY_MOVE = "boundary moved";
+    public final static String INFOLINK_BOUNDARY_MOVE = "link (boundary) moved";
 
     // OldOperationList
     public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
@@ -274,14 +276,19 @@ public class StringLiterals {
                 tipPart4b = "a label of an edge.";
                 break;
             }
+            case HYPEREDGE: {
+                tipPart4a = "a hyperedge. " + INFO_HYPEREDGE_HOW_TO_EXPAND;
+                tipPart4b = "a hyperedge.";
+                break;
+            }
             case BOUNDARY: {
                 tipPart4a = "a boundary.";
                 tipPart4b = "a boundary.";
                 break;
             }
-            case HYPEREDGE: {
-                tipPart4a = "a hyperedge. " + INFO_HYPEREDGE_HOW_TO_EXPAND;
-                tipPart4b = "a hyperedge.";
+            case LINK_BOUNDARY: {
+                tipPart4a = "a link to a boundary.";
+                tipPart4b = "a link of aboundary.";
                 break;
             }
         }

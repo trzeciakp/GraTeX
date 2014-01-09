@@ -32,10 +32,12 @@ public class GraphElementControllersFactoryImpl implements GraphElementControlle
                 return new LabelVertexParser(colorMapper, graphElementFactory);
             case LABEL_EDGE:
                 return new LabelEdgeParser(colorMapper, graphElementFactory);
-            case BOUNDARY:
-                return new BoundaryParser(colorMapper, graphElementFactory);
             case HYPEREDGE:
                 return new HyperedgeParser(colorMapper, graphElementFactory);
+            case BOUNDARY:
+                return new BoundaryParser(colorMapper, graphElementFactory);
+            case LINK_BOUNDARY:
+                return new LinkBoundaryParser(colorMapper, graphElementFactory);
         }
         return null;
     }
@@ -51,10 +53,12 @@ public class GraphElementControllersFactoryImpl implements GraphElementControlle
                 return new LabelVertexMouseControllerImpl(generalController, graphElementFactory, type.getRelatedElementType());
             case LABEL_EDGE:
                 return new LabelEdgeMouseControllerImpl(generalController, graphElementFactory, type.getRelatedElementType());
-            case BOUNDARY:
-                return new BoundaryMouseController(generalController, graphElementFactory, type.getRelatedElementType());
             case HYPEREDGE:
                 return new HyperedgeMouseControllerImpl(generalController, graphElementFactory, type.getRelatedElementType());
+            case BOUNDARY:
+                return new BoundaryMouseController(generalController, graphElementFactory, type.getRelatedElementType());
+            case LINK_BOUNDARY:
+                return new LinkBoundaryMouseController(generalController, graphElementFactory, type.getRelatedElementType());
         }
         return null;
     }

@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -82,17 +83,21 @@ public abstract class GraphElement {
         return getTypeDrawingPriority() + elementID;
     }
 
-    public abstract void finalizeAddingToGraph();
+    public void finalizeAddingToGraph() {
+    }
 
-    public abstract void finalizeRemovingFromGraph();
+    public void finalizeRemovingFromGraph() {
+    }
 
-    public abstract Area getArea();
+    public List<GraphElement> getConnectedElements() {
+        return new LinkedList<>();
+    }
 
     public abstract GraphElementType getType();
 
     public abstract int getTypeDrawingPriority();
 
-    public abstract List<? extends GraphElement> getConnectedElements();
+    public abstract Area getArea();
 
     public static final void sortByDrawingPriorities(List<GraphElement> elements) {
         Collections.sort(elements, new Comparator<GraphElement>() {

@@ -86,8 +86,14 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Sel
             case LABEL_EDGE:
                 menuItems.get(MenuBarItem.LABELE_MODE).setSelected(true);
                 break;
+            case HYPEREDGE:
+                menuItems.get(MenuBarItem.HYPEREDGE_MODE).setSelected(true);
+                break;
             case BOUNDARY:
                 menuItems.get(MenuBarItem.LABELE_MODE).setSelected(true);
+                break;
+            case LINK_BOUNDARY:
+                menuItems.get(MenuBarItem.LINK_BOUNDARY_MODE).setSelected(true);
                 break;
         }
     }
@@ -245,6 +251,13 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Sel
                         modeController.setMode(ModeType.LABEL_EDGE);
                     }
                 };
+            case HYPEREDGE_MODE:
+                return new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        modeController.setMode(ModeType.HYPEREDGE);
+                    }
+                };
             case BOUNDARY_MODE:
                 return new ActionListener() {
                     @Override
@@ -252,11 +265,11 @@ public class MenuBar extends JMenuBar implements ModeListener, ToolListener, Sel
                         modeController.setMode(ModeType.BOUNDARY);
                     }
                 };
-            case HYPEREDGE_MODE:
+            case LINK_BOUNDARY_MODE:
                 return new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        modeController.setMode(ModeType.HYPEREDGE);
+                        modeController.setMode(ModeType.LINK_BOUNDARY);
                     }
                 };
             case ADD_TOOL:

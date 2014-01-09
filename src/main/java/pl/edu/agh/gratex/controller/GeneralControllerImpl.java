@@ -121,7 +121,9 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         if (checkForUnsavedProgress()) {
             graph = new Graph();
             resetWorkspace();
-            editGraphTemplate();
+
+            // TODO odkomentować
+            //editGraphTemplate();
         }
     }
 

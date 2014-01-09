@@ -14,7 +14,7 @@ public class ActionButton extends JButton {
 
     private Image image;
 
-    public ActionButton(GeneralController generalController, String imageName, String tooltip, ActionListener actionListener) {
+    public ActionButton(String imageName, String tooltip, ActionListener actionListener) {
         image = Application.loadImage(imageName);
         setToolTipText(tooltip);
         addActionListener(actionListener);

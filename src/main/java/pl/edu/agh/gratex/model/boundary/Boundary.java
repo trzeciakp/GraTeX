@@ -15,7 +15,6 @@ import java.util.List;
  *
  */
 public class Boundary extends GraphElement {
-    // TODO zmienilbym na topLeftX
     private int topLeftX;
     private int topLeftY;
     private int width;
@@ -28,31 +27,18 @@ public class Boundary extends GraphElement {
     }
 
     @Override
-    public Area getArea() {
-        return new Area(new Rectangle(topLeftX, topLeftY, width, height));
-    }
-
-    @Override
     public GraphElementType getType() {
         return GraphElementType.BOUNDARY;
     }
 
     @Override
     public int getTypeDrawingPriority() {
-        return 0;
+        return -100000000;
     }
 
     @Override
-    public void finalizeAddingToGraph() {
-    }
-
-    @Override
-    public void finalizeRemovingFromGraph() {
-    }
-
-    @Override
-    public List<? extends GraphElement> getConnectedElements() {
-        return new ArrayList<>();
+    public Area getArea() {
+        return new Area(new Rectangle(topLeftX, topLeftY, width, height));
     }
 
     public int getTopLeftX() {

@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.List;
 
 
-public class LabelV extends GraphElement  {
+public class LabelV extends GraphElement {
     private LabelVertexPropertyModel propertyModel = (LabelVertexPropertyModel) super.propertyModel;
 
     private int posX;
@@ -34,6 +34,21 @@ public class LabelV extends GraphElement  {
     }
 
     @Override
+    public GraphElementType getType() {
+        return GraphElementType.LABEL_VERTEX;
+    }
+
+    @Override
+    public int getTypeDrawingPriority() {
+        return 400000000;
+    }
+
+    @Override
+    public Area getArea() {
+        return new Area(outline);
+    }
+
+    @Override
     public void finalizeAddingToGraph() {
         getOwner().setLabel(this);
     }
@@ -48,25 +63,6 @@ public class LabelV extends GraphElement  {
         LabelVUtils.updateLocation(this);
     }
 
-    @Override
-    public List<? extends GraphElement> getConnectedElements() {
-        return new LinkedList<>();
-    }
-
-    @Override
-    public GraphElementType getType() {
-        return GraphElementType.LABEL_VERTEX;
-    }
-
-    @Override
-    public Area getArea() {
-        return new Area(outline);
-    }
-
-    @Override
-    public int getTypeDrawingPriority() {
-        return 400000000;
-    }
 
     public String getText() {
         return propertyModel.getText();
@@ -94,7 +90,7 @@ public class LabelV extends GraphElement  {
 
     public void setPosition(int position) {
         //TODO try to get rid of usages of this function
-        propertyModel.setLabelPosition(LabelPosition.values()[position+1]);
+        propertyModel.setLabelPosition(LabelPosition.values()[position + 1]);
     }
 
     public int getSpacing() {

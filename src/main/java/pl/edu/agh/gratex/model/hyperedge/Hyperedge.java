@@ -38,6 +38,33 @@ public class Hyperedge extends GraphElement {
         super(graph, propertyModel);
     }
 
+    @Override
+    public GraphElementType getType() {
+        return GraphElementType.HYPEREDGE;
+    }
+
+    @Override
+    public int getTypeDrawingPriority() {
+        return 200000000;
+    }
+
+    @Override
+    public Area getArea() {
+        Path2D path = new Path2D.Double();
+        for (Vertex vertex : connectedVertices) {
+            path.moveTo(jointCenterX, jointCenterY);
+            path.lineTo(vertex.getPosX(), vertex.getPosY());
+        }
+        Area edgesArea = new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(path));
+        edgesArea.add(getJointArea());
+        return edgesArea;
+    }
+
+    @Override
+    public void updateLocation() {
+        HyperedgeUtils.updateLocation(this);
+    }
+
     //it should contain unique number to identify joint, any vertex cannot have the same number
     //it can be string, not necessary number
     public int getNumber() {
@@ -51,21 +78,6 @@ public class Hyperedge extends GraphElement {
         }
     }
 
-    @Override
-    public void finalizeAddingToGraph() {
-
-    }
-
-    @Override
-    public void finalizeRemovingFromGraph() {
-
-    }
-
-    @Override
-    public void updateLocation() {
-        HyperedgeUtils.updateLocation(this);
-    }
-
     public void autoCenterJoint() {
         int centroidX = 0;
         int centroidY = 0;
@@ -77,18 +89,6 @@ public class Hyperedge extends GraphElement {
         centroidY /= Math.max(1, getConnectedVertices().size());
         setJointCenterX(centroidX);
         setJointCenterY(centroidY);
-    }
-
-    @Override
-    public Area getArea() {
-        Path2D path = new Path2D.Double();
-        for (Vertex vertex : connectedVertices) {
-            path.moveTo(jointCenterX, jointCenterY);
-            path.lineTo(vertex.getPosX(), vertex.getPosY());
-        }
-        Area edgesArea = new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(path));
-        edgesArea.add(getJointArea());
-        return edgesArea;
     }
 
     public Area getJointArea() {
@@ -106,21 +106,6 @@ public class Hyperedge extends GraphElement {
             }
         }
         return null;
-    }
-
-    @Override
-    public GraphElementType getType() {
-        return GraphElementType.HYPEREDGE;
-    }
-
-    @Override
-    public int getTypeDrawingPriority() {
-        return 200000000;
-    }
-
-    @Override
-    public List<? extends GraphElement> getConnectedElements() {
-        return new ArrayList<>();
     }
 
     public List<Vertex> getConnectedVertices() {

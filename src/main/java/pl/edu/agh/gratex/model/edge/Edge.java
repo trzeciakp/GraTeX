@@ -42,8 +42,40 @@ public class Edge extends GraphElement {
         super(graph, propertyModel);
     }
 
-    public boolean isLoop() {
-        return (vertexA != null && vertexA == vertexB);
+    @Override
+    public GraphElementType getType() {
+        return GraphElementType.EDGE;
+    }
+
+    @Override
+    public int getTypeDrawingPriority() {
+        return 100000000;
+    }
+
+    @Override
+    public Area getArea() {
+        Shape edgePath = arc;
+        if (vertexA != vertexB && getRelativeEdgeAngle() == 0) {
+            Path2D path = new Path2D.Double();
+            path.moveTo(inPoint.x, inPoint.y);
+            path.lineTo(outPoint.x, outPoint.y);
+            edgePath = path;
+        }
+        return new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(edgePath));
+    }
+
+    @Override
+    public void updateLocation() {
+        EdgeUtils.updateLocation(this);
+    }
+
+    @Override
+    public List<GraphElement> getConnectedElements() {
+        List<GraphElement> result = new LinkedList<>();
+        if (label != null) {
+            result.add(label);
+        }
+        return result;
     }
 
     @Override
@@ -51,11 +83,6 @@ public class Edge extends GraphElement {
         EdgePropertyModel pm = (EdgePropertyModel) propertyModel.getCopy();
         pm.setLoop(isLoop() ? IsLoop.YES : IsLoop.NO);
         return pm;
-    }
-
-    @Override
-    public void updateLocation() {
-        EdgeUtils.updateLocation(this);
     }
 
     @Override
@@ -74,43 +101,8 @@ public class Edge extends GraphElement {
         return true;
     }
 
-    @Override
-    public GraphElementType getType() {
-        return GraphElementType.EDGE;
-    }
-
-    @Override
-    public void finalizeAddingToGraph() {
-    }
-
-    @Override
-    public void finalizeRemovingFromGraph() {
-    }
-
-    @Override
-    public List<? extends GraphElement> getConnectedElements() {
-        List<GraphElement> result = new LinkedList<>();
-        if (label != null) {
-            result.add(label);
-        }
-        return result;
-    }
-
-    @Override
-    public Area getArea() {
-        Shape edgePath = arc;
-        if (vertexA != vertexB && getRelativeEdgeAngle() == 0) {
-            Path2D path = new Path2D.Double();
-            path.moveTo(inPoint.x, inPoint.y);
-            path.lineTo(outPoint.x, outPoint.y);
-            edgePath = path;
-        }
-        return new Area(new BasicStroke(2 * Const.EDGE_SELECTION_MARGIN + getLineWidth()).createStrokedShape(edgePath));
-    }
-
-    @Override
-    public int getTypeDrawingPriority() {
-        return 100000000;
+    public boolean isLoop() {
+        return (vertexA != null && vertexA == vertexB);
     }
 
 

@@ -29,7 +29,7 @@ public class PanelButtonContainer extends JPanel implements SelectionListener {
 
         int x = 10;
         for (ActionButtonType actionButtonType : ActionButtonType.values()) {
-            ActionButton actionButton = new ActionButton(generalController, actionButtonType.getImageName(),
+            ActionButton actionButton = new ActionButton(actionButtonType.getImageName(),
                     actionButtonType.getTooltip(), getActionListener(actionButtonType));
             actionButton.setBounds(x, 5, 40, 40);
             actionButton.setFocusable(false);

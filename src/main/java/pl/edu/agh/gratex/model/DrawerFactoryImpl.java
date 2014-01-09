@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.model.edge.EdgeDrawer;
 import pl.edu.agh.gratex.model.hyperedge.HyperedgeDrawer;
 import pl.edu.agh.gratex.model.labelE.LabelEdgeDrawer;
 import pl.edu.agh.gratex.model.labelV.LabelVertexDrawer;
+import pl.edu.agh.gratex.model.linkBoundary.LinkBoundaryDrawer;
 import pl.edu.agh.gratex.model.vertex.VertexDrawer;
 
 import java.util.EnumMap;
@@ -24,8 +25,9 @@ public class DrawerFactoryImpl implements DrawerFactory {
         defaultDrawable.put(GraphElementType.LABEL_VERTEX, new LabelVertexDrawer(selectionController));
         defaultDrawable.put(GraphElementType.EDGE, new EdgeDrawer(selectionController));
         defaultDrawable.put(GraphElementType.LABEL_EDGE, new LabelEdgeDrawer(selectionController));
-        defaultDrawable.put(GraphElementType.BOUNDARY, new BoundaryDrawer(selectionController));
         defaultDrawable.put(GraphElementType.HYPEREDGE, new HyperedgeDrawer(selectionController));
+        defaultDrawable.put(GraphElementType.BOUNDARY, new BoundaryDrawer(selectionController));
+        defaultDrawable.put(GraphElementType.LINK_BOUNDARY, new LinkBoundaryDrawer(selectionController));
         dummyEdgeDrawable = new DummyEdgeDrawer(defaultDrawable.get(GraphElementType.EDGE));
     }
 

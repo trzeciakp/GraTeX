@@ -63,10 +63,12 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
                 return new LabelVertexPropertyPanel();
             case LABEL_EDGE:
                 return new LabelEdgePropertyPanel();
-            case BOUNDARY:
-                return new BoundaryPropertyPanel();
             case HYPEREDGE:
                 return new HyperedgePropertyPanel();
+            case BOUNDARY:
+                return new BoundaryPropertyPanel();
+            case LINK_BOUNDARY:
+                return new LinkBoundaryPropertyPanel();
             default:
                 return null;
         }

@@ -6,6 +6,7 @@ import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelEdgePropertyModel;
 import pl.edu.agh.gratex.model.labelV.LabelVertexPropertyModel;
+import pl.edu.agh.gratex.model.linkBoundary.LinkBoundaryPropertyModel;
 import pl.edu.agh.gratex.model.properties.*;
 import pl.edu.agh.gratex.model.properties.JointDisplay;
 import pl.edu.agh.gratex.model.vertex.VertexPropertyModel;
@@ -27,15 +28,17 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         emptyModelMap.put(GraphElementType.LABEL_VERTEX, new LabelVertexPropertyModel());
         emptyModelMap.put(GraphElementType.EDGE, new EdgePropertyModel());
         emptyModelMap.put(GraphElementType.LABEL_EDGE, new LabelEdgePropertyModel());
-        emptyModelMap.put(GraphElementType.BOUNDARY, new BoundaryPropertyModel());
         emptyModelMap.put(GraphElementType.HYPEREDGE, new HyperedgePropertyModel());
+        emptyModelMap.put(GraphElementType.BOUNDARY, new BoundaryPropertyModel());
+        emptyModelMap.put(GraphElementType.LINK_BOUNDARY, new LinkBoundaryPropertyModel());
 
         defaultModelMap.put(GraphElementType.VERTEX, new VertexPropertyModel());
         defaultModelMap.put(GraphElementType.LABEL_VERTEX, new LabelVertexPropertyModel());
         defaultModelMap.put(GraphElementType.EDGE, new EdgePropertyModel());
         defaultModelMap.put(GraphElementType.LABEL_EDGE, new LabelEdgePropertyModel());
-        defaultModelMap.put(GraphElementType.BOUNDARY, new BoundaryPropertyModel());
         defaultModelMap.put(GraphElementType.HYPEREDGE, new HyperedgePropertyModel());
+        defaultModelMap.put(GraphElementType.BOUNDARY, new BoundaryPropertyModel());
+        defaultModelMap.put(GraphElementType.LINK_BOUNDARY, new LinkBoundaryPropertyModel());
 
         initDefaultModels();
 
@@ -95,11 +98,6 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setTopPlacement(LabelTopPlacement.EMPTY);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(LabelRotation.EMPTY);
 
-        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("darkgray"));
-        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setFillColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
-        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineType(LineType.SOLID);
-        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineWidth(1);
-
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setIsJointDisplay(JointDisplay.VISIBLE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineWidth(1);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineType(LineType.SOLID);
@@ -115,5 +113,11 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelPosition(JointLabelPosition.ABOVE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelColor(PropertyModel.REVERSE_COLORS.get("black"));
 
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("darkgray"));
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setFillColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineType(LineType.SOLID);
+        ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setLineWidth(1);
+
+        // TODO LINK_BOUNDARY
     }
 }

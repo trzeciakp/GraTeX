@@ -36,10 +36,18 @@ public class LabelE extends GraphElement {
     }
 
     @Override
-    public PropertyModel getModel() {
-        LabelEdgePropertyModel pm = (LabelEdgePropertyModel) propertyModel.getCopy();
-        pm.setLoop(owner.isLoop() ? IsLoop.YES : IsLoop.NO);
-        return pm;
+    public GraphElementType getType() {
+        return GraphElementType.LABEL_EDGE;
+    }
+
+    @Override
+    public int getTypeDrawingPriority() {
+        return 400000000;
+    }
+
+    @Override
+    public Area getArea() {
+        return new Area(outline);
     }
 
     @Override
@@ -58,23 +66,10 @@ public class LabelE extends GraphElement {
     }
 
     @Override
-    public List<? extends GraphElement> getConnectedElements() {
-        return new LinkedList<>();
-    }
-
-    @Override
-    public GraphElementType getType() {
-        return GraphElementType.LABEL_EDGE;
-    }
-
-    @Override
-    public Area getArea() {
-        return new Area(outline);
-    }
-
-    @Override
-    public int getTypeDrawingPriority() {
-        return 400000000;
+    public PropertyModel getModel() {
+        LabelEdgePropertyModel pm = (LabelEdgePropertyModel) propertyModel.getCopy();
+        pm.setLoop(owner.isLoop() ? IsLoop.YES : IsLoop.NO);
+        return pm;
     }
 
     public String getText() {

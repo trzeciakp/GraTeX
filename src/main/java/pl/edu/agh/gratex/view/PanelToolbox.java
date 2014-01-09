@@ -27,7 +27,7 @@ public class PanelToolbox extends JPanel implements ModeListener {
         setLayout(null);
         comboBox_mode = new JComboBox<>(ModeType.values());
         comboBox_mode.setSelectedIndex(0);
-        comboBox_mode.setBounds(5, 11, 110, 30);
+        comboBox_mode.setBounds(2, 11, 116, 30);
         comboBox_mode.setToolTipText(StringLiterals.COMBOBOX_PANEL_TOOLBOX_MODE);
         comboBox_mode.setFocusable(false);
         comboBox_mode.setFont(new Font("Tahoma", Font.PLAIN, 11 ));
