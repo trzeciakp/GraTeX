@@ -111,6 +111,7 @@ public class Edge extends GraphElement {
         result = 31 * result + (vertexB != null ? vertexB.getNumber() : 0);
         result = 31 * result + inAngle;
         result = 31 * result + outAngle;
+        result = 31 * result + getRelativeEdgeAngle();
         return result;
     }
 
