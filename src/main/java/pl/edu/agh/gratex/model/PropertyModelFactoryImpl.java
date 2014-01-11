@@ -72,7 +72,7 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setNumber(PropertyModel.EMPTY);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setRadius(40);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setShape(ShapeType.CIRCLE);
-        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setVertexColor(new Color(new Float(1), new Float(0.5), new Float(0)));
+        ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setVertexColor(PropertyModel.REVERSE_COLORS.get("orange"));
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLineType(LineType.SOLID);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLineWidth(1);
         ((VertexPropertyModel) createDefaultModel(GraphElementType.VERTEX)).setLineColor(Color.black);
@@ -119,7 +119,7 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((BoundaryPropertyModel) createDefaultModel(GraphElementType.BOUNDARY)).setFillColor(PropertyModel.REVERSE_COLORS.get("lightgray"));
 
         ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLineType(LineType.SOLID);
-        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLineWidth(3);
+        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLineWidth(2);
         ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("red"));
         ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setDirected(IsDirected.YES);
         ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setArrowType(ArrowType.FILLED);
