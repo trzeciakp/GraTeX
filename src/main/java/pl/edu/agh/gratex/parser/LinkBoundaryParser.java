@@ -34,6 +34,7 @@ public class LinkBoundaryParser extends GraphElementParser {
         parseList.add(new LinkBoundaryLineTypeParseElement());
         parseList.add(new LinkBoundaryDirectionParseElement());
         parseList.add(new StaticParseElement("];", false));
+        parseList.add(new LinkBoundaryCommentedParametersParseElement());
         return parseList;
     }
 

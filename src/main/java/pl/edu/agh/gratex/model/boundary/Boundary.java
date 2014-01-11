@@ -1,5 +1,6 @@
 package pl.edu.agh.gratex.model.boundary;
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
@@ -19,6 +20,8 @@ public class Boundary extends GraphElement {
     private int topLeftY;
     private int width;
     private int height;
+    private int number = minNumberCounter--;
+    private static int minNumberCounter = Const.MIN_VERTEX_NUMBER - 1;
 
     private BoundaryPropertyModel propertyModel = (BoundaryPropertyModel) super.propertyModel;
 
@@ -39,6 +42,17 @@ public class Boundary extends GraphElement {
     @Override
     public Area getArea() {
         return new Area(new Rectangle(topLeftX, topLeftY, width, height));
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+        if(number <= minNumberCounter) {
+            minNumberCounter = number--;
+        }
     }
 
     public int getTopLeftX() {

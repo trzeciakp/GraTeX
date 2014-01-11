@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModelFactory;
 import pl.edu.agh.gratex.model.PropertyModelFactoryImpl;
+import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.labelE.LabelE;
@@ -88,6 +89,16 @@ public class Graph {
             Edge edge = (Edge) graphElement;
             if(edge.getNumber() == id) {
                 return edge;
+            }
+        }
+        return null;
+    }
+
+    public Boundary getBoundaryById(int id) {
+        for (GraphElement graphElement : elements.get(GraphElementType.BOUNDARY)) {
+            Boundary boundary = (Boundary) graphElement;
+            if(boundary.getNumber() == id) {
+                return boundary;
             }
         }
         return null;

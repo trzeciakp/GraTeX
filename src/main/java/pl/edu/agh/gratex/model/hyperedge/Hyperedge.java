@@ -73,7 +73,7 @@ public class Hyperedge extends GraphElement {
 
     public void setNumber(int number) {
         this.number = number;
-        if (number > jointNumberCounter) {
+        if (number >= jointNumberCounter) {
             jointNumberCounter = number + 1;
         }
     }

@@ -26,7 +26,9 @@ public class BoundaryParser extends GraphElementParser {
     public List<ParseElement> createParseList() {
         List<ParseElement> parseList = new ArrayList<>();
         parseList.add(new StaticParseElement("\\begin{scope}[on background layer] ", false));
-        parseList.add(new StaticParseElement("\\node [", false));
+        parseList.add(new StaticParseElement("\\node ", false));
+        parseList.add(new BoundaryNumberParseElement());
+        parseList.add(new StaticParseElement(" [", false));
         parseList.add(new BoundaryResolutionParseElement());
         parseList.add(new BoundaryLineWidthParseElement());
         parseList.add(new BoundaryLineColorTypeParseElement(colorMapper));

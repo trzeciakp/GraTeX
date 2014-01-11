@@ -42,6 +42,7 @@ public class Const {
 
     // Maximum number tht a vertex can have. Alphabetical "ZZ" corresponds to digital 703
     public final static int MAX_VERTEX_NUMBER = 703;
+    public final static int MIN_VERTEX_NUMBER = 1;
 
     // Default font for drawing graph elements
     public final static Font DEFAULT_FONT = new Font("Cambria", Font.PLAIN, 16);
