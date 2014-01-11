@@ -100,7 +100,7 @@ public class LabelEUtils {
             }
 
             double offsetRate = 0.75;
-            switch(owner.getVertexA().getShape()) {
+            switch (owner.getVertexA().getShape()) {
                 case TRIANGLE:
                     offsetRate = 0.375;
                     if (owner.getRelativeEdgeAngle() == 270) {
@@ -258,9 +258,9 @@ public class LabelEUtils {
                         }
                     }
 
-                    Point stringClosestCorner = new Point((int) Math.round(startPoint.x
-                            + (labelE.getPosition() * (distance) * (endPoint.x - startPoint.x) / (100 * distance))), (int) Math.round(startPoint.y
-                            + (labelE.getPosition() * (distance) * (endPoint.y - startPoint.y) / (100 * distance))));
+                    Point stringClosestCorner = new Point(
+                            (int) Math.round(startPoint.x + (labelE.getPosition() * (distance) * (endPoint.x - startPoint.x) / (100 * distance))),
+                            (int) Math.round(startPoint.y + (labelE.getPosition() * (distance) * (endPoint.y - startPoint.y) / (100 * distance))));
 
                     if (labelE.isTopPlacement()) {
                         if ((ax - bx) * (ay - by) > 0) {
@@ -421,13 +421,13 @@ public class LabelEUtils {
                     Point draw = new Point(labelE.getPosX() - width / 2, labelE.getPosY() + height / 2 - descent);
                     draw = rotatePoint(middle, draw, labelE.getAngle());
                     Point p1 = new Point(labelE.getPosX() - width / 2, labelE.getPosY() - height / 2);
-                    p1 =  rotatePoint(middle, p1, labelE.getAngle());
+                    p1 = rotatePoint(middle, p1, labelE.getAngle());
                     Point p2 = new Point(labelE.getPosX() + width / 2, labelE.getPosY() - height / 2);
-                    p2 =  rotatePoint(middle, p2, labelE.getAngle());
+                    p2 = rotatePoint(middle, p2, labelE.getAngle());
                     Point p3 = new Point(labelE.getPosX() + width / 2, labelE.getPosY() + height / 2);
-                    p3 =  rotatePoint(middle, p3, labelE.getAngle());
+                    p3 = rotatePoint(middle, p3, labelE.getAngle());
                     Point p4 = new Point(labelE.getPosX() - width / 2, labelE.getPosY() + height / 2);
-                    p4 =  rotatePoint(middle, p4, labelE.getAngle());
+                    p4 = rotatePoint(middle, p4, labelE.getAngle());
 
                     labelE.setDrawX(draw.x);
                     labelE.setDrawY(draw.y);

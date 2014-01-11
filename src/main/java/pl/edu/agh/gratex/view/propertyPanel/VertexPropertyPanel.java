@@ -110,7 +110,7 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         comboBoxVertexColor.setSelectedItem(model.getVertexColor());
         comboBoxFontColor.setSelectedItem(model.getFontColor());
         comboBoxLineType.setSelectedItem(model.getLineType());
-        if(model.getLineType() == LineType.NONE || model.getLineType().isEmpty()) {
+        if (model.getLineType() == LineType.NONE || model.getLineType().isEmpty()) {
             spinnerLineSize.setEnabled(false);
             lblLineSize.setEnabled(false);
             lblLineColor.setEnabled(false);
@@ -356,8 +356,6 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         listModels[1] = new SpinnerNumberModel(1, 1, Const.MAX_VERTEX_NUMBER - 1, 1);
 
         spinnerNumber = new JSpinner() {
-            private static final long serialVersionUID = -3030254701594657020L;
-
             public void setEnabled(boolean flag) {
                 super.setEnabled(flag);
                 if (!flag) {
@@ -405,11 +403,9 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
             }
 
             public void stateChanged(ChangeEvent arg0) {
-
                 if (changedByUser) {
                     int value = getValue();
-                    if (value == previous) {
-                    } else {
+                    if (value != previous) {
                         while ((value > 0) && (value < Const.MAX_VERTEX_NUMBER)) {
                             if (!generalController.getGraph().getGraphNumeration().isUsed(value)) {
 

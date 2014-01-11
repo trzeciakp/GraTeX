@@ -136,8 +136,6 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
         /**************************** DISTANCE SPINNER ****************************/
         lblDistance = createJLabel(StringLiterals.LABEL_VERTEX_DISTANCE);
 
-        MIN_SIZE = 0;
-        MAX_SIZE = 99;
         //TODO
         String[] distances = new String[MAX_SIZE - MIN_SIZE + 2];
         distances[0] = StringLiterals.EMPTY_VALUE;

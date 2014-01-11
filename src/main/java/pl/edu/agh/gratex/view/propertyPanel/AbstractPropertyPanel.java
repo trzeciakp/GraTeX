@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+@SuppressWarnings("serial")
 public abstract class AbstractPropertyPanel extends JPanel {
-    private static final long serialVersionUID = 235712066745109734L;
 
     protected List<JComponent> labels = new ArrayList<>();
     protected List<JComponent> components = new ArrayList<>();

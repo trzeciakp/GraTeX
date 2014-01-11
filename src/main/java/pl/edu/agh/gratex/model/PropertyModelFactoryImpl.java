@@ -96,7 +96,7 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setPosition(PropertyModel.EMPTY);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setSpacing(5);
         ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setTopPlacement(LabelTopPlacement.EMPTY);
-        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(LabelRotation.EMPTY);
+        ((LabelEdgePropertyModel) createDefaultModel(GraphElementType.LABEL_EDGE)).setHorizontalPlacement(LabelRotation.TANGENT);
 
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setIsJointDisplay(JointDisplay.VISIBLE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setLineWidth(1);

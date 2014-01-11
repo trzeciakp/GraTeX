@@ -27,8 +27,8 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
     private JComboBox<LoopPosition> comboBoxPosition;
     private JLabel lblDistance;
     private JSpinner spinnerDistance;
-    private static int MIN_SIZE = 0;
-    private static int MAX_SIZE = 99;
+    private final int MIN_SIZE = 0;
+    private final int MAX_SIZE = 100;
     private JLabel lblPlace;
     private JComboBox<LabelTopPlacement> comboBoxPlace;
     private JLabel lblRotation;
@@ -60,16 +60,18 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         } else if (model.getLoop().isEmpty() || (model.getLoop() == IsLoop.YES)) {
             lblPlace.setEnabled(false);
             comboBoxPlace.setEnabled(false);
-            lblRotation.setEnabled(false);
-            comboBoxRotation.setEnabled(false);
             spinnerPosition.setVisible(false);
             comboBoxPosition.setVisible(true);
-            if(model.getLoop().isEmpty()) {
+            if (model.getLoop().isEmpty()) {
                 comboBoxPosition.setEnabled(false);
             } else {
                 comboBoxPosition.setEnabled(true);
             }
             comboBoxPosition.setSelectedItem(LoopPosition.getByValue(model.getPosition()));
+        }
+        if (model.getLoop() == IsLoop.YES) {
+            lblRotation.setEnabled(false);
+            comboBoxRotation.setEnabled(false);
         }
 
         if (model.getSpacing() == PropertyModel.EMPTY) {
@@ -141,8 +143,6 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************** POSITION SPINNER ****************************/
         lblPosition = createJLabel(StringLiterals.LABEL_EDGE_POSITION);
 
-        MIN_SIZE = 0;
-        MAX_SIZE = 99;
         String[] positions = new String[MAX_SIZE - MIN_SIZE + 2];
         positions[0] = StringLiterals.EMPTY_VALUE;
         for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++) {
@@ -194,8 +194,6 @@ public class LabelEdgePropertyPanel extends AbstractPropertyPanel {
         /**************************** DISTANCE SPINNER ****************************/
         lblDistance = createJLabel(StringLiterals.LABEL_EDGE_DISTANCE);
 
-        MIN_SIZE = 0;
-        MAX_SIZE = 99;
         String[] distances = new String[MAX_SIZE - MIN_SIZE + 2];
         distances[0] = StringLiterals.EMPTY_VALUE;
         for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++)

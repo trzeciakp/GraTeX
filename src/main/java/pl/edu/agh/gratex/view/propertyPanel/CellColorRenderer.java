@@ -4,8 +4,8 @@ import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 
+@SuppressWarnings("serial")
 class CellColorRenderer extends JLabel implements ListCellRenderer<Color> {
-    private static final long serialVersionUID = 6524312801000597079L;
 
     public CellColorRenderer() {
         setOpaque(true);
