@@ -263,11 +263,6 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         boundary2.setHeight(60);
         graph.addElement(boundary2);
 
-        System.out.println(LinkBoundaryUtils.getExitPointFromBoundary(boundary2, 0));
-        System.out.println(LinkBoundaryUtils.getExitPointFromBoundary(boundary2, 90));
-        System.out.println(LinkBoundaryUtils.getExitPointFromBoundary(boundary2, 180));
-        System.out.println(LinkBoundaryUtils.getExitPointFromBoundary(boundary2, 270));
-
         LinkBoundary linkBoundary = (LinkBoundary) graphElementFactory.create(GraphElementType.LINK_BOUNDARY, graph);
         linkBoundary.setBoundaryA(boundary1);
         linkBoundary.setOutAngle(305);

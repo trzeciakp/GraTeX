@@ -10,11 +10,21 @@ import java.awt.geom.Point2D;
 public class LinkBoundaryUtils {
     public static void updateLocation(LinkBoundary linkBoundary) {
         Point outPoint = getExitPointFromBoundary(linkBoundary.getBoundaryA(), linkBoundary.getOutAngle());
-        Point inPoint = getExitPointFromBoundary(linkBoundary.getBoundaryB(), linkBoundary.getInAngle());
         linkBoundary.setOutPointX(outPoint.x);
         linkBoundary.setOutPointY(outPoint.y);
-        linkBoundary.setInPointX(inPoint.x);
-        linkBoundary.setInPointY(inPoint.y);
+
+        if (linkBoundary.getBoundaryB() != null) {
+            Point inPoint = getExitPointFromBoundary(linkBoundary.getBoundaryB(), linkBoundary.getInAngle());
+            linkBoundary.setInPointX(inPoint.x);
+            linkBoundary.setInPointY(inPoint.y);
+        } else {
+            double middleX = linkBoundary.getBoundaryA().getTopLeftX() + linkBoundary.getBoundaryA().getWidth() / 2.0;
+            double middleY = linkBoundary.getBoundaryA().getTopLeftY() + linkBoundary.getBoundaryA().getHeight() / 2.0;
+            double dist = Point.distance(outPoint.x, outPoint.y, middleX, middleY);
+            linkBoundary.setInPointX((int) (middleX + (outPoint.x - middleX) * (dist + Const.LINK_BOUNDARY_VISUALISATION_LENGTH) / dist));
+            linkBoundary.setInPointY((int) (middleY + (outPoint.y - middleY) * (dist + Const.LINK_BOUNDARY_VISUALISATION_LENGTH) / dist));
+        }
+
         if (linkBoundary.isDirected()) {
             updateArrowPosition(linkBoundary);
         }

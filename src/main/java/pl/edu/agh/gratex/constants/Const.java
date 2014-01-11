@@ -78,5 +78,6 @@ public class Const {
     // (px) margin of label from joint border
     public static final int HYPEREDGE_JOINT_LABEL_MARGIN = 5;
 
-
+    // (px) length of link (boundary) visualisation when first boundary is selected
+    public static final int LINK_BOUNDARY_VISUALISATION_LENGTH = 40;
 }

@@ -192,7 +192,7 @@ public class StringLiterals {
     public static final String INFO_HYPEREDGE_EDIT = "hyperedge edited";
     public static final String INFO_HYPEREDGE_EXTEND = "vertex added to a hyperedge";
     public final static String INFO_BOUNDARY_MOVE = "boundary moved";
-    public final static String INFOLINK_BOUNDARY_MOVE = "link (boundary) moved";
+    public final static String INFO_LINK_BOUNDARY_MOVE = "link (boundary) moved";
 
     // OldOperationList
     public final static String INFO_NOTHING_TO_UNDO = "nothing to undo";
@@ -232,13 +232,17 @@ public class StringLiterals {
     public final static String INFO_CHOOSE_EDGE_FOR_LABEL = "choose an edge to attach label to";
     public final static String INFO_CANNOT_CREATE_LABEL_E_EXISTS = "cannot create the label, as this edge already has one";
 
-    public final static String INFO_CHOOSE_BOUNDARY_END = "choose opposite corner for the boundary";
-
     public static final String INFO_CHOOSE_HYPEREDGE_START = "choose a starting vertex for the hyperedge (click)";
     public static final String INFO_CHOOSE_HYPEREDGE_END = "now choose the second vertex (click)";
     public static final String INFO_HYPEREDGE_ADDING_CANCELLED = "adding hyperedge cancelled";
     public final static String INFO_HYPEREDGE_HOW_TO_EXPAND = "Drag joint to add a vertex. Drag an edge to edit. " +
             "CTRL + drag to move joint around - SHIFT for auto-center.";
+
+    public final static String INFO_CHOOSE_BOUNDARY_END = "choose opposite corner for the boundary";
+
+    public static final String INFO_LINK_ADDING_CANCELLED = "adding link cancelled";
+    public static final String INFO_CHOOSE_LINK_START = "choose a starting boundary for the link (click)";
+    public final static String INFO_CHOOSE_LINK_END = "now choose the target boundary (click)";
 
     // SaveFileDialog
     public final static String INFO_GRAPH_SAVE_OK = "graph saved successfully";
@@ -328,7 +332,7 @@ public class StringLiterals {
         return String.format("%s numeration enabled (starting with '%s')", numerationType, startingNumString);
     }
 
-    public static String INFO_GENERIC_SELECT_ALL(ModeType mode){
+    public static String INFO_GENERIC_SELECT_ALL(ModeType mode) {
         return "all " + mode.getRelatedElementType().getPluralName() + " selected";
     }
 }
