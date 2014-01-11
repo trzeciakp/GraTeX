@@ -53,7 +53,7 @@ public class Const {
     public final static int ARROW_LENGTH_FACTOR = 2;
 
     // How far from edge will selection work
-    public final static int EDGE_SELECTION_MARGIN = 10;
+    public final static int EDGE_SELECTION_MARGIN = 5;
 
     // Stroke used to draw angle visualization
     public final static Stroke ANGLE_VISUALIZATION_STROKE = DrawingTools.getStroke(LineType.DASHED, 2, 0.0);
