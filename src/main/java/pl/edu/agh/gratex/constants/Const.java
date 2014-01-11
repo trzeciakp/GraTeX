@@ -24,8 +24,9 @@ public class Const {
 
     // Color of selection rectangle inside
     public final static Color SELECTION_RECT_INSIDE_COLOR = new Color(72, 118, 255, 128);
+
     // Color of selection rectangle border
-    public final static Color SELECTION_RECT_BORDER_COLOR = new Color(72, 118, 255, 128);
+    public final static Color SELECTION_RECT_BORDER_COLOR = new Color(72, 118, 255);
 
 
     // Color of deletion rectangle inside

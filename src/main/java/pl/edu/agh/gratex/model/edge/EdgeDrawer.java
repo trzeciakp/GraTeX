@@ -75,30 +75,12 @@ public class EdgeDrawer implements Drawer {
         }
 
         if (edge.isDirected()) {
+            g.setColor(DrawingTools.getDrawingColor(edge.getLineColor(), edge.isDummy()));
+            g.setStroke(new BasicStroke(edge.getLineWidth()));
             if (edge.getArrowType() == ArrowType.BASIC) {
-                if (selectionController.selectionContains(edge)) {
-                    g.setColor(Const.SELECTION_COLOR);
-                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
-                    g.setStroke(drawingStroke);
-                    g.drawLine(edge.getArrowLine1()[0], edge.getArrowLine1()[1], edge.getArrowLine1()[2], edge.getArrowLine1()[3]);
-                    g.drawLine(edge.getArrowLine2()[0], edge.getArrowLine2()[1], edge.getArrowLine2()[2], edge.getArrowLine2()[3]);
-                }
-
-                g.setColor(DrawingTools.getDrawingColor(edge.getLineColor(), edge.isDummy()));
-                g.setStroke(new BasicStroke(edge.getLineWidth()));
                 g.drawLine(edge.getArrowLine1()[0], edge.getArrowLine1()[1], edge.getArrowLine1()[2], edge.getArrowLine1()[3]);
                 g.drawLine(edge.getArrowLine2()[0], edge.getArrowLine2()[1], edge.getArrowLine2()[2], edge.getArrowLine2()[3]);
             } else {
-                if (selectionController.selectionContains(edge)) {
-                    g.setColor(Const.SELECTION_COLOR);
-                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
-                    g.setStroke(drawingStroke);
-                    g.fillPolygon(new Polygon(new int[]{edge.getArrowLine1()[0], edge.getArrowLine1()[2], edge.getArrowLine2()[0]},
-                            new int[]{edge.getArrowLine1()[1], edge.getArrowLine1()[3], edge.getArrowLine2()[1]}, 3));
-                }
-
-                g.setColor(DrawingTools.getDrawingColor(edge.getLineColor(), edge.isDummy()));
-                g.setStroke(new BasicStroke(edge.getLineWidth()));
                 g.fillPolygon(new Polygon(new int[]{edge.getArrowLine1()[0], edge.getArrowLine1()[2], edge.getArrowLine2()[0]},
                         new int[]{edge.getArrowLine1()[1], edge.getArrowLine1()[3], edge.getArrowLine2()[1]}, 3));
             }
