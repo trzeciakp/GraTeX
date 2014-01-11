@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class LinkBoundaryParserTest {
     private static final double COEFFICIENT = 0.625;
-    private static final String TEST_STRING_SIMPLE = "\\draw (0.0pt, 0.0pt) to (6.25pt, -6.25pt) [line width=0.625pt, color=black, dashed, ->, >=latex];%0,-1";
+    private static final String TEST_STRING_SIMPLE = "\\draw (0.0pt, 0.0pt) to (6.25pt, -6.25pt) [line width=0.625pt, color=black, dashed, ->, >=latex];%0,-1,3.33,4.52";
     private static final ColorMapper COLOR_MAPPER = Mockito.mock(ColorMapper.class);
     private static final GraphElementFactory FACTORY = Mockito.mock(GraphElementFactory.class);
     private static final String EXPECTED_COLOR_TEXT = "black";
@@ -37,6 +37,8 @@ public class LinkBoundaryParserTest {
     public static final int EXPECTED_OUT_X = 10;
     public static final int EXPECTED_IN_X = 0;
     public static final int EXPECTED_IN_Y = 0;
+    public static final double EXPECTED_IN_ANGLE = 3.33;
+    public static final double EXPECTED_OUT_ANGLE = 4.52;
     public static final ArrowType EXPECTED_ARROW_TYPE = ArrowType.FILLED;
     private static final Boundary EXPECTED_BOUNDARY_A = Mockito.mock(Boundary.class);
     private static final Boundary EXPECTED_BOUNDARY_B = Mockito.mock(Boundary.class);
@@ -68,6 +70,8 @@ public class LinkBoundaryParserTest {
         Mockito.when(mockedLinkBoundary.getLineType()).thenReturn(EXPECTED_LINE_TYPE);
         Mockito.when(mockedLinkBoundary.getBoundaryA()).thenReturn(EXPECTED_BOUNDARY_A);
         Mockito.when(mockedLinkBoundary.getBoundaryB()).thenReturn(EXPECTED_BOUNDARY_B);
+        Mockito.when(mockedLinkBoundary.getInAngle()).thenReturn(EXPECTED_IN_ANGLE);
+        Mockito.when(mockedLinkBoundary.getOutAngle()).thenReturn(EXPECTED_OUT_ANGLE);
 
         LinkBoundaryParser testObject = new LinkBoundaryParser(COLOR_MAPPER, FACTORY);
 
@@ -96,5 +100,7 @@ public class LinkBoundaryParserTest {
         Mockito.verify(mockedLinkBoundary).setOutPointY(EXPECTED_OUT_Y);
         Mockito.verify(mockedLinkBoundary).setBoundaryA(EXPECTED_BOUNDARY_A);
         Mockito.verify(mockedLinkBoundary).setBoundaryB(EXPECTED_BOUNDARY_B);
+        Mockito.verify(mockedLinkBoundary).setInAngle(EXPECTED_IN_ANGLE);
+        Mockito.verify(mockedLinkBoundary).setOutAngle(EXPECTED_OUT_ANGLE);
     }
 }
