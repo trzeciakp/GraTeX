@@ -52,6 +52,6 @@ public abstract class PositionParseElement extends ParseElement {
     }
 
     protected String getProperty(int x, int y) {
-        return "("+COEFFICIENT*x+"pt, "+ -COEFFICIENT*y+"pt) ";
+        return "("+COEFFICIENT*x+"pt, "+ COEFFICIENT*(-y)+"pt) ";
     }
 }

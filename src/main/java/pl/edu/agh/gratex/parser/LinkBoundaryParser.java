@@ -5,7 +5,10 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
+import pl.edu.agh.gratex.parser.elements.StaticParseElement;
+import pl.edu.agh.gratex.parser.elements.link.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LinkBoundaryParser extends GraphElementParser {
@@ -14,13 +17,24 @@ public class LinkBoundaryParser extends GraphElementParser {
     public LinkBoundaryParser(ColorMapper colorMapper, GraphElementFactory graphElementFactory) {
         super(graphElementFactory);
         this.colorMapper = colorMapper;
-        // TODO wylaczylem bo by sie program nie wlaczyl
-        //init();
+
+        init();
     }
 
     @Override
     public List<ParseElement> createParseList() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        List<ParseElement> parseList = new ArrayList<>();
+        parseList.add(new StaticParseElement("\\draw ", false));
+        parseList.add(new LinkBoundaryInPositionParseElement());
+        parseList.add(new StaticParseElement("to ", false));
+        parseList.add(new LinkBoundaryOutPositionParseElement());
+        parseList.add(new StaticParseElement("[", false));
+        parseList.add(new LinkBoundaryLineWidthParseElement());
+        parseList.add(new LinkBoundaryLineColorParseElement(colorMapper));
+        parseList.add(new LinkBoundaryLineTypeParseElement());
+        parseList.add(new LinkBoundaryDirectionParseElement());
+        parseList.add(new StaticParseElement("];", false));
+        return parseList;
     }
 
     @Override
