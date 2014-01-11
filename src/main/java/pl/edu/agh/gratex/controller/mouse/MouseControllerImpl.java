@@ -183,7 +183,7 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
 
     @Override
     public GraphElement getCurrentlyAddedElement() {
-        if (tool == ToolType.ADD) {
+        if (tool == ToolType.ADD && !isElementMoving) {
             return controllers.get(mode).getCurrentlyAddedElement();
         } else {
             return null;

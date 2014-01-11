@@ -38,7 +38,7 @@ public class EdgeDrawer implements Drawer {
             if (edge.getRelativeEdgeAngle() != 0) {
                 if (selectionController.selectionContains(edge)) {
                     g.setColor(Const.SELECTION_COLOR);
-                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() * 2 + 5);
+                    Stroke drawingStroke = new BasicStroke(edge.getLineWidth() + 2 * Const.EDGE_SELECTION_MARGIN);
                     g.setStroke(drawingStroke);
                     g.draw(edge.getArc());
                 }
