@@ -33,7 +33,7 @@ public class LabelVertexPropertyPanel extends AbstractPropertyPanel {
 
     private void changed() {
         if (changedByUser)
-            ((PanelPropertyEditor) getParent()).valueChanged(model);
+            propertyEditorParent.valueChanged(model);
     }
 
     public LabelVertexPropertyModel getModel() {

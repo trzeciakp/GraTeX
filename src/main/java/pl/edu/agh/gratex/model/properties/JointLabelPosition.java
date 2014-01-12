@@ -4,7 +4,7 @@ package pl.edu.agh.gratex.model.properties;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 public enum JointLabelPosition implements Emptible{
-    EMPTY(PropertyModel.EMPTY) {
+    EMPTY {
         public String toString() {
             return " ";
         }
@@ -13,19 +13,10 @@ public enum JointLabelPosition implements Emptible{
         public boolean isEmpty() {
             return true;
         }
-    }, ABOVE(0), RIGHT(1), BELOW(2), LEFT(3), INSIDE(4), ;
-    private int value;
-
-    public int getValue() {
-        return value;
-    }
-
-    JointLabelPosition(int value) {
-        this.value = value;
-    }
+    }, HIDDEN, ABOVE, RIGHT, BELOW, LEFT, INSIDE;
 
     public String toString() {
-        return name();
+        return name().toLowerCase();
     }
 
     @Override

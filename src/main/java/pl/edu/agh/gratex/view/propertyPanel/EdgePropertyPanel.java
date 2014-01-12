@@ -38,8 +38,9 @@ public class EdgePropertyPanel extends AbstractPropertyPanel {
     private static int MAX_SIZE;
 
     private void changed() {
-        if (changedByUser)
-            ((PanelPropertyEditor) getParent()).valueChanged(model);
+        if (changedByUser) {
+            propertyEditorParent.valueChanged(model);
+        }
     }
 
     public EdgePropertyModel getModel() {

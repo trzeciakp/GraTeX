@@ -8,6 +8,7 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
+import pl.edu.agh.gratex.model.properties.JointLabelPosition;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -23,7 +24,8 @@ import static org.junit.Assert.assertEquals;
  *
  */
 public class HyperedgeParserTest {
-    public static final String TEST_STRING = "\\node (4) [circle, minimum size=5.0pt, fill=blue] at (195.625pt, -172.5pt) {}; \\begin{scope}[line width=1.875pt, color=olive] \\draw (1) to (4); \\draw (2) to (4);\\end{scope}";
+    public static final String TEST_STRING = "\\node (4) [circle, minimum size=5.0pt, fill=blue, line width=5.625pt, draw=dupa, dashed] at (195.625pt, -172.5pt) {}; \\begin{scope}[line width=1.875pt, color=olive] \\draw (1) to (4); \\draw (2) to (4); " +
+            "\\node (below) at (0.0pt, 12.5pt) {test};\\end{scope}";
     public static final int JOINT_SIZE = 4;
     public static final ShapeType SHAPE_CIRCLE = ShapeType.CIRCLE;
     public static final int JOINT_NUMBER = 4;
@@ -42,13 +44,26 @@ public class HyperedgeParserTest {
     public static final List<Vertex> CONNECTED = new ArrayList<>();
     public static final String BLUE_COLOR_NAME = "blue";
     public static final String OLIVE_COLOR_NAME = "olive";
+    public static final JointLabelPosition EXPECTED_JOINT_LABEL_POSITION = JointLabelPosition.BELOW;
+    public static final double LABEL_X_TEXT = 0.0;
+    public static final double LABEL_Y_TEXT = 12.5;
+    public static final int LABEL_POS_X = (int) (LABEL_X_TEXT/COEFFICIENT);
+    public static final int LABEL_POS_Y = (int) (-LABEL_Y_TEXT/COEFFICIENT);
+    public static final String LABEL_TEXT = "test";
+    public static final int JOINT_LINE_WIDTH = (int) (5.625/COEFFICIENT);
+    public static final Color JOINT_LINE_COLOR = Mockito.mock(Color.class);
+    public static final String JOINT_LINE_COLOR_TEXT = "dupa";
+    public static final LineType JOINT_LINE_TYPE = LineType.DASHED;
+
 
     @BeforeClass
     public static void setUp() {
         Mockito.when(MOCKED_COLOR_MAPPER.getColor(BLUE_COLOR_NAME)).thenReturn(MOCKED_BLUE);
         Mockito.when(MOCKED_COLOR_MAPPER.getColor(OLIVE_COLOR_NAME)).thenReturn(MOCKED_OLIVE);
+        Mockito.when(MOCKED_COLOR_MAPPER.getColor(JOINT_LINE_COLOR_TEXT)).thenReturn(JOINT_LINE_COLOR);
         Mockito.when(MOCKED_COLOR_MAPPER.getColorText(MOCKED_BLUE)).thenReturn(BLUE_COLOR_NAME);
         Mockito.when(MOCKED_COLOR_MAPPER.getColorText(MOCKED_OLIVE)).thenReturn(OLIVE_COLOR_NAME);
+        Mockito.when(MOCKED_COLOR_MAPPER.getColorText(JOINT_LINE_COLOR)).thenReturn(JOINT_LINE_COLOR_TEXT);
 
         Vertex mockedVertexA = Mockito.mock(Vertex.class);
         Vertex mockedVertexB = Mockito.mock(Vertex.class);
@@ -75,6 +90,14 @@ public class HyperedgeParserTest {
         Mockito.when(mockedHyperedge.getLineType()).thenReturn(SOLID);
         Mockito.when(mockedHyperedge.getLineColor()).thenReturn(MOCKED_OLIVE);
         Mockito.when(mockedHyperedge.getGraph()).thenReturn(MOCKED_GRAPH);
+        Mockito.when(mockedHyperedge.getJointLabelPosition()).thenReturn(EXPECTED_JOINT_LABEL_POSITION);
+        Mockito.when(mockedHyperedge.getLabelPosX()).thenReturn(LABEL_POS_X);
+        Mockito.when(mockedHyperedge.getLabelPosY()).thenReturn(LABEL_POS_Y);
+        Mockito.when(mockedHyperedge.getText()).thenReturn(LABEL_TEXT);
+        Mockito.when(mockedHyperedge.getJointLineColor()).thenReturn(JOINT_LINE_COLOR);
+        Mockito.when(mockedHyperedge.getJointLineWidth()).thenReturn(JOINT_LINE_WIDTH);
+        Mockito.when(mockedHyperedge.getJointLineType()).thenReturn(JOINT_LINE_TYPE);
+
 
         HyperedgeParser testObject = new HyperedgeParser(MOCKED_COLOR_MAPPER, MOCKED_FACTORY);
 
@@ -105,5 +128,10 @@ public class HyperedgeParserTest {
         Mockito.verify(mockedHyperedge).setLineWidth(LINE_WIDTH);
         Mockito.verify(mockedHyperedge).setLineType(SOLID);
         Mockito.verify(mockedHyperedge).setLineColor(MOCKED_OLIVE);
+        Mockito.verify(mockedHyperedge).setText(LABEL_TEXT);
+        Mockito.verify(mockedHyperedge).setLabelPosX(LABEL_POS_X);
+        Mockito.verify(mockedHyperedge).setLabelPosY(LABEL_POS_Y);
+        Mockito.verify(mockedHyperedge).setText(LABEL_TEXT);
+
     }
 }

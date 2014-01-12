@@ -5,6 +5,7 @@ import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.properties.IsLabelInside;
+import pl.edu.agh.gratex.model.properties.JointLabelPosition;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.model.vertex.Vertex;
@@ -51,7 +52,7 @@ public class HyperedgeDrawer implements Drawer {
         VertexDrawer.drawVertex(g, middleX, middleY, hyperedge.getJointShape(), hyperedge.getJointSize(), hyperedge.getJointColor(), hyperedge.getJointLineType(),
                 hyperedge.getJointLineWidth(), hyperedge.getJointLineColor(), selectionController.selectionContains(hyperedge), hyperedge.isDummy());
 
-        if (hyperedge.getJointHasLabel() == IsLabelInside.YES) {
+        if (hyperedge.getJointLabelPosition() != JointLabelPosition.HIDDEN) {
             g.setFont(Const.DEFAULT_FONT);
             g.setColor(hyperedge.getJointLabelColor());
             g.drawString(hyperedge.getText(), hyperedge.getLabelDrawX(), hyperedge.getLabelDrawY());

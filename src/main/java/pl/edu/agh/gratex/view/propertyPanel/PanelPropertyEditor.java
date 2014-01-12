@@ -7,8 +7,6 @@ import pl.edu.agh.gratex.controller.*;
 import pl.edu.agh.gratex.controller.operation.*;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
-import pl.edu.agh.gratex.model.boundary.BoundaryPropertyModel;
-import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     private JLabel label_title;
     private EnumMap<ModeType, AbstractPropertyPanel> panelsMap = new EnumMap<>(ModeType.class);
     private List<? extends GraphElement> selection;
+    private JScrollPane scrollPane;
 
     public PanelPropertyEditor(GeneralController generalController, ModeController modeController, OperationController operationController, SelectionController selectionController) {
         this.generalController = generalController;
@@ -53,25 +52,38 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     }
 
     //TODO maybe move from here
-    private AbstractPropertyPanel createPropertyPanel(ModeType modeType) {
+    private AbstractPropertyPanel createPropertyPanel(ModeType modeType, PanelPropertyEditor parent) {
+        AbstractPropertyPanel result;
         switch (modeType) {
             case VERTEX:
-                return new VertexPropertyPanel(generalController);
+                result = new VertexPropertyPanel(generalController);
+				break;
             case EDGE:
-                return new EdgePropertyPanel();
+                result = new EdgePropertyPanel();
+				break;
             case LABEL_VERTEX:
-                return new LabelVertexPropertyPanel();
+                result = new LabelVertexPropertyPanel();
+				break;
             case LABEL_EDGE:
-                return new LabelEdgePropertyPanel();
+                result = new LabelEdgePropertyPanel();
+				break;
             case HYPEREDGE:
-                return new HyperedgePropertyPanel();
+                result = new HyperedgePropertyPanel();
+				break;
             case BOUNDARY:
-                return new BoundaryPropertyPanel();
+                result = new BoundaryPropertyPanel();
+				break;
             case LINK_BOUNDARY:
-                return new LinkBoundaryPropertyPanel();
+                result = new LinkBoundaryPropertyPanel();
+				break;
             default:
-                return null;
+                result = null;
+				break;
         }
+        if(result != null) {
+            result.setParent(parent);
+        }
+        return result;
     }
 
     private void initialize() {
@@ -81,14 +93,20 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
         label_title.setBounds(10, 11, 180, 14);
         add(label_title);
 
+        scrollPane = new JScrollPane();
+        scrollPane.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
         for (ModeType modeType : ModeType.values()) {
-            AbstractPropertyPanel propertyPanel = createPropertyPanel(modeType);
+            AbstractPropertyPanel propertyPanel = createPropertyPanel(modeType, this);
             panelsMap.put(modeType, propertyPanel);
-            propertyPanel.setVisible(false);
-            propertyPanel.setBounds(10, 30, 180, 340);
-            add(propertyPanel);
+            propertyPanel.setVisible(true);
+//            propertyPanel.setBounds(10, 30, 180, 340);
+            //scrollPane.add(propertyPanel);
         }
-        panelsMap.get(mode).setVisible(true);
+        scrollPane.setViewportView(panelsMap.get(mode));
+        scrollPane.setBounds(10, 30, 180, 540);
+        scrollPane.setViewportBorder(null);
+        add(scrollPane);
+        //panelsMap.get(mode).setVisible(true);
     }
 
     public void setModel(PropertyModel pm) {
@@ -124,8 +142,10 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     // ModeListener implementation
     @Override
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
-        panelsMap.get(previousMode).setVisible(false);
-        panelsMap.get(currentMode).setVisible(true);
+        //panelsMap.get(previousMode).setVisible(false);
+        //panelsMap.get(currentMode).setVisible(true);
+        scrollPane.setViewportView(panelsMap.get(currentMode));
+
         mode = currentMode;
     }
 

@@ -161,6 +161,12 @@ public class StringLiterals {
 
     // This should go before message when undoing changes
     private final static String UNDO_PREFIX = "[UNDONE] ";
+    public static final String HYPEREDGE_JOINT_LINE_TYPE = "Joint line type:";
+    public static final String HYPEREDGE_JOINT_LINE_SIZE = "Joint line size:";
+    public static final String HYPEREDGE_JOINT_LINE_COLOR = "Joint line color:";
+    public static final String HYPEREDGE_LABEL_POSITION = "Label position:";
+    public static final String HYPEREDGE_LABEL_TEXT = "Label text:";
+    public static final String HYPEREDGE_LABEL_COLOR = "Label color:";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;

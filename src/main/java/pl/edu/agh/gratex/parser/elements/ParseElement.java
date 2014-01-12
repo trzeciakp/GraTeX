@@ -10,9 +10,13 @@ import java.util.regex.Pattern;
 public abstract class ParseElement {
 
     public static final double COEFFICIENT = 0.625;
-    protected final Pattern PATTERN;
+    protected Pattern PATTERN;
 
     public ParseElement() {
+        init();
+    }
+
+    protected void init() {
         PATTERN = Pattern.compile(regex());
     }
 

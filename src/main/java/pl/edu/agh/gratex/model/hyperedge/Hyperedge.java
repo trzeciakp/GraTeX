@@ -240,16 +240,8 @@ public class Hyperedge extends GraphElement {
         return propertyModel.getJointLabelColor();
     }
 
-    public void setJointHasLabel(IsLabelInside jointHasLabel) {
-        propertyModel.setJointHasLabel(jointHasLabel);
-    }
-
     public void setJointDisplay(JointDisplay jointDisplay) {
         propertyModel.setJointDisplay(jointDisplay);
-    }
-
-    public IsLabelInside getJointHasLabel() {
-        return propertyModel.getJointHasLabel();
     }
 
     public int getLabelPosX() {

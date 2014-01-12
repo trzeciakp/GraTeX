@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.StringLiterals;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.hyperedge.HyperedgePropertyModel;
 import pl.edu.agh.gratex.model.properties.JointDisplay;
+import pl.edu.agh.gratex.model.properties.JointLabelPosition;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 
@@ -38,10 +39,22 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
     private JLabel lblLineColor;
     private JComboBox<JointDisplay> comboBoxIsJointDisplayType;
     private JLabel lblIsJointDisplay;
+    private ColorComboBox comboBoxJointLineColor;
+    private JComboBox<LineType> comboBoxJointLineType;
+    private JSpinner spinnerJointLineSize;
+    private JTextField textField;
+    private ColorComboBox comboBoxFontColor;
+    private JComboBox<JointLabelPosition> comboBoxPosition;
+    private JLabel lblJointLineType;
+    private JLabel lblJointLineSize;
+    private JLabel lblJointLineColor;
+    private JLabel lblLabelPosition;
+    private JLabel lblLabelText;
+    private JLabel lblLabelColor;
 
     private void changed() {
         if (changedByUser) {
-            ((PanelPropertyEditor) getParent()).valueChanged(model);
+            propertyEditorParent.valueChanged(model);
         }
     }
 
@@ -64,6 +77,13 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
             spinnerJointSize.setValue(model.getJointSize() + StringLiterals.PX_SUFFIX);
         }
         comboBoxJointColor.setSelectedItem(model.getJointColor());
+        comboBoxJointLineType.setSelectedItem(model.getJointLineType());
+        if(model.getJointLineWidth() == PropertyModel.EMPTY) {
+            spinnerJointLineSize.setValue(StringLiterals.EMPTY_VALUE);
+        } else {
+            spinnerJointLineSize.setValue(model.getJointLineWidth()+StringLiterals.PX_SUFFIX);
+        }
+        comboBoxJointLineColor.setSelectedItem(model.getJointLabelColor());
 
         comboBoxLineType.setSelectedItem(model.getLineType());
         if (model.getLineWidth() == PropertyModel.EMPTY) {
@@ -72,12 +92,19 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
             spinnerLineSize.setValue(model.getLineWidth() + StringLiterals.PX_SUFFIX);
         }
         comboBoxLineColor.setSelectedItem(model.getLineColor());
-        if(model.getIsJointDisplay().isEmpty() || model.getIsJointDisplay() == JointDisplay.HIDDEN) {
-            setJointPropertyEnabled(false);
-        } else {
-            setJointPropertyEnabled(true);
-        }
+        comboBoxPosition.setSelectedItem(model.getJointLabelPosition());
+        textField.setText(model.getText());
+        comboBoxFontColor.setSelectedItem(model.getJointLabelColor());
+        setJointPropertyEnabled(!model.getIsJointDisplay().isEmpty() && model.getIsJointDisplay() != JointDisplay.HIDDEN);
+        setLabelPropertyEnabled(!model.getJointLabelPosition().isEmpty() && model.getJointLabelPosition() != JointLabelPosition.HIDDEN);
         changedByUser = true;
+    }
+
+    private void setLabelPropertyEnabled(boolean b) {
+        lblLabelColor.setEnabled(b);
+        lblLabelText.setEnabled(b);
+        textField.setEnabled(b);
+        comboBoxFontColor.setEnabled(b);
     }
 
     private void setJointPropertyEnabled(boolean b) {
@@ -87,9 +114,20 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         lblJointShapeType.setEnabled(b);
         spinnerJointSize.setEnabled(b);
         lblJointSize.setEnabled(b);
+        comboBoxJointLineType.setEnabled(b);
+        lblJointLineType.setEnabled(b);
+        LineType jointLineType = model.getJointLineType();
+        setJoinLineTypePropertyEnabled(!jointLineType.isEmpty() && jointLineType != LineType.NONE);
         if(!b) {
             //lblJointShapeType.set
         }
+    }
+
+    private void setJoinLineTypePropertyEnabled(boolean b) {
+        spinnerJointLineSize.setEnabled(b);
+        lblJointLineSize.setEnabled(b);
+        comboBoxJointLineColor.setEnabled(b);
+        lblJointLineColor.setEnabled(b);
     }
 
     @Override
@@ -138,7 +176,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         add(comboBoxJointShapeType);
         /**************************************************************************/
 
-        /**************************** VERTEX SIZE SPINNER *************************/
+        /**************************** JOINT SIZE SPINNER *************************/
 
         MIN_SIZE = 3;
         MAX_SIZE = 20;
@@ -176,7 +214,64 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         add(spinnerJointSize);
         /**************************************************************************/
 
-        /**************************** VERTEX COLOR COMBOBOX ***********************/
+        /**************************** JOINT LINE TYPE COMBOBOX **************************/
+
+        comboBoxJointLineType = new JComboBox<LineType>(LineType.values());
+        comboBoxJointLineType.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                LineType newValue = (LineType) comboBoxJointLineType.getSelectedItem();
+                if(!newValue.isEmpty() && model.getJointLineType() != newValue || !changedByUser) {
+                    model.setJointLineType(newValue);
+                    changed();
+                } else {
+                    comboBoxJointLineType.setSelectedItem(model.getJointLineType());
+                }
+            }
+        });
+        add(comboBoxJointLineType);
+
+        /**************************************************************************/
+
+
+        /**************************** JOINT LINE WIDTH SPINNER **************************/
+
+        MIN_SIZE = 1;
+        MAX_SIZE = 10;
+        String[] lineSizes = new String[MAX_SIZE - MIN_SIZE + 2];
+        lineSizes[0] = StringLiterals.EMPTY_VALUE;
+        for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++) {
+            lineSizes[i - MIN_SIZE + 1] = i + StringLiterals.PX_SUFFIX;
+        }
+
+        spinnerJointLineSize = new JSpinner();
+        spinnerJointLineSize.setModel(new SpinnerListModel(lineSizes));
+        spinnerJointLineSize.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent arg0) {
+                String value = (String) spinnerJointLineSize.getValue();
+                value = value.substring(0, value.indexOf(" "));
+                try {
+                    int newValue = Integer.parseInt(value);
+                    if (model.getJointLineWidth() != newValue) {
+                        model.setJointLineWidth(newValue);
+                        changed();
+                    }
+                } catch (NumberFormatException e) {
+                    if (changedByUser) {
+                        if (model.getJointSize() != PropertyModel.EMPTY) {
+                            spinnerJointLineSize.setValue(model.getJointLineWidth() + StringLiterals.PX_SUFFIX);
+                        }
+                    } else {
+                        spinnerJointLineSize.setValue(StringLiterals.EMPTY_VALUE);
+                        model.setJointLineWidth(PropertyModel.EMPTY);
+                    }
+                }
+            }
+        });
+
+        add(spinnerJointLineSize);
+        /**************************************************************************/
+
+        /**************************** JOINT COLOR COMBOBOX ***********************/
 
         comboBoxJointColor = new ColorComboBox();
         comboBoxJointColor.addActionListener(new ActionListener() {
@@ -196,6 +291,29 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
             }
         });
         add(comboBoxJointColor);
+        /**************************************************************************/
+
+
+        /**************************** JOINT LINE COLOR COMBOBOX ***********************/
+
+        comboBoxJointLineColor = new ColorComboBox();
+        comboBoxJointLineColor.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                if (changedByUser) {
+                    Color newValue = (Color) comboBoxJointLineColor.getSelectedItem();
+                    if (newValue != null) {
+                        if (!newValue.equals(model.getJointLineColor())) {
+                            model.setJointLineColor(newValue);
+                            changed();
+                        }
+                    } else {
+                        comboBoxJointLineColor.setSelectedItem(model.getJointLineColor());
+                    }
+                }
+                repaint();
+            }
+        });
+        add(comboBoxJointLineColor);
         /**************************************************************************/
 
 
@@ -226,11 +344,11 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
 
         MIN_SIZE = 1;
         MAX_SIZE = 10;
-        String[] lineSizes = new String[MAX_SIZE - MIN_SIZE + 2];
+        /*String[] lineSizes = new String[MAX_SIZE - MIN_SIZE + 2];
         lineSizes[0] = StringLiterals.EMPTY_VALUE;
         for (int i = MIN_SIZE; i < MAX_SIZE + 1; i++) {
             lineSizes[i - MIN_SIZE + 1] = i + StringLiterals.PX_SUFFIX;
-        }
+        } */
 
         spinnerLineSize = new JSpinner();
         spinnerLineSize.setModel(new SpinnerListModel(lineSizes));
@@ -285,20 +403,85 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         add(comboBoxLineColor);
         /**************************************************************************/
 
+
+        /**************************** LABEL TEXT TEXTFIELD ******************************/
+        textField = new JTextField();
+        textField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (!textField.getText().equals(model.getText())) {
+                    model.setText(textField.getText());
+                    changed();
+                }
+            }
+        });
+        add(textField);
+        textField.setColumns(10);
+        /**************************************************************************/
+
+        /****************************  LABEL COLOR COMBOBOX ******************************/
+        comboBoxFontColor = new ColorComboBox();
+        comboBoxFontColor.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                if (changedByUser) {
+                    Color newValue = (Color) comboBoxFontColor.getSelectedItem();
+                    if (newValue != null) {
+                        if (!newValue.equals(model.getJointLabelColor())) {
+                            model.setJointLabelColor(newValue);
+                            changed();
+                        }
+                    } else {
+                        comboBoxFontColor.setSelectedItem(model.getJointLabelColor());
+                    }
+                }
+                repaint();
+            }
+        });
+        add(comboBoxFontColor);
+        /**************************************************************************/
+
+        /**************************** LABEL POSITION COMBOBOX ****************************/
+        comboBoxPosition = new JComboBox<>(JointLabelPosition.values());
+        comboBoxPosition.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                JointLabelPosition newValue = ((JointLabelPosition) comboBoxPosition.getSelectedItem());
+                if ((!newValue.isEmpty() && model.getJointLabelPosition() != newValue || (!changedByUser))) {
+                    model.setJointLabelPosition(newValue);
+                    changed();
+                } else {
+                    comboBoxPosition.setSelectedItem(model.getJointLabelPosition());
+                }
+            }
+        });
+        add(comboBoxPosition);
+
+        /**************************************************************************/
+
         lblIsJointDisplay = createJLabel(StringLiterals.HYPEREDGE_JOINT_DISPLAY);
         lblJointShapeType = createJLabel(StringLiterals.HYPEREDGE_JOINT_SHAPE_TYPE);
         lblJointSize = createJLabel(StringLiterals.HYPEREDGE_JOINT_SIZE);
         lblJointColor = createJLabel(StringLiterals.HYPEREDGE_JOINT_COLOR);
+        lblJointLineType = createJLabel(StringLiterals.HYPEREDGE_JOINT_LINE_TYPE);
+        lblJointLineSize = createJLabel(StringLiterals.HYPEREDGE_JOINT_LINE_SIZE);
+        lblJointLineColor = createJLabel(StringLiterals.HYPEREDGE_JOINT_LINE_COLOR);
         lblLineType = createJLabel(StringLiterals.HYPEREDGE_LINE_TYPE);
         lblLineSize = createJLabel(StringLiterals.HYPEREDGE_LINE_WIDTH);
         lblLineColor = createJLabel(StringLiterals.HYPEREDGE_LINE_COLOR);
+        lblLabelPosition = createJLabel(StringLiterals.HYPEREDGE_LABEL_POSITION);
+        lblLabelText = createJLabel(StringLiterals.HYPEREDGE_LABEL_TEXT);
+        lblLabelColor = createJLabel(StringLiterals.HYPEREDGE_LABEL_COLOR);
 
         components.add(comboBoxIsJointDisplayType);
         components.add(comboBoxJointShapeType);
         components.add(spinnerJointSize);
         components.add(comboBoxJointColor);
+        components.add(comboBoxJointLineType);
+        components.add(spinnerJointLineSize);
+        components.add(comboBoxJointLineColor);
         components.add(comboBoxLineType);
         components.add(spinnerLineSize);
         components.add(comboBoxLineColor);
+        components.add(comboBoxPosition);
+        components.add(textField);
+        components.add(comboBoxFontColor);
     }
 }

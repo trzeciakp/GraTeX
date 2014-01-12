@@ -6,10 +6,10 @@ import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.hyperedge.*;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 import pl.edu.agh.gratex.parser.elements.StaticParseElement;
+import pl.edu.agh.gratex.parser.elements.hyperedge.HyperedgeLabelParseElement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -29,9 +29,11 @@ public class HyperedgeParser extends GraphElementParser {
         parseList.add(new StaticParseElement("\\node ", false));
         parseList.add(new HyperedgeNumberParseElement());
         parseList.add(new StaticParseElement(" [", false));
-        parseList.add(new HyperedgeShapeParseElement());
+        parseList.add(new HyperedgeJointShapeParseElement());
         parseList.add(new HyperedgeJointSizeParseElement());
         parseList.add(new HyperedgeJointColorParseElement(colorMapper));
+        parseList.add(new HyperedgeJointLineWidthParseElement());
+        parseList.add(new HyperedgeJointLineColorTypeParseElement(colorMapper));
         parseList.add(new StaticParseElement("] at ", false));
         parseList.add(new HyperedgeJointPositionParseElement());
         parseList.add(new StaticParseElement("{}; \\begin{scope}[", false));
@@ -40,6 +42,7 @@ public class HyperedgeParser extends GraphElementParser {
         parseList.add(new HyperedgeLineColorParseElement(colorMapper));
         parseList.add(new StaticParseElement("]", false));
         parseList.add(new HyperedgeVerticesParseElement());
+        parseList.add(new HyperedgeLabelParseElement(colorMapper));
         parseList.add(new StaticParseElement("\\end{scope}", false));
         parseList.add(new HyperedgeCommentedParametersParseElement());
         return parseList;

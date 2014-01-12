@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.model.hyperedge;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.properties.IsLabelInside;
+import pl.edu.agh.gratex.model.properties.JointLabelPosition;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 
 import java.awt.*;
@@ -16,7 +17,7 @@ public class HyperedgeUtils {
     }
 
     public static void updateLocation(Hyperedge hyperedge) {
-        if (hyperedge.getJointHasLabel() == IsLabelInside.YES) {
+        if (hyperedge.getJointLabelPosition() != JointLabelPosition.HIDDEN) {
             FontMetrics fm = new Canvas().getFontMetrics(Const.DEFAULT_FONT);
             int width = fm.stringWidth(hyperedge.getText());
             int height = fm.getAscent();

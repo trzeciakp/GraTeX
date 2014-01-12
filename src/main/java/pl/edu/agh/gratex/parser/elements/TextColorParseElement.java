@@ -51,11 +51,11 @@ public abstract class TextColorParseElement extends ParseElement {
     private String getGroup(String match, int number) {
         Matcher matcher = PATTERN.matcher(match);
         matcher.matches();
-        return matcher.group(number).replaceAll("\\\\%","%");
+        return matcher.group(number);
     }
 
     protected String getText(String match) {
-        return getGroup(match, TEXT_GROUP);
+        return getGroup(match, TEXT_GROUP).replaceAll("\\\\%","%");
     }
     protected String getProperty(Color color, String text) {
         String escapedText = text.replaceAll("%", Matcher.quoteReplacement("\\%"));

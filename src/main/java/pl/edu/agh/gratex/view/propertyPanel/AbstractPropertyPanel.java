@@ -13,6 +13,7 @@ public abstract class AbstractPropertyPanel extends JPanel {
 
     protected List<JComponent> labels = new ArrayList<>();
     protected List<JComponent> components = new ArrayList<>();
+    protected PanelPropertyEditor propertyEditorParent;
 
     public AbstractPropertyPanel() {
         initialize();
@@ -74,5 +75,9 @@ public abstract class AbstractPropertyPanel extends JPanel {
                 components.get(i).setBounds(90, 24 + i * spacing, 80, 25);
             }
         }
+    }
+
+    public void setParent(PanelPropertyEditor parent) {
+        this.propertyEditorParent = parent;
     }
 }

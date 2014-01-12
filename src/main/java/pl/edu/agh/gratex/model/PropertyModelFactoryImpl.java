@@ -108,7 +108,6 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineType(LineType.SOLID);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineWidth(1);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLineColor(PropertyModel.REVERSE_COLORS.get("black"));
-        ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointHasLabel(IsLabelInside.YES);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setText("Label");
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelPosition(JointLabelPosition.ABOVE);
         ((HyperedgePropertyModel) createDefaultModel(GraphElementType.HYPEREDGE)).setJointLabelColor(PropertyModel.REVERSE_COLORS.get("black"));

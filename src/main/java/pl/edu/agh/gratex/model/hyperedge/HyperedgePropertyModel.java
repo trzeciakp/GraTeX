@@ -22,7 +22,6 @@ public class HyperedgePropertyModel extends PropertyModel {
     private int jointLineWidth = PropertyModel.EMPTY;
     private Color jointLineColor = null;
 
-    private IsLabelInside jointHasLabel = IsLabelInside.EMPTY;
     private String text = null;
     private JointLabelPosition jointLabelPosition = JointLabelPosition.EMPTY;
     private Color jointLabelColor = null;
@@ -61,9 +60,6 @@ public class HyperedgePropertyModel extends PropertyModel {
         if (getJointLineColor() != null && !getJointLineColor().equals(model.getJointLineColor())) {
             setJointLineColor(null);
         }
-        if (getJointHasLabel() != model.getJointHasLabel()) {
-            setJointHasLabel(IsLabelInside.EMPTY);
-        }
         if (getText() != null && !getText().equals(model.getText())) {
             setText(null);
         }
@@ -99,7 +95,6 @@ public class HyperedgePropertyModel extends PropertyModel {
         if (model.getIsJointDisplay() != JointDisplay.EMPTY) {
             setIsJointDisplay(model.getIsJointDisplay());
         }
-
         if (model.getJointLineType() != LineType.EMPTY) {
             setJointLineType(model.getJointLineType());
         }
@@ -108,9 +103,6 @@ public class HyperedgePropertyModel extends PropertyModel {
         }
         if (model.getJointLineColor() != null) {
             setJointLineColor(model.getJointLineColor());
-        }
-        if (model.getJointHasLabel() != IsLabelInside.EMPTY) {
-            setJointHasLabel(model.getJointHasLabel());
         }
         if (model.getText() != null) {
             setText(model.getText());
@@ -136,7 +128,6 @@ public class HyperedgePropertyModel extends PropertyModel {
         result.setJointLineType(getJointLineType());
         result.setJointLineWidth(getJointLineWidth());
         result.setJointLineColor(getJointLineColor());
-        result.setJointHasLabel(getJointHasLabel());
         result.setText(getText());
         result.setJointLabelPosition(getJointLabelPosition());
         result.setJointLabelColor(getJointLabelColor());
@@ -229,14 +220,6 @@ public class HyperedgePropertyModel extends PropertyModel {
 
     public void setJointLineColor(Color jointLineColor) {
         this.jointLineColor = jointLineColor;
-    }
-
-    public IsLabelInside getJointHasLabel() {
-        return jointHasLabel;
-    }
-
-    public void setJointHasLabel(IsLabelInside jointHasLabel) {
-        this.jointHasLabel = jointHasLabel;
     }
 
     public String getText() {

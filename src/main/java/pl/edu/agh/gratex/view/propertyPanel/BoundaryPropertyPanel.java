@@ -62,7 +62,7 @@ public class BoundaryPropertyPanel extends AbstractPropertyPanel {
 
     private void changed() {
         if (changedByUser) {
-            ((PanelPropertyEditor) getParent()).valueChanged(model);
+            propertyEditorParent.valueChanged(model);
         }
     }
 

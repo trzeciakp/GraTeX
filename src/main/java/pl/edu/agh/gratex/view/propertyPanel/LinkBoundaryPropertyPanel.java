@@ -38,7 +38,7 @@ public class LinkBoundaryPropertyPanel extends AbstractPropertyPanel {
 
     private void changed() {
         if (changedByUser)
-            ((PanelPropertyEditor) getParent()).valueChanged(model);
+            propertyEditorParent.valueChanged(model);
     }
 
     public LinkBoundaryPropertyModel getModel() {
