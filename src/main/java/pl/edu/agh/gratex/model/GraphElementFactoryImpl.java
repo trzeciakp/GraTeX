@@ -162,9 +162,9 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
 
         LinkBoundary linkBoundary = (LinkBoundary) this.create(GraphElementType.LINK_BOUNDARY, exampleGraph);
         linkBoundary.setBoundaryA(boundary1);
-        linkBoundary.setOutAngle(305);
+        linkBoundary.setOutAngle(2 * Math.PI - 1);
         linkBoundary.setBoundaryB(boundary2);
-        linkBoundary.setInAngle(180);
+        linkBoundary.setInAngle(Math.PI);
         exampleGraph.addElement(linkBoundary);
 
         for (GraphElement graphElement : exampleGraph.getAllElements()) {
