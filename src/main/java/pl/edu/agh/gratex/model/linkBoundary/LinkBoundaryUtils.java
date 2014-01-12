@@ -110,4 +110,30 @@ public class LinkBoundaryUtils {
         }
         return angle;
     }
+
+    public static double getAngleFromLineIntersection(Boundary boundary, int startX, int startY, int endX, int endY) {
+        int dx = endX - startX;
+        int dy = endY - startY;
+        int closestX = boundary.getTopLeftX();
+        int closestY = boundary.getTopLeftY();
+        if (Math.abs(startX - boundary.getTopLeftX() - boundary.getWidth()) < Math.abs(startX - boundary.getTopLeftX())) {
+            closestX = boundary.getTopLeftX() + boundary.getWidth();
+        }
+        if (Math.abs(startY - boundary.getTopLeftY() - boundary.getHeight()) < Math.abs(startY - boundary.getTopLeftY())) {
+            closestY = boundary.getTopLeftY() + boundary.getHeight();
+        }
+
+        if (dx == 0) {
+            return getAngleFromCursorLocation(boundary, endX, closestY);
+        }
+        else if (dy == 0) {
+            return getAngleFromCursorLocation(boundary, closestX, endY);
+        } else {
+            int borderDist = Math.abs(endX - closestX);
+            if (Math.abs(startY - closestY) < Math.abs(startX - closestX)) {
+                borderDist = Math.abs(endY - closestY);
+            }
+            return getAngleFromCursorLocation(boundary, endX - (int) (Math.signum(endX - startX) * borderDist), endY - (int) (Math.signum(endY - startY) * borderDist));
+        }
+    }
 }
