@@ -89,7 +89,6 @@ public class LabelV extends GraphElement {
     }
 
     public void setPosition(int position) {
-        //TODO try to get rid of usages of this function
         propertyModel.setLabelPosition(LabelPosition.values()[position + 1]);
     }
 

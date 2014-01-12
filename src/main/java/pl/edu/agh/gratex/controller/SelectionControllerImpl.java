@@ -86,8 +86,6 @@ public class SelectionControllerImpl implements SelectionController, ToolListene
             list.add(element);
             addToSelection(list, controlDown);
         } else {
-            // TODO why?
-            // TODO Bo jak element jest null to kliknelismy w puste miejsce. Jeśli jest control, to nie czyścimy zaznaczenia, ale jeśli nie ma, to tak
             if (!controlDown) {
                 clearSelection();
             }

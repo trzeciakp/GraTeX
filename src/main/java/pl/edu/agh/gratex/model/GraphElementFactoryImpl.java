@@ -68,7 +68,6 @@ public class GraphElementFactoryImpl implements GraphElementFactory {
 
     @Override
     public PropertyModelFactory getPropertyModelFactory() {
-        //TODO
         return propertyModelFactory;
     }
 

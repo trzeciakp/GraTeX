@@ -47,6 +47,8 @@ public abstract class AbstractPropertyPanel extends JPanel {
 
     }
 
+
+
    /* public void focusFirstElement() {
         components.get(0).requestFocus();
     }*/
@@ -75,6 +77,10 @@ public abstract class AbstractPropertyPanel extends JPanel {
                 components.get(i).setBounds(90, 24 + i * spacing, 80, 25);
             }
         }
+    }
+
+    public int getHeight() {
+        return 35*components.size()+20;
     }
 
     public void setParent(PanelPropertyEditor parent) {

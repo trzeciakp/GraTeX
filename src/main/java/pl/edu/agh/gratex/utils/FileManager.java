@@ -20,7 +20,7 @@ public class FileManager {
         savedContent = new ArrayList<>();
     }
 
-    public boolean saveFile(File fileToSave, Graph graph) {
+    public boolean saveFile(File fileToSave, Graph graph) throws IOException {
         boolean result = true;
         PrintWriter printWriter = null;
         try {
@@ -32,10 +32,6 @@ public class FileManager {
             }
             currentFile = fileToSave;
             savedContent = content;
-        } catch (IOException e) {
-            //TODO
-            result = false;
-            e.printStackTrace();
         } finally {
             if(printWriter != null) {
                 printWriter.close();

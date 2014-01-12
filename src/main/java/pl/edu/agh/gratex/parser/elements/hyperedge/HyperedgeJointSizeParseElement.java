@@ -11,7 +11,6 @@ public class HyperedgeJointSizeParseElement extends SizeParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         Hyperedge hyperedge = (Hyperedge) element;
-        //TODO
         hyperedge.setJointSize(getRadius(match));
     }
 
