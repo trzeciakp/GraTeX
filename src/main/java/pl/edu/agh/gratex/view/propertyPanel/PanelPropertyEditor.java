@@ -9,6 +9,8 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -28,7 +30,6 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
         this.generalController = generalController;
         modeController.addModeListener(this);
 
-        // TODO To jest potrzebne, bo z GraphTemplateEditora tworzymy anonimowy PanelPropertyEditor i wtedy nie chcemy, zeby byl on listenerem
         if (operationController != null) {
             operationController.addOperationListener(this);
         }
@@ -46,12 +47,10 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
         for (GraphElement graphElement : selection) {
             graphElement.setModel(model);
         }
-        //TODO assure that disabled-enabled fields are refreshed
         panelsMap.get(mode).setModel(model);
         operation.finish();
     }
 
-    //TODO maybe move from here
     private AbstractPropertyPanel createPropertyPanel(ModeType modeType, PanelPropertyEditor parent) {
         AbstractPropertyPanel result;
         switch (modeType) {
@@ -87,11 +86,13 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     }
 
     private void initialize() {
-        setLayout(null);
+        setLayout(new BorderLayout());
+        //setLayout(null);
         label_title = new JLabel("Property editor");
         label_title.setHorizontalAlignment(SwingConstants.CENTER);
         label_title.setBounds(10, 11, 180, 14);
         add(label_title);
+
 
         scrollPane = new JScrollPane();
         scrollPane.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
@@ -99,11 +100,15 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
             AbstractPropertyPanel propertyPanel = createPropertyPanel(modeType, this);
             panelsMap.put(modeType, propertyPanel);
             propertyPanel.setVisible(true);
-//            propertyPanel.setBounds(10, 30, 180, 340);
+            propertyPanel.setPreferredSize(new Dimension(180, propertyPanel.getHeight()));
+            propertyPanel.setBounds(10, 30, 180, propertyPanel.getHeight());
             //scrollPane.add(propertyPanel);
         }
         scrollPane.setViewportView(panelsMap.get(mode));
-        scrollPane.setBounds(10, 30, 180, 540);
+        scrollPane.setBounds(0, 30, 200, 540);
+        scrollPane.setPreferredSize(new Dimension(220, 0));
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        //scrollPane.
         scrollPane.setViewportBorder(null);
         add(scrollPane);
         //panelsMap.get(mode).setVisible(true);

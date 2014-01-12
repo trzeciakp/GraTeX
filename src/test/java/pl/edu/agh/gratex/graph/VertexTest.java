@@ -22,6 +22,5 @@ public class VertexTest {
 
     @Test
     public void testRemove() throws Exception {
-        //TODO
     }
 }

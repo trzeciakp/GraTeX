@@ -50,7 +50,6 @@ public class BoundaryResolutionParseElement extends ParseElement {
     private int getGroupFromMatch(String match, int group) {
         Matcher matcher = PATTERN.matcher(match);
         matcher.matches();
-        //TODO
-        return (int) (Double.parseDouble(matcher.group(group))/COEFFICIENT);
+        return getIntFromDoublePt(matcher.group(group));
     }
 }

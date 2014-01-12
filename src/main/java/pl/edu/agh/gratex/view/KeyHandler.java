@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class KeyHandler implements KeyEventDispatcher {
-    // TODO Jednak tego nie mozemy wyrzucic, bo potrzebujemy przechwytywac nacisniecia shifta jak nie rusza sie mysz
     MouseController mouseController;
 
     public KeyHandler(GeneralController generalController) {

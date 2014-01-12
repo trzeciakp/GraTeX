@@ -50,11 +50,11 @@ public class VertexTextColorParseElement extends ParseElement {
             vertex.setFontColor(colorMapper.getColor(textColor));
         } else {
             //TODO
-            vertex.setFontColor(Color.black);
+            //vertex.setFontColor(Color.black);
         }
         if(textNumber != null) {
             //TODO
-            vertex.setNumber(Integer.parseInt(textNumber));
+            //vertex.setNumber(Integer.parseInt(textNumber));
             vertex.setLabelInside(true);
         }
         else {
@@ -66,13 +66,13 @@ public class VertexTextColorParseElement extends ParseElement {
     public String getProperty(GraphElement element) {
         Vertex vertex = (Vertex) element;
         Color color = vertex.getFontColor();
-        int number = vertex.getNumber();
+        String number = (vertex.getGraph().getGraphNumeration().isNumerationDigital()?vertex.getNumber()+"":vertex.getText());
         String line;
         if(vertex.isLabelInside()) {
             if(color != null) {
-                line = "{\\textcolor{"+colorMapper.getColorText(color)+"}{"+vertex.getNumber()+"}}";
+                line = "{\\textcolor{"+colorMapper.getColorText(color)+"}{"+number+"}}";
             } else {
-                line = "{"+vertex.getNumber()+"}";
+                line = "{"+number+"}";
             }
         } else {
             line = "{}";

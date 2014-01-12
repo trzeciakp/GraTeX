@@ -172,12 +172,14 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         }
 
         if (file != null) {
-            if (fileManager.saveFile(file, graph)) {
+            try {
+                fileManager.saveFile(file, graph);
                 operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_SAVE_OK));
                 return true;
-            } else {
+            } catch (IOException e) {
                 operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_SAVE_FAIL));
                 Application.reportError(StringLiterals.MESSAGE_ERROR_SAVE_GRAPH, null);
+                return false;
             }
         }
         return false;

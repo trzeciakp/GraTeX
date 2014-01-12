@@ -12,8 +12,6 @@ public class BoundaryPositionParseElement extends PositionParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         Boundary boundary = (Boundary) element;
-        //TODO
-
         int centerX = getX(match);
         int centerY = getY(match);
         int width = boundary.getWidth();

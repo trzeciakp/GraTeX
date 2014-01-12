@@ -105,12 +105,10 @@ public class LabelE extends GraphElement {
     }
 
     public boolean isTopPlacement() {
-        //TODO?
         return propertyModel.getTopPlacement() == LabelTopPlacement.ABOVE;
     }
 
     public void setTopPlacement(boolean topPlacement) {
-        //TODO?
         propertyModel.setTopPlacement(topPlacement ? LabelTopPlacement.ABOVE : LabelTopPlacement.BELOW);
     }
 
@@ -123,12 +121,10 @@ public class LabelE extends GraphElement {
     }
 
     public boolean isHorizontalPlacement() {
-        //TODO?
         return propertyModel.getHorizontalPlacement() == LabelRotation.LEVEL;
     }
 
     public void setHorizontalPlacement(boolean horizontalPlacement) {
-        //TODO?
         propertyModel.setHorizontalPlacement(horizontalPlacement ? LabelRotation.LEVEL : LabelRotation.TANGENT);
     }
 
