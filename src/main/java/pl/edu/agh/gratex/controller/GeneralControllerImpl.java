@@ -125,8 +125,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             graph = new Graph();
             resetWorkspace();
             operationController.clearOperations();
-            // TODO odkomentować
-            //editGraphTemplate();
+            editGraphTemplate();
         }
     }
 
