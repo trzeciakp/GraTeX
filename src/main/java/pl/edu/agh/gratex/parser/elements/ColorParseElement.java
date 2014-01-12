@@ -33,7 +33,8 @@ public abstract class ColorParseElement extends ParseElement {
 
     protected Color getColorPropertyValue(String match) {
         if(match == null) {
-            return colorMapper.getTemplateColor();
+            //return colorMapper.getTemplateColor();
+            return null;
         }
         Matcher matcher = PATTERN.matcher(match);
         matcher.matches();

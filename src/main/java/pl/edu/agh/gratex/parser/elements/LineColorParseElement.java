@@ -35,7 +35,8 @@ public abstract class LineColorParseElement extends ParseElement {
 
     protected Color getLineColor(String match) {
         if(match == null) {
-            return colorMapper.getTemplateColor();
+            //return colorMapper.getTemplateColor();
+            return null;
         }
         Matcher matcher = PATTERN.matcher(match);
         matcher.matches();

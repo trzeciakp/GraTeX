@@ -21,7 +21,7 @@ public class BoundaryLineColorTypeParseElement extends LineColorTypeParseElement
         Boundary boundary = (Boundary) element;
         if(match == null) {
             boundary.setLineType(LineType.NONE);
-            boundary.setLineColor(colorMapper.getTemplateColor());
+            //boundary.setLineColor(colorMapper.getTemplateColor());
             return;
         }
         Color color = getColorPropertyValue(match);

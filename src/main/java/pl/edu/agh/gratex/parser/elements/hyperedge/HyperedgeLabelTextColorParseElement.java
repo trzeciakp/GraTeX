@@ -5,6 +5,8 @@ import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.TextColorParseElement;
 
+import java.awt.*;
+
 /**
  *
  */
@@ -16,7 +18,10 @@ public class HyperedgeLabelTextColorParseElement extends TextColorParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         Hyperedge hyperedge = (Hyperedge) element;
-        hyperedge.setJointLabelColor(getFontColor(match));
+        Color color = getFontColor(match);
+        if(color != null) {
+            hyperedge.setJointLabelColor(color);
+        }
         hyperedge.setText(getText(match));
     }
 

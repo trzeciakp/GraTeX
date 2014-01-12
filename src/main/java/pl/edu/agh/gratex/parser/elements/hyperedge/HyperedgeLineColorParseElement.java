@@ -5,6 +5,8 @@ import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.LineColorParseElement;
 
+import java.awt.*;
+
 /**
  *
  */
@@ -16,7 +18,10 @@ public class HyperedgeLineColorParseElement extends LineColorParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         Hyperedge hyperedge = (Hyperedge) element;
-        hyperedge.setLineColor(getLineColor(match));
+        Color color = getLineColor(match);
+        if(color != null) {
+            hyperedge.setLineColor(color);
+        }
     }
 
     @Override

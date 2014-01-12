@@ -44,7 +44,8 @@ public abstract class TextColorParseElement extends ParseElement {
         if(color != null) {
             return colorMapper.getColor(color);
         } else {
-            return colorMapper.getTemplateColor();
+            return null;
+            //return colorMapper.getTemplateColor();
         }
     }
 

@@ -42,7 +42,8 @@ public abstract class LineColorTypeParseElement extends ParseElement {
         Matcher matcher = PATTERN.matcher(match);
         matcher.matches();
         String colorGroup = matcher.group(COLOR_GROUP);
-        return (colorGroup != null ? colorMapper.getColor(colorGroup) : colorMapper.getTemplateColor());
+        return (colorGroup != null ? colorMapper.getColor(colorGroup) : null);
+                //colorMapper.getTemplateColor());
     }
 
     protected LineType getLineTypePropertyValue(String match) {

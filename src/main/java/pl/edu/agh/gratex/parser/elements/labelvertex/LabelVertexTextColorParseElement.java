@@ -5,6 +5,8 @@ import pl.edu.agh.gratex.model.labelV.LabelV;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.TextColorParseElement;
 
+import java.awt.*;
+
 /**
  *
  */
@@ -17,7 +19,10 @@ public class LabelVertexTextColorParseElement extends TextColorParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         LabelV labelV = (LabelV) element;
-        labelV.setFontColor(getFontColor(match));
+        Color color = getFontColor(match);
+        if(color != null) {
+            labelV.setFontColor(color);
+        }
         labelV.setText(getText(match));
     }
 

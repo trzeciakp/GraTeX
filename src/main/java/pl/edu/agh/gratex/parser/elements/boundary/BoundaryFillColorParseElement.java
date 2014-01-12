@@ -21,7 +21,9 @@ public class BoundaryFillColorParseElement extends ColorParseElement {
     public void setProperty(String match, GraphElement element) {
         Boundary boundary = (Boundary) element;
         Color color = getColorPropertyValue(match);
-        boundary.setFillColor(color);
+        if(color != null) {
+            boundary.setFillColor(color);
+        }
     }
 
     @Override
