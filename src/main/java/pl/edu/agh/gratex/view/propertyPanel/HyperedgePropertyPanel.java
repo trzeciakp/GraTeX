@@ -456,6 +456,9 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
 
         /**************************************************************************/
 
+        lblLineType = createJLabel(StringLiterals.HYPEREDGE_LINE_TYPE);
+        lblLineSize = createJLabel(StringLiterals.HYPEREDGE_LINE_WIDTH);
+        lblLineColor = createJLabel(StringLiterals.HYPEREDGE_LINE_COLOR);
         lblIsJointDisplay = createJLabel(StringLiterals.HYPEREDGE_JOINT_DISPLAY);
         lblJointShapeType = createJLabel(StringLiterals.HYPEREDGE_JOINT_SHAPE_TYPE);
         lblJointSize = createJLabel(StringLiterals.HYPEREDGE_JOINT_SIZE);
@@ -463,13 +466,13 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         lblJointLineType = createJLabel(StringLiterals.HYPEREDGE_JOINT_LINE_TYPE);
         lblJointLineSize = createJLabel(StringLiterals.HYPEREDGE_JOINT_LINE_SIZE);
         lblJointLineColor = createJLabel(StringLiterals.HYPEREDGE_JOINT_LINE_COLOR);
-        lblLineType = createJLabel(StringLiterals.HYPEREDGE_LINE_TYPE);
-        lblLineSize = createJLabel(StringLiterals.HYPEREDGE_LINE_WIDTH);
-        lblLineColor = createJLabel(StringLiterals.HYPEREDGE_LINE_COLOR);
         lblLabelPosition = createJLabel(StringLiterals.HYPEREDGE_LABEL_POSITION);
         lblLabelText = createJLabel(StringLiterals.HYPEREDGE_LABEL_TEXT);
         lblLabelColor = createJLabel(StringLiterals.HYPEREDGE_LABEL_COLOR);
 
+        components.add(comboBoxLineType);
+        components.add(spinnerLineSize);
+        components.add(comboBoxLineColor);
         components.add(comboBoxIsJointDisplayType);
         components.add(comboBoxJointShapeType);
         components.add(spinnerJointSize);
@@ -477,9 +480,6 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         components.add(comboBoxJointLineType);
         components.add(spinnerJointLineSize);
         components.add(comboBoxJointLineColor);
-        components.add(comboBoxLineType);
-        components.add(spinnerLineSize);
-        components.add(comboBoxLineColor);
         components.add(comboBoxPosition);
         components.add(textField);
         components.add(comboBoxFontColor);

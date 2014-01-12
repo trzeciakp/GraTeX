@@ -9,14 +9,16 @@ import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class PanelPropertyEditor extends JPanel implements ModeListener, OperationListener, SelectionListener {
+public class PanelPropertyEditor extends JScrollPane implements ModeListener, OperationListener, SelectionListener {
     GeneralController generalController;
 
     //private int mode = 1;
@@ -24,7 +26,6 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     private JLabel label_title;
     private EnumMap<ModeType, AbstractPropertyPanel> panelsMap = new EnumMap<>(ModeType.class);
     private List<? extends GraphElement> selection;
-    private JScrollPane scrollPane;
 
     public PanelPropertyEditor(GeneralController generalController, ModeController modeController, OperationController operationController, SelectionController selectionController) {
         this.generalController = generalController;
@@ -79,38 +80,32 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
                 result = null;
 				break;
         }
-        if(result != null) {
-            result.setParent(parent);
-        }
+        result.setParent(parent);
         return result;
     }
 
     private void initialize() {
-        setLayout(new BorderLayout());
-        //setLayout(null);
-        label_title = new JLabel("Property editor");
-        label_title.setHorizontalAlignment(SwingConstants.CENTER);
-        label_title.setBounds(10, 11, 180, 14);
-        add(label_title);
+        setBorder(new TitledBorder("Property editor"));
+        //setBorder(new BevelBorder(1));
+//        label_title = new JLabel("Property editor");
+//        label_title.setHorizontalAlignment(SwingConstants.CENTER);
+//        label_title.setBounds(10, 11, 180, 14);
+//        add(label_title);
 
 
-        scrollPane = new JScrollPane();
-        scrollPane.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
+        //scrollPane.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
         for (ModeType modeType : ModeType.values()) {
             AbstractPropertyPanel propertyPanel = createPropertyPanel(modeType, this);
             panelsMap.put(modeType, propertyPanel);
             propertyPanel.setVisible(true);
-            propertyPanel.setPreferredSize(new Dimension(180, propertyPanel.getHeight()));
-            propertyPanel.setBounds(10, 30, 180, propertyPanel.getHeight());
+            propertyPanel.setPreferredSize(new Dimension(165, propertyPanel.getHeight()));
+            //propertyPanel.setBounds(10, 30, 180, propertyPanel.getHeight());
             //scrollPane.add(propertyPanel);
         }
-        scrollPane.setViewportView(panelsMap.get(mode));
-        scrollPane.setBounds(0, 30, 200, 540);
-        scrollPane.setPreferredSize(new Dimension(220, 0));
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        setViewportView(panelsMap.get(mode));
+        //setBorder(BorderFactory.createEmptyBorder());
         //scrollPane.
-        scrollPane.setViewportBorder(null);
-        add(scrollPane);
+        //setViewportBorder(null);
         //panelsMap.get(mode).setVisible(true);
     }
 
@@ -149,7 +144,7 @@ public class PanelPropertyEditor extends JPanel implements ModeListener, Operati
     public void modeChanged(ModeType previousMode, ModeType currentMode) {
         //panelsMap.get(previousMode).setVisible(false);
         //panelsMap.get(currentMode).setVisible(true);
-        scrollPane.setViewportView(panelsMap.get(currentMode));
+        setViewportView(panelsMap.get(currentMode));
 
         mode = currentMode;
     }

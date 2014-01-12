@@ -12,6 +12,7 @@ import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.ModeType;
@@ -83,8 +84,7 @@ public class MainWindow extends JFrame {
         getContentPane().add(label_infoDisplay, BorderLayout.SOUTH);
 
         panel_propertyEditor = new PanelPropertyEditor(generalController, generalController.getModeController(), generalController.getOperationController(), generalController.getSelectionController());
-        panel_propertyEditor.setPreferredSize(new Dimension(200, 0));
-        panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
+        panel_propertyEditor.setPreferredSize(new Dimension(220, 0));
         getContentPane().add(panel_propertyEditor, BorderLayout.EAST);
 
         panel_buttonContainer = new PanelButtonContainer(generalController, generalController.getSelectionController());
