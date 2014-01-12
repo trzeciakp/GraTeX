@@ -11,11 +11,8 @@ import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
 import pl.edu.agh.gratex.model.boundary.Boundary;
-import pl.edu.agh.gratex.model.edge.Edge;
-import pl.edu.agh.gratex.model.edge.EdgeUtils;
 import pl.edu.agh.gratex.model.linkBoundary.LinkBoundary;
 import pl.edu.agh.gratex.model.linkBoundary.LinkBoundaryUtils;
-import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.view.Application;
 
 import java.awt.*;
@@ -27,6 +24,10 @@ public class LinkBoundaryMouseController extends GraphElementMouseController {
     private boolean disconnectedBoundaryA;
     private Boundary linkDragDummy;
     private String initialLatexCodeOfDraggedLink;
+
+    // Used to straighten links with Ctrl
+    private int dummyMouseX;
+    private int dummyMouseY;
 
     public LinkBoundaryMouseController(GeneralController generalController, GraphElementFactory graphElementFactory, GraphElementType handledGraphElementType) {
         super(generalController, graphElementFactory, handledGraphElementType);
@@ -46,6 +47,12 @@ public class LinkBoundaryMouseController extends GraphElementMouseController {
     }
 
     @Override
+    public void ctrlDownChanged() {
+        checkForCtrl();
+        generalController.getOperationController().reportOperationEvent(null);
+    }
+
+    @Override
     public void reset() {
         finishMoving();
         currentlyDraggedLink = null;
@@ -55,25 +62,31 @@ public class LinkBoundaryMouseController extends GraphElementMouseController {
 
     @Override
     public GraphElement getCurrentlyAddedElement() {
+        checkForCtrl();
         if (currentlyAddedLink != null) {
-            Boundary boundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, mouseX, mouseY);
+            Boundary boundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, dummyMouseX, dummyMouseY);
             if (boundary == null) {
                 boundary = linkDragDummy;
-                linkDragDummy.setTopLeftX(mouseX);
-                linkDragDummy.setTopLeftY(mouseY);
+                linkDragDummy.setTopLeftX(dummyMouseX);
+                linkDragDummy.setTopLeftY(dummyMouseY);
             } else {
-                currentlyAddedLink.setInAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, mouseX, mouseY));
+                if (ctrlDown) {
+                    currentlyAddedLink.setInAngle(LinkBoundaryUtils.getAngleFromLineIntersection(boundary,
+                            currentlyAddedLink.getOutPointX(), currentlyAddedLink.getOutPointY(), dummyMouseX, dummyMouseY));
+                } else {
+                    currentlyAddedLink.setInAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, dummyMouseX, dummyMouseY));
+                }
             }
             if (currentlyAddedLink.getBoundaryA() != boundary) {
                 currentlyAddedLink.setBoundaryB(boundary);
             }
             return currentlyAddedLink;
         } else { // currentlyAddedLink == null
-            Boundary boundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, mouseX, mouseY);
+            Boundary boundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, dummyMouseX, dummyMouseY);
             if (boundary != null) {
                 LinkBoundary dummy = (LinkBoundary) getGraphElementFactory().create(GraphElementType.LINK_BOUNDARY, generalController.getGraph());
                 dummy.setBoundaryA(boundary);
-                dummy.setOutAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, mouseX, mouseY));
+                dummy.setOutAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, dummyMouseX, dummyMouseY));
                 return dummy;
             }
         }
@@ -81,8 +94,9 @@ public class LinkBoundaryMouseController extends GraphElementMouseController {
     }
 
     @Override
-    public void addNewElement(int mouseX, int mouseY) {
-        Boundary boundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, mouseX, mouseY);
+    public void addNewElement(int moudeX, int mouseY) {
+        checkForCtrl();
+        Boundary boundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, dummyMouseX, dummyMouseY);
         if (boundary == null) {
             if (currentlyAddedLink == null) {
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_LINK_START));
@@ -94,29 +108,40 @@ public class LinkBoundaryMouseController extends GraphElementMouseController {
             if (currentlyAddedLink == null) {
                 currentlyAddedLink = (LinkBoundary) getGraphElementFactory().create(GraphElementType.LINK_BOUNDARY, generalController.getGraph());
                 currentlyAddedLink.setBoundaryA(boundary);
-                currentlyAddedLink.setOutAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, mouseX, mouseY));
+                currentlyAddedLink.setOutAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, dummyMouseX, dummyMouseY));
                 generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_CHOOSE_LINK_END));
             } else {
-                currentlyAddedLink.setBoundaryB(boundary);
-                currentlyAddedLink.setInAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, mouseX, mouseY));
-                new CreationRemovalOperation(generalController, currentlyAddedLink, OperationType.ADD_LINK_BOUNDARY, StringLiterals.INFO_LINK_BOUNDARY_ADD, true);
-                currentlyAddedLink = null;
+                if (currentlyAddedLink.getBoundaryA() != boundary) {
+                    currentlyAddedLink.setBoundaryB(boundary);
+                    if (ctrlDown) {
+                        currentlyAddedLink.setInAngle(LinkBoundaryUtils.getAngleFromLineIntersection(boundary,
+                                currentlyAddedLink.getOutPointX(), currentlyAddedLink.getOutPointY(), dummyMouseX, dummyMouseY));
+                    } else {
+                        currentlyAddedLink.setInAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, dummyMouseX, dummyMouseY));
+                    }
+                    new CreationRemovalOperation(generalController, currentlyAddedLink, OperationType.ADD_LINK_BOUNDARY, StringLiterals.INFO_LINK_BOUNDARY_ADD, true);
+                    currentlyAddedLink = null;
+                } else {
+                    currentlyAddedLink = null;
+                    generalController.getOperationController().reportOperationEvent(new GenericOperation(StringLiterals.INFO_LINK_ADDING_CANCELLED));
+                }
             }
         }
     }
 
     @Override
     public void moveSelection(int mouseX, int mouseY) {
+        checkForCtrl();
         if (currentlyDraggedLink == null) {
-            currentlyDraggedLink = (LinkBoundary) generalController.getGraph().getElementFromPosition(GraphElementType.LINK_BOUNDARY, mouseX, mouseY);
+            currentlyDraggedLink = (LinkBoundary) generalController.getGraph().getElementFromPosition(GraphElementType.LINK_BOUNDARY, dummyMouseX, dummyMouseY);
             initialLatexCodeOfDraggedLink = generalController.getParseController().getParserByElementType(GraphElementType.LINK_BOUNDARY).parseToLatex(currentlyDraggedLink);
 
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedLink, OperationType.MOVE_LINK_BOUNDARY, StringLiterals.INFO_LINK_BOUNDARY_MOVE);
 
-            linkDragDummy.setTopLeftX(mouseX);
-            linkDragDummy.setTopLeftY(mouseY);
-            if (Point.distance(currentlyDraggedLink.getOutPointX(), currentlyDraggedLink.getOutPointY(), mouseX, mouseY) <
-                    Point.distance(currentlyDraggedLink.getInPointX(), currentlyDraggedLink.getInPointY(), mouseX, mouseY)) {
+            linkDragDummy.setTopLeftX(dummyMouseX);
+            linkDragDummy.setTopLeftY(dummyMouseY);
+            if (Point.distance(currentlyDraggedLink.getOutPointX(), currentlyDraggedLink.getOutPointY(), dummyMouseX, dummyMouseY) <
+                    Point.distance(currentlyDraggedLink.getInPointX(), currentlyDraggedLink.getInPointY(), dummyMouseX, dummyMouseY)) {
                 disconnectedBoundaryA = true;
                 currentlyDraggedLink.setBoundaryA(linkDragDummy);
             } else {
@@ -125,18 +150,28 @@ public class LinkBoundaryMouseController extends GraphElementMouseController {
             }
         } else {
             generalController.getSelectionController().addToSelection(currentlyDraggedLink, false);
-            Boundary boundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, mouseX, mouseY);
+            Boundary boundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, dummyMouseX, dummyMouseY);
             if (boundary != null) {
                 if (disconnectedBoundaryA && currentlyDraggedLink.getBoundaryB() != boundary) {
                     currentlyDraggedLink.setBoundaryA(boundary);
-                    currentlyDraggedLink.setOutAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, mouseX, mouseY));
+                    if (ctrlDown) {
+                        currentlyDraggedLink.setOutAngle(LinkBoundaryUtils.getAngleFromLineIntersection(boundary,
+                                currentlyDraggedLink.getOutPointX(), currentlyDraggedLink.getOutPointY(), dummyMouseX, dummyMouseY));
+                    } else {
+                        currentlyDraggedLink.setOutAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, dummyMouseX, dummyMouseY));
+                    }
                 } else if (!disconnectedBoundaryA && currentlyDraggedLink.getBoundaryA() != boundary) {
                     currentlyDraggedLink.setBoundaryB(boundary);
-                    currentlyDraggedLink.setInAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, mouseX, mouseY));
+                    if (ctrlDown) {
+                        currentlyDraggedLink.setInAngle(LinkBoundaryUtils.getAngleFromLineIntersection(boundary,
+                                currentlyDraggedLink.getOutPointX(), currentlyDraggedLink.getOutPointY(), dummyMouseX, dummyMouseY));
+                    } else {
+                        currentlyDraggedLink.setInAngle(LinkBoundaryUtils.getAngleFromCursorLocation(boundary, dummyMouseX, dummyMouseY));
+                    }
                 }
             } else {
-                linkDragDummy.setTopLeftX(mouseX);
-                linkDragDummy.setTopLeftY(mouseY);
+                linkDragDummy.setTopLeftX(dummyMouseX);
+                linkDragDummy.setTopLeftY(dummyMouseY);
                 if (disconnectedBoundaryA) {
                     currentlyDraggedLink.setBoundaryA(linkDragDummy);
                 } else {
@@ -162,6 +197,52 @@ public class LinkBoundaryMouseController extends GraphElementMouseController {
                 }
             }
             currentlyDraggedLink = null;
+        }
+    }
+
+    private void checkForCtrl() {
+        if (!ctrlDown) {
+            dummyMouseX = mouseX;
+            dummyMouseY = mouseY;
+        } else {
+            Boundary boundary = (Boundary) generalController.getGraph().getElementFromPosition(GraphElementType.BOUNDARY, dummyMouseX, dummyMouseY);
+            if (currentlyAddedLink != null) {
+                straightenMousePosRelativeTo(currentlyAddedLink.getOutPointX(), currentlyAddedLink.getOutPointY());
+            } else if (currentlyDraggedLink != null) {
+                if (disconnectedBoundaryA) {
+                    straightenMousePosRelativeTo(currentlyDraggedLink.getInPointX(), currentlyDraggedLink.getInPointY());
+                } else {
+                    straightenMousePosRelativeTo(currentlyDraggedLink.getOutPointX(), currentlyDraggedLink.getOutPointY());
+                }
+            } else if (boundary != null) {
+                straightenMousePosRelativeTo(boundary.getTopLeftX() + boundary.getWidth() / 2, boundary.getTopLeftY() + boundary.getHeight() / 2);
+            } else {
+                dummyMouseX = mouseX;
+                dummyMouseY = mouseY;
+            }
+        }
+    }
+
+    private void straightenMousePosRelativeTo(int x, int y) {
+        int d = Math.max(Math.abs(mouseX - x), Math.abs(mouseY - y));
+        int diagonalX = x + (int) (d * Math.signum(mouseX - x));
+        int diagonalY = y + (int) (d * Math.signum(mouseY - y));
+
+        double vertDist = Point.distance(mouseX, mouseY, x, diagonalY);
+        double horizDist = Point.distance(mouseX, mouseY, diagonalX, y);
+        double diagDist = Point.distance(mouseX, mouseY, diagonalX, diagonalY);
+
+        double minDist = Math.min(Math.min(vertDist, horizDist), diagDist);
+
+        if (minDist == vertDist) {
+            dummyMouseX = x;
+            dummyMouseY = diagonalY;
+        } else if (minDist == horizDist) {
+            dummyMouseX = diagonalX;
+            dummyMouseY = y;
+        } else {
+            dummyMouseX = diagonalX;
+            dummyMouseY = diagonalY;
         }
     }
 }

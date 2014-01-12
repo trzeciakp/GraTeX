@@ -43,7 +43,7 @@ public class LinkBoundary extends GraphElement {
 
     @Override
     public int getTypeDrawingPriority() {
-        return -100000000;
+        return 0;
     }
 
     @Override

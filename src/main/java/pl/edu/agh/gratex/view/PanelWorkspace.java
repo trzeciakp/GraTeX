@@ -4,11 +4,13 @@ import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.CursorType;
 import pl.edu.agh.gratex.constants.ToolType;
 import pl.edu.agh.gratex.controller.*;
+import pl.edu.agh.gratex.controller.mouse.LinkBoundaryMouseController;
 import pl.edu.agh.gratex.controller.mouse.MouseController;
 import pl.edu.agh.gratex.controller.operation.Operation;
 import pl.edu.agh.gratex.controller.operation.OperationListener;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.linkBoundary.LinkBoundaryUtils;
 
 import javax.swing.*;
 import java.awt.*;
