@@ -117,10 +117,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         comboBoxJointLineType.setEnabled(b);
         lblJointLineType.setEnabled(b);
         LineType jointLineType = model.getJointLineType();
-        setJoinLineTypePropertyEnabled(!jointLineType.isEmpty() && jointLineType != LineType.NONE);
-        if(!b) {
-            //lblJointShapeType.set
-        }
+        setJoinLineTypePropertyEnabled(b && !jointLineType.isEmpty() && jointLineType != LineType.NONE);
     }
 
     private void setJoinLineTypePropertyEnabled(boolean b) {
