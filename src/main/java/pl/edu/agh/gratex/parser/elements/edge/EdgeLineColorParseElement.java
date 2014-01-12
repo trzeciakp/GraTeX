@@ -19,7 +19,10 @@ public class EdgeLineColorParseElement extends LineColorParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         Edge edge = (Edge) element;
-        edge.setLineColor(getLineColor(match));
+        Color color = getLineColor(match);
+        if(color != null) {
+            edge.setLineColor(color);
+        }
     }
 
     @Override

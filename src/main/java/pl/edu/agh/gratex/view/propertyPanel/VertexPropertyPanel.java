@@ -365,13 +365,13 @@ public class VertexPropertyPanel extends AbstractPropertyPanel {
         };
 
         //TODO
-        /*if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
+        if (generalController.getGraph().getGraphNumeration().isNumerationDigital()) {
             spinnerNumber.setModel(listModels[1]);
             ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
         } else {
             spinnerNumber.setModel(listModels[0]);
             ((ListEditor) spinnerNumber.getEditor()).getTextField().setFormatterFactory(new DefaultFormatterFactory(new MyListFormatter()));
-        }*/
+        }
 
         spinnerNumber.setModel(listModels[1]);
         ((JSpinner.DefaultEditor) spinnerNumber.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);

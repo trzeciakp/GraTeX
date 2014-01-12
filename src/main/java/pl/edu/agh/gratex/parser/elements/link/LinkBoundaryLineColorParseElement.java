@@ -6,6 +6,8 @@ import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.LineColorParseElement;
 import pl.edu.agh.gratex.parser.elements.ParseElement;
 
+import java.awt.*;
+
 /**
  *
  */
@@ -17,7 +19,10 @@ public class LinkBoundaryLineColorParseElement extends LineColorParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         LinkBoundary linkBoundary = (LinkBoundary) element;
-        linkBoundary.setLineColor(getLineColor(match));
+        Color color = getLineColor(match);
+        if(color != null) {
+            linkBoundary.setLineColor(color);
+        }
     }
 
     @Override

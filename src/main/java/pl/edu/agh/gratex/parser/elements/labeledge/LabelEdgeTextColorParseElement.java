@@ -5,6 +5,8 @@ import pl.edu.agh.gratex.model.labelE.LabelE;
 import pl.edu.agh.gratex.parser.elements.ColorMapper;
 import pl.edu.agh.gratex.parser.elements.TextColorParseElement;
 
+import java.awt.*;
+
 /**
  *
  */
@@ -17,7 +19,10 @@ public class LabelEdgeTextColorParseElement extends TextColorParseElement {
     @Override
     public void setProperty(String match, GraphElement element) {
         LabelE labelE = (LabelE) element;
-        labelE.setFontColor(getFontColor(match));
+        Color color = getFontColor(match);
+        if(color != null) {
+            labelE.setFontColor(color);
+        }
         labelE.setText(getText(match));
     }
 

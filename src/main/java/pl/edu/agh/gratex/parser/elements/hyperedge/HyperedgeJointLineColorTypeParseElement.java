@@ -22,7 +22,7 @@ public class HyperedgeJointLineColorTypeParseElement extends LineColorTypeParseE
         Hyperedge hyperedge = (Hyperedge) element;
         if(match == null) {
             hyperedge.setJointLineType(LineType.NONE);
-            hyperedge.setJointLineColor(colorMapper.getTemplateColor());
+            //hyperedge.setJointLineColor(colorMapper.getTemplateColor());
             return;
         }
         Color color = getColorPropertyValue(match);

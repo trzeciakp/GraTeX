@@ -22,7 +22,9 @@ public class VertexColorParseElement extends ColorParseElement {
     public void setProperty(String match, GraphElement element) {
         Vertex vertex = (Vertex) element;
         Color color = getColorPropertyValue(match);
-        vertex.setVertexColor(color);
+        if(color != null) {
+            vertex.setVertexColor(color);
+        }
     }
 
     @Override

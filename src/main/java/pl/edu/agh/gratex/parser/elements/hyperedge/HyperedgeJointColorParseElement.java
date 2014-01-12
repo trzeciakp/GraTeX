@@ -19,7 +19,9 @@ public class HyperedgeJointColorParseElement extends ColorParseElement {
     public void setProperty(String match, GraphElement element) {
         Hyperedge hyperedge = (Hyperedge) element;
         Color jointColor = getColorPropertyValue(match);
-        hyperedge.setJointColor(jointColor);
+        if(jointColor != null) {
+            hyperedge.setJointColor(jointColor);
+        }
 
     }
 
