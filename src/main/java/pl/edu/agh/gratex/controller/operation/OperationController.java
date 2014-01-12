@@ -20,6 +20,8 @@ public interface OperationController {
 
     public void redo();
 
+    public void clearOperations();
+
     public void addOperationListener(OperationListener operationListener);
 
     public void removeOperationListener(OperationListener operationListener);

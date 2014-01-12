@@ -124,7 +124,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         if (checkForUnsavedProgress()) {
             graph = new Graph();
             resetWorkspace();
-
+            operationController.clearOperations();
             // TODO odkomentować
             //editGraphTemplate();
         }
@@ -148,6 +148,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     newGraph = fileManager.openFile(file);
                     graph = newGraph;
                     resetWorkspace();
+                    operationController.clearOperations();
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_OK));
                 } catch(Exception e) {
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_FAIL));

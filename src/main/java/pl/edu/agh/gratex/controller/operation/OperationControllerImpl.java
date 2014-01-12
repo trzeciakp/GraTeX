@@ -39,6 +39,11 @@ public class OperationControllerImpl implements OperationController {
     }
 
     @Override
+    public void clearOperations() {
+        operationList = new OperationList();
+    }
+
+    @Override
     public void addOperationListener(OperationListener operationListener) {
         listeners.add(operationListener);
     }
