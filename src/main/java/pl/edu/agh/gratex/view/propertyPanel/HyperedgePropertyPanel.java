@@ -83,7 +83,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         } else {
             spinnerJointLineSize.setValue(model.getJointLineWidth()+StringLiterals.PX_SUFFIX);
         }
-        comboBoxJointLineColor.setSelectedItem(model.getJointLabelColor());
+        comboBoxJointLineColor.setSelectedItem(model.getJointLineColor());
 
         comboBoxLineType.setSelectedItem(model.getLineType());
         if (model.getLineWidth() == PropertyModel.EMPTY) {

@@ -25,9 +25,9 @@ public class LinkBoundaryParser extends GraphElementParser {
     public List<ParseElement> createParseList() {
         List<ParseElement> parseList = new ArrayList<>();
         parseList.add(new StaticParseElement("\\draw ", false));
-        parseList.add(new LinkBoundaryInPositionParseElement());
-        parseList.add(new StaticParseElement("to ", false));
         parseList.add(new LinkBoundaryOutPositionParseElement());
+        parseList.add(new StaticParseElement("to ", false));
+        parseList.add(new LinkBoundaryInPositionParseElement());
         parseList.add(new StaticParseElement("[", false));
         parseList.add(new LinkBoundaryLineWidthParseElement());
         parseList.add(new LinkBoundaryLineColorParseElement(colorMapper));
