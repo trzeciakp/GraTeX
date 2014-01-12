@@ -9,12 +9,15 @@ import pl.edu.agh.gratex.model.DrawerFactoryImpl;
 import pl.edu.agh.gratex.model.*;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
+import pl.edu.agh.gratex.parser.ParserException;
 import pl.edu.agh.gratex.parser.elements.ColorMapperTmpImpl;
 import pl.edu.agh.gratex.utils.FileManager;
 import pl.edu.agh.gratex.view.*;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener {
@@ -42,7 +45,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         graphElementFactory = new GraphElementFactoryImpl(drawerFactory, propertyModelFactory);
 
         GraphElementControllersFactory elementControllersFactory = new GraphElementControllersFactoryImpl(this, new ColorMapperTmpImpl(), graphElementFactory);
-        parseController = new ParseControllerImpl(elementControllersFactory);
+        parseController = new ParseControllerImpl(elementControllersFactory, graphElementFactory);
         fileManager = new FileManager(parseController);
         mouseController = new MouseControllerImpl(this, modeController, toolController, this.selectionController, this.operationController, elementControllersFactory);
 
@@ -141,11 +144,12 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
 
             if (file != null) {
                 Graph newGraph;
-                if ((newGraph = fileManager.openFile(file)) != null) {
+                try {
+                    newGraph = fileManager.openFile(file);
                     graph = newGraph;
                     resetWorkspace();
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_OK));
-                } else {
+                } catch(IOException | ParserException e) {
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_FAIL));
                     Application.reportError(StringLiterals.MESSAGE_ERROR_OPEN_GRAPH, null);
                 }

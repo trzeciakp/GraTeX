@@ -45,7 +45,9 @@ public class GraphNumeration {
     }
 
     public void setUsed(int index, boolean flag) {
-        usedNumber[index] = flag;
+        if(index > -1) {
+            usedNumber[index] = flag;
+        }
     }
 
     public boolean isNumerationDigital() {

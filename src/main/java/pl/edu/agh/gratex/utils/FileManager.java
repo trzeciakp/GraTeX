@@ -3,6 +3,7 @@ package pl.edu.agh.gratex.utils;
 
 import pl.edu.agh.gratex.controller.ParseController;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.parser.ParserException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class FileManager {
         try {
             printWriter = new PrintWriter(fileToSave);
             List<String> content = parseController.parseGraphToLatexCode(graph);
+            content.addAll(parseController.parseTemplatesToLatexCode());
             for (String line : content) {
                 printWriter.println(line);
             }
@@ -50,10 +52,12 @@ public class FileManager {
         if(currentFile == null) {
             return true;
         }
+        List<String> templates = parseController.parseTemplatesToLatexCode();
+        content.addAll(templates);
         return !content.equals(savedContent);
     }
 
-    public Graph openFile(File fileToOpen) {
+    public Graph openFile(File fileToOpen) throws IOException, ParserException {
         BufferedReader bufferedReader = null;
         Graph result = null;
         try {
@@ -63,12 +67,9 @@ public class FileManager {
             while((line = bufferedReader.readLine()) != null) {
                 content.add(line);
             }
-            result = parseController.parseLatexCodeToGraph(content);
+            result = parseController.parseLatexCodeWithTemplatesToGraph(content);
             currentFile = fileToOpen;
             savedContent = content;
-        } catch (IOException e) {
-            //TODO
-            e.printStackTrace();
         } finally {
             if(bufferedReader != null) {
                 try {

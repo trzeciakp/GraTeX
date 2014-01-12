@@ -68,7 +68,7 @@ public class LabelE extends GraphElement {
     @Override
     public PropertyModel getModel() {
         LabelEdgePropertyModel pm = (LabelEdgePropertyModel) propertyModel.getCopy();
-        pm.setLoop(owner.isLoop() ? IsLoop.YES : IsLoop.NO);
+        pm.setLoop(owner == null? IsLoop.EMPTY : (owner.isLoop() ? IsLoop.YES : IsLoop.NO));
         return pm;
     }
 

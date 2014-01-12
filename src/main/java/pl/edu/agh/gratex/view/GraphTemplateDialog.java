@@ -1,6 +1,7 @@
 package pl.edu.agh.gratex.view;
 
 
+import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.constants.ModeType;
 import pl.edu.agh.gratex.constants.StringLiterals;
@@ -117,14 +118,6 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         }
     }
 
-    private void setTemplateModelsToAllGraphElements() {
-        PropertyModelFactory propertyModelFactory = graphElementFactory.getPropertyModelFactory();
-        for (GraphElement graphElement : graph.getAllElements()) {
-            PropertyModel model = propertyModelFactory.createTemplateModel(graphElement.getType());
-            graphElement.setModel(model);
-        }
-    }
-
     private void initializeEvents() {
         tabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
@@ -175,105 +168,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
     }
 
     private void initGraph() {
-        graph = new Graph();
-        graph.setGridOn(false);
-
-        Vertex vertex1 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
-        vertex1.setNumber(1);
-        VertexUtils.setPartOfNumeration(vertex1, true);
-        vertex1.setPosX(120);
-        vertex1.setPosY(255);
-        graph.addElement(vertex1);
-
-        Vertex vertex2 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
-        vertex2.setNumber(2);
-        VertexUtils.setPartOfNumeration(vertex2, true);
-        vertex2.setPosX(400);
-        vertex2.setPosY(255);
-        graph.addElement(vertex2);
-
-        Vertex vertex3 = (Vertex) graphElementFactory.create(GraphElementType.VERTEX, graph);
-        vertex3.setNumber(3);
-        VertexUtils.setPartOfNumeration(vertex3, true);
-        vertex3.setPosX(260);
-        vertex3.setPosY(90);
-        graph.addElement(vertex3);
-
-        Edge edge1 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
-        edge1.setVertexA(vertex2);
-        edge1.setVertexB(vertex3);
-        edge1.setRelativeEdgeAngle(330);
-        graph.addElement(edge1);
-
-        Edge edge2 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
-        edge2.setVertexA(vertex1);
-        edge2.setVertexB(vertex1);
-        edge2.setRelativeEdgeAngle(90);
-        graph.addElement(edge2);
-
-        Edge edge3 = (Edge) graphElementFactory.create(GraphElementType.EDGE, graph);
-        edge3.setVertexA(vertex1);
-        edge3.setVertexB(vertex2);
-        edge3.setRelativeEdgeAngle(0);
-        graph.addElement(edge3);
-
-        LabelV labelV1 = (LabelV) graphElementFactory.create(GraphElementType.LABEL_VERTEX, graph);
-        labelV1.setOwner(vertex2);
-        labelV1.setLabelPosition(LabelPosition.SE);
-        vertex1.setLabel(labelV1);
-        graph.addElement(labelV1);
-
-        LabelE labelE1 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
-        labelE1.setOwner(edge1);
-        labelE1.setPosition(35);
-        edge1.setLabel(labelE1);
-        graph.addElement(labelE1);
-
-        LabelE labelE2 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
-        labelE2.setOwner(edge2);
-        edge2.setLabel(labelE2);
-        graph.addElement(labelE2);
-
-        LabelE labelE3 = (LabelE) graphElementFactory.create(GraphElementType.LABEL_EDGE, graph);
-        labelE3.setOwner(edge3);
-        labelE3.setPosition(35);
-        edge3.setLabel(labelE3);
-        graph.addElement(labelE3);
-
-        Hyperedge hyperedge = (Hyperedge) graphElementFactory.create(GraphElementType.HYPEREDGE, graph);
-        List<Vertex> connectedVertices = new LinkedList<>();
-        connectedVertices.add(vertex1);
-        connectedVertices.add(vertex2);
-        connectedVertices.add(vertex3);
-        hyperedge.setConnectedVertices(connectedVertices);
-        hyperedge.autoCenterJoint();
-        graph.addElement(hyperedge);
-
-                Boundary boundary1 = (Boundary) graphElementFactory.create(GraphElementType.BOUNDARY, graph);
-        boundary1.setTopLeftX(40);
-        boundary1.setTopLeftY(140);
-        boundary1.setWidth(440);
-        boundary1.setHeight(173);
-        graph.addElement(boundary1);
-
-        Boundary boundary2 = (Boundary) graphElementFactory.create(GraphElementType.BOUNDARY, graph);
-        boundary2.setTopLeftX(40);
-        boundary2.setTopLeftY(30);
-        boundary2.setWidth(140);
-        boundary2.setHeight(60);
-        graph.addElement(boundary2);
-
-        LinkBoundary linkBoundary = (LinkBoundary) graphElementFactory.create(GraphElementType.LINK_BOUNDARY, graph);
-        linkBoundary.setBoundaryA(boundary1);
-        linkBoundary.setOutAngle(305);
-        linkBoundary.setBoundaryB(boundary2);
-        linkBoundary.setInAngle(180);
-        graph.addElement(linkBoundary);
-
-        for (GraphElement graphElement : graph.getAllElements()) {
-            graphElement.setDummy(false);
-        }
-        setTemplateModelsToAllGraphElements();
+        graph = graphElementFactory.createExampleGraph();
     }
 
     private void initializeFrame() {

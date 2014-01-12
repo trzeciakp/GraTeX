@@ -12,5 +12,7 @@ public interface ParseController {
 
     public List<String> parseGraphToLatexCode(Graph graph);
 
-    public Graph parseLatexCodeToGraph(List<String> code);
+    public Graph parseLatexCodeWithTemplatesToGraph(List<String> code) throws ParserException;
+
+    public List<String> parseTemplatesToLatexCode();
 }

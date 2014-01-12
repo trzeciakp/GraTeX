@@ -91,7 +91,7 @@ public class VertexPropertyModel extends PropertyModel {
     public void updateWithModel(PropertyModel pm) {
         VertexPropertyModel model = (VertexPropertyModel) pm;
 
-        if (model.number != PropertyModel.EMPTY) {
+        if (model.number != PropertyModel.EMPTY && owner != null) {
             VertexUtils.setPartOfNumeration((Vertex) owner, false);
             number = model.number;
             VertexUtils.setPartOfNumeration((Vertex) owner, true);
