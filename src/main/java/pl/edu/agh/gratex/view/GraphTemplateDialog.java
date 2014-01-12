@@ -80,7 +80,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         modeController.addModeListener(this);
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(768, 511);
+        setSize(788, 511);
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
 
@@ -174,14 +174,14 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
     private void initializeFrame() {
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
-        tabbedPane.setBounds(0, 0, 752, 427);
+        tabbedPane.setBounds(0, 0, 772, 427);
         getContentPane().add(tabbedPane);
 
         label_hint = new JLabel(StringLiterals.LABEL_TEMPLATE_EDITOR_HEADER);
         label_hint.setHorizontalAlignment(SwingConstants.CENTER);
-        label_hint.setBounds(222, 10, 524, 20);
+        label_hint.setBounds(242, 10, 524, 20);
         panel_preview = new PanelPreview(graph);
-        panel_preview.setBounds(222, 42, 520, 343);
+        panel_preview.setBounds(242, 42, 520, 343);
 
         panel_propertyEditor = new PanelPropertyEditor(generalController, modeController, null, null) {
             public void valueChanged(PropertyModel model) {
@@ -189,8 +189,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
                 panel_preview.repaint();
             }
         };
-        panel_propertyEditor.setBounds(10, 10, 200, 380);
-        panel_propertyEditor.setBorder(UIManager.getBorder("TitledBorder.border"));
+        panel_propertyEditor.setBounds(10, 10, 220, 380);
         panel_propertyEditor.setEnabled(true);
         panel_propertyEditor.disableUnnecessaryFields();
         panel_propertyEditor.setModel(currentModels.get(GraphElementType.VERTEX));
@@ -203,12 +202,12 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
 
         button_discard = new JButton(StringLiterals.BUTTON_TEMPLATE_EDITOR_DISCARD);
         button_discard.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_DISCARD);
-        button_discard.setBounds(656, 433, 90, 34);
+        button_discard.setBounds(676, 433, 90, 34);
         getContentPane().add(button_discard);
 
         button_save = new JButton(StringLiterals.BUTTON_TEMPLATE_EDITOR_SAVE);
         button_save.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_SAVE);
-        button_save.setBounds(554, 433, 90, 34);
+        button_save.setBounds(574, 433, 90, 34);
         getContentPane().add(button_save);
 
         button_restoreDefaultSettings = new JButton(StringLiterals.BUTTON_TEMPLATE_EDITOR_RESTORE_DEFAULT);
@@ -217,7 +216,7 @@ public class GraphTemplateDialog extends JDialog implements ModeListener {
         getContentPane().add(button_restoreDefaultSettings);
 
         checkBox_applyToAll = new JCheckBox(StringLiterals.CHECKBOX_TEMPLATE_EDITOR_GLOBAL_APPLY);
-        checkBox_applyToAll.setBounds(363, 433, 179, 34);
+        checkBox_applyToAll.setBounds(383, 433, 179, 34);
         checkBox_applyToAll.setToolTipText(StringLiterals.TOOLTIP_TEMPLATE_EDITOR_GLOBAL_APPLY);
         getContentPane().add(checkBox_applyToAll);
 

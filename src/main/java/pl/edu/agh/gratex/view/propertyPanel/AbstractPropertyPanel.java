@@ -67,20 +67,20 @@ public abstract class AbstractPropertyPanel extends JPanel {
         int spacing = 35;
 
         for (int i = 0; i < labels.size(); i++) {
-            labels.get(i).setBounds(6, 22 + i * spacing, 84, 30);
+            labels.get(i).setBounds(6, 5 + i * spacing, 84, 30);
         }
 
         for (int i = 0; i < components.size(); i++) {
             if (components.get(i) instanceof JTextField) {
-                components.get(i).setBounds(90, 24 + i * spacing, 80, 26);
+                components.get(i).setBounds(90, 7 + i * spacing, 80, 26);
             } else {
-                components.get(i).setBounds(90, 24 + i * spacing, 80, 25);
+                components.get(i).setBounds(90, 7 + i * spacing, 80, 25);
             }
         }
     }
 
     public int getHeight() {
-        return 35*components.size()+20;
+        return 35*components.size()+5;
     }
 
     public void setParent(PanelPropertyEditor parent) {

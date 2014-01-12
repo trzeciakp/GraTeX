@@ -297,7 +297,7 @@ public class StringLiterals {
                 break;
             }
             case LINK_BOUNDARY: {
-                tipPart4a = "a link to a boundary. Hold down SHIFT for directed link. Hold down CTRL to snap to wind rose angles.";
+                tipPart4a = "a link to a boundary. Hold down SHIFT for directed link. Hold down CTRL for horizontal or vertical link.";
                 tipPart4b = "a link of aboundary.";
                 break;
             }
