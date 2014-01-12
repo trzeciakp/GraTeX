@@ -149,7 +149,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                     graph = newGraph;
                     resetWorkspace();
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_OK));
-                } catch(IOException | ParserException e) {
+                } catch(Exception e) {
                     operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_OPEN_FAIL));
                     Application.reportError(StringLiterals.MESSAGE_ERROR_OPEN_GRAPH, null);
                 }
