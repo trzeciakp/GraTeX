@@ -51,12 +51,45 @@ public class LinkBoundaryUtils {
             } else {
                 int dx = middleX - linkBoundary.getOutPointX();
                 int dy = middleY - linkBoundary.getOutPointY();
-                Point refPointAbove = new Point(middleX - dy, middleY + dx);
-                Point refPointBelow = new Point(middleX + dy, middleY - dx);
-                if (refPointAbove.y > middleY) {
-                    refPointAbove = new Point(middleX + dy, middleY - dx);
-                    refPointBelow = new Point(middleX - dy, middleY + dx);
+                double d = Math.sqrt(dx * dx + dy * dy);
+                double k = 1000 / d;
+
+                Line2D linkLine = new Line2D.Double(linkBoundary.getOutPointX(), linkBoundary.getOutPointY(),
+                        linkBoundary.getInPointX(), linkBoundary.getInPointY());
+                Point2D refPoint = new Point2D.Double(middleX - dy * k, middleY + dx * k);
+                double minDist = linkLine.ptLineDist(refPoint.getX() + width / 2.0, refPoint.getY() + height / 2.0);
+                double newMinDist = linkLine.ptLineDist(refPoint.getX() - width / 2.0, refPoint.getY() + height / 2.0);
+                if (newMinDist < minDist) {
+                    minDist = newMinDist;
                 }
+                newMinDist = linkLine.ptLineDist(refPoint.getX() - width / 2.0, refPoint.getY() - height / 2.0);
+                if (newMinDist < minDist) {
+                    minDist = newMinDist;
+                }
+                newMinDist = linkLine.ptLineDist(refPoint.getX() + width / 2.0, refPoint.getY() - height / 2.0);
+                if (newMinDist < minDist) {
+                    minDist = newMinDist;
+                }
+
+                k = (1000 - minDist + spacing) / d;
+
+                Point pointAbove = new Point((int) (middleX - dy * k), (int) (middleY + dx * k));
+                Point pointBelow = new Point((int) (middleX + dy * k), (int) (middleY - dx * k));
+                if (pointAbove.y > middleY) {
+                    pointAbove = new Point((int) (middleX + dy * k), (int) (middleY - dx * k));
+                    pointBelow = new Point((int) (middleX - dy * k), (int) (middleY + dx * k));
+                }
+
+                if (linkBoundary.getLabelPosition() == LinkLabelPosition.ABOVE) {
+                    linkBoundary.setLabelPosX(pointAbove.x);
+                    linkBoundary.setLabelPosY(pointAbove.y);
+                } else {
+                    linkBoundary.setLabelPosX(pointBelow.x);
+                    linkBoundary.setLabelPosY(pointBelow.y);
+                }
+
+                linkBoundary.setLabelDrawX(linkBoundary.getLabelPosX() - width / 2);
+                linkBoundary.setLabelDrawY(linkBoundary.getLabelPosY() - descent + height / 2);
             }
         }
     }

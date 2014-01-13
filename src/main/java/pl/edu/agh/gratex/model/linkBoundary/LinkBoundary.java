@@ -185,24 +185,24 @@ public class LinkBoundary extends GraphElement {
         return propertyModel.getLineColor();
     }
 
-    public void setText(String text) {
-        propertyModel.setText(text);
+    public LinkLabelPosition getLabelPosition() {
+        return propertyModel.getLabelPosition();
     }
 
     public void setLabelPosition(LinkLabelPosition labelPosition) {
         propertyModel.setLabelPosition(labelPosition);
     }
 
-    public Color getLabelColor() {
-        return propertyModel.getLabelColor();
-    }
-
-    public LinkLabelPosition getLabelPosition() {
-        return propertyModel.getLabelPosition();
-    }
-
     public String getText() {
         return propertyModel.getText();
+    }
+
+    public void setText(String text) {
+        propertyModel.setText(text);
+    }
+
+    public Color getLabelColor() {
+        return propertyModel.getLabelColor();
     }
 
     public void setLabelColor(Color labelColor) {
