@@ -3,6 +3,8 @@ package pl.edu.agh.gratex.model.linkBoundary;
 import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.properties.ArrowType;
+import pl.edu.agh.gratex.model.properties.JointLabelPosition;
+import pl.edu.agh.gratex.model.properties.LinkLabelPosition;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -28,6 +30,34 @@ public class LinkBoundaryUtils {
 
         if (linkBoundary.isDirected()) {
             updateArrowPosition(linkBoundary);
+        }
+
+        if (linkBoundary.getLabelPosition() != LinkLabelPosition.HIDDEN) {
+            FontMetrics fm = new Canvas().getFontMetrics(Const.DEFAULT_FONT);
+            int width = fm.stringWidth(linkBoundary.getText());
+            int height = fm.getAscent();
+            int descent = fm.getDescent();
+
+            int middleX = (linkBoundary.getOutPointX() + linkBoundary.getInPointX()) / 2;
+            int middleY = (linkBoundary.getOutPointY() + linkBoundary.getInPointY()) / 2;
+
+            int spacing = Const.LINK_BOUNDARY_LABEL_MARGIN + linkBoundary.getLineWidth() / 2;
+
+            if (linkBoundary.getLabelPosition() == LinkLabelPosition.THROUGH) {
+                linkBoundary.setLabelPosX(middleX);
+                linkBoundary.setLabelPosY(middleY);
+                linkBoundary.setLabelDrawX(middleX - width / 2);
+                linkBoundary.setLabelDrawY(middleY - descent + height / 2);
+            } else {
+                int dx = middleX - linkBoundary.getOutPointX();
+                int dy = middleY - linkBoundary.getOutPointY();
+                Point refPointAbove = new Point(middleX - dy, middleY + dx);
+                Point refPointBelow = new Point(middleX + dy, middleY - dx);
+                if (refPointAbove.y > middleY) {
+                    refPointAbove = new Point(middleX + dy, middleY - dx);
+                    refPointBelow = new Point(middleX - dy, middleY + dx);
+                }
+            }
         }
     }
 

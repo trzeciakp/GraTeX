@@ -1,9 +1,7 @@
 package pl.edu.agh.gratex.model.linkBoundary;
 
 import pl.edu.agh.gratex.model.PropertyModel;
-import pl.edu.agh.gratex.model.properties.ArrowType;
-import pl.edu.agh.gratex.model.properties.IsDirected;
-import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.model.properties.*;
 
 import java.awt.*;
 
@@ -14,6 +12,10 @@ public class LinkBoundaryPropertyModel extends PropertyModel {
     private Color lineColor = null;
     private IsDirected directed = IsDirected.EMPTY;
     private ArrowType arrowType = ArrowType.EMPTY;
+
+    private String text = null;
+    private LinkLabelPosition labelPosition = LinkLabelPosition.EMPTY;
+    private Color labelColor = null;
 
 
     @Override
@@ -26,6 +28,10 @@ public class LinkBoundaryPropertyModel extends PropertyModel {
             result.setLineColor(new Color(lineColor.getRGB()));
         }
         result.setDirected(directed);
+
+        result.setText(getText());
+        result.setLabelPosition(getLabelPosition());
+        result.setLabelColor(getLabelColor());
 
         return result;
     }
@@ -51,6 +57,18 @@ public class LinkBoundaryPropertyModel extends PropertyModel {
 
         if (model.getArrowType() != ArrowType.EMPTY) {
             arrowType = model.getArrowType();
+        }
+
+        if (model.getText() != null) {
+            setText(model.getText());
+        }
+
+        if (model.getLabelPosition() != LinkLabelPosition.EMPTY) {
+            setLabelPosition(model.getLabelPosition());
+        }
+
+        if (model.getLabelColor() != null) {
+            setLabelColor(model.getLabelColor());
         }
     }
 
@@ -78,6 +96,18 @@ public class LinkBoundaryPropertyModel extends PropertyModel {
 
         if (model.arrowType != arrowType) {
             arrowType = ArrowType.EMPTY;
+        }
+
+        if (getText() != null && !getText().equals(model.getText())) {
+            setText(null);
+        }
+
+        if (getLabelPosition() != model.getLabelPosition()) {
+            setLabelPosition(LinkLabelPosition.EMPTY);
+        }
+
+        if (getLabelColor() != null && !getLabelColor().equals(model.getLabelColor())) {
+            setLabelColor(null);
         }
     }
 
@@ -119,5 +149,29 @@ public class LinkBoundaryPropertyModel extends PropertyModel {
 
     public void setArrowType(ArrowType arrowType) {
         this.arrowType = arrowType;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Color getLabelColor() {
+        return labelColor;
+    }
+
+    public void setLabelColor(Color labelColor) {
+        this.labelColor = labelColor;
+    }
+
+    public LinkLabelPosition getLabelPosition() {
+        return labelPosition;
+    }
+
+    public void setLabelPosition(LinkLabelPosition labelPosition) {
+        this.labelPosition = labelPosition;
     }
 }

@@ -34,8 +34,8 @@ public class Application {
     }
 
     public static void criticalError(String message, Exception e) {
-        reportError(StringLiterals.MESSAGE_ERROR_CRITICAL + message, e);
-        System.exit(1);
+        //reportError(StringLiterals.MESSAGE_ERROR_CRITICAL + message, e);
+        //System.exit(1);
     }
 
     public static Image loadImage(String imageName) {

@@ -33,10 +33,10 @@ public class LinkBoundaryParserTest {
     public static final int EXPECTED_LINE_WIDTH = (int) (EXPECTED_LINE_WIDTH_TEXT/COEFFICIENT);
     public static final LineType EXPECTED_LINE_TYPE = LineType.DASHED;
     public static final boolean EXPECTED_IS_DIRECTED = true;
-    public static final int EXPECTED_OUT_Y = 10;
-    public static final int EXPECTED_OUT_X = 10;
-    public static final int EXPECTED_IN_X = 0;
-    public static final int EXPECTED_IN_Y = 0;
+    public static final int EXPECTED_OUT_Y = 0;
+    public static final int EXPECTED_OUT_X = 0;
+    public static final int EXPECTED_IN_X = 10;
+    public static final int EXPECTED_IN_Y = -10;
     public static final double EXPECTED_IN_ANGLE = 3.33;
     public static final double EXPECTED_OUT_ANGLE = 4.52;
     public static final ArrowType EXPECTED_ARROW_TYPE = ArrowType.FILLED;

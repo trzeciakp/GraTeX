@@ -9,6 +9,7 @@ import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.properties.ArrowType;
 import pl.edu.agh.gratex.model.properties.IsDirected;
 import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.model.properties.LinkLabelPosition;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -30,6 +31,11 @@ public class LinkBoundary extends GraphElement {
 
     private int[] arrowLine1 = null;
     private int[] arrowLine2 = null;
+
+    private int labelPosX;
+    private int labelPosY;
+    private int labelDrawX;
+    private int labelDrawY;
 
 
     public LinkBoundary(Graph graph, PropertyModel propertyModel) {
@@ -177,5 +183,61 @@ public class LinkBoundary extends GraphElement {
 
     public Color getLineColor() {
         return propertyModel.getLineColor();
+    }
+
+    public void setText(String text) {
+        propertyModel.setText(text);
+    }
+
+    public void setLabelPosition(LinkLabelPosition labelPosition) {
+        propertyModel.setLabelPosition(labelPosition);
+    }
+
+    public Color getLabelColor() {
+        return propertyModel.getLabelColor();
+    }
+
+    public LinkLabelPosition getLabelPosition() {
+        return propertyModel.getLabelPosition();
+    }
+
+    public String getText() {
+        return propertyModel.getText();
+    }
+
+    public void setLabelColor(Color labelColor) {
+        propertyModel.setLabelColor(labelColor);
+    }
+
+    public int getLabelPosX() {
+        return labelPosX;
+    }
+
+    public void setLabelPosX(int labelPosX) {
+        this.labelPosX = labelPosX;
+    }
+
+    public int getLabelPosY() {
+        return labelPosY;
+    }
+
+    public void setLabelPosY(int labelPosY) {
+        this.labelPosY = labelPosY;
+    }
+
+    public int getLabelDrawX() {
+        return labelDrawX;
+    }
+
+    public void setLabelDrawX(int labelDrawX) {
+        this.labelDrawX = labelDrawX;
+    }
+
+    public int getLabelDrawY() {
+        return labelDrawY;
+    }
+
+    public void setLabelDrawY(int labelDrawY) {
+        this.labelDrawY = labelDrawY;
     }
 }

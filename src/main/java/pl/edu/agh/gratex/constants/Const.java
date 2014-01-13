@@ -81,4 +81,7 @@ public class Const {
 
     // (px) length of link (boundary) visualisation when first boundary is selected
     public static final int LINK_BOUNDARY_VISUALISATION_LENGTH = 40;
+
+    // (px) margin of label from link
+    public static final int LINK_BOUNDARY_LABEL_MARGIN = 5;
 }

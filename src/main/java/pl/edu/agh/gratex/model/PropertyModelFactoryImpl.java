@@ -122,5 +122,8 @@ public class PropertyModelFactoryImpl implements PropertyModelFactory {
         ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLineColor(PropertyModel.REVERSE_COLORS.get("red"));
         ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setDirected(IsDirected.YES);
         ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setArrowType(ArrowType.FILLED);
+        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setText("Label");
+        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLabelPosition(LinkLabelPosition.THROUGH);
+        ((LinkBoundaryPropertyModel) createDefaultModel(GraphElementType.LINK_BOUNDARY)).setLabelColor(PropertyModel.REVERSE_COLORS.get("black"));
     }
 }
