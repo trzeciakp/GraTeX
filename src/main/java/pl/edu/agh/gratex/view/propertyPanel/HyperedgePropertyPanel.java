@@ -96,7 +96,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         textField.setText(model.getText());
         comboBoxFontColor.setSelectedItem(model.getJointLabelColor());
         setJointPropertyEnabled(!model.getIsJointDisplay().isEmpty() && model.getIsJointDisplay() != JointDisplay.HIDDEN);
-        setLabelPropertyEnabled(!model.getJointLabelPosition().isEmpty() && model.getJointLabelPosition() != JointLabelPosition.HIDDEN);
+        setLabelPropertyEnabled(model.getJointLabelPosition() != JointLabelPosition.HIDDEN);
         changedByUser = true;
     }
 
@@ -117,7 +117,7 @@ public class HyperedgePropertyPanel extends AbstractPropertyPanel {
         comboBoxJointLineType.setEnabled(b);
         lblJointLineType.setEnabled(b);
         LineType jointLineType = model.getJointLineType();
-        setJoinLineTypePropertyEnabled(b && !jointLineType.isEmpty() && jointLineType != LineType.NONE);
+        setJoinLineTypePropertyEnabled(b && jointLineType != LineType.NONE);
     }
 
     private void setJoinLineTypePropertyEnabled(boolean b) {

@@ -167,6 +167,9 @@ public class StringLiterals {
     public static final String HYPEREDGE_LABEL_POSITION = "Label position:";
     public static final String HYPEREDGE_LABEL_TEXT = "Label text:";
     public static final String HYPEREDGE_LABEL_COLOR = "Label color:";
+    public static final String LINK_LABEL_POSITION = "Label position:";
+    public static final String LINK_LABEL_TEXT = "Label text:";
+    public static final String LINK_LABEL_COLOR = "Label color:";
 
     public static String INFO_UNDO(String literal) {
         return UNDO_PREFIX + literal;

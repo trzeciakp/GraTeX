@@ -6,10 +6,7 @@ import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.edge.EdgePropertyModel;
 import pl.edu.agh.gratex.model.linkBoundary.LinkBoundary;
 import pl.edu.agh.gratex.model.linkBoundary.LinkBoundaryPropertyModel;
-import pl.edu.agh.gratex.model.properties.ArrowType;
-import pl.edu.agh.gratex.model.properties.IsDirected;
-import pl.edu.agh.gratex.model.properties.IsLoop;
-import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.model.properties.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -35,6 +32,12 @@ public class LinkBoundaryPropertyPanel extends AbstractPropertyPanel {
     private JLabel lblLineColor;
     private JLabel lblDirect;
     private JLabel lblArrowType;
+    private JLabel lblLabelPosition;
+    private JLabel lblLabelText;
+    private JLabel lblLabelColor;
+    private JTextField textField;
+    private ColorComboBox comboBoxFontColor;
+    private JComboBox<LinkLabelPosition> comboBoxPosition;
 
     private void changed() {
         if (changedByUser)
@@ -64,24 +67,20 @@ public class LinkBoundaryPropertyPanel extends AbstractPropertyPanel {
         comboBoxLineColor.setSelectedItem(model.getLineColor());
         comboBoxDirect.setSelectedItem(model.getDirected());
         comboBoxArrowType.setSelectedItem(model.getArrowType());
-        /*spinnerAngle.setVisible(true);
-        comboBoxAngle.setVisible(false);
-        if (model.getLoop() == IsLoop.YES) {
-            spinnerAngle.setVisible(false);
-            comboBoxAngle.setVisible(true);
-            if (model.getRelativeEdgeAngle() >= 0) {
-                comboBoxAngle.setSelectedIndex(model.getRelativeEdgeAngle() / 90 + 1);
-            } else {
-                comboBoxAngle.setSelectedIndex(0);
-            }
-        } else if (model.getRelativeEdgeAngle() == PropertyModel.EMPTY) {
-            spinnerAngle.setValue(StringLiterals.EMPTY_VALUE);
-        } else if (model.getRelativeEdgeAngle() > 180) {
-            spinnerAngle.setValue(model.getRelativeEdgeAngle() - 360 + StringLiterals.DEG_SUFFIX);
-        } else {
-            spinnerAngle.setValue(model.getRelativeEdgeAngle() + StringLiterals.DEG_SUFFIX);
-        }*/
+        LinkLabelPosition labelPosition = model.getLabelPosition();
+        setLabelPropertiesEnabled(labelPosition != LinkLabelPosition.HIDDEN);
+        comboBoxPosition.setSelectedItem(labelPosition);
+        comboBoxFontColor.setSelectedItem(model.getLabelColor());
+        textField.setText(model.getText());
         changedByUser = true;
+    }
+
+    private void setLabelPropertiesEnabled(boolean b) {
+        lblLabelColor.setEnabled(b);
+        lblLabelText.setEnabled(b);
+        comboBoxFontColor.setEnabled(b);
+        textField.setEnabled(b);
+
     }
 
     @Override
@@ -186,7 +185,7 @@ public class LinkBoundaryPropertyPanel extends AbstractPropertyPanel {
         add(comboBoxDirect);
         /**************************************************************************/
 
-        /**************************** LABEL INSIDE COMBOBOX ***********************/
+        /**************************** ARROW TYPE COMBOBOX ***********************/
 
         comboBoxArrowType = new JComboBox<>(ArrowType.values());
         comboBoxArrowType.addActionListener(new ActionListener() {
@@ -204,16 +203,76 @@ public class LinkBoundaryPropertyPanel extends AbstractPropertyPanel {
         /**************************************************************************/
 
 
+
+        /**************************** LABEL TEXT TEXTFIELD ******************************/
+        textField = new JTextField();
+        textField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (!textField.getText().equals(model.getText())) {
+                    model.setText(textField.getText());
+                    changed();
+                }
+            }
+        });
+        add(textField);
+        textField.setColumns(10);
+        /**************************************************************************/
+
+        /****************************  LABEL COLOR COMBOBOX ******************************/
+        comboBoxFontColor = new ColorComboBox();
+        comboBoxFontColor.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                if (changedByUser) {
+                    Color newValue = (Color) comboBoxFontColor.getSelectedItem();
+                    if (newValue != null) {
+                        if (!newValue.equals(model.getLabelColor())) {
+                            model.setLabelColor(newValue);
+                            changed();
+                        }
+                    } else {
+                        comboBoxFontColor.setSelectedItem(model.getLabelColor());
+                    }
+                }
+                repaint();
+            }
+        });
+        add(comboBoxFontColor);
+        /**************************************************************************/
+
+        /**************************** LABEL POSITION COMBOBOX ****************************/
+        comboBoxPosition = new JComboBox<>(LinkLabelPosition.values());
+        comboBoxPosition.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                LinkLabelPosition newValue = ((LinkLabelPosition) comboBoxPosition.getSelectedItem());
+                if ((!newValue.isEmpty() && model.getLabelPosition() != newValue || (!changedByUser))) {
+                    model.setLabelPosition(newValue);
+                    changed();
+                } else {
+                    comboBoxPosition.setSelectedItem(model.getLabelPosition());
+                }
+            }
+        });
+        add(comboBoxPosition);
+
+        /**************************************************************************/
+
         lblLineType = createJLabel(StringLiterals.EDGE_LINE_TYPE);
         lblLineSize = createJLabel(StringLiterals.EDGE_LINE_WIDTH);
         lblLineColor = createJLabel(StringLiterals.EDGE_LINE_COLOR);
         lblDirect = createJLabel(StringLiterals.EDGE_DIRECTED);
         lblArrowType = createJLabel(StringLiterals.EDGE_ARROW_TYPE);
+        lblLabelPosition = createJLabel(StringLiterals.LINK_LABEL_POSITION);
+        lblLabelText = createJLabel(StringLiterals.LINK_LABEL_TEXT);
+        lblLabelColor = createJLabel(StringLiterals.LINK_LABEL_COLOR);
+
 
         components.add(comboBoxLineType);
         components.add(spinnerLineSize);
         components.add(comboBoxLineColor);
         components.add(comboBoxDirect);
         components.add(comboBoxArrowType);
+        components.add(comboBoxPosition);
+        components.add(textField);
+        components.add(comboBoxFontColor);
     }
 }
