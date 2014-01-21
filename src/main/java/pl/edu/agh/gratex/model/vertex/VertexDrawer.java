@@ -24,16 +24,17 @@ public class VertexDrawer implements Drawer {
         Vertex vertex = (Vertex) graphElement;
         Graphics2D g = (Graphics2D) graphics.create();
 
-        int posX = vertex.getPosX();
-        int posY = vertex.getPosY();
 
         int tempX = 0;
         int tempY = 0;
         if (graphElement.isDummy() && vertex.getGraph().isGridOn()) {
-            tempX = posX;
-            tempY = posY;
+            tempX = vertex.getPosX();
+            tempY = vertex.getPosY();
             VertexUtils.adjustToGrid(vertex);
         }
+
+        int posX = vertex.getPosX();
+        int posY = vertex.getPosY();
 
         drawVertex(g, posX, posY, vertex.getShape(), vertex.getRadius(), vertex.getVertexColor(),
                 vertex.getLineType(), vertex.getLineWidth(), vertex.getLineColor(), selectionController.selectionContains(vertex), vertex.isDummy());
