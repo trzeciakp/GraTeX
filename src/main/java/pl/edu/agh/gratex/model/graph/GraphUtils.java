@@ -7,6 +7,7 @@ import pl.edu.agh.gratex.model.boundary.Boundary;
 import pl.edu.agh.gratex.model.boundary.BoundaryUtils;
 import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
+import pl.edu.agh.gratex.model.linkBoundary.LinkBoundary;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
@@ -40,6 +41,17 @@ public class GraphUtils {
             Edge edge = (Edge) graphElement;
             if (edge.getVertexA() == vertex || edge.getVertexB() == vertex) {
                 result.add(edge);
+            }
+        }
+        return result;
+    }
+
+    public static LinkedList<LinkBoundary> getAdjacentLinks(Graph graph, Boundary boundary) {
+        LinkedList<LinkBoundary> result = new LinkedList<>();
+        for (GraphElement graphElement : graph.getElements(GraphElementType.LINK_BOUNDARY)) {
+            LinkBoundary link = (LinkBoundary) graphElement;
+            if (link.getBoundaryA() == boundary || link.getBoundaryB() == boundary) {
+                result.add(link);
             }
         }
         return result;

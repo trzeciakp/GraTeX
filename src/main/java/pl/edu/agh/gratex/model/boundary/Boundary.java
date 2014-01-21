@@ -5,11 +5,13 @@ import pl.edu.agh.gratex.constants.GraphElementType;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.PropertyModel;
 import pl.edu.agh.gratex.model.graph.Graph;
+import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.properties.LineType;
 
 import java.awt.*;
 import java.awt.geom.Area;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,6 +34,14 @@ public class Boundary extends GraphElement {
     @Override
     public GraphElementType getType() {
         return GraphElementType.BOUNDARY;
+    }
+
+
+    @Override
+    public List<GraphElement> getConnectedElements() {
+        List<GraphElement> result = new LinkedList<>();
+        result.addAll(GraphUtils.getAdjacentLinks(graph, this));
+        return result;
     }
 
     @Override
