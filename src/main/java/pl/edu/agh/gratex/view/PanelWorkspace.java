@@ -11,6 +11,8 @@ import pl.edu.agh.gratex.controller.operation.OperationListener;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.graph.Graph;
 import pl.edu.agh.gratex.model.linkBoundary.LinkBoundaryUtils;
+import pl.edu.agh.gratex.model.properties.LineType;
+import pl.edu.agh.gratex.utils.DrawingTools;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,6 +78,10 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, Const.PAGE_WIDTH, Const.PAGE_HEIGHT);
+        g2d.setColor(Color.GRAY);
+        g2d.setStroke(DrawingTools.getStroke(LineType.DASHED, 1, 0));
+        g2d.drawLine(Const.PAGE_MARGIN_X, 0, Const.PAGE_MARGIN_X, Const.PAGE_MARGIN_Y);
+        g2d.drawLine(Const.PAGE_MARGIN_X, Const.PAGE_MARGIN_Y, 0, Const.PAGE_MARGIN_Y);
 
 
         if (generalController.getGraph() != null) {

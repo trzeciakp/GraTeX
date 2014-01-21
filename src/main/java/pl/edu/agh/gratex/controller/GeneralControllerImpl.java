@@ -18,6 +18,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.LinkedList;
 import java.util.List;
 
 public class GeneralControllerImpl implements GeneralController, ToolListener, ModeListener {
@@ -225,6 +226,8 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     public void toggleGrid() {
         if (graph.isGridOn()) {
             graph.setGridOn(false);
+            operationController.reportOperationEvent(new GenericOperation(
+                    StringLiterals.INFO_GENERIC_GRID(false, graph.getGridResolutionX(), graph.getGridResolutionY())));
         } else {
             GridDialog gd = new GridDialog(mainWindow, graph.getGridResolutionX(), graph.getGridResolutionY());
             int[] result = gd.showDialog();
@@ -232,11 +235,15 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                 graph.setGridOn(true);
                 graph.setGridResolutionX(result[0]);
                 graph.setGridResolutionY(result[1]);
+
+                List<GraphElement> verticesAndBoudaries = new LinkedList<>(graph.getElements(GraphElementType.BOUNDARY));
+                verticesAndBoudaries.addAll(graph.getElements(GraphElementType.VERTEX));
+                AlterationOperation operation = new AlterationOperation(this, verticesAndBoudaries, OperationType.PROPERTY_CHANGE,
+                        StringLiterals.INFO_GENERIC_GRID(true, graph.getGridResolutionX(), graph.getGridResolutionY()));
                 GraphUtils.adjustElementsToGrid(graph);
+                operation.finish();
             }
         }
-        operationController.reportOperationEvent(new GenericOperation(
-                StringLiterals.INFO_GENERIC_GRID(graph.isGridOn(), graph.getGridResolutionX(), graph.getGridResolutionY())));
         resetWorkspace();
     }
 

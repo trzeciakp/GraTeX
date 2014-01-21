@@ -16,8 +16,11 @@ public class Const {
     public final static String GRAPH_FILES_EXTENSION = ".gph";
 
     // Page dimensions in pixels
-    public final static int PAGE_WIDTH = 672;
-    public final static int PAGE_HEIGHT = 880;
+    public final static int PAGE_WIDTH = 1200;
+    public final static int PAGE_HEIGHT = 1200;
+
+    public final static int PAGE_MARGIN_X = 672;
+    public final static int PAGE_MARGIN_Y = 880;
 
     // Color used to denote selection on graph elements
     public final static Color SELECTION_COLOR = new Color(72, 118, 255, 128);
