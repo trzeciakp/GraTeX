@@ -16,7 +16,7 @@ public class Const {
     public final static String GRAPH_FILES_EXTENSION = ".gph";
 
     // Page dimensions in pixels
-    public final static int PAGE_WIDTH = 1200;
+    public final static int PAGE_WIDTH = 2000;
     public final static int PAGE_HEIGHT = 1200;
 
     public final static int PAGE_MARGIN_X = 672;
