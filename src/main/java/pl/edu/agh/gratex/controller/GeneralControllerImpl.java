@@ -126,6 +126,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             graph = new Graph();
             resetWorkspace();
             operationController.clearOperations();
+            mainWindow.setTitle("GraTeX - untitled.gph");
             editGraphTemplate();
         }
     }
@@ -146,6 +147,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
                 Graph newGraph;
                 try {
                     newGraph = fileManager.openFile(file);
+                    mainWindow.setTitle("GraTeX - " + file.getName());
                     graph = newGraph;
                     resetWorkspace();
                     operationController.clearOperations();
@@ -175,6 +177,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
         if (file != null) {
             try {
                 fileManager.saveFile(file, graph);
+                mainWindow.setTitle("GraTeX - " + file.getName());
                 operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_GRAPH_SAVE_OK));
                 return true;
             } catch (IOException e) {
