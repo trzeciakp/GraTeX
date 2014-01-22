@@ -4,6 +4,7 @@ import pl.edu.agh.gratex.constants.Const;
 import pl.edu.agh.gratex.controller.SelectionController;
 import pl.edu.agh.gratex.model.Drawer;
 import pl.edu.agh.gratex.model.GraphElement;
+import pl.edu.agh.gratex.model.graph.GraphUtils;
 import pl.edu.agh.gratex.model.properties.LineType;
 import pl.edu.agh.gratex.model.properties.ShapeType;
 import pl.edu.agh.gratex.utils.DrawingTools;
@@ -36,17 +37,19 @@ public class VertexDrawer implements Drawer {
         int posX = vertex.getPosX();
         int posY = vertex.getPosY();
 
-        drawVertex(g, posX, posY, vertex.getShape(), vertex.getRadius(), vertex.getVertexColor(),
-                vertex.getLineType(), vertex.getLineWidth(), vertex.getLineColor(), selectionController.selectionContains(vertex), vertex.isDummy());
-        g.setStroke(new BasicStroke());
+        if (!vertex.isDummy() || VertexUtils.fitsIntoPage(vertex) && !GraphUtils.checkVertexCollision(vertex.getGraph(), vertex)) {
+            drawVertex(g, posX, posY, vertex.getShape(), vertex.getRadius(), vertex.getVertexColor(),
+                    vertex.getLineType(), vertex.getLineWidth(), vertex.getLineColor(), selectionController.selectionContains(vertex), vertex.isDummy());
+            g.setStroke(new BasicStroke());
 
-        if (vertex.isLabelInside()) {
-            g.setColor(DrawingTools.getDrawingColor(vertex.getFontColor(), vertex.isDummy()));
-            vertex.setNumber(vertex.getNumber());
-            if (vertex.getLabelInside() != null) {
-                g.setFont(Const.DEFAULT_FONT);
-                FontMetrics fm = g.getFontMetrics();
-                g.drawString(vertex.getLabelInside(), posX - fm.stringWidth(vertex.getLabelInside()) / 2, posY + (fm.getAscent() - fm.getDescent()) / 2);
+            if (vertex.isLabelInside()) {
+                g.setColor(DrawingTools.getDrawingColor(vertex.getFontColor(), vertex.isDummy()));
+                vertex.setNumber(vertex.getNumber());
+                if (vertex.getLabelInside() != null) {
+                    g.setFont(Const.DEFAULT_FONT);
+                    FontMetrics fm = g.getFontMetrics();
+                    g.drawString(vertex.getLabelInside(), posX - fm.stringWidth(vertex.getLabelInside()) / 2, posY + (fm.getAscent() - fm.getDescent()) / 2);
+                }
             }
         }
 

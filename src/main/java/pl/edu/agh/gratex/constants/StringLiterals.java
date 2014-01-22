@@ -228,8 +228,8 @@ public class StringLiterals {
     public final static String INFO_SUBGRAPH_WHERE_TO_PASTE = "choose location for the copy of subgraph";
     public final static String INFO_SUBGRAPH_CANNOT_PASTE = "cannot insert this subgraph here - vertices collide with existing ones or are out of bounds";
 
-    public final static String INFO_CANNOT_CREATE_VERTEX_BOUNDARY = "cannot createEmptyModel a vertex here - too close to page edge";
-    public final static String INFO_CANNOT_CREATE_VERTEX_COLLISION = "cannot createEmptyModel a vertex here - too close to another vertex";
+    public final static String INFO_CANNOT_CREATE_VERTEX_BOUNDARY = "cannot create a vertex here - too close to page edge";
+    public final static String INFO_CANNOT_CREATE_VERTEX_COLLISION = "cannot create a vertex here - too close to another vertex";
 
     public final static String INFO_CHOOSE_EDGE_START = "choose a starting vertex for the edge (click)";
     public final static String INFO_CHOOSE_EDGE_END = "now choose the target vertex (click)";
@@ -303,7 +303,7 @@ public class StringLiterals {
             }
             case LINK_BOUNDARY: {
                 tipPart4a = "a link to a boundary. Hold down SHIFT for directed link. Hold down CTRL for horizontal or vertical link.";
-                tipPart4b = "a link of aboundary.";
+                tipPart4b = "a link of a boundary.";
                 break;
             }
         }

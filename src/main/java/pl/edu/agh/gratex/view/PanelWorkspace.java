@@ -82,6 +82,7 @@ public class PanelWorkspace extends JPanel implements MouseListener, MouseMotion
         g2d.setStroke(DrawingTools.getStroke(LineType.DASHED, 1, 0));
         g2d.drawLine(Const.PAGE_MARGIN_X, 0, Const.PAGE_MARGIN_X, Const.PAGE_MARGIN_Y);
         g2d.drawLine(Const.PAGE_MARGIN_X, Const.PAGE_MARGIN_Y, 0, Const.PAGE_MARGIN_Y);
+        g2d.setStroke(DrawingTools.getStroke(LineType.SOLID, 1, 0));
 
 
         if (generalController.getGraph() != null) {
