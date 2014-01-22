@@ -277,7 +277,7 @@ public class BoundaryMouseController extends GraphElementMouseController {
     @Override
     public void finishMoving() {
         if (currentlyDraggedBoundary != null) {
-            currentDragOperation.finish();
+            currentDragOperation.finish(true);
             currentlyDraggedBoundary = null;
         }
     }

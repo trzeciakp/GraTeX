@@ -32,7 +32,9 @@ public enum OperationType {
 
     DUPLICATION,
     PROPERTY_CHANGE,
-    TEMPLATE_GLOBAL_APPLY;
+    TEMPLATE_GLOBAL_APPLY,
+    GRID_TOGGLE,
+    ADJUST_ELEMENTS_TO_GRID;
 
     public static OperationType REMOVE_OPERATION(ModeType mode)
     {

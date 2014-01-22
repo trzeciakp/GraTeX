@@ -96,7 +96,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void finishMoving() {
         if(currentlyDraggedVertex != null) {
-            currentDragOperation.finish();
+            currentDragOperation.finish(true);
             currentlyDraggedVertex = null;
         }
     }

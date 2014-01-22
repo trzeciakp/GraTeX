@@ -108,7 +108,7 @@ public class LabelEdgeMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void finishMoving() {
         if (currentlyDraggedLabel != null) {
-            currentDragOperation.finish();
+            currentDragOperation.finish(true);
             currentlyDraggedLabel = null;
         }
     }

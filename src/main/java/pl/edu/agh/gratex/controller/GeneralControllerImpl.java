@@ -198,7 +198,7 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
             for (GraphElement element : elements) {
                 element.setModel(propertyModelFactory.createTemplateModel(element.getType()));
             }
-            operation.finish();
+            operation.finish(true);
         } else {
             operationController.reportOperationEvent(new GenericOperation(StringLiterals.INFO_TEMPLATE_CHANGE));
         }
@@ -225,23 +225,12 @@ public class GeneralControllerImpl implements GeneralController, ToolListener, M
     @Override
     public void toggleGrid() {
         if (graph.isGridOn()) {
-            graph.setGridOn(false);
-            operationController.reportOperationEvent(new GenericOperation(
-                    StringLiterals.INFO_GENERIC_GRID(false, graph.getGridResolutionX(), graph.getGridResolutionY())));
+            new GridToggleOperation(this, false, graph.getGridResolutionX(), graph.getGridResolutionY());
         } else {
             GridDialog gd = new GridDialog(mainWindow, graph.getGridResolutionX(), graph.getGridResolutionY());
             int[] result = gd.showDialog();
             if (result != null) {
-                graph.setGridOn(true);
-                graph.setGridResolutionX(result[0]);
-                graph.setGridResolutionY(result[1]);
-
-                List<GraphElement> verticesAndBoudaries = new LinkedList<>(graph.getElements(GraphElementType.BOUNDARY));
-                verticesAndBoudaries.addAll(graph.getElements(GraphElementType.VERTEX));
-                AlterationOperation operation = new AlterationOperation(this, verticesAndBoudaries, OperationType.PROPERTY_CHANGE,
-                        StringLiterals.INFO_GENERIC_GRID(true, graph.getGridResolutionX(), graph.getGridResolutionY()));
-                GraphUtils.adjustElementsToGrid(graph);
-                operation.finish();
+                new GridToggleOperation(this, true, result[0], result[1]);
             }
         }
         resetWorkspace();

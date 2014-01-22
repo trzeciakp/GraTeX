@@ -192,7 +192,7 @@ public class LinkBoundaryMouseController extends GraphElementMouseController {
     public void finishMoving() {
         if (currentlyDraggedLink != null) {
             if (currentlyDraggedLink.getBoundaryA() != linkDragDummy && currentlyDraggedLink.getBoundaryB() != linkDragDummy) {
-                currentDragOperation.finish();
+                currentDragOperation.finish(true);
             } else {
                 // Restore original edge state (it was dropped in mid air)
                 try {

@@ -211,7 +211,7 @@ public class EdgeMouseControllerImpl extends GraphElementMouseController {
     public void finishMoving() {
         if (currentlyDraggedEdge != null) {
             if (currentlyDraggedEdge.getVertexA() != edgeDragDummy && currentlyDraggedEdge.getVertexB() != edgeDragDummy) {
-                currentDragOperation.finish();
+                currentDragOperation.finish(true);
             } else {
                 // Restore original edge state (it was dropped in mid air)
                 try {

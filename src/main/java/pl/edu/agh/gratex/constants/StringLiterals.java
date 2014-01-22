@@ -261,6 +261,8 @@ public class StringLiterals {
     public final static String INFO_GRAPH_OPEN_OK = "graph loaded successfully";
     public final static String INFO_GRAPH_OPEN_FAIL = "loading graph failed!";
 
+    public static final String INFO_ELEMENTS_ADJUSTED_TO_GRID = "Elements adjusted to grid";
+
     // MainWindow
     public static String INFO_MODE_AND_TOOL(ModeType mode, ToolType tool) {
         String tipPart1 = mode.toString() + " mode - ";
@@ -331,7 +333,7 @@ public class StringLiterals {
         if (gridOn) {
             return String.format("%dx%d grid enabled", gridResolutionX, gridResolutionY);
         } else {
-            return "grid disabled";
+            return String.format("%dx%d grid disabled", gridResolutionX, gridResolutionY);
         }
     }
 

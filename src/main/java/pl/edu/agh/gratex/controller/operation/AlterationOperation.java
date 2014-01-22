@@ -43,7 +43,7 @@ public class AlterationOperation extends Operation {
         }
     }
 
-    public void finish() {
+    public void finish(boolean doRegister) {
         for (GraphElement element : initialStates.keySet()) {
             String initialState = initialStates.get(element);
             String endState = getLatexCode(element, generalController.getParseController());
@@ -60,7 +60,7 @@ public class AlterationOperation extends Operation {
             }
         }
 
-        if (initialToEndStates.keySet().size() > 0) {
+        if (doRegister && initialToEndStates.keySet().size() > 0) {
             generalController.getOperationController().registerOperation(this);
         }
     }

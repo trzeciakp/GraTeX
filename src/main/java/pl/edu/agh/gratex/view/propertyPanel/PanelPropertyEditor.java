@@ -49,7 +49,7 @@ public class PanelPropertyEditor extends JScrollPane implements ModeListener, Op
             graphElement.setModel(model);
         }
         panelsMap.get(mode).setModel(model);
-        operation.finish();
+        operation.finish(true);
     }
 
     private AbstractPropertyPanel createPropertyPanel(ModeType modeType, PanelPropertyEditor parent) {

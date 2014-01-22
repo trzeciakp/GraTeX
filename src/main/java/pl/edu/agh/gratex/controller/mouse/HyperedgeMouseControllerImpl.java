@@ -191,7 +191,7 @@ public class HyperedgeMouseControllerImpl extends GraphElementMouseController {
                     }
                 }
             }
-            currentDragOperation.finish();
+            currentDragOperation.finish(true);
             currentlyDraggedHyperedge = null;
         }
     }
