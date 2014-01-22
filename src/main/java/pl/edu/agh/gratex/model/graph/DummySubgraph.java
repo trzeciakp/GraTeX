@@ -148,4 +148,10 @@ public class DummySubgraph {
             return null;
         }
     }
+
+    public void adjustToGrid() {
+        for (Vertex vertex : vertices) {
+            VertexUtils.adjustToGrid(vertex);
+        }
+    }
 }

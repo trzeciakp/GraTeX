@@ -16,7 +16,7 @@ public class BoundaryUtils {
         Graph graph = boundary.getGraph();
         boundary.setTopLeftX(((boundary.getTopLeftX() + (graph.getGridResolutionX() / 2)) / graph.getGridResolutionX()) * graph.getGridResolutionX());
         boundary.setTopLeftY(((boundary.getTopLeftY() + (graph.getGridResolutionY() / 2)) / graph.getGridResolutionY()) * graph.getGridResolutionY());
-        boundary.setWidth(((boundary.getWidth() + ((graph.getGridResolutionY() - 1) / 2)) / graph.getGridResolutionY()) * graph.getGridResolutionY());
+        boundary.setWidth(((boundary.getWidth() + ((graph.getGridResolutionX() - 1) / 2)) / graph.getGridResolutionX()) * graph.getGridResolutionX());
         boundary.setHeight(((boundary.getHeight() + ((graph.getGridResolutionY() - 1) / 2)) / graph.getGridResolutionY()) * graph.getGridResolutionY());
     }
 }

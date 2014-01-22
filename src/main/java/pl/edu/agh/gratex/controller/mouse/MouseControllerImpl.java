@@ -84,6 +84,9 @@ public class MouseControllerImpl implements MouseController, ToolListener, ModeL
             case SELECT:
                 if (dummySubgraph != null) {
                     if (dummySubgraph.fitsIntoPosition()) {
+                        if (generalController.getGraph().isGridOn()) {
+                            dummySubgraph.adjustToGrid();
+                        }
                         new CreationRemovalOperation(generalController, dummySubgraph.getElements(), OperationType.DUPLICATION,
                                 StringLiterals.INFO_SUBGRAPH_DUPLICATE, true);
                     } else {
