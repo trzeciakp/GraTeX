@@ -84,6 +84,6 @@ public class LabelVUtils {
         labelV.setPosY((int) drawPosY);
         labelV.setDrawX((int) (drawPosX - width / 2));
         labelV.setDrawY((int) (drawPosY - descent + height / 2));
-        labelV.setOutline(new Rectangle(labelV.getPosX() - width / 2, labelV.getPosY() - height / 2, width, height));
+        labelV.setOutline(new Rectangle(labelV.getPosX() - width / 2, labelV.getPosY() - (height + descent) / 2, width, height + descent));
     }
 }

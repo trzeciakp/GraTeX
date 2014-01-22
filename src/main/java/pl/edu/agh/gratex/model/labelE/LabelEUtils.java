@@ -176,7 +176,7 @@ public class LabelEUtils {
             labelE.setDrawX(labelE.getPosX() - width / 2);
             labelE.setDrawY(labelE.getPosY() + height / 2 - descent);
             int[] xp = new int[]{labelE.getDrawX(), labelE.getDrawX() + width, labelE.getDrawX() + width, labelE.getDrawX()};
-            int[] yp = new int[]{labelE.getPosY() - height / 2, labelE.getPosY() - height / 2, labelE.getPosY() + height / 2, labelE.getPosY() + height / 2};
+            int[] yp = new int[]{labelE.getPosY() - (height + descent) / 2, labelE.getPosY() - (height + descent) / 2, labelE.getPosY() + (height + descent) / 2, labelE.getPosY() + (height + descent) / 2};
             labelE.setOutline(new Polygon(xp, yp, 4));
         } else {
             if (owner.getRelativeEdgeAngle() == 0) // straight edge
@@ -289,7 +289,8 @@ public class LabelEUtils {
                     labelE.setAngle(0);
                     labelE.setPosX(labelE.getDrawX() + width / 2);
                     int[] xp = new int[]{labelE.getDrawX(), labelE.getDrawX() + width, labelE.getDrawX() + width, labelE.getDrawX()};
-                    int[] yp = new int[]{labelE.getPosY() - height / 2, labelE.getPosY() - height / 2, labelE.getPosY() + height / 2, labelE.getPosY() + height / 2};
+                    int[] yp = new int[]{labelE.getPosY() - (height + descent) / 2, labelE.getPosY() - (height + descent) / 2,
+                            labelE.getPosY() + (height + descent) / 2, labelE.getPosY() + (height + descent) / 2};
                     labelE.setOutline(new Polygon(xp, yp, 4));
                 } else {
 
@@ -326,7 +327,8 @@ public class LabelEUtils {
                     }
 
                     int[] xp = new int[]{stringStartBottom.x, stringEndBottom.x, stringEndTop.x, stringStartTop.x};
-                    int[] yp = new int[]{stringStartBottom.y, stringEndBottom.y, stringEndTop.y, stringStartTop.y};
+                    int[] yp = new int[]{stringStartBottom.y + descent / 2, stringEndBottom.y + descent / 2,
+                            stringEndTop.y - descent / 2, stringStartTop.y - descent / 2};
                     labelE.setOutline(new Polygon(xp, yp, 4));
 
                     labelE.setPosX((stringStartBottom.x + stringEndTop.x) / 2);
@@ -386,7 +388,8 @@ public class LabelEUtils {
                     }
 
                     int xPoints[] = new int[]{labelE.getPosX() - width / 2, labelE.getPosX() + width / 2, labelE.getPosX() + width / 2, labelE.getPosX() - width / 2};
-                    int yPoints[] = new int[]{labelE.getPosY() - height / 2, labelE.getPosY() - height / 2, labelE.getPosY() + height / 2, labelE.getPosY() + height / 2};
+                    int yPoints[] = new int[]{labelE.getPosY() - (height + descent) / 2, labelE.getPosY() - (height + descent) / 2,
+                            labelE.getPosY() + (height + descent) / 2, labelE.getPosY() + (height + descent) / 2};
                     labelE.setOutline(new Polygon(xPoints, yPoints, 4));
                 } else {
                     double r;
@@ -420,13 +423,13 @@ public class LabelEUtils {
                     Point middle = new Point(labelE.getPosX(), labelE.getPosY());
                     Point draw = new Point(labelE.getPosX() - width / 2, labelE.getPosY() + height / 2 - descent);
                     draw = rotatePoint(middle, draw, labelE.getAngle());
-                    Point p1 = new Point(labelE.getPosX() - width / 2, labelE.getPosY() - height / 2);
+                    Point p1 = new Point(labelE.getPosX() - width / 2, labelE.getPosY() - (height + descent) / 2);
                     p1 = rotatePoint(middle, p1, labelE.getAngle());
-                    Point p2 = new Point(labelE.getPosX() + width / 2, labelE.getPosY() - height / 2);
+                    Point p2 = new Point(labelE.getPosX() + width / 2, labelE.getPosY() - (height + descent) / 2);
                     p2 = rotatePoint(middle, p2, labelE.getAngle());
-                    Point p3 = new Point(labelE.getPosX() + width / 2, labelE.getPosY() + height / 2);
+                    Point p3 = new Point(labelE.getPosX() + width / 2, labelE.getPosY() + (height + descent) / 2);
                     p3 = rotatePoint(middle, p3, labelE.getAngle());
-                    Point p4 = new Point(labelE.getPosX() - width / 2, labelE.getPosY() + height / 2);
+                    Point p4 = new Point(labelE.getPosX() - width / 2, labelE.getPosY() + (height + descent) / 2);
                     p4 = rotatePoint(middle, p4, labelE.getAngle());
 
                     labelE.setDrawX(draw.x);

@@ -59,6 +59,9 @@ public class Const {
     // How far from edge will selection work
     public final static int EDGE_SELECTION_MARGIN = 5;
 
+    // Minimum selection shadow margin (distance from vertex outline)
+    public static final int MIN_VERTEX_SELECTION_MARGIN = 7;
+
     // Stroke used to draw angle visualization
     public final static Stroke ANGLE_VISUALIZATION_STROKE = DrawingTools.getStroke(LineType.DASHED, 2, 0.0);
     // Color used to draw angle visualization

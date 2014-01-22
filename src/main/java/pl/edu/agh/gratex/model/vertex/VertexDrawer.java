@@ -66,7 +66,9 @@ public class VertexDrawer implements Drawer {
 
         if (isSelected) {
             g.setColor(Const.SELECTION_COLOR);
-            g.fill(VertexUtils.getVertexShape(shapeType, radius + lineWidth / 2 + radius / 4, posX, posY));
+            int selRadius = radius + lineWidth / 2 + radius / 4;
+            selRadius = Math.max(selRadius, radius + lineWidth / 2 + Const.MIN_VERTEX_SELECTION_MARGIN);
+            g.fill(VertexUtils.getVertexShape(shapeType, selRadius, posX, posY));
         }
 
         g.setColor(Color.white);
