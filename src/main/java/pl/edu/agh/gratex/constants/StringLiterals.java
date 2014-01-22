@@ -193,7 +193,7 @@ public class StringLiterals {
 
 
     // DragOperation
-    public final static String INFO_VERTEX_MOVE = "vertex moved";
+    public final static String INFO_VERTEX_MOVE = "vertex (or vertices) moved";
     public final static String INFO_EDGE_MOVE = "edge moved";
     public final static String INFO_LABEL_V_MOVE = "label (vertex) moved";
     public final static String INFO_LABEL_E_MOVE = "label (edge) moved";

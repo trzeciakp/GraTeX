@@ -9,20 +9,22 @@ import pl.edu.agh.gratex.controller.operation.CreationRemovalOperation;
 import pl.edu.agh.gratex.controller.operation.GenericOperation;
 import pl.edu.agh.gratex.model.GraphElement;
 import pl.edu.agh.gratex.model.GraphElementFactory;
-import pl.edu.agh.gratex.model.edge.Edge;
 import pl.edu.agh.gratex.model.graph.GraphUtils;
-import pl.edu.agh.gratex.model.labelV.LabelV;
+import pl.edu.agh.gratex.model.hyperedge.Hyperedge;
 import pl.edu.agh.gratex.model.vertex.Vertex;
 import pl.edu.agh.gratex.model.vertex.VertexUtils;
 
-import java.awt.*;
-import java.util.*;
+import java.util.LinkedList;
 import java.util.List;
 
 
 public class VertexMouseControllerImpl extends GraphElementMouseController {
-    private Vertex currentlyDraggedVertex;
     private AlterationOperation currentDragOperation;
+    private List<GraphElement> currentlyDraggedVertices;
+    public int biasX;
+    public int biasY;
+    public int startX;
+    public int startY;
 
     public VertexMouseControllerImpl(GeneralController generalController, GraphElementFactory graphElementFactory, GraphElementType handledGraphElementType) {
         super(generalController, graphElementFactory, handledGraphElementType);
@@ -31,7 +33,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
     @Override
     public void reset() {
         finishMoving();
-        currentlyDraggedVertex = null;
+        currentlyDraggedVertices = null;
         currentDragOperation = null;
     }
 
@@ -70,34 +72,43 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void moveSelection(int mouseX, int mouseY) {
-        if(currentlyDraggedVertex == null) {
-            currentlyDraggedVertex = (Vertex) generalController.getGraph().getElementFromPosition(GraphElementType.VERTEX, mouseX, mouseY);
-            currentDragOperation = new AlterationOperation(generalController, currentlyDraggedVertex, OperationType.MOVE_VERTEX, StringLiterals.INFO_VERTEX_MOVE);
+        if(currentlyDraggedVertices == null) {
+            currentlyDraggedVertices = new LinkedList<>(generalController.getSelectionController().getSelection());
+            currentDragOperation = new AlterationOperation(generalController, currentlyDraggedVertices,
+                    OperationType.MOVE_VERTEX, StringLiterals.INFO_VERTEX_MOVE);
+            biasX = 0;
+            biasY = 0;
+            startX = mouseX;
+            startY = mouseY;
         } else {
-            generalController.getSelectionController().addToSelection(currentlyDraggedVertex, false);
-            Vertex vertex = currentlyDraggedVertex;
-            int oldPosX = vertex.getPosX();
-            int oldPosY = vertex.getPosY();
+            int oldPosX = startX + biasX;
+            int oldPosY = startY + biasY;
 
-            vertex.setPosX(mouseX);
-            vertex.setPosY(mouseY);
+            for (GraphElement element : currentlyDraggedVertices) {
+                Vertex vertex = ((Vertex) element);
+                vertex.setPosX(vertex.getPosX() - biasX + mouseX - startX);
+                vertex.setPosY(vertex.getPosY() - biasY + mouseY - startY);
 
-            if (generalController.getGraph().isGridOn()) {
-                VertexUtils.adjustToGrid(vertex);
+                if (generalController.getGraph().isGridOn()) {
+                    VertexUtils.adjustToGrid(vertex);
+                }
             }
 
-            if (GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) || !VertexUtils.fitsIntoPage(vertex)) {
-                vertex.setPosX(oldPosX);
-                vertex.setPosY(oldPosY);
-            }
+            biasX = mouseX - startX;
+            biasY = mouseY - startY;
+
+//            if (GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) || !VertexUtils.fitsIntoPage(vertex)) {
+//                vertex.setPosX(oldPosX);
+//                vertex.setPosY(oldPosY);
+//            }
         }
     }
 
     @Override
     public void finishMoving() {
-        if(currentlyDraggedVertex != null) {
+        if(currentlyDraggedVertices != null) {
             currentDragOperation.finish(true);
-            currentlyDraggedVertex = null;
+            currentlyDraggedVertices = null;
         }
     }
 }
