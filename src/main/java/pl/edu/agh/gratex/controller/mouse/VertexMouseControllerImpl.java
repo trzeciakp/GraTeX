@@ -72,7 +72,7 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
 
     @Override
     public void moveSelection(int mouseX, int mouseY) {
-        if(currentlyDraggedVertices == null) {
+        if (currentlyDraggedVertices == null) {
             currentlyDraggedVertices = new LinkedList<>(generalController.getSelectionController().getSelection());
             currentDragOperation = new AlterationOperation(generalController, currentlyDraggedVertices,
                     OperationType.MOVE_VERTEX, StringLiterals.INFO_VERTEX_MOVE);
@@ -81,32 +81,43 @@ public class VertexMouseControllerImpl extends GraphElementMouseController {
             startX = mouseX;
             startY = mouseY;
         } else {
-            int oldPosX = startX + biasX;
-            int oldPosY = startY + biasY;
+            int currentBiasX = mouseX - startX - biasX;
+            int currentBiasY = mouseY - startY - biasY;
+
+            boolean canMoveHere = true;
 
             for (GraphElement element : currentlyDraggedVertices) {
                 Vertex vertex = ((Vertex) element);
-                vertex.setPosX(vertex.getPosX() - biasX + mouseX - startX);
-                vertex.setPosY(vertex.getPosY() - biasY + mouseY - startY);
-
-                if (generalController.getGraph().isGridOn()) {
-                    VertexUtils.adjustToGrid(vertex);
+                vertex.setPosX(vertex.getPosX() + currentBiasX);
+                vertex.setPosY(vertex.getPosY() + currentBiasY);
+                if (GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) || !VertexUtils.fitsIntoPage(vertex)) {
+                    canMoveHere = false;
                 }
             }
 
-            biasX = mouseX - startX;
-            biasY = mouseY - startY;
-
-//            if (GraphUtils.checkVertexCollision(generalController.getGraph(), vertex) || !VertexUtils.fitsIntoPage(vertex)) {
-//                vertex.setPosX(oldPosX);
-//                vertex.setPosY(oldPosY);
-//            }
+            if (!canMoveHere) {
+                for (GraphElement element : currentlyDraggedVertices) {
+                    Vertex vertex = ((Vertex) element);
+                    vertex.setPosX(vertex.getPosX() - currentBiasX);
+                    vertex.setPosY(vertex.getPosY() - currentBiasY);
+                }
+            } else {
+                biasX = mouseX - startX;
+                biasY = mouseY - startY;
+            }
         }
     }
 
     @Override
     public void finishMoving() {
-        if(currentlyDraggedVertices != null) {
+        if (currentlyDraggedVertices != null) {
+
+            if (generalController.getGraph().isGridOn()) {
+                for (GraphElement element : currentlyDraggedVertices) {
+                    VertexUtils.adjustToGrid(((Vertex) element));
+                }
+            }
+
             currentDragOperation.finish(true);
             currentlyDraggedVertices = null;
         }

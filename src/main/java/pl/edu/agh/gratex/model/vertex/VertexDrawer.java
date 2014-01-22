@@ -27,7 +27,7 @@ public class VertexDrawer implements Drawer {
 
         int tempX = 0;
         int tempY = 0;
-        if (graphElement.isDummy() && vertex.getGraph().isGridOn()) {
+        if (vertex.getGraph().isGridOn()) {
             tempX = vertex.getPosX();
             tempY = vertex.getPosY();
             VertexUtils.adjustToGrid(vertex);
@@ -50,7 +50,7 @@ public class VertexDrawer implements Drawer {
             }
         }
 
-        if (vertex.isDummy() && vertex.getGraph().isGridOn()) {
+        if (vertex.getGraph().isGridOn()) {
             vertex.setPosX(tempX);
             vertex.setPosY(tempY);
         }
